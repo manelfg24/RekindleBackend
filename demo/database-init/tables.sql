@@ -1,5 +1,5 @@
 CREATE TABLE User (
-	mail varchar(20) PRIMARY KEY,
+	mail varchar(50) PRIMARY KEY,
     password varchar(15) NOT NULL,
 	name varchar(20) NOT NULL,
     surname1 varchar(20) NOT NULL,
@@ -7,13 +7,13 @@ CREATE TABLE User (
 );
 
 CREATE TABLE Volunteer (
-	mail varchar(20) PRIMARY KEY,
+	mail varchar(50) PRIMARY KEY,
     
     FOREIGN KEY (mail) REFERENCES User(mail)
 );
 
 CREATE TABLE Refugee (
-	mail varchar(20) PRIMARY KEY,
+	mail varchar(50) PRIMARY KEY,
     phoneNumber int,
     birthdate date,
     sex varchar(20),
@@ -29,7 +29,7 @@ CREATE TABLE Refugee (
 CREATE TABLE Service (
   id int PRIMARY KEY,
   name varchar(20) NOT NULL,
-  volunteer varchar(20) NOT NULL,
+  volunteer varchar(50) NOT NULL,
   phone varchar(20) NOT NULL,
   address varchar(20) NOT NULL,
   description varchar(300),
