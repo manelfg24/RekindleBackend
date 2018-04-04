@@ -1,8 +1,10 @@
 package com.rekindle.entities;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -16,6 +18,9 @@ public class Refugee extends User {
 	private String ethnic;
 	private String bloodType;
 	private String eyeColor;
+	
+	@ManyToMany
+	private ArrayList<Service> services;
 	
 	public Refugee(String mail, @NotNull String password, @NotNull String name, @NotNull String surname1,
 			String surname2, int phoneNumber, Date birthDate, String sex, String country, String town, String ethnic,
@@ -94,6 +99,16 @@ public class Refugee extends User {
 	public void setEyeColor(String eyeColor) {
 		this.eyeColor = eyeColor;
 	}
+
+	public ArrayList<Service> getServices() {
+		return services;
+	}
+
+	public void setServices(ArrayList<Service> services) {
+		this.services = services;
+	}
 	
-	
+	public void addService(Service service) {
+		this.services.add(service);
+	}
 }
