@@ -6,4 +6,5 @@ public interface DonationService {
 	
 	Iterable<Donation> listAllDonations();
 	
+	
 }

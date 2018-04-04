@@ -14,7 +14,6 @@ public class DonationServiceImpl implements DonationService {
 	@Autowired
 	DonationRepository donationRepository;
 	
-	@Override
 	public Iterable<Donation> listAllDonations() {
 		return donationRepository.findAll();
 	}
