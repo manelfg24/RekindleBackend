@@ -1,4 +1,4 @@
-package com.rekindle.rekindle;
+package com.pes.rekindle;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
