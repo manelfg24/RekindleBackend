@@ -23,6 +23,7 @@ public class UserController {
 	public User test1() {
 		User u = new User();
 		u.setMail("mail");
+		u.setUserType('v');
 		u.setPassword("pass");
 		u.setName("name");
 		u.setSurname1("sur1");
@@ -41,8 +42,6 @@ public class UserController {
 		boolean creationResult = userService.createUser(mail, password);
 		return creationResult;
 	}	
-
-	
 	
 	/*
 	@RequestMapping(value="/create/mail={mail}&password={password}", method=RequestMethod.GET)

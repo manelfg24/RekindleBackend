@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService {
 	UserRepository userRepository;
 	
 	public boolean logIn(String mail, String password) {
-		Optional<User> oUser = userRepository.findById(mail);
+		Optional<User> oUser = userRepository.findOptionalByMail(mail);
 		boolean correctPassword = false;
 		if(oUser.isPresent()) {
 			User user =  oUser.get();
@@ -33,12 +33,13 @@ public class UserServiceImpl implements UserService {
 	public boolean createUser(String mail, String password) {
 		
 		System.out.println("Mail "+mail+"   Password "+password);
-		Optional<User> oUser = userRepository.findById(mail);
+		Optional<User> oUser = userRepository.findOptionalByMail(mail);
 		boolean notExists = false;
 		if(!oUser.isPresent()) {
 			notExists = true;
 			User u = new User();
 			u.setMail(mail);
+			u.setUserType('v');
 			u.setPassword(password);
 			u.setName("name");
 			u.setSurname1("sur1");

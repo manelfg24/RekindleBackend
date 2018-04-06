@@ -15,6 +15,8 @@ public class User {
 	//Comun
 	@Id
 	private String mail;
+	@NotNull
+	private char userType;
     @NotNull
     private String password;
     @NotNull
@@ -41,6 +43,12 @@ public class User {
 	}
 	public void setMail(String mail) {
 		this.mail = mail;
+	}
+	public char getUserType() {
+		return userType;
+	}
+	public void setUserType(char userType) {
+		this.userType = userType;
 	}
 	public String getPassword() {
 		return password;
