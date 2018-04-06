@@ -29,5 +29,24 @@ public class UserServiceImpl implements UserService {
 		}
 		return correctPassword;
 	}
-
+	
+	public boolean createUser(String mail, String password) {
+		
+		System.out.println("Mail "+mail+"   Password "+password);
+		Optional<User> oUser = userRepository.findById(mail);
+		boolean notExists = false;
+		if(!oUser.isPresent()) {
+			notExists = true;
+			User u = new User();
+			u.setMail(mail);
+			u.setPassword(password);
+			u.setName("name");
+			u.setSurname1("sur1");
+			u.setSurname2("sur2");
+			userRepository.save(u);
+		}
+		else 
+			System.out.println("Ya existe");
+		return notExists;
+	}	
 }

@@ -19,12 +19,38 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
-	@RequestMapping(value="/login"/*, method=RequestMethod.GET*/)
-	public User logIn() {
-		System.out.println("Hola");
-		return new User("m", "p", "k", "k", "k");
+	@RequestMapping(value="/test1", method=RequestMethod.GET)
+	public User test1() {
+		User u = new User();
+		u.setMail("mail");
+		u.setPassword("pass");
+		u.setName("name");
+		u.setSurname1("sur1");
+		u.setSurname2("sur2");
+		return u;
 	}	
 	
+	@RequestMapping(value="/test2"/*, method=RequestMethod.GET*/)
+	public int test2() {
+		return 1;
+	}
+	
+
+	@RequestMapping(value="/create/{mail}/{password}", method=RequestMethod.GET)
+	public boolean create(@PathVariable("mail")String mail, @PathVariable("password")String password) {
+		boolean creationResult = userService.createUser(mail, password);
+		return creationResult;
+	}	
+
+	
+	
+	/*
+	@RequestMapping(value="/create/mail={mail}&password={password}", method=RequestMethod.GET)
+	public boolean create(@PathVariable("mail")String mail, @PathVariable("password")String password) {
+		boolean creationResult = userService.createUser(mail, password);
+		return creationResult;
+	}	
+	*/
 	/*
 	@RequestMapping(value="/login"+"?mail="+"{mail}"+"&password"+"{password}", method=RequestMethod.POST)
 	public boolean logIn(@PathVariable("mail")String mail, @PathVariable("password")String password) {
