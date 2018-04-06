@@ -31,7 +31,6 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	public boolean createUser(String mail, String password) {
-		
 		System.out.println("Mail "+mail+"   Password "+password);
 		Optional<User> oUser = userRepository.findOptionalByMail(mail);
 		boolean notExists = false;
