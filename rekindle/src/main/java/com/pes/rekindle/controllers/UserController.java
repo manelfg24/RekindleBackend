@@ -1,6 +1,9 @@
 package com.pes.rekindle.controllers;
 
+import java.sql.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,25 +13,21 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pes.rekindle.entities.User;
+import com.pes.rekindle.entities.Volunteer;
+import com.pes.rekindle.repositories.RefugeeRepository;
+import com.pes.rekindle.repositories.VolunteerRepository;
 import com.pes.rekindle.services.UserService;
 
 @RestController
-@RequestMapping(value="/user")
+//@RequestMapping(value="/user")
 public class UserController {
 	
 	@Autowired
 	private UserService userService;
 	
-	@RequestMapping(value="/test1", method=RequestMethod.GET)
-	public User test1() {
-		User u = new User();
-		u.setMail("mail");
-		u.setUserType('v');
-		u.setPassword("pass");
-		u.setName("name");
-		u.setSurname1("sur1");
-		u.setSurname2("sur2");
-		return u;
+	@RequestMapping(value="/test1/nombre={name}&email={mail}", method=RequestMethod.GET)
+	public String test1(@PathVariable("name")String name, @PathVariable("mail")String mail) {
+		return "Nombre "+name+"   Mail: "+mail;
 	}	
 	
 	@RequestMapping(value="/test2"/*, method=RequestMethod.GET*/)
@@ -37,11 +36,35 @@ public class UserController {
 	}
 	
 
+	@RequestMapping(value="/registrarVoluntario/nombre={name}&email={mail}&password={password}&"
+						+ "apellido1={surname1}&apellido2={surname2}", method=RequestMethod.POST)
+	public String createVolunteer(@PathVariable("name")String name, @PathVariable("mail")String mail, @PathVariable("password")String password,
+						  @PathVariable("surname1")String surname1, @PathVariable("surname2")String surname2) {
+		String creationResult = userService.createVolunteer(mail, password, name, surname1, surname2);
+		return creationResult;
+	}	
+	
+	@RequestMapping(value="/registrarRefugiado/nombre={name}&email={mail}&password={password}&apellido1={surname1}&apellido2={surname2}"
+			+ "&telefono={phoneNumber}&nacimiento={birthdate}&sexo={sex}&pais={country}&pueblo={town}&etnia={ethnic}&gs={bloodType}&color_ojos={eyeColor}", 
+			method=RequestMethod.POST)
+	public String createRefugee(@PathVariable("mail")String mail, @PathVariable("password")String password, @PathVariable("name")String name, 
+			@PathVariable("surname1")String surname1, @PathVariable("surname2")String surname2, @PathVariable("phoneNumber")Integer phoneNumber,
+			@PathVariable("birthdate")Date birthdate, @PathVariable("sex")String sex, @PathVariable("country")String country,
+			@PathVariable("town")String town, @PathVariable("ethnic")String ethnic, @PathVariable("bloodType")String bloodType,
+			@PathVariable("eyeColor")String eyeColor) {
+		String creationResult = userService.createRefugee(mail, password, name, surname1, surname2, phoneNumber,
+				birthdate, sex, country, town, ethnic, bloodType, eyeColor);
+		return creationResult;		
+		
+	}
+	
+	/*
 	@RequestMapping(value="/create/{mail}/{password}", method=RequestMethod.GET)
 	public boolean create(@PathVariable("mail")String mail, @PathVariable("password")String password) {
 		boolean creationResult = userService.createUser(mail, password);
 		return creationResult;
 	}	
+	*/	
 	
 	/*
 	@RequestMapping(value="/create/mail={mail}&password={password}", method=RequestMethod.GET)
