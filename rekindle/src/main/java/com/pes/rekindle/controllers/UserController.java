@@ -39,7 +39,17 @@ public class UserController {
 	public Object logIn(@PathVariable("mail")String mail, @PathVariable("password")String password) {
 		Object user = userService.logIn(mail, password);
 		return user;
-	}		
+	}	
+	
+	@RequestMapping(value="/changePasswordVolunteer/email={mail}&password={password}", method=RequestMethod.POST)
+	public void changePasswordVolunteer(@PathVariable("mail")String mail, @PathVariable("password")String password) {
+		userService.changePasswordVolunteer(mail, password);
+	}	
+	
+	@RequestMapping(value="/changePasswordRefugee/email={mail}&password={password}", method=RequestMethod.POST)
+	public void changePasswordRefugee(@PathVariable("mail")String mail, @PathVariable("password")String password) {
+		userService.changePasswordRefugee(mail, password);
+	}
 
 	@RequestMapping(value="/registrarVoluntario/nombre={name}&email={mail}&password={password}&"
 						+ "apellido1={surname1}&apellido2={surname2}", method=RequestMethod.POST)

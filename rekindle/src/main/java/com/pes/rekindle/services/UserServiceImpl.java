@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
 	public String createVolunteer(String mail, String password, String name, String surname1, String surname2){
 		String creationResult = "Usuario creado con exito";
 		try {
-			volunteerRepository.save(mail, password, name, surname1, surname2);
+			volunteerRepository.create(mail, password, name, surname1, surname2);
 		}
 		catch (Exception e){
 			creationResult = "El usuario ya existe";
@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
 			String bloodType, String eyeColor) {
 		String creationResult = "Usuario creado con exito";
 		try {
-			refugeeRepository.save(mail, password, name, surname1, surname2, phoneNumber,birthdate, sex, 
+			refugeeRepository.create(mail, password, name, surname1, surname2, phoneNumber,birthdate, sex, 
 					country, town, ethnic, bloodType, eyeColor);
 		}
 		catch (Exception e){
@@ -89,6 +89,18 @@ public class UserServiceImpl implements UserService {
 		else 
 			System.out.println(refugee.getMail()==null);
 		return refugee;				
+	}
+	
+	public void changePasswordVolunteer(String mail, String password) {
+		Volunteer volunteer = volunteerRepository.findByMail(mail);
+		volunteer.setPassword(password);
+		volunteerRepository.save(volunteer);
+	}
+	
+	public void changePasswordRefugee(String mail, String password) {
+		Refugee refugee = refugeeRepository.findByMail(mail);
+		refugee.setPassword(password);
+		refugeeRepository.save(refugee);		
 	}
 }
 
