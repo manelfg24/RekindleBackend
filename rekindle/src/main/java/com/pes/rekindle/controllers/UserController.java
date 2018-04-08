@@ -35,6 +35,11 @@ public class UserController {
 		return 1;
 	}
 	
+	@RequestMapping(value="/login/email={mail}&password={password}", method=RequestMethod.POST)
+	public Object logIn(@PathVariable("mail")String mail, @PathVariable("password")String password) {
+		Object user = userService.logIn(mail, password);
+		return user;
+	}		
 
 	@RequestMapping(value="/registrarVoluntario/nombre={name}&email={mail}&password={password}&"
 						+ "apellido1={surname1}&apellido2={surname2}", method=RequestMethod.POST)

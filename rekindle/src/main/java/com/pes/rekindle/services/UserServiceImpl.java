@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
+import com.pes.rekindle.entities.Refugee;
 import com.pes.rekindle.entities.User;
 import com.pes.rekindle.entities.Volunteer;
 import com.pes.rekindle.repositories.RefugeeRepository;
@@ -30,16 +31,6 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	RefugeeRepository refugeeRepository;
 	
-	public boolean logIn(String mail, String password) {
-		Optional<User> oUser = userRepository.findOptionalByMail(mail);
-		boolean correctPassword = false;
-		if(oUser.isPresent()) {
-			User user =  oUser.get();
-			correctPassword = (user.getPassword() == password);
-		}
-		return correctPassword;
-	}
-	
 	public String createVolunteer(String mail, String password, String name, String surname1, String surname2){
 		String creationResult = "Usuario creado con exito";
 		try {
@@ -49,26 +40,7 @@ public class UserServiceImpl implements UserService {
 			creationResult = "El usuario ya existe";
 		}
 		return creationResult;
-	}
-	
-	 /*
-	public String createVolunteer(String mail, String password, String name, String surname1, String surname2){
-		System.out.println("Mail "+mail+"   Password "+password);
-		Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMail(mail);
-		String creationResult = "El voluntario ya existe";
-		if(!oVolunteer.isPresent()) {
-			Volunteer v = new Volunteer();
-			v.setMail(mail);
-			v.setPassword(password);
-			v.setName(name);
-			v.setSurname1(surname1);
-			v.setSurname2(surname2);
-			creationResult = volunteerRepository.save(v);
-		}
-		return creationResult;
-	}
-	*/
-
+	}	
 	@Override
 	public String createRefugee(String mail, String password, String name, String surname1, String surname2,
 			Integer phoneNumber, Date birthdate, String sex, String country, String town, String ethnic,
@@ -82,5 +54,68 @@ public class UserServiceImpl implements UserService {
 			creationResult = "El usuario ya existe";
 		}
 		return creationResult;
-	}	
+	}
+	
+	public Object logIn(String mail, String password) {
+		Object user = new Object();
+		Refugee refugee = logInRefugee(mail, password);
+		if (refugee.getMail()==null) {
+			Volunteer volunteer = logInVolunteer(mail, password);
+			user = volunteer;
+		}
+		else 
+			user = refugee;
+		return user;
+	}
+	
+	//Mirar visibilidad
+	public Volunteer logInVolunteer(String mail, String password) {
+		Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMailAndPassword(mail, password);
+		Volunteer volunteer = new Volunteer();
+		if(oVolunteer.isPresent()) {
+			volunteer =  oVolunteer.get();		
+		}
+		else 
+			System.out.println(volunteer.getMail()==null);
+		return volunteer;		
+	}
+	
+	public Refugee logInRefugee(String mail, String password) {
+		Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMailAndPassword(mail, password);
+		Refugee refugee = new Refugee();
+		if(oRefugee.isPresent()) {
+			refugee =  oRefugee.get();		
+		}
+		else 
+			System.out.println(refugee.getMail()==null);
+		return refugee;				
+	}
 }
+
+/*
+public String createVolunteer(String mail, String password, String name, String surname1, String surname2){
+	System.out.println("Mail "+mail+"   Password "+password);
+	Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMail(mail);
+	String creationResult = "El voluntario ya existe";
+	if(!oVolunteer.isPresent()) {
+		Volunteer v = new Volunteer();
+		v.setMail(mail);
+		v.setPassword(password);
+		v.setName(name);
+		v.setSurname1(surname1);
+		v.setSurname2(surname2);
+		creationResult = volunteerRepository.save(v);
+	}
+	return creationResult;
+}
+*/
+
+/*	public boolean logIn(String mail, String password) {
+Optional<User> oUser = userRepository.findOptionalByMail(mail);
+boolean correctPassword = false;
+if(oUser.isPresent()) {
+	User user =  oUser.get();
+	correctPassword = (user.getPassword() == password);
+}
+return correctPassword;
+}*/

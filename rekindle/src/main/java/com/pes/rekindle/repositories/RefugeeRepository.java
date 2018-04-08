@@ -27,4 +27,6 @@ public interface RefugeeRepository extends Repository<Refugee, String> {
 			@Param("birthdate")Date birthdate, @Param("sex")String sex, @Param("country")String country,
 			@Param("town")String town, @Param("ethnic")String ethnic, @Param("bloodType")String bloodType,
 			@Param("eyeColor")String eyeColor) throws Exception;
+	
+	public Optional<Refugee> findOptionalByMailAndPassword(String mail, String password);
 }

@@ -17,6 +17,9 @@ public interface VolunteerRepository extends Repository<Volunteer, String> {
 	public Volunteer findByMail(String mail);
 	public Optional<Volunteer> findOptionalByMail(String mail);
 	
+	public Volunteer findByMailAndPassword(String mail, String password);
+	public Optional<Volunteer> findOptionalByMailAndPassword(String mail, String password);
+	
 	@Modifying
 	@Transactional
 	@Query(value = "insert into Volunteer"
