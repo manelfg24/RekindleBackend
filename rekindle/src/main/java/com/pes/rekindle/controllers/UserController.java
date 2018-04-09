@@ -35,7 +35,7 @@ public class UserController {
 		return 1;
 	}
 	
-	@RequestMapping(value="/login/email={mail}&password={password}", method=RequestMethod.POST)
+	@RequestMapping(value="/login/email={mail}&password={password}", method=RequestMethod.GET)
 	public Object logIn(@PathVariable("mail")String mail, @PathVariable("password")String password) {
 		Object user = userService.logIn(mail, password);
 		return user;
@@ -70,7 +70,6 @@ public class UserController {
 		String creationResult = userService.createRefugee(mail, password, name, surname1, surname2, phoneNumber,
 				birthdate, sex, country, town, ethnic, bloodType, eyeColor);
 		return creationResult;		
-		
 	}
 	
 	/*
