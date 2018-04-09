@@ -63,3 +63,17 @@ FOR EACH ROW
 BEGIN CALL is_not_a_volunteer(NEW.mail);
 END;
 $$
+
+CREATE TABLE Lodge (
+	id int PRIMARY KEY,
+    name varchar(50),
+    volunteer varchar(30),
+    phoneNumber int,
+    adress varchar(50),
+    places int,
+    dateLimit DATE,
+    description varchar(300),
+    
+    FOREIGN KEY (volunteer) REFERENCES Volunteer(mail)
+    
+);
