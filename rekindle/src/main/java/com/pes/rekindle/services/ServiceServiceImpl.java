@@ -27,6 +27,6 @@ public class ServiceServiceImpl implements ServiceService {
 	  lodge.setDateLimit(dateLimit);
 	  lodge.setDescription(description);
 	  lodgeRepository.save(lodge);
-	  return "Alojamiento creado con exito";
+	  return "Servicio de alojamiento creado con exito";
 	 }
 }

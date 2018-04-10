@@ -28,7 +28,7 @@ public class DonationServiceImpl implements DonationService {
 	  donation.setEndTime(endTime);
 	  donation.setDescription(description);
 	  donationRepository.save(donation);
-	  return "Alojamiento creado con exito";
+	  return "Servicio de donación creado con exito";
 	 }
 
 

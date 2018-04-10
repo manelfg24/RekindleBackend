@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.pes.rekindle.services.DonationService;
-import com.pes.rekindle.services.ServiceService;
+
+import com.pes.rekindle.services.*;
 
 @RestController
 public class ServiceController {
@@ -44,6 +44,21 @@ public class ServiceController {
 				
 		String creationResult = donationService.createDonation(name, mail, phoneNumber, adress, places,
 				startTime, endTime, description);
+		return creationResult;
+	}
+	@Autowired
+	private EducationService educationService;
+	@RequestMapping(value="/crearCursoEducativo/nombre={name}&email={mail}&telefono={phoneNumber}"
+			+ "&direccion={adress}&ambito={ambit}&requisitos-previos={prerequisite}"
+			+ "&horario={schedule}&plazas-disponibles={places}&precio={price}&descripcion={description}", method=RequestMethod.POST)
+	 public String createEducation(@PathVariable("name")String name, @PathVariable("mail")String mail,
+		   @PathVariable("phoneNumber")Integer phoneNumber,  @PathVariable("adress")String adress,
+		   @PathVariable("ambit")String ambit,@PathVariable("prerequisite")String prerequisite,
+		   @PathVariable("schedule")String schedule, @PathVariable("places")Integer places, @PathVariable("price")Integer price,
+		   @PathVariable("description")String description) {
+				
+		String creationResult = educationService.createEducation(name, mail, phoneNumber, adress,ambit, prerequisite, schedule,
+				places, price, description);
 		return creationResult;
 	}
 }
