@@ -1,3 +1,11 @@
+/*
+ * Resources local:
+ * jdbc:mysql://localhost:3306/local_rekindle
+ * 
+ * Resources local:
+ * spring.datasource.url=jdbc:mysql://10.4.41.149:3306/PES
+ */
+
 USE PES;
 USE local_rekindle;
 CREATE TABLE Refugee (
@@ -66,13 +74,13 @@ $$
 
 CREATE TABLE Lodge (
 	id int PRIMARY KEY auto_increment,
-    name varchar(50),
-    volunteer varchar(30),
-    phoneNumber int,
-    adress varchar(50),
+    name varchar(50) NOT NULL,
+    volunteer varchar(30) NOT NULL,
+    phoneNumber int NOT NULL,
+    adress varchar(50) NOT NULL,
     places int,
-    dateLimit DATE,
-    description varchar(300),
+    dateLimit DATE NOT NULL,
+    description varchar(300) NOT NULL,
     
     FOREIGN KEY (volunteer) REFERENCES Volunteer(mail)
 );
@@ -80,14 +88,32 @@ CREATE TABLE Lodge (
 
 CREATE TABLE Donation (
 	id int PRIMARY KEY auto_increment,
-    name varchar(50),
-    volunteer varchar(30),
-	phoneNumber int,
-	adress varchar(50),
+    name varchar(50) NOT NULL,
+    volunteer varchar(30) NOT NULL,
+	phoneNumber int NOT NULL,
+	adress varchar(50) NOT NULL,
     places int,
-    startTime time(0),
-    endTime time(0),
-	description varchar(300),
+    startTime time(0) NOT NULL,
+    endTime time(0) NOT NULL,
+	description varchar(300) NOT NULL,
     
+    FOREIGN KEY (volunteer) REFERENCES Volunteer(mail)
+);
+
+CREATE TABLE Job (
+	id int PRIMARY KEY,
+	name varchar(50) NOT NULL,
+	volunteer varchar(30) NOT NULL,
+	phoneNumber int NOT NULL,
+	adress varchar(50) NOT NULL,
+	charge varchar(30) NOT NULL,
+	requirements varchar(50) NOT NULL,
+	hoursDay decimal(10,2) NOT NULL,
+	hoursWeek decimal(10,2) NOT NULL,
+	contractDuration int NOT NULL,
+	salary decimal(10,2) NOT NULL,
+	places int,
+	description varchar(300) NOT NULL,
+  
     FOREIGN KEY (volunteer) REFERENCES Volunteer(mail)
 );
