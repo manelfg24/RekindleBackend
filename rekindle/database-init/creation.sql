@@ -76,3 +76,18 @@ CREATE TABLE Lodge (
     
     FOREIGN KEY (volunteer) REFERENCES Volunteer(mail)
 );
+
+
+CREATE TABLE Donation (
+	id int PRIMARY KEY auto_increment,
+    name varchar(50),
+    volunteer varchar(30),
+	phoneNumber int,
+	adress varchar(50),
+    places int,
+    startTime time(0),
+    endTime time(0),
+	description varchar(300),
+    
+    FOREIGN KEY (volunteer) REFERENCES Volunteer(mail)
+);
