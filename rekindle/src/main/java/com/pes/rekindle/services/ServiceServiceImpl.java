@@ -14,7 +14,7 @@ public class ServiceServiceImpl implements ServiceService {
 	@Autowired
 	LodgeRepository lodgeRepository;
 
-	@Override
+	
 	 public String createLodge(String name, String mail, Integer phoneNumber, String adress, Integer places, 
 			 Date dateLimit, String description) {
 	  System.out.println("hola");
@@ -26,9 +26,6 @@ public class ServiceServiceImpl implements ServiceService {
 	  lodge.setPlaces(places);
 	  lodge.setDateLimit(dateLimit);
 	  lodge.setDescription(description);
-	  
-	  System.out.println("-----------------------------------------------------------------------------------");
-	  System.out.println(lodge.getAdress());
 	  lodgeRepository.save(lodge);
 	  return "Alojamiento creado con exito";
 	 }
