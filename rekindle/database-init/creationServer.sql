@@ -92,3 +92,19 @@ CREATE TABLE Donation (
     
     FOREIGN KEY (volunteer) REFERENCES Volunteer(mail)
 );
+
+CREATE TABLE Education (
+	id int PRIMARY KEY auto_increment,
+    name varchar(50),
+    volunteer varchar(30),
+	phoneNumber int,
+	adress varchar(50),
+	ambit varchar(50),
+    prerequisite varchar(100),
+    schedule varchar(30),
+    places int,
+    price int,
+	description varchar(300),
+    
+    FOREIGN KEY (volunteer) REFERENCES Volunteer(mail)
+);
