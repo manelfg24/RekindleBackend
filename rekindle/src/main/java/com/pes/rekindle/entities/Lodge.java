@@ -14,9 +14,9 @@ import javax.validation.constraints.NotNull;
 @Table(name = "Lodge")
 public class Lodge {
 
-	@Id 
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private int id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
     @NotNull
     private String name;
     @NotNull
@@ -32,7 +32,7 @@ public class Lodge {
     private String description;
 
     
-    public int getId() {
+    public long getId() {
 		return id;
 	}
 	public void setId(int id) {

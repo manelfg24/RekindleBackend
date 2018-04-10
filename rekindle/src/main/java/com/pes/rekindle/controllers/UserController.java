@@ -16,6 +16,7 @@ import com.pes.rekindle.entities.User;
 import com.pes.rekindle.entities.Volunteer;
 import com.pes.rekindle.repositories.RefugeeRepository;
 import com.pes.rekindle.repositories.VolunteerRepository;
+import com.pes.rekindle.services.ServiceService;
 import com.pes.rekindle.services.UserService;
 
 @RestController
@@ -81,25 +82,21 @@ public class UserController {
 		return creationResult;		
 	}
 	
-	/*
-	@RequestMapping(value="/create/{mail}/{password}", method=RequestMethod.GET)
-	public boolean create(@PathVariable("mail")String mail, @PathVariable("password")String password) {
-		boolean creationResult = userService.createUser(mail, password);
-		return creationResult;
-	}	
-	*/	
+	
+	// S'haura de canviar a ServiceController quan es modifiquin les peticions per URL
 	
 	/*
-	@RequestMapping(value="/create/mail={mail}&password={password}", method=RequestMethod.GET)
-	public boolean create(@PathVariable("mail")String mail, @PathVariable("password")String password) {
-		boolean creationResult = userService.createUser(mail, password);
+	@RequestMapping(value="/crearAlojamiento/nombre={name}&email={mail}&telefono={phoneNumber}"
+			+ "&direccion={adress}&limite-peticiones={places}&fecha-limite={dateLimit}"
+			+ "&descripcion={description}", method=RequestMethod.GET)
+	 public String createLodge(@PathVariable("name")String name, @PathVariable("mail")String mail,
+		   @PathVariable("phoneNumber")Integer phoneNumber, @PathVariable("places")Integer places,
+		   @PathVariable("dateLimit")Date dateLimit, @PathVariable("description")String description) {
+		/*String creationResult = serviceService.createLodge(name, mail, phoneNumber, places, dateLimit, 
+		  description);
 		return creationResult;
-	}	
+		return "Escroto";
+	 }	
 	*/
-	/*
-	@RequestMapping(value="/login"+"?mail="+"{mail}"+"&password"+"{password}", method=RequestMethod.POST)
-	public boolean logIn(@PathVariable("mail")String mail, @PathVariable("password")String password) {
-		return userService.logIn(mail, password);
-	}
-	*/
+	
 }

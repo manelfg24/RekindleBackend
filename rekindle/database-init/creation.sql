@@ -65,7 +65,7 @@ END;
 $$
 
 CREATE TABLE Lodge (
-	id int PRIMARY KEY,
+	id int PRIMARY KEY auto_increment,
     name varchar(50),
     volunteer varchar(30),
     phoneNumber int,
@@ -75,5 +75,4 @@ CREATE TABLE Lodge (
     description varchar(300),
     
     FOREIGN KEY (volunteer) REFERENCES Volunteer(mail)
-    
 );
