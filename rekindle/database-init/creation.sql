@@ -125,7 +125,7 @@ CREATE TABLE Education (
 	phoneNumber int NOT NULL,
 	adress varchar(50) NOT NULL,
 	ambit varchar(50) NOT NULL,
-    prerequisite varchar(100) NOT NULL,
+    requirements varchar(100) NOT NULL,
     schedule varchar(30) NOT NULL,
     places int,
     price int,

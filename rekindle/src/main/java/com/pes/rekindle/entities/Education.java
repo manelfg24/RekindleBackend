@@ -24,7 +24,7 @@ public class Education {
     @NotNull
     private String ambit;
     @NotNull
-    private String prerequisite;
+    private String requirements;
     private String schedule;
     private Integer places;
     private Integer price;
@@ -67,10 +67,10 @@ public class Education {
 		this.ambit = ambit;
 	}
 	public String getPrerequisite() {
-		return prerequisite;
+		return requirements;
 	}
 	public void setPrerequisite(String prerequisite) {
-		this.prerequisite = prerequisite;
+		this.requirements = prerequisite;
 	}
 	public String getSchedule() {
 		return schedule;

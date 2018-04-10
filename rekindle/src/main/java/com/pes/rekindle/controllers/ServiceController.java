@@ -2,6 +2,7 @@ package com.pes.rekindle.controllers;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,15 @@ public class ServiceController {
 	
 	@Autowired
 	private ServiceService serviceService;
+	
+	@Autowired
+	private EducationService educationService;
+	
+	@Autowired
+	private DonationService donationService;
+	
+	@Autowired
+	private JobService jobService;
 
 	@RequestMapping(value="/crearAlojamiento/nombre={name}&email={mail}&telefono={phoneNumber}"
 			+ "&direccion={adress}&limite-peticiones={places}&fecha-limite={dateLimit}"
@@ -32,8 +42,7 @@ public class ServiceController {
 				dateLimit, description);
 		return creationResult;
 	 }	
-	@Autowired
-	private DonationService donationService;
+	
 	@RequestMapping(value="/crearDonacion/nombre={name}&email={mail}&telefono={phoneNumber}"
 			+ "&direccion={adress}&limite-peticiones={places}&hora-inicio={startTime}"
 			+ "&hora-fin={endTime}&descripcion={description}", method=RequestMethod.POST)
@@ -46,8 +55,8 @@ public class ServiceController {
 				startTime, endTime, description);
 		return creationResult;
 	}
-	@Autowired
-	private EducationService educationService;
+	
+	// Cambiar prerequisite por requirements
 	@RequestMapping(value="/crearCursoEducativo/nombre={name}&email={mail}&telefono={phoneNumber}"
 			+ "&direccion={adress}&ambito={ambit}&requisitos-previos={prerequisite}"
 			+ "&horario={schedule}&plazas-disponibles={places}&precio={price}&descripcion={description}", method=RequestMethod.POST)
@@ -60,5 +69,21 @@ public class ServiceController {
 		String creationResult = educationService.createEducation(name, mail, phoneNumber, adress,ambit, prerequisite, schedule,
 				places, price, description);
 		return creationResult;
-	}
+	}	
+	
+	@RequestMapping(value="/crearOfertaEmpleo/nombre={name}&email={mail}&telefono={phoneNumber}"
+			+ "&direccion={adress}&puesto={charge}&requisitos-necesarios={requirements}"
+			+ "&jornada={hoursDay}&horas-semanales={hoursWeek}&duracion={duration}&plazas-disponibles={places}"
+			+ "&sueldo={salary}&descripcion={description}", method=RequestMethod.POST)
+	 public String createEducation(@PathVariable("name")String name, @PathVariable("mail")String mail,
+		   @PathVariable("phoneNumber")Integer phoneNumber,  @PathVariable("adress")String adress,
+		   @PathVariable("charge")String charge,@PathVariable("requirements")String requirements,
+		   @PathVariable("hoursDay")Double hoursDay, @PathVariable("hoursWeek")Double hoursWeek, 
+		   @PathVariable("duration")Integer duration, @PathVariable("places")Integer places, 
+		   @PathVariable("salary")Double salary, @PathVariable("description")String description) {
+				
+		String creationResult = jobService.createJob(name, mail, phoneNumber, adress, charge, requirements, hoursDay,
+				hoursWeek, duration, places, salary, description);
+		return creationResult;
+	}		
 }

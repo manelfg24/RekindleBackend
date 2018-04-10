@@ -32,6 +32,7 @@ public class Donation {
     private Time endTime;
     @NotNull
     private String description;
+    
 	public long getId() {
 		return id;
 	}
