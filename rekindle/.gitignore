@@ -23,5 +23,9 @@
 /nbbuild/
 /dist/
 /nbdist/
+<<<<<<< HEAD:rekindle/.gitignore
 /.nb-gradle/
 /bin/
+=======
+/.nb-gradle/
+>>>>>>> Bueno:rekindle/.gitignore
