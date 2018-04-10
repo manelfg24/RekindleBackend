@@ -120,16 +120,16 @@ CREATE TABLE Job (
 
 CREATE TABLE Education (
 	id int PRIMARY KEY auto_increment,
-    name varchar(50),
-    volunteer varchar(30),
-	phoneNumber int,
-	adress varchar(50),
-	ambit varchar(50),
-    prerequisite varchar(100),
-    schedule varchar(30),
+    name varchar(50) NOT NULL,
+    volunteer varchar(30) NOT NULL,
+	phoneNumber int NOT NULL,
+	adress varchar(50) NOT NULL,
+	ambit varchar(50) NOT NULL,
+    prerequisite varchar(100) NOT NULL,
+    schedule varchar(30) NOT NULL,
     places int,
     price int,
-	description varchar(300),
+	description varchar(300) NOT NULL,
     
     FOREIGN KEY (volunteer) REFERENCES Volunteer(mail)
 );
