@@ -22,14 +22,14 @@ public class ServiceController {
 	@Autowired
 	private ServiceService serviceService;
 	
-	@Autowired
-	private EducationService educationService;
+	/*@Autowired
+	private EducationService educationService;*/
 	
-	@Autowired
-	private DonationService donationService;
+	/*@Autowired
+	private DonationService donationService;*/
 	
-	@Autowired
-	private JobService jobService;
+	/*@Autowired
+	private JobService jobService;*/
 
 	@RequestMapping(value="/crearAlojamiento/nombre={name}&email={mail}&telefono={phoneNumber}"
 			+ "&direccion={adress}&limite-peticiones={places}&fecha-limite={dateLimit}"
@@ -54,7 +54,7 @@ public class ServiceController {
 		   @PathVariable("places")Integer places, @PathVariable("startTime")Time startTime,
 		   @PathVariable("endTime")Time endTime, @PathVariable("description")String description) {
 				
-		String creationResult = donationService.createDonation(name, mail, phoneNumber, adress, places,
+		String creationResult = serviceService.createDonation(name, mail, phoneNumber, adress, places,
 				startTime, endTime, description);
 		return creationResult;
 	}
@@ -69,7 +69,7 @@ public class ServiceController {
 		   @PathVariable("schedule")String schedule, @PathVariable("places")Integer places, @PathVariable("price")Integer price,
 		   @PathVariable("description")String description) {
 				
-		String creationResult = educationService.createEducation(name, mail, phoneNumber, adress,ambit, prerequisite, schedule,
+		String creationResult = serviceService.createEducation(name, mail, phoneNumber, adress,ambit, prerequisite, schedule,
 				places, price, description);
 		return creationResult;
 	}	
@@ -85,7 +85,7 @@ public class ServiceController {
 		   @PathVariable("duration")Integer duration, @PathVariable("places")Integer places, 
 		   @PathVariable("salary")Double salary, @PathVariable("description")String description) {
 				
-		String creationResult = jobService.createJob(name, mail, phoneNumber, adress, charge, requirements, hoursDay,
+		String creationResult = serviceService.createJob(name, mail, phoneNumber, adress, charge, requirements, hoursDay,
 				hoursWeek, duration, places, salary, description);
 		return creationResult;
 	}	
