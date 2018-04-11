@@ -55,7 +55,7 @@ public class UserController {
 		String creationResult = userService.createVolunteer(volunteer.getMail(), volunteer.getPassword(), volunteer.getName(),
 				volunteer.getSurname1(), volunteer.getSurname2());
 		ResponseEntity re = new ResponseEntity(HttpStatus.OK);
-		if (creationResult.equals("Usuario creado con exito"))
+		if (creationResult.equals("El usuario ya existe"))
 			re.status(HttpStatus.BAD_REQUEST).body(null);
 		return re;
 	}	
