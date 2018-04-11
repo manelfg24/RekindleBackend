@@ -4,6 +4,8 @@ import java.sql.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.pes.rekindle.entities.Refugee;
 import com.pes.rekindle.entities.User;
 import com.pes.rekindle.entities.Volunteer;
 import com.pes.rekindle.repositories.RefugeeRepository;
@@ -21,65 +24,75 @@ import com.pes.rekindle.services.ServiceService;
 import com.pes.rekindle.services.UserService;
 
 @RestController
-//@RequestMapping(value="/user")
 public class UserController {
+	
+	private class LogInInfo {
+		String mail;
+		String password;
+		public String getMail() {
+			return mail;
+		}
+		public String getPassword() {
+			return password;
+		}
+	}
 	
 	@Autowired
 	private UserService userService;
 	
-	@RequestMapping(value="/test1/nombre={name}&email={mail}", method=RequestMethod.GET)
-	public String test1(@PathVariable("name")String name, @PathVariable("mail")String mail) {
-		return "Nombre "+name+"   Mail: "+mail;
-	}	
-	
-	@RequestMapping(value="/test2"/*, method=RequestMethod.GET*/)
-	public int test2() {
-		return 1;
-	}
-	
-	@RequestMapping(value="/test3", method=RequestMethod.GET)
-	public Object test3() {
-		String mail = "Fernando@fib";
-		String password = "12345"; 
-		Object user = userService.logInRefugee(mail, password);
-		return user;
-	}
-	
-	
-	@RequestMapping(value="/login/email={mail}&password={password}", method=RequestMethod.GET)
-	public Object logIn(@PathVariable("mail")String mail, @PathVariable("password")String password) {
-		Object user = userService.logIn(mail, password);
-		return user;
-	}	
-	
-	@RequestMapping(value="/changePasswordVolunteer/email={mail}&password={password}", method=RequestMethod.POST)
-	public void changePasswordVolunteer(@PathVariable("mail")String mail, @PathVariable("password")String password) {
-		userService.changePasswordVolunteer(mail, password);
-	}	
-	
-	@RequestMapping(value="/changePasswordRefugee/email={mail}&password={password}", method=RequestMethod.POST)
-	public void changePasswordRefugee(@PathVariable("mail")String mail, @PathVariable("password")String password) {
-		userService.changePasswordRefugee(mail, password);
-	}
-
 	@RequestMapping(value="/registrarVoluntario", method=RequestMethod.POST)
-	public String createVolunteer(@RequestBody Volunteer volunteer) {
+	public ResponseEntity createVolunteer(@RequestBody Volunteer volunteer) {
 		String creationResult = userService.createVolunteer(volunteer.getMail(), volunteer.getPassword(), volunteer.getName(),
 				volunteer.getSurname1(), volunteer.getSurname2());
-		return creationResult;
+		ResponseEntity re = new ResponseEntity(HttpStatus.OK);
+		if (creationResult.equals("Usuario creado con exito"))
+			re.status(HttpStatus.BAD_REQUEST);
+		return re;
 	}	
 	
-	@RequestMapping(value="/registrarRefugiado/nombre={name}&email={mail}&password={password}&apellido1={surname1}&apellido2={surname2}"
-			+ "&telefono={phoneNumber}&nacimiento={birthdate}&sexo={sex}&pais={country}&pueblo={town}&etnia={ethnic}&gs={bloodType}&color_ojos={eyeColor}", 
-			method=RequestMethod.POST)
-	public String createRefugee(@PathVariable("mail")String mail, @PathVariable("password")String password, @PathVariable("name")String name, 
-			@PathVariable("surname1")String surname1, @PathVariable("surname2")String surname2, @PathVariable("phoneNumber")Integer phoneNumber,
-			@PathVariable("birthdate")Date birthdate, @PathVariable("sex")String sex, @PathVariable("country")String country,
-			@PathVariable("town")String town, @PathVariable("ethnic")String ethnic, @PathVariable("bloodType")String bloodType,
-			@PathVariable("eyeColor")String eyeColor) {
-		String creationResult = userService.createRefugee(mail, password, name, surname1, surname2, phoneNumber,
-				birthdate, sex, country, town, ethnic, bloodType, eyeColor);
-		return creationResult;		
-	}
+	@RequestMapping(value="/registrarVoluntario2", method=RequestMethod.POST)
+	public ResponseEntity createVolunteer2(@RequestBody Volunteer volunteer) {
+		String creationResult = userService.createVolunteer(volunteer.getMail(), volunteer.getPassword(), volunteer.getName(),
+				volunteer.getSurname1(), volunteer.getSurname2());
+		ResponseEntity re = new ResponseEntity(HttpStatus.OK);
+		if (creationResult.equals("Usuario creado con exito"))
+			re.status(HttpStatus.BAD_REQUEST).body(null);
+		return re;
+	}	
 	
+	@RequestMapping(value="/registrarRefugiado", method=RequestMethod.POST)
+	public String createRefugee(@RequestBody Refugee refugee) {
+		String creationResult = userService.createRefugee(refugee.getMail(), refugee.getPassword(), refugee.getName(), refugee.getSurname1(),
+				refugee.getSurname2(), refugee.getPhoneNumber(), refugee.getBirthdate(), refugee.getSex(), refugee.getCountry(), refugee.getTown(),
+				refugee.getEthnic(), refugee.getBloodType(), refugee.getEyeColor());
+		return creationResult;		
+	}	
+	
+	@RequestMapping(value="/inicioSesion", method=RequestMethod.POST)
+	public Object logIn(@RequestBody LogInInfo logInInfo) {
+		Object user = userService.logIn(logInInfo.getMail(), logInInfo.getPassword());
+		return user;
+	}	
+	
+	/*
+	//Afegir contraseña vella
+	@RequestMapping(value="/cambiarContraseñaVoluntario", method=RequestMethod.POST)
+	public void changePasswordVolunteer(@RequestBody LogInInfo logInInfo) {
+		userService.changePasswordVolunteer(logInInfo.getMail(), logInInfo.getPassword());
+	}	
+	
+	//Afegir contraseña vella
+	@RequestMapping(value="/cambiarContraseñaRefugiado", method=RequestMethod.POST)
+	public void changePasswordRefugee(@RequestBody LogInInfo logInInfo) {
+		userService.changePasswordRefugee(logInInfo.getMail(), logInInfo.getPassword());
+	}	
+	
+	//Recibimos mail
+	@RequestMapping(value="consultarPerfil", method=RequestMethod.POST)
+	public void 
+	
+	//Nos pasan todo el objeto, retorna string 
+	@RequestMapping(value="modificarPerfil", method=RequestMethod.POST)
+	public void 
+	*/
 }
