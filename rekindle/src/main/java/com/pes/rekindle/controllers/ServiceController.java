@@ -3,6 +3,7 @@ package com.pes.rekindle.controllers;
 import java.sql.Date;
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -85,5 +86,12 @@ public class ServiceController {
 		String creationResult = jobService.createJob(name, mail, phoneNumber, adress, charge, requirements, hoursDay,
 				hoursWeek, duration, places, salary, description);
 		return creationResult;
-	}		
+	}	
+	
+	@RequestMapping(value="/listarServicios", method=RequestMethod.GET)
+	 public ArrayList<Object> listServices() {
+		ArrayList<Object> listResult = (ArrayList<Object>) serviceService.listServices();
+		return listResult;
+	 }	
+	
 }

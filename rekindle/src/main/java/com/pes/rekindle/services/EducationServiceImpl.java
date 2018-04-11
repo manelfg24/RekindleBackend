@@ -14,14 +14,14 @@ public class EducationServiceImpl implements EducationService {
 
 	@Override
 	public String createEducation(String name, String mail, Integer phoneNumber, String adress, String ambit,
-			String prerequisite, String schedule, Integer places, Integer price, String description) {
+			String requirements, String schedule, Integer places, Integer price, String description) {
 		Education education = new Education();
 		education.setName(name);
 		education.setVolunteer(mail);
 		education.setPhoneNumber(phoneNumber);
 		education.setAdress(adress);
 		education.setAmbit(ambit);
-		education.setPrerequisite(prerequisite);
+		education.setRequirements(requirements);
 		education.setSchedule(schedule);
 		education.setPlaces(places);
 		education.setDescription(description);

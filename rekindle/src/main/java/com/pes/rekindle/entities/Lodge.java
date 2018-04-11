@@ -7,7 +7,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -80,6 +79,8 @@ public class Lodge {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+		
+	
 }
 
 

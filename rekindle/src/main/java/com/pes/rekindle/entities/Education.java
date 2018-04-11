@@ -66,11 +66,11 @@ public class Education {
 	public void setAmbit(String ambit) {
 		this.ambit = ambit;
 	}
-	public String getPrerequisite() {
+	public String getRequirements() {
 		return requirements;
 	}
-	public void setPrerequisite(String prerequisite) {
-		this.requirements = prerequisite;
+	public void setRequirements(String requirements) {
+		this.requirements = requirements;
 	}
 	public String getSchedule() {
 		return schedule;

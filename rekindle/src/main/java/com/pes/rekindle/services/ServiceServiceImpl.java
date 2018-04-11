@@ -1,11 +1,16 @@
 package com.pes.rekindle.services;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.pes.rekindle.entities.Lodge;
+import com.pes.rekindle.repositories.DonationRepository;
+import com.pes.rekindle.repositories.EducationRepository;
+import com.pes.rekindle.repositories.JobRepository;
 import com.pes.rekindle.repositories.LodgeRepository;
 
 @Service
@@ -13,6 +18,12 @@ public class ServiceServiceImpl implements ServiceService {
 
 	@Autowired
 	LodgeRepository lodgeRepository;
+	@Autowired
+	EducationRepository educationRepository;
+	@Autowired
+	DonationRepository donationRepository;
+	@Autowired
+	JobRepository jobRepository;
 
 	
 	 public String createLodge(String name, String mail, Integer phoneNumber, String adress, Integer places, 
@@ -29,4 +40,14 @@ public class ServiceServiceImpl implements ServiceService {
 	  lodgeRepository.save(lodge);
 	  return "Servicio de alojamiento creado con exito";
 	 }
+
+
+	public ArrayList<Object> listServices() {
+		ArrayList<Object> listServices = new ArrayList<Object>();
+		listServices.addAll(lodgeRepository.findAll());
+		//listServices.addAll(educationRepository.findAll());
+		//listServices.addAll(donationRepository.findAll());
+		//listServices.addAll(jobRepository.findAll());
+		return listServices;
+	}
 }
