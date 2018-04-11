@@ -45,9 +45,9 @@ public class ServiceServiceImpl implements ServiceService {
 	public ArrayList<Object> listServices() {
 		ArrayList<Object> listServices = new ArrayList<Object>();
 		listServices.addAll(lodgeRepository.findAll());
-		//listServices.addAll(educationRepository.findAll());
-		//listServices.addAll(donationRepository.findAll());
-		//listServices.addAll(jobRepository.findAll());
+		listServices.addAll(educationRepository.findAll());
+		listServices.addAll(donationRepository.findAll());
+		listServices.addAll(jobRepository.findAll());
 		return listServices;
 	}
 }

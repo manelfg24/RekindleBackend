@@ -4,6 +4,8 @@ import java.sql.Date;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-
+import com.pes.rekindle.entities.Lodge;
 import com.pes.rekindle.services.*;
 
 @RestController
@@ -89,9 +91,9 @@ public class ServiceController {
 	}	
 	
 	@RequestMapping(value="/listarServicios", method=RequestMethod.GET)
-	 public ArrayList<Object> listServices() {
-		ArrayList<Object> listResult = (ArrayList<Object>) serviceService.listServices();
-		return listResult;
+	 public Map<String, ArrayList<Object>> listServices() {
+		Map<String, ArrayList<Object>> result = new HashMap<String, ArrayList<Object>>(); 
+		result.put("Servicios", serviceService.listServices());
+		return result;
 	 }	
-	
 }
