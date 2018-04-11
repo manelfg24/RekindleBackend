@@ -13,4 +13,6 @@ public interface DonationRepository extends Repository<Donation, String> {
 	public void save(Donation donation);
 	
 	public Collection<Donation> findAll();
+
+	public Object findById(Long id);
 }

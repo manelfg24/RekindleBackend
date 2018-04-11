@@ -35,6 +35,7 @@ public class ServiceServiceImpl implements ServiceService {
 	  Lodge lodge = new Lodge();
 	  lodge.setName(name);
 	  lodge.setVolunteer(mail);
+	  lodge.setServiceType('l');
 	  lodge.setPhoneNumber(phoneNumber);
 	  lodge.setAdress(adress);
 	  lodge.setPlaces(places);
@@ -50,6 +51,7 @@ public class ServiceServiceImpl implements ServiceService {
 	  Donation donation = new Donation();
 	  donation.setName(name);
 	  donation.setVolunteer(mail);
+	  donation.setServiceType('d');
 	  donation.setPhoneNumber(phoneNumber);
 	  donation.setAdress(adress);
 	  donation.setPlaces(places);
@@ -65,6 +67,7 @@ public class ServiceServiceImpl implements ServiceService {
 		Education education = new Education();
 		education.setName(name);
 		education.setVolunteer(mail);
+		education.setServiceType('e');
 		education.setPhoneNumber(phoneNumber);
 		education.setAdress(adress);
 		education.setAmbit(ambit);
@@ -82,6 +85,7 @@ public class ServiceServiceImpl implements ServiceService {
 		Job job = new Job();
 		job.setName(name);
 		job.setVolunteer(mail);
+		job.setServiceType('j');
 		job.setPhoneNumber(phoneNumber);
 		job.setAdress(adress);
 		job.setCharge(charge);
@@ -104,5 +108,20 @@ public class ServiceServiceImpl implements ServiceService {
 		listServices.addAll(donationRepository.findAll());
 		listServices.addAll(jobRepository.findAll());
 		return listServices;
+	}
+
+	public Object infoService(Long id, char serviceType) {
+		Object service = new Object();
+		if (serviceType == 'l') 
+			service = lodgeRepository.findById(id);
+		else if (serviceType == 'e')
+			service = educationRepository.findById(id);
+		else if (serviceType == 'j')
+			service = jobRepository.findById(id);
+		else if (serviceType == 'd')
+			service = donationRepository.findById(id);
+		else
+			service = "Servicio no encontrado";
+		return service;		
 	}
 }

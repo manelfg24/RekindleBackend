@@ -22,15 +22,6 @@ public class ServiceController {
 	@Autowired
 	private ServiceService serviceService;
 	
-	/*@Autowired
-	private EducationService educationService;*/
-	
-	/*@Autowired
-	private DonationService donationService;*/
-	
-	/*@Autowired
-	private JobService jobService;*/
-
 	@RequestMapping(value="/crearAlojamiento/nombre={name}&email={mail}&telefono={phoneNumber}"
 			+ "&direccion={adress}&limite-peticiones={places}&fecha-limite={dateLimit}"
 			+ "&descripcion={description}", method=RequestMethod.POST)
@@ -95,5 +86,11 @@ public class ServiceController {
 		Map<String, ArrayList<Object>> result = new HashMap<String, ArrayList<Object>>(); 
 		result.put("Servicios", serviceService.listServices());
 		return result;
+	 }
+	
+	@RequestMapping(value="/seleccionarServicio/id={id}&tipo-servicio={serviceType}", method=RequestMethod.POST)
+	 public Object infoService(@PathVariable("id")Long id, @PathVariable("serviceType")char serviceType) {
+		Object service = serviceService.infoService(id, serviceType);
+		return service;
 	 }	
 }

@@ -13,4 +13,6 @@ public interface JobRepository extends Repository<Job, String> {
 	public void save(Job job);
 	
 	public Collection<Job> findAll();
+
+	public Object findById(Long id);
 }

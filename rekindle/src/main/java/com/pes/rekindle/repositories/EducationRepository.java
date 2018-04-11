@@ -13,4 +13,6 @@ public interface EducationRepository extends Repository<Education, String> {
 	public void save(Education education);
 	
 	public Collection<Education> findAll();
+
+	public Object findById(Long id);
 }

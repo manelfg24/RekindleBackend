@@ -13,6 +13,8 @@ public class Education {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+	@NotNull
+	private char serviceType;
     @NotNull
     private String name;
     @NotNull
@@ -30,11 +32,19 @@ public class Education {
     private Integer price;
     @NotNull
     private String description;
+
+    
 	public long getId() {
 		return id;
 	}
 	public void setId(long id) {
 		this.id = id;
+	}
+	public char getServiceType() {
+		return serviceType;
+	}
+	public void setServiceType(char serviceType) {
+		this.serviceType = serviceType;
 	}
 	public String getName() {
 		return name;

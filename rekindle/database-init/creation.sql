@@ -72,22 +72,9 @@ BEGIN CALL is_not_a_volunteer(NEW.mail);
 END;
 $$
 
-CREATE TABLE Lodge (
-	id int PRIMARY KEY auto_increment,
-    name varchar(50) NOT NULL,
-    volunteer varchar(30) NOT NULL,
-    phoneNumber int NOT NULL,
-    adress varchar(50) NOT NULL,
-    places int,
-    dateLimit DATE NOT NULL,
-    description varchar(300) NOT NULL,
-    
-    FOREIGN KEY (volunteer) REFERENCES Volunteer(mail)
-);
-
-
 CREATE TABLE Donation (
 	id int PRIMARY KEY auto_increment,
+    serviceType char,
     name varchar(50) NOT NULL,
     volunteer varchar(30) NOT NULL,
 	phoneNumber int NOT NULL,
@@ -101,7 +88,8 @@ CREATE TABLE Donation (
 );
 
 CREATE TABLE Job (
-	id int PRIMARY KEY,
+	id int PRIMARY KEY auto_increment,
+    serviceType char,
 	name varchar(50) NOT NULL,
 	volunteer varchar(30) NOT NULL,
 	phoneNumber int NOT NULL,
@@ -120,6 +108,7 @@ CREATE TABLE Job (
 
 CREATE TABLE Education (
 	id int PRIMARY KEY auto_increment,
+    serviceType char,
     name varchar(50) NOT NULL,
     volunteer varchar(30) NOT NULL,
 	phoneNumber int NOT NULL,

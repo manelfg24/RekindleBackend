@@ -13,4 +13,6 @@ public interface LodgeRepository extends Repository<Lodge, String> {
 	public void save(Lodge lodge);
 	
 	public ArrayList<Lodge> findAll();
+
+	public Object findById(Long id);
 }
