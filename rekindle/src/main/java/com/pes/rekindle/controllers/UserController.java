@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -61,6 +62,14 @@ public class UserController {
 		userService.changePasswordRefugee(mail, password);
 	}
 
+	@RequestMapping(value="/registrarVoluntario", method=RequestMethod.POST)
+	public String createVolunteer(@RequestBody Volunteer volunteer) {
+		String creationResult = userService.createVolunteer(volunteer.getMail(), volunteer.getPassword(), volunteer.getName(),
+				volunteer.getSurname1(), volunteer.getSurname2());
+		return creationResult;
+	}	
+	
+	/*
 	@RequestMapping(value="/registrarVoluntario/nombre={name}&email={mail}&password={password}&"
 						+ "apellido1={surname1}&apellido2={surname2}", method=RequestMethod.POST)
 	public String createVolunteer(@PathVariable("name")String name, @PathVariable("mail")String mail, @PathVariable("password")String password,
@@ -68,6 +77,7 @@ public class UserController {
 		String creationResult = userService.createVolunteer(mail, password, name, surname1, surname2);
 		return creationResult;
 	}	
+	*/
 	
 	@RequestMapping(value="/registrarRefugiado/nombre={name}&email={mail}&password={password}&apellido1={surname1}&apellido2={surname2}"
 			+ "&telefono={phoneNumber}&nacimiento={birthdate}&sexo={sex}&pais={country}&pueblo={town}&etnia={ethnic}&gs={bloodType}&color_ojos={eyeColor}", 
@@ -81,22 +91,5 @@ public class UserController {
 				birthdate, sex, country, town, ethnic, bloodType, eyeColor);
 		return creationResult;		
 	}
-	
-	
-	// S'haura de canviar a ServiceController quan es modifiquin les peticions per URL
-	
-	/*
-	@RequestMapping(value="/crearAlojamiento/nombre={name}&email={mail}&telefono={phoneNumber}"
-			+ "&direccion={adress}&limite-peticiones={places}&fecha-limite={dateLimit}"
-			+ "&descripcion={description}", method=RequestMethod.GET)
-	 public String createLodge(@PathVariable("name")String name, @PathVariable("mail")String mail,
-		   @PathVariable("phoneNumber")Integer phoneNumber, @PathVariable("places")Integer places,
-		   @PathVariable("dateLimit")Date dateLimit, @PathVariable("description")String description) {
-		/*String creationResult = serviceService.createLodge(name, mail, phoneNumber, places, dateLimit, 
-		  description);
-		return creationResult;
-		return "Escroto";
-	 }	
-	*/
 	
 }
