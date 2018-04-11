@@ -69,16 +69,6 @@ public class UserController {
 		return creationResult;
 	}	
 	
-	/*
-	@RequestMapping(value="/registrarVoluntario/nombre={name}&email={mail}&password={password}&"
-						+ "apellido1={surname1}&apellido2={surname2}", method=RequestMethod.POST)
-	public String createVolunteer(@PathVariable("name")String name, @PathVariable("mail")String mail, @PathVariable("password")String password,
-						  @PathVariable("surname1")String surname1, @PathVariable("surname2")String surname2) {
-		String creationResult = userService.createVolunteer(mail, password, name, surname1, surname2);
-		return creationResult;
-	}	
-	*/
-	
 	@RequestMapping(value="/registrarRefugiado/nombre={name}&email={mail}&password={password}&apellido1={surname1}&apellido2={surname2}"
 			+ "&telefono={phoneNumber}&nacimiento={birthdate}&sexo={sex}&pais={country}&pueblo={town}&etnia={ethnic}&gs={bloodType}&color_ojos={eyeColor}", 
 			method=RequestMethod.POST)
