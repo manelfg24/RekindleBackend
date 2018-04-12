@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,7 +27,7 @@ public class ServiceController {
 		public int test2() {
 			return 1;
 		}
-	
+
 	@RequestMapping(value="/crearAlojamiento/nombre={name}&email={mail}&telefono={phoneNumber}"
 			+ "&direccion={adress}&limite-peticiones={places}&fecha-limite={dateLimit}"
 			+ "&descripcion={description}", method=RequestMethod.POST)
