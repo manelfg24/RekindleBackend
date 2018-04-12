@@ -109,6 +109,36 @@ public class UserController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		}
 	}
+	
+	@RequestMapping(value="/modificarPerfilVoluntario", method=RequestMethod.POST)
+	public ResponseEntity<String> modifyProfileVolunteer(@RequestBody Volunteer volunteer) {
+			userService.modifyProfileVolunteer(volunteer.getMail(), volunteer.getName(),
+				volunteer.getSurname1(), volunteer.getSurname2());
+			return ResponseEntity.status(HttpStatus.OK).body(null);
+	}
+	
+	@RequestMapping(value="/modificarPerfilRefugiado", method=RequestMethod.POST)
+	public ResponseEntity<String> modifyProfileRefugee(@RequestBody Refugee refugee) {
+			userService.modifyProfileRefugee(refugee.getMail(), refugee.getName(),
+					refugee.getSurname1(), refugee.getSurname2());
+			return ResponseEntity.status(HttpStatus.OK).body(null);
+	}
+	
+	@RequestMapping(value="/verPerfilVoluntario", method=RequestMethod.POST)
+	public ResponseEntity<Volunteer> infoVolunteer(@RequestBody LogInInfo logInInfo) {
+			Volunteer volunteer = userService.infoVolunteer(logInInfo.getMail());
+			return ResponseEntity.status(HttpStatus.OK).body(volunteer);
+	}
+	
+	@RequestMapping(value="/verPerfilRefugiado", method=RequestMethod.POST)
+	public ResponseEntity<Refugee> infoRefugee(@RequestBody LogInInfo logInInfo) {
+		Refugee refugee = userService.infoRefugee(logInInfo.getMail());
+			return ResponseEntity.status(HttpStatus.OK).body(refugee);
+	}
+	
+	
+	
+	
 	/*
 	//Afegir contraseña vella
 	@RequestMapping(value="/cambiarContraseñaRefugiado", method=RequestMethod.POST)

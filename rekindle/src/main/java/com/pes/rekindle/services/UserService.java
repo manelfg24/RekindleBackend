@@ -22,5 +22,13 @@ public interface UserService {
 	
 	Boolean changePasswordVolunteer(String mail, String password, String newPassword);
 	Boolean changePasswordRefugee(String mail, String password, String newPassword);
+
+	void modifyProfileVolunteer(String mail, String name, String surname1, String surname2);
+
+	void modifyProfileRefugee(String mail, String name, String surname1, String surname2);
+
+	Volunteer infoVolunteer(String mail);
+
+	Refugee infoRefugee(String mail);
 	
 }

@@ -101,6 +101,36 @@ public class UserServiceImpl implements UserService {
 			return false;
 		}
 	}
+
+	@Override
+	public void modifyProfileVolunteer(String mail, String name, String surname1, String surname2) {
+		Volunteer volunteer = volunteerRepository.findByMail(mail);
+		volunteer.setName(name);
+		volunteer.setSurname1(surname1);
+		volunteer.setSurname2(surname2);
+		volunteerRepository.save(volunteer);
+	}
+
+	@Override
+	public void modifyProfileRefugee(String mail, String name, String surname1, String surname2) {
+		Refugee refugee = refugeeRepository.findByMail(mail);
+		refugee.setName(name);
+		refugee.setSurname1(surname1);
+		refugee.setSurname2(surname2);
+		refugeeRepository.save(refugee);
+	}
+
+	@Override
+	public Volunteer infoVolunteer(String mail) {
+		Volunteer volunteer = volunteerRepository.findByMail(mail);
+		return volunteer;
+	}
+
+	@Override
+	public Refugee infoRefugee(String mail) {
+		Refugee refugee = refugeeRepository.findByMail(mail);
+		return refugee;
+	}
 }
 
 /*
