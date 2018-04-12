@@ -34,7 +34,11 @@ public class VolunteerRepositoryTest {
 	@Test
 	public void saveVolunteerTest() {
 		volunteerRepository.save(volunteer);
-		assertEquals("alex@gmail.com", volunteerRepository.findByMail("alex@gmail.com").getMail());
+		Volunteer findVolunteer = volunteerRepository.findByMail("alex@gmail.com");
+		assertEquals("alex@gmail.com", findVolunteer.getMail());
+		assertEquals("1234", findVolunteer.getPassword());
+		assertEquals("alex", findVolunteer.getName());
+		assertEquals("sanchez", findVolunteer.getSurname1());
 	}
 	
 	@Test
@@ -47,5 +51,8 @@ public class VolunteerRepositoryTest {
 	public void findVolunteerByMailAndPasswordTest() {
 		Volunteer volunteer = volunteerRepository.findByMailAndPassword("alex@gmail.com", "1234");
 		assertEquals("alex@gmail.com", volunteer.getMail());
+		assertEquals("1234", volunteer.getPassword());
+		assertEquals("alex", volunteer.getName());
+		assertEquals("sanchez", volunteer.getSurname1());
 	}
 }
