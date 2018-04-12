@@ -23,8 +23,6 @@ public class Lodge {
 	private char serviceType;
     @NotNull
     private String name;
-    @OneToMany
-    @JoinColumn(name="mail")
     @NotNull
     private String volunteer;
     @NotNull
