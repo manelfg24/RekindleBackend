@@ -58,7 +58,7 @@ public class LodgeRepositoryTest {
 	public void saveLodgeTest() {
 		lodgeRepository.save(lodge);
 		Long id = (long) 1;
-		Lodge findLodge = lodgeRepository.findById(id);
+		Lodge findLodge = (Lodge) lodgeRepository.findById(id);
 		assertEquals(1, findLodge.getId());
 		assertEquals(664867797, (int) findLodge.getPhoneNumber());
 		assertEquals('l', findLodge.getServiceType());
