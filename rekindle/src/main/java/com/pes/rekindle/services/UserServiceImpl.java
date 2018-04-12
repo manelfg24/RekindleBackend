@@ -78,16 +78,28 @@ public class UserServiceImpl implements UserService {
 		return refugee;
 	}
 
-	public void changePasswordVolunteer(String mail, String password) {
+	public Boolean changePasswordVolunteer(String mail, String password, String newPassword) {
 		Volunteer volunteer = volunteerRepository.findByMail(mail);
-		volunteer.setPassword(password);
-		volunteerRepository.save(volunteer);
+		if(volunteer.getPassword().equals(password)) {
+			volunteer.setPassword(newPassword);
+			volunteerRepository.save(volunteer);
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 
-	public void changePasswordRefugee(String mail, String password) {
+	public Boolean changePasswordRefugee(String mail, String password, String newPassword) {
 		Refugee refugee = refugeeRepository.findByMail(mail);
-		refugee.setPassword(password);
-		refugeeRepository.save(refugee);
+		if(refugee.getPassword().equals(password)) {
+			refugee.setPassword(newPassword);
+			refugeeRepository.save(refugee);
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 }
 
@@ -107,4 +119,9 @@ public class UserServiceImpl implements UserService {
  * userRepository.findOptionalByMail(mail); boolean correctPassword = false;
  * if(oUser.isPresent()) { User user = oUser.get(); correctPassword =
  * (user.getPassword() == password); } return correctPassword; }
+ * 
+ * 
+ * 
+ * spring.datasource.url=jdbc:mysql://10.4.41.149:3306/pes
+spring.datasource.username=aplicacion
  */

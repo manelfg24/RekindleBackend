@@ -20,7 +20,7 @@ public interface UserService {
 	Volunteer logInVolunteer(String mail, String password);
 	Refugee logInRefugee(String mail, String password);
 	
-	void changePasswordVolunteer(String mail, String password);
-	void changePasswordRefugee(String mail, String password);
+	Boolean changePasswordVolunteer(String mail, String password, String newPassword);
+	Boolean changePasswordRefugee(String mail, String password, String newPassword);
 	
 }
