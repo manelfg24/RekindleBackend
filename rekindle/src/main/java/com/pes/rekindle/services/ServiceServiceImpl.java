@@ -27,10 +27,24 @@ public class ServiceServiceImpl implements ServiceService {
 	DonationRepository donationRepository;
 	@Autowired
 	JobRepository jobRepository;
-
-
 	
-	 public String createLodge(String name, String mail, Integer phoneNumber, String adress, Integer places, 
+
+	@Override
+	public void createLodge(String name, String mail, Integer phoneNumber, String adress, Integer places,
+			java.util.Date date, String description) {
+		Lodge lodge = new Lodge();
+		  lodge.setName(name);
+		  lodge.setVolunteer(mail);
+		  lodge.setServiceType('l');
+		  lodge.setPhoneNumber(phoneNumber);
+		  lodge.setAdress(adress);
+		  lodge.setPlaces(places);
+		  lodge.setDateLimit(date);
+		  lodge.setDescription(description);
+		  lodgeRepository.save(lodge);
+	}
+	/*
+	 public Boolean createLodge(String name, String mail, Integer phoneNumber, String adress, Integer places, 
 			 Date dateLimit, String description) {
 	  Lodge lodge = new Lodge();
 	  lodge.setName(name);
@@ -42,11 +56,11 @@ public class ServiceServiceImpl implements ServiceService {
 	  lodge.setDateLimit(dateLimit);
 	  lodge.setDescription(description);
 	  lodgeRepository.save(lodge);
-	  return "Servicio de alojamiento creado con exito";
+	  return true;
 	 }
-	
+	*/
 		
-	 public String createDonation(String name, String mail, Integer phoneNumber, String adress, Integer places, Time startTime,
+	 public void createDonation(String name, String mail, Integer phoneNumber, String adress, Integer places, Time startTime,
 				Time endTime, String description) {
 	  Donation donation = new Donation();
 	  donation.setName(name);
@@ -59,10 +73,9 @@ public class ServiceServiceImpl implements ServiceService {
 	  donation.setEndTime(endTime);
 	  donation.setDescription(description);
 	  donationRepository.save(donation);
-	  return "Servicio de donación creado con exito";
 	 }
 
-	public String createEducation(String name, String mail, Integer phoneNumber, String adress, String ambit,
+	public void createEducation(String name, String mail, Integer phoneNumber, String adress, String ambit,
 			String requirements, String schedule, Integer places, Integer price, String description) {
 		Education education = new Education();
 		education.setName(name);
@@ -76,10 +89,9 @@ public class ServiceServiceImpl implements ServiceService {
 		education.setPlaces(places);
 		education.setDescription(description);
 		educationRepository.save(education);
-		return "Servicio de educación creado con exito";
 	}
 	
-	public String createJob(String name, String mail, Integer phoneNumber, String adress, String charge,
+	public void createJob(String name, String mail, Integer phoneNumber, String adress, String charge,
 			String requirements, Double hoursDay, Double hoursWeek, Integer duration, Integer places, Double salary,
 			String description) {
 		Job job = new Job();
@@ -97,7 +109,6 @@ public class ServiceServiceImpl implements ServiceService {
 		job.setSalary(salary);
 		job.setDescription(description);
 		jobRepository.save(job);
-		return "Servicio de empleo creado con exito";
 		}
 	
 	
@@ -124,4 +135,8 @@ public class ServiceServiceImpl implements ServiceService {
 			service = "Servicio no encontrado";
 		return service;		
 	}
+
+
+
+
 }

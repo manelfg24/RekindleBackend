@@ -8,12 +8,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.pes.rekindle.controllers.UserController.LogInInfo;
+import com.pes.rekindle.entities.Donation;
+import com.pes.rekindle.entities.Education;
+import com.pes.rekindle.entities.Job;
 import com.pes.rekindle.entities.Lodge;
 import com.pes.rekindle.services.*;
 
@@ -27,37 +33,35 @@ public class ServiceController {
 		public int test2() {
 			return 1;
 		}
-
-	@RequestMapping(value="/crearAlojamiento/nombre={name}&email={mail}&telefono={phoneNumber}"
-			+ "&direccion={adress}&limite-peticiones={places}&fecha-limite={dateLimit}"
-			+ "&descripcion={description}", method=RequestMethod.POST)
-	 public String createLodge(@PathVariable("name")String name, @PathVariable("mail")String mail,
-		   @PathVariable("phoneNumber")Integer phoneNumber,  @PathVariable("adress")String adress,
-		   @PathVariable("places")Integer places, @PathVariable("dateLimit")Date dateLimit,
-		   @PathVariable("description")String description) {
-		
-		System.out.println(name + " " + mail + " " + phoneNumber);
-		
-		String creationResult = serviceService.createLodge(name, mail, phoneNumber, adress, places, 
-				dateLimit, description);
-		return creationResult;
-	 }	
 	
-	@RequestMapping(value="/crearDonacion/nombre={name}&email={mail}&telefono={phoneNumber}"
-			+ "&direccion={adress}&limite-peticiones={places}&hora-inicio={startTime}"
-			+ "&hora-fin={endTime}&descripcion={description}", method=RequestMethod.POST)
-	 public String createDonation(@PathVariable("name")String name, @PathVariable("mail")String mail,
-		   @PathVariable("phoneNumber")Integer phoneNumber,  @PathVariable("adress")String adress,
-		   @PathVariable("places")Integer places, @PathVariable("startTime")Time startTime,
-		   @PathVariable("endTime")Time endTime, @PathVariable("description")String description) {
-				
-		String creationResult = serviceService.createDonation(name, mail, phoneNumber, adress, places,
-				startTime, endTime, description);
-		return creationResult;
+	@RequestMapping(value="/crearAlojamiento", method=RequestMethod.POST)
+	public ResponseEntity<String> createLodge(@RequestBody Lodge lodge) {
+			serviceService.createLodge(lodge.getName(), lodge.getVolunteer(), lodge.getPhoneNumber(),
+				lodge.getAdress(), lodge.getPlaces(), lodge.getDateLimit(),
+				lodge.getDescription());
+			return ResponseEntity.status(HttpStatus.OK).body(null);
+		
+	}
+	
+	@RequestMapping(value="/crearDonacion", method=RequestMethod.POST)
+	public ResponseEntity<String> createDonation(@RequestBody Donation donation) {
+				serviceService.createDonation(donation.getName(), donation.getVolunteer(),
+					donation.getPhoneNumber(),donation.getAdress(),donation.getPlaces(),
+					donation.getStartTime(), donation.getEndTime(), donation.getDescription());
+				return ResponseEntity.status(HttpStatus.OK).body(null);
+	}
+	
+	@RequestMapping(value="/crearCursoEducativo", method=RequestMethod.POST)
+	public ResponseEntity<String> createEducation(@RequestBody Education education) {
+				serviceService.createEducation(education.getName(), education.getVolunteer(),
+					education.getPhoneNumber(),education.getAdress(),education.getAmbit(),
+					education.getRequirements(), education.getSchedule(),education.getPlaces(),
+					education.getPrice(), education.getDescription());
+				return ResponseEntity.status(HttpStatus.OK).body(null);
 	}
 	
 	// Cambiar prerequisite por requirements
-	@RequestMapping(value="/crearCursoEducativo/nombre={name}&email={mail}&telefono={phoneNumber}"
+	/*@RequestMapping(value="/crearCursoEducativo/nombre={name}&email={mail}&telefono={phoneNumber}"
 			+ "&direccion={adress}&ambito={ambit}&requisitos-previos={prerequisite}"
 			+ "&horario={schedule}&plazas-disponibles={places}&precio={price}&descripcion={description}", method=RequestMethod.POST)
 	 public String createEducation(@PathVariable("name")String name, @PathVariable("mail")String mail,
@@ -69,9 +73,19 @@ public class ServiceController {
 		String creationResult = serviceService.createEducation(name, mail, phoneNumber, adress,ambit, prerequisite, schedule,
 				places, price, description);
 		return creationResult;
-	}	
+	}	*/
 	
-	@RequestMapping(value="/crearOfertaEmpleo/nombre={name}&email={mail}&telefono={phoneNumber}"
+	@RequestMapping(value="/crearOfertaEmpleo", method=RequestMethod.POST)
+	public ResponseEntity<String> createJob(@RequestBody Job job) {
+				serviceService.createJob(job.getName(), job.getVolunteer(),
+						job.getPhoneNumber(),job.getAdress(),job.getCharge(),job.getRequirements(),
+						job.getHoursDay(),job.getHoursWeek(),job.getContractDuration(),job.getPlaces(),
+						job.getSalary(), job.getDescription());
+				return ResponseEntity.status(HttpStatus.OK).body(null);
+	}
+	
+	
+/*	@RequestMapping(value="/crearOfertaEmpleo/nombre={name}&email={mail}&telefono={phoneNumber}"
 			+ "&direccion={adress}&puesto={charge}&requisitos-necesarios={requirements}"
 			+ "&jornada={hoursDay}&horas-semanales={hoursWeek}&duracion={duration}&plazas-disponibles={places}"
 			+ "&sueldo={salary}&descripcion={description}", method=RequestMethod.POST)
@@ -85,7 +99,7 @@ public class ServiceController {
 		String creationResult = serviceService.createJob(name, mail, phoneNumber, adress, charge, requirements, hoursDay,
 				hoursWeek, duration, places, salary, description);
 		return creationResult;
-	}	
+	}	*/
 	
 	@RequestMapping(value="/listarServicios", method=RequestMethod.GET)
 	 public Map<String, ArrayList<Object>> listServices() {
