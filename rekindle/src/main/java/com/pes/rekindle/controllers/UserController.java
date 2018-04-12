@@ -108,12 +108,11 @@ public class UserController {
 	}
 	
 	@RequestMapping(value="/modificarPerfil", method=RequestMethod.POST)
-	public String modifyProfileRefugee(@RequestBody Refugee refugee) {
+	public ResponseEntity<String> modifyProfileRefugee(@RequestBody Refugee refugee) {
 			userService.modifyProfileRefugee(refugee.getMail(), refugee.getName(), refugee.getSurname1(),
 					refugee.getSurname2(), refugee.getPhoneNumber(), refugee.getBirthdate(), refugee.getSex(), refugee.getCountry(), refugee.getTown(),
 					refugee.getEthnic(), refugee.getBloodType(), refugee.getEyeColor());
-					ResponseEntity.status(HttpStatus.OK).body(null);
-			return "True";
+			return ResponseEntity.status(HttpStatus.OK).body(null);
 	}
 	
 	@RequestMapping(value="/verPerfilVoluntario", method=RequestMethod.POST)
