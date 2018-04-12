@@ -47,22 +47,12 @@ public class UserController {
 	public ResponseEntity<String> createVolunteer(@RequestBody Volunteer volunteer) {
 		String creationResult = userService.createVolunteer(volunteer.getMail(), volunteer.getPassword(), volunteer.getName(),
 				volunteer.getSurname1(), volunteer.getSurname2());
-		if (creationResult.equals("El usuario ya existe")) {
-			System.out.println("Bad Request");
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-		}
-		else if (creationResult.equals("Usuario creado con exito")) {
-			System.out.println("Ok");
+		if (creationResult.equals("Usuario creado con exito")) {
 			return ResponseEntity.status(HttpStatus.OK).body(null);
-		}
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-		/*	if (creationResult.equals("Usuario creado con exito")) {
-				System.out.println("Ok");
-				return ResponseEntity.status(HttpStatus.OK).body(null);
-		  	else {
-		  		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-		  }
-		  */
+			}
+	  	else {
+	  		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+	  	}
 	}	
 	
 	@RequestMapping(value="/registrarRefugiado", method=RequestMethod.POST)
@@ -117,7 +107,7 @@ public class UserController {
 			return ResponseEntity.status(HttpStatus.OK).body(null);
 	}
 	
-	@RequestMapping(value="/modificarPerfilRefugiado", method=RequestMethod.POST)
+	@RequestMapping(value="/modificarPerfil", method=RequestMethod.POST)
 	public ResponseEntity<String> modifyProfileRefugee(@RequestBody Refugee refugee) {
 			userService.modifyProfileRefugee(refugee.getMail(), refugee.getName(), refugee.getSurname1(),
 					refugee.getSurname2(), refugee.getPhoneNumber(), refugee.getBirthdate(), refugee.getSex(), refugee.getCountry(), refugee.getTown(),
@@ -136,23 +126,5 @@ public class UserController {
 		Refugee refugee = userService.infoRefugee(logInInfo.getMail());
 			return ResponseEntity.status(HttpStatus.OK).body(refugee);
 	}
-	
-	
-	
-	
-	/*
-	//Afegir contraseña vella
-	@RequestMapping(value="/cambiarContraseñaRefugiado", method=RequestMethod.POST)
-	public void changePasswordRefugee(@RequestBody LogInInfo logInInfo) {
-		userService.changePasswordRefugee(logInInfo.getMail(), logInInfo.getPassword());
-	}	
-	
-	//Recibimos mail
-	@RequestMapping(value="consultarPerfil", method=RequestMethod.POST)
-	public void 
-	
-	//Nos pasan todo el objeto, retorna string 
-	@RequestMapping(value="modificarPerfil", method=RequestMethod.POST)
-	public void 
-	*/
+
 }

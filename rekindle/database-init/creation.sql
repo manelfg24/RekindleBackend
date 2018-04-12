@@ -122,3 +122,17 @@ CREATE TABLE Education (
     
     FOREIGN KEY (volunteer) REFERENCES Volunteer(mail)
 );
+
+CREATE TABLE Lodge (
+	id int PRIMARY KEY auto_increment,
+    serviceType char,
+    name varchar(50) NOT NULL,
+    volunteer varchar(30) NOT NULL,
+	phoneNumber int NOT NULL,
+	adress varchar(50) NOT NULL,
+    places int,
+    dateLimit Date,
+	description varchar(300) NOT NULL,
+    
+    FOREIGN KEY (volunteer) REFERENCES Volunteer(mail)
+);
