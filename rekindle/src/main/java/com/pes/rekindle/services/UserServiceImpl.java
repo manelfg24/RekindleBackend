@@ -111,15 +111,25 @@ public class UserServiceImpl implements UserService {
 		volunteerRepository.flush();
 	}
 
-	@Override
-	public void modifyProfileRefugee(String mail, String name, String surname1, String surname2) {
+	public void modifyProfileRefugee(String mail, String name, String surname1, String surname2, Integer phoneNumber,
+			Date birthdate, String sex, String country, String town, String ethnic, String bloodType, String eyeColor) {
 		Refugee refugee = refugeeRepository.findByMail(mail);
 		refugee.setName(name);
 		refugee.setSurname1(surname1);
 		refugee.setSurname2(surname2);
+		refugee.setPhoneNumber(phoneNumber);
+		refugee.setBirthdate(birthdate);
+		refugee.setSex(sex);
+		refugee.setCountry(country);
+		refugee.setTown(town);
+		refugee.setEthnic(ethnic);
+		refugee.setBloodType(bloodType);
+		refugee.setEyeColor(eyeColor);
 		refugeeRepository.flush();
+		
 	}
 
+	
 	@Override
 	public Volunteer infoVolunteer(String mail) {
 		Volunteer volunteer = volunteerRepository.findByMail(mail);
@@ -131,6 +141,10 @@ public class UserServiceImpl implements UserService {
 		Refugee refugee = refugeeRepository.findByMail(mail);
 		return refugee;
 	}
+
+
+	
+		
 }
 
 /*

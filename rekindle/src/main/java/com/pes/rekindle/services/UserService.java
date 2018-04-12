@@ -25,7 +25,9 @@ public interface UserService {
 
 	void modifyProfileVolunteer(String mail, String name, String surname1, String surname2);
 
-	void modifyProfileRefugee(String mail, String name, String surname1, String surname2);
+	void modifyProfileRefugee(String mail, String name, String surname1, String surname2, 
+			Integer phonNumber, Date birthdate, String sex, String country, String town, 
+			String ethnic, String bloodType, String eyeColor);
 
 	Volunteer infoVolunteer(String mail);
 
