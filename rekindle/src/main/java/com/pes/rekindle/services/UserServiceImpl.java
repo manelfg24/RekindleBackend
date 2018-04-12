@@ -108,7 +108,7 @@ public class UserServiceImpl implements UserService {
 		volunteer.setName(name);
 		volunteer.setSurname1(surname1);
 		volunteer.setSurname2(surname2);
-		volunteerRepository.save(volunteer);
+		volunteerRepository.flush();
 	}
 
 	@Override
@@ -117,7 +117,7 @@ public class UserServiceImpl implements UserService {
 		refugee.setName(name);
 		refugee.setSurname1(surname1);
 		refugee.setSurname2(surname2);
-		refugeeRepository.save(refugee);
+		refugeeRepository.flush();
 	}
 
 	@Override

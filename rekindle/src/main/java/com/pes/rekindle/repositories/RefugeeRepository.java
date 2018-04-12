@@ -32,4 +32,5 @@ public interface RefugeeRepository extends Repository<Refugee, String> {
 			@Param("eyeColor")String eyeColor) throws Exception;
 	
 	public Optional<Refugee> findOptionalByMailAndPassword(String mail, String password);
+	public void flush();
 }

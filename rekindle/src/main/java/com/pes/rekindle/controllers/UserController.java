@@ -98,7 +98,7 @@ public class UserController {
 		}
 	}	
 	
-	@RequestMapping(value="/cambiarPassword", method=RequestMethod.POST)
+	@RequestMapping(value="/cambiarPasswordRefugiado", method=RequestMethod.POST)
 	public ResponseEntity<String> changePasswordRefugee(@RequestBody LogInInfo logInInfo) {
 		Boolean cambio = userService.changePasswordRefugee(logInInfo.getMail(), 
 				logInInfo.getPassword(), logInInfo.getNewPassword());
