@@ -70,9 +70,11 @@ public class UserController {
 	}	
 	
 	@RequestMapping(value="/inicioSesion", method=RequestMethod.POST)
-	public Object logIn(@RequestBody LogInInfo logInInfo) {
-		Object user = userService.logIn(logInInfo.getMail(), logInInfo.getPassword());
-		return user;
+	public ResponseEntity<String> logIn(@RequestBody LogInInfo logInInfo) {
+		if(userService.exists(logInInfo.getMail(),logInInfo.getPassword())) {
+			return ResponseEntity.status(HttpStatus.OK).body(null);
+		}
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 	}	
 	
 

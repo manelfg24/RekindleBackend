@@ -32,5 +32,7 @@ public interface UserService {
 	Volunteer infoVolunteer(String mail);
 
 	Refugee infoRefugee(String mail);
+
+	Boolean exists(String mail, String password);
 	
 }

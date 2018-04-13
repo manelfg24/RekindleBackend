@@ -142,6 +142,23 @@ public class UserServiceImpl implements UserService {
 		return refugee;
 	}
 
+	@Override
+	public Boolean exists(String mail, String password) {
+		Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMailAndPassword(mail, password);
+		Refugee refugee = new Refugee();
+		if (oRefugee.isPresent()) {
+			return true;
+		}
+		Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMailAndPassword(mail, password);
+		Volunteer volunteer = new Volunteer();
+		if (oVolunteer.isPresent()) {
+			return true;
+		} 
+		return false;
+	}
+
+
+
 
 	
 		
