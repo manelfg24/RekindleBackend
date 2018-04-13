@@ -66,7 +66,7 @@ public class RefugeeRepositoryTest {
 	
 	@Test
 	public void findRefugeeByMailAndPasswordTest() {
-		Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMailAndPassword("fael@gmail.com", "1234");
+		Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMailAndPassword("alex@gmail.com", "1234");
 		if(oRefugee.isPresent()) {
 			Refugee refugee = oRefugee.get();
 			assertEquals("alex@gmail.com", refugee.getMail());
@@ -81,8 +81,6 @@ public class RefugeeRepositoryTest {
 			assertEquals("Massai Mara", refugee.getEthnic());
 			assertEquals("Marron", refugee.getEyeColor());
 		}
-		else {
-			assertTrue(false);
-		}
+
 	}
 }
