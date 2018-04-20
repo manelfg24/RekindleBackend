@@ -1,3 +1,4 @@
+
 package com.pes.rekindle.repositories;
 
 import java.util.ArrayList;
@@ -10,9 +11,9 @@ import com.pes.rekindle.entities.Lodge;
 
 @Transactional
 public interface LodgeRepository extends Repository<Lodge, String> {
-	public void save(Lodge lodge);
-	
-	public ArrayList<Lodge> findAll();
+    public void save(Lodge lodge);
 
-	public Object findById(Long id);
+    public ArrayList<Lodge> findAll();
+
+    public Object findById(Long id);
 }
