@@ -26,10 +26,10 @@ public class UserServiceImpl implements UserService {
     public String createVolunteer(String mail, String password, String name, String surname1,
             String surname2) {
         String creationResult = "Usuario creado con exito";
-        try {
-            volunteerRepository.create(mail, password, name, surname1, surname2);
-        } catch (Exception e) {
+        if (exists(mail, password)) {
             creationResult = "El usuario ya existe";
+        } else {
+            volunteerRepository.create(mail, password, name, surname1, surname2);
         }
         return creationResult;
     }
