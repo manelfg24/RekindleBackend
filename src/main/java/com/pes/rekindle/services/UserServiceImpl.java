@@ -27,7 +27,8 @@ public class UserServiceImpl implements UserService {
             String surname2) {
         String creationResult = "Usuario creado con exito";
         Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMail(mail);
-        if (oVolunteer.isPresent()) {
+        Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMail(mail);
+        if (oVolunteer.isPresent() || oRefugee.isPresent()) {
             creationResult = "El usuario ya existe";
         } else {
             volunteerRepository.create(mail, password, name, surname1, surname2);
@@ -43,7 +44,8 @@ public class UserServiceImpl implements UserService {
             String bloodType, String eyeColor) {
         String creationResult = "Usuario creado con exito";
         Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMail(mail);
-        if (oRefugee.isPresent()) {
+        Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMail(mail);
+        if (oRefugee.isPresent() || oVolunteer.isPresent()) {
             creationResult = "El usuario ya existe";
         } else {
             refugeeRepository.create(mail, password, name, surname1, surname2, phoneNumber,
