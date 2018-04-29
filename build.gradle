@@ -7,9 +7,8 @@ buildscript {
 	}
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-        classpath "org.liquibase:liquibase-gradle-plugin:1.2.4"
-            classpath 'org.liquibase:liquibase-core:3.4.1'
-        
+        //classpath "org.liquibase:liquibase-gradle-plugin:1.2.4"
+        //classpath 'org.liquibase:liquibase-core:3.4.1'
         classpath 'mysql:mysql-connector-java:5.1.13'
         
 	
@@ -40,3 +39,13 @@ dependencies {
 	testCompile('org.springframework.security:spring-security-test')
 }
 
+/*liquibase {
+  activities {
+    main {
+      changeLogFile 'db/changelog/db.changelog-master.xml'
+      url 'jdbc:mysql://10.4.41.149:3306/PES'
+	  username 'aplicacion'
+	  password 'rekindle'
+    }
+  }
+}*/
