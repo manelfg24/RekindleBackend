@@ -43,7 +43,7 @@ dependencies {
 liquibase {
   activities {
     main {
-      changeLogFile 'src/main/resources/db/changelog/db.changelog-master.xml'
+      changeLogFile 'db/changelog/db.changelog-master.xml'
       url 'jdbc:mysql://10.4.41.149:3306/PES'
 	  username 'aplicacion'
 	  password 'rekindle'
