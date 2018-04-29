@@ -39,7 +39,7 @@ dependencies {
 	testCompile('org.springframework.security:spring-security-test')
 }
 
-/*liquibase {
+liquibase {
   activities {
     main {
       changeLogFile 'db/changelog/db.changelog-master.xml'
@@ -48,4 +48,4 @@ dependencies {
 	  password 'rekindle'
     }
   }
-}*/
+}
