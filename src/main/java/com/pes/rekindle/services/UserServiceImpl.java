@@ -37,22 +37,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String createRefugee(String mail, String password, String name, String surname1,
+    public Refugee createRefugee(String mail, String password, String name, String surname1,
             String surname2,
             Integer phoneNumber, Date birthdate, String sex, String country, String town,
             String ethnic,
-            String bloodType, String eyeColor) {
-        String creationResult = "Usuario creado con exito";
+            String bloodType, String eyeColor) throws Exception {
+        Refugee refugee = new Refugee();
         Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMail(mail);
         Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMail(mail);
         if (oRefugee.isPresent() || oVolunteer.isPresent()) {
-            creationResult = "El usuario ya existe";
+            throw new Exception();
         } else {
             refugeeRepository.create(mail, password, name, surname1, surname2, phoneNumber,
                     birthdate, sex, country,
                     town, ethnic, bloodType, eyeColor);
+            refugee = refugeeRepository.findByMail(mail);
         }
-        return creationResult;
+        return refugee;
     }
 
     public Object logIn(String mail, String password) {

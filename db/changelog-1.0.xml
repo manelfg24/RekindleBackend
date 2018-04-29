@@ -54,7 +54,7 @@
 				<constraints nullable="false"/>
 			</column>
 			<column name="volunteer" type="varchar(20)">
-				<constraints nullable="false" foreignKeyName="fk_donation_volunteer" references="volunteer(mail)"/>
+				<constraints nullable="false" foreignKeyName="fk_donation_volunteer" references="Volunteer(mail)"/>
 			</column>
 			<column name="phoneNumber" type="int">
 				<constraints nullable="false"/>
@@ -83,7 +83,7 @@
 				<constraints nullable="false"/>
 			</column>
 			<column name="volunteer" type="varchar(20)">
-				<constraints nullable="false" foreignKeyName="fk_job_volunteer" references="volunteer(mail)"/>
+				<constraints nullable="false" foreignKeyName="fk_job_volunteer" references="Volunteer(mail)"/>
 			</column>
 			<column name="phoneNumber" type="int">
 				<constraints nullable="false"/>
@@ -124,7 +124,7 @@
 				<constraints nullable="false"/>
 			</column>
 			<column name="volunteer" type="varchar(20)">
-				<constraints nullable="false" foreignKeyName="fk_education_volunteer" references="volunteer(mail)"/>
+				<constraints nullable="false" foreignKeyName="fk_education_volunteer" references="Volunteer(mail)"/>
 			</column>
 			<column name="phoneNumber" type="int">
 				<constraints nullable="false"/>
@@ -157,7 +157,7 @@
 				<constraints nullable="false"/>
 			</column>
 			<column name="volunteer" type="varchar(20)">
-				<constraints nullable="false" foreignKeyName="fk_lodge_volunteer" references="volunteer(mail)"/>
+				<constraints nullable="false" foreignKeyName="fk_lodge_volunteer" references="Volunteer(mail)"/>
 			</column>
 			<column name="phoneNumber" type="int">
 				<constraints nullable="false"/>

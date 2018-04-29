@@ -62,19 +62,21 @@ public class UserController {
         }
     }
 
-    @RequestMapping(value = "/registrarRefugiado", method = RequestMethod.POST)
-    public ResponseEntity<String> createRefugee(@RequestBody Refugee refugee) {
-        String creationResult = userService.createRefugee(refugee.getMail(), refugee.getPassword(),
-                refugee.getName(), refugee.getSurname1(),
-                refugee.getSurname2(), refugee.getPhoneNumber(), refugee.getBirthdate(),
-                refugee.getSex(), refugee.getCountry(), refugee.getTown(),
-                refugee.getEthnic(), refugee.getBloodType(), refugee.getEyeColor());
-        if (creationResult.equals("Usuario creado con exito")) {
-            System.out.println("Ok");
-            return ResponseEntity.status(HttpStatus.OK).body(null);
-        } else {
+    @RequestMapping(value = "/refugiados", method = RequestMethod.POST)
+    public ResponseEntity<Refugee> createRefugee(@RequestBody Refugee refugee) {
+        Refugee createdRefugee;
+        try {
+            createdRefugee = userService.createRefugee(refugee.getMail(),
+                    refugee.getPassword(),
+                    refugee.getName(), refugee.getSurname1(),
+                    refugee.getSurname2(), refugee.getPhoneNumber(), refugee.getBirthdate(),
+                    refugee.getSex(), refugee.getCountry(), refugee.getTown(),
+                    refugee.getEthnic(), refugee.getBloodType(), refugee.getEyeColor());
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
+
+        return ResponseEntity.status(HttpStatus.OK).body(createdRefugee);
     }
 
     @RequestMapping(value = "/inicioSesion", method = RequestMethod.POST)
