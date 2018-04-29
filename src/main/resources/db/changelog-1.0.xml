@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+	http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+	
+	<changeSet id="1" author="bob" >
+		<createTable tableName="Volunteer">
+			<column name="mail" type="varchar(30)">
+				<constraints primaryKey="true" nullable="false"/>
+			</column>
+			<column name="password" type="varchar(15)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="name" type="varchar(20)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="surname1" type="varchar(20)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="surname2" type="varchar(20)"/>
+		</createTable>
+		
+		<createTable tableName="Refugee">
+			<column name="mail" type="varchar(30)">
+				<constraints primaryKey="true" nullable="false"/>
+			</column>
+			<column name="password" type="varchar(15)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="name" type="varchar(20)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="surname1" type="varchar(20)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="phoneNumber" type="int"/>
+			<column name="birthdate" type="date"/>
+			<column name="sex" type="varchar(20)"/>
+			<column name="country" type="varchar(20)"/>
+			<column name="town" type="varchar(40)"/>
+			<column name="ethnic" type="varchar(20)"/>
+			<column name="bloodType" type="varchar(20)"/>
+			<column name="eyeColor" type="varchar(20)"/>
+		</createTable>
+		
+		<createTable tableName="Donation">
+			<column autoIncrement="true" name="id" type="int">
+				<constraints primaryKey="true" nullable="false"/>
+			</column>
+			<column name="serviceType" type="char"></column>
+			<column name="name" type="varchar(50)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="volunteer" type="varchar(20)">
+				<constraints nullable="false" foreignKeyName="fk_donation_volunteer" references="Volunteer(mail)"/>
+			</column>
+			<column name="phoneNumber" type="int">
+				<constraints nullable="false"/>
+			</column>
+			<column name="adress" type="varchar(50)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="places" type="int"></column>
+			<column name="startTime" type="time(0)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="endTime" type="time(0)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="description" type="varchar(300)">
+				<constraints nullable="false"/>
+			</column>
+		</createTable>
+		
+		<createTable tableName="Job">
+			<column autoIncrement="true" name="id" type="int">
+				<constraints primaryKey="true" nullable="false"/>
+			</column>
+			<column name="serviceType" type="char"></column>
+			<column name="name" type="varchar(50)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="volunteer" type="varchar(20)">
+				<constraints nullable="false" foreignKeyName="fk_job_volunteer" references="Volunteer(mail)"/>
+			</column>
+			<column name="phoneNumber" type="int">
+				<constraints nullable="false"/>
+			</column>
+			<column name="adress" type="varchar(50)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="charge" type="varchar(30)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="requirements" type="varchar(50)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="hoursDay" type="decimal(10,2)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="hoursWeek" type="decimal(10,2)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="contractDuration" type="int">
+				<constraints nullable="false"/>
+			</column>
+			<column name="salary" type="decimal(10,2)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="places" type="int"></column>
+			<column name="description" type="varchar(300)">
+				<constraints nullable="false"/>
+			</column>
+		</createTable>
+		
+		<createTable tableName="Education">
+			<column autoIncrement="true" name="id" type="int">
+				<constraints primaryKey="true" nullable="false"/>
+			</column>
+			<column name="serviceType" type="char"></column>
+			<column name="name" type="varchar(50)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="volunteer" type="varchar(20)">
+				<constraints nullable="false" foreignKeyName="fk_education_volunteer" references="Volunteer(mail)"/>
+			</column>
+			<column name="phoneNumber" type="int">
+				<constraints nullable="false"/>
+			</column>
+			<column name="adress" type="varchar(50)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="ambit" type="varchar(50)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="requirements" type="varchar(100)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="schedule" type="varchar(30)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="price" type="int"></column>
+			<column name="places" type="int"></column>
+			<column name="description" type="varchar(300)">
+				<constraints nullable="false"/>
+			</column>
+		</createTable>
+		
+		<createTable tableName="Lodge">
+			<column autoIncrement="true" name="id" type="int">
+				<constraints primaryKey="true" nullable="false"/>
+			</column>
+			<column name="serviceType" type="char"></column>
+			<column name="name" type="varchar(50)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="volunteer" type="varchar(20)">
+				<constraints nullable="false" foreignKeyName="fk_lodge_volunteer" references="Volunteer(mail)"/>
+			</column>
+			<column name="phoneNumber" type="int">
+				<constraints nullable="false"/>
+			</column>
+			<column name="adress" type="varchar(50)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="dateLimit" type="date">
+				<constraints nullable="false"/>
+			</column>
+			<column name="places" type="int"></column>
+			<column name="description" type="varchar(300)">
+				<constraints nullable="false"/>
+			</column>
+		</createTable>
+	
+	</changeSet>
+	
+</databaseChangeLog>
