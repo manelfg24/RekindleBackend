@@ -60,7 +60,7 @@ public class UserController {
         return refugee;
     }
 
-    @RequestMapping(value = "/registrarVoluntario", method = RequestMethod.POST)
+    @RequestMapping(value = "/voluntarios", method = RequestMethod.POST)
     public ResponseEntity<Volunteer> createVolunteer(@RequestBody Volunteer volunteer) {
         Volunteer createdVolunteer;
         try {
