@@ -46,6 +46,7 @@ public class UserServiceImpl implements UserService {
         Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMail(mail);
         Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMail(mail);
         if (oRefugee.isPresent() || oVolunteer.isPresent()) {
+            System.out.println("Rafael mamon");
             throw new Exception();
         } else {
             refugeeRepository.create(mail, password, name, surname1, surname2, phoneNumber,
