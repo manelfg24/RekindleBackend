@@ -73,7 +73,7 @@ public class UserController {
                     refugee.getSex(), refugee.getCountry(), refugee.getTown(),
                     refugee.getEthnic(), refugee.getBloodType(), refugee.getEyeColor());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(null);
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(createdRefugee);
