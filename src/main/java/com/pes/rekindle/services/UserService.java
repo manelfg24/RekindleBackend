@@ -11,8 +11,8 @@ public interface UserService {
     // boolean logIn(String user, String password);
     Object logIn(String user, String password);
 
-    String createVolunteer(String mail, String password, String name, String surname1,
-            String surname2);
+    Volunteer createVolunteer(String mail, String password, String name, String surname1,
+            String surname2) throws Exception;
 
     Refugee createRefugee(String mail, String password, String name, String surname1,
             String surname2,

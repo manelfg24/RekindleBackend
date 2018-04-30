@@ -23,17 +23,18 @@ public class UserServiceImpl implements UserService {
     @Autowired
     RefugeeRepository refugeeRepository;
 
-    public String createVolunteer(String mail, String password, String name, String surname1,
-            String surname2) {
-        String creationResult = "Usuario creado con exito";
+    public Volunteer createVolunteer(String mail, String password, String name, String surname1,
+            String surname2) throws Exception {
+        Volunteer volunteer = new Volunteer();
         Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMail(mail);
         Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMail(mail);
         if (oVolunteer.isPresent() || oRefugee.isPresent()) {
-            creationResult = "El usuario ya existe";
+            throw new Exception();
         } else {
             volunteerRepository.create(mail, password, name, surname1, surname2);
+            volunteer = volunteerRepository.findByMail(mail);
         }
-        return creationResult;
+        return volunteer;
     }
 
     @Override
@@ -46,7 +47,6 @@ public class UserServiceImpl implements UserService {
         Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMail(mail);
         Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMail(mail);
         if (oRefugee.isPresent() || oVolunteer.isPresent()) {
-            System.out.println("Rafael mamon");
             throw new Exception();
         } else {
             refugeeRepository.create(mail, password, name, surname1, surname2, phoneNumber,

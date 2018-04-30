@@ -61,15 +61,17 @@ public class UserController {
     }
 
     @RequestMapping(value = "/registrarVoluntario", method = RequestMethod.POST)
-    public ResponseEntity<String> createVolunteer(@RequestBody Volunteer volunteer) {
-        String creationResult = userService.createVolunteer(volunteer.getMail(),
-                volunteer.getPassword(), volunteer.getName(),
-                volunteer.getSurname1(), volunteer.getSurname2());
-        if (creationResult.equals("Usuario creado con exito")) {
-            return ResponseEntity.status(HttpStatus.OK).body(null);
-        } else {
+    public ResponseEntity<Volunteer> createVolunteer(@RequestBody Volunteer volunteer) {
+        Volunteer createdVolunteer;
+        try {
+            createdVolunteer = userService.createVolunteer(volunteer.getMail(),
+                    volunteer.getPassword(), volunteer.getName(),
+                    volunteer.getSurname1(), volunteer.getSurname2());
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
+
+        return ResponseEntity.status(HttpStatus.OK).body(createdVolunteer);
     }
 
     @RequestMapping(value = "/refugiados", method = RequestMethod.POST)
