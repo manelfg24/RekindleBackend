@@ -62,7 +62,6 @@ public class UserController {
 
     @RequestMapping(value = "/registrarVoluntario", method = RequestMethod.POST)
     public ResponseEntity<String> createVolunteer(@RequestBody Volunteer volunteer) {
-        System.out.println(volunteer.getMail());
         String creationResult = userService.createVolunteer(volunteer.getMail(),
                 volunteer.getPassword(), volunteer.getName(),
                 volunteer.getSurname1(), volunteer.getSurname2());
@@ -75,6 +74,9 @@ public class UserController {
 
     @RequestMapping(value = "/refugiados", method = RequestMethod.POST)
     public ResponseEntity<Refugee> createRefugee(@RequestBody Refugee refugee) {
+        System.out.println(refugee.getMail());
+        System.out.println(refugee.getName());
+        System.out.println(refugee.getSex());
         Refugee createdRefugee;
         try {
             createdRefugee = userService.createRefugee(refugee.getMail(),
