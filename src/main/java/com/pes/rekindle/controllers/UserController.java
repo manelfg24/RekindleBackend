@@ -50,6 +50,16 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @RequestMapping(value = "/test2", method = RequestMethod.GET)
+    public Refugee test2() {
+        Refugee refugee = new Refugee();
+        refugee.setName("DonEscro");
+        refugee.setMail("dones@gmail.com");
+        refugee.setPassword("1234");
+        refugee.setSurname1("Casas");
+        return refugee;
+    }
+
     @RequestMapping(value = "/registrarVoluntario", method = RequestMethod.POST)
     public ResponseEntity<String> createVolunteer(@RequestBody Volunteer volunteer) {
         String creationResult = userService.createVolunteer(volunteer.getMail(),
