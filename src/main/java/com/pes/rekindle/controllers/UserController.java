@@ -62,6 +62,7 @@ public class UserController {
 
     @RequestMapping(value = "/registrarVoluntario", method = RequestMethod.POST)
     public ResponseEntity<String> createVolunteer(@RequestBody Volunteer volunteer) {
+        System.out.println(volunteer.getMail());
         String creationResult = userService.createVolunteer(volunteer.getMail(),
                 volunteer.getPassword(), volunteer.getName(),
                 volunteer.getSurname1(), volunteer.getSurname2());
