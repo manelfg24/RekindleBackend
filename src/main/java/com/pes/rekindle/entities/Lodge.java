@@ -38,7 +38,7 @@ public class Lodge {
 
     @ManyToMany
     @JoinTable(name = "LodgeEnrollment")
-    private ArrayList<Refugee> inscriptions;
+    private Set<Refugee> inscriptions;
 
     public long getId() {
         return id;
