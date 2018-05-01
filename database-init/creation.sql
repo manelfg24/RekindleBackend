@@ -1,9 +1,13 @@
 /*
  * Resources local:
- * jdbc:mysql://localhost:3306/local_rekindle
- * 
- * Resources local:
- * spring.datasource.url=jdbc:mysql://10.4.41.149:3306/PES
+ spring.datasource.url=jdbc:mysql://localhost:3306/local_rekindle
+ spring.datasource.username=alumne
+ spring.datasource.password=rekindle
+ 
+ * Resources server:
+ spring.datasource.url=jdbc:mysql://10.4.41.149:3306/PES
+ spring.datasource.username=aplicacion
+ spring.datasource.password=rekindle
  */
 
 USE PES;
