@@ -12,6 +12,7 @@
 
 USE PES;
 USE local_rekindle;
+
 CREATE TABLE Refugee (
 	mail varchar(30) PRIMARY KEY,
 	password varchar(15) NOT NULL,
@@ -35,46 +36,6 @@ CREATE TABLE Volunteer (
 	surname1 varchar(20) NOT NULL,
 	surname2 varchar(20)
 );
-
-DELIMITER $$
-CREATE PROCEDURE `is_not_a_refugee` (IN mail VARCHAR(30))
-BEGIN
- DECLARE count INTEGER;
- SELECT count(*) INTO count
- FROM Refugee r
- WHERE r.mail = mail;
-    IF count > 0 
-  THEN SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'This user already exists as refugee';
- END IF;
-END 
-$$
-
-DELIMITER $$
-CREATE TRIGGER user_exists_as_refugee BEFORE INSERT ON Volunteer 
-FOR EACH ROW 
-BEGIN CALL is_not_a_refugee(NEW.mail);
-END;
-$$
-
-DELIMITER $$
-CREATE PROCEDURE `is_not_a_volunteer` (IN mail VARCHAR(30))
-BEGIN
- DECLARE count INTEGER;
- SELECT count(*) INTO count
- FROM Volunteer v
- WHERE v.mail = mail;
-    IF count > 0 
-  THEN SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'This user already exists as volunteer';
- END IF;
-END 
-$$
-
-DELIMITER $$
-CREATE TRIGGER user_exists_as_volunteer BEFORE INSERT ON Refugee 
-FOR EACH ROW 
-BEGIN CALL is_not_a_volunteer(NEW.mail);
-END;
-$$
 
 CREATE TABLE Donation (
 	id int PRIMARY KEY auto_increment,
@@ -139,4 +100,40 @@ CREATE TABLE Lodge (
 	description varchar(300) NOT NULL,
     
     FOREIGN KEY (volunteer) REFERENCES Volunteer(mail)
+);
+
+CREATE TABLE LodgeEnrollment (
+	refugeeMail varchar(30), 
+	lodgeId int,
+	
+	PRIMARY KEY (refugeeMail, lodgeId),
+	FOREIGN KEY (refugeeMail) REFERENCES Refugee(mail),
+	FOREIGN KEY (lodgeId) REFERENCES Lodge(id)
+);
+
+CREATE TABLE EducationEnrollment (
+	refugeeMail varchar(30), 
+	educationId int,
+	
+	PRIMARY KEY (refugeeMail, educationId),
+	FOREIGN KEY (refugeeMail) REFERENCES Refugee(mail),
+	FOREIGN KEY (educationId) REFERENCES Education(id)
+);
+
+CREATE TABLE JobEnrollment (
+	refugeeMail varchar(30), 
+	jobId int,
+	
+	PRIMARY KEY (refugeeMail, jobId),
+	FOREIGN KEY (refugeeMail) REFERENCES Refugee(mail),
+	FOREIGN KEY (jobId) REFERENCES Job(id)
+);
+
+CREATE TABLE DonationEnrollment (
+	refugeeMail varchar(30), 
+	donationId int,
+	
+	PRIMARY KEY (refugeeMail, donationId),
+	FOREIGN KEY (refugeeMail) REFERENCES Refugee(mail),
+	FOREIGN KEY (donationId) REFERENCES Donation(id)
 );
