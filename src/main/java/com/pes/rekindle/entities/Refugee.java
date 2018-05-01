@@ -35,7 +35,7 @@ public class Refugee {
     private String eyeColor;
 
     @ManyToMany
-    @JoinTable(name = "LodgeEnrollment")
+    @JoinTable(name = "Lodge_refugee")
     private Set<Lodge> lodges;
 
     @ManyToMany
@@ -153,4 +153,36 @@ public class Refugee {
     public void setEyeColor(String eyeColor) {
         this.eyeColor = eyeColor;
     }
+
+	public Set<Lodge> getLodges() {
+		return lodges;
+	}
+
+	public void setLodges(Set<Lodge> lodges) {
+		this.lodges = lodges;
+	}
+
+	public Set<Donation> getDonations() {
+		return donations;
+	}
+
+	public void setDonations(Set<Donation> donations) {
+		this.donations = donations;
+	}
+
+	public Set<Job> getJobs() {
+		return jobs;
+	}
+
+	public void setJobs(Set<Job> jobs) {
+		this.jobs = jobs;
+	}
+
+	public Set<Education> getCourses() {
+		return courses;
+	}
+
+	public void setCourses(Set<Education> courses) {
+		this.courses = courses;
+	}
 }

@@ -40,4 +40,6 @@ public interface UserService {
 
     Boolean exists(String mail, String password);
 
+	void enrollRefugeeLodge(String refugeeMail, long serviceId);
+
 }

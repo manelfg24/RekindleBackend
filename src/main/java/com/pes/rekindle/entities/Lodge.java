@@ -38,7 +38,7 @@ public class Lodge {
     private String description;
 
     @ManyToMany
-    @JoinTable(name = "LodgeEnrollment")
+    @JoinTable(name = "Lodge_refugee")
     private Set<Refugee> inscriptions;
 
     public long getId() {
@@ -112,5 +112,13 @@ public class Lodge {
     public void setDescription(String description) {
         this.description = description;
     }
+
+	public Set<Refugee> getInscriptions() {
+		return inscriptions;
+	}
+
+	public void setInscriptions(Set<Refugee> inscriptions) {
+		this.inscriptions = inscriptions;
+	}
 
 }

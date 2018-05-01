@@ -153,4 +153,15 @@ public class UserController {
         Refugee refugee = userService.infoRefugee(mail);
         return ResponseEntity.status(HttpStatus.OK).body(refugee);
     }
+    
+    @RequestMapping(value = "/testLodge", method = RequestMethod.GET)
+    public ResponseEntity<Refugee> lodgeTest() {
+    	String refugeeMail;
+    	long serviceId;
+    	refugeeMail = "alex@gmail.com";
+    	serviceId = 1;
+        userService.enrollRefugeeLodge(refugeeMail, serviceId);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+    
 }

@@ -3,12 +3,15 @@ package com.pes.rekindle.services;
 
 import java.sql.Date;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.pes.rekindle.entities.Lodge;
 import com.pes.rekindle.entities.Refugee;
 import com.pes.rekindle.entities.Volunteer;
+import com.pes.rekindle.repositories.LodgeRepository;
 import com.pes.rekindle.repositories.RefugeeRepository;
 import com.pes.rekindle.repositories.UserRepository;
 import com.pes.rekindle.repositories.VolunteerRepository;
@@ -22,6 +25,9 @@ public class UserServiceImpl implements UserService {
     VolunteerRepository volunteerRepository;
     @Autowired
     RefugeeRepository refugeeRepository;
+    
+    @Autowired
+    LodgeRepository lodgeRepository;
 
     public Volunteer createVolunteer(String mail, String password, String name, String surname1,
             String surname2) throws Exception {
@@ -171,6 +177,20 @@ public class UserServiceImpl implements UserService {
         return false;
     }
 
+	@Override
+	public void enrollRefugeeLodge(String refugeeMail, long serviceId) {
+		Refugee r = refugeeRepository.findByMail(refugeeMail);
+		Lodge l = (Lodge) lodgeRepository.findById(serviceId);
+		
+		Set<Lodge> lodges = r.getLodges();
+		Set<Refugee> refugees = l.getInscriptions();
+		
+		refugees.add(r);
+		lodges.add(l);
+		
+		refugeeRepository.save(r);
+		lodgeRepository.save(l);
+	}
 }
 
 /*
