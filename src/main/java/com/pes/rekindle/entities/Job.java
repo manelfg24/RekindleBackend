@@ -2,6 +2,7 @@
 package com.pes.rekindle.entities;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -46,7 +47,7 @@ public class Job {
 
     @ManyToMany
     @JoinTable(name = "JobEnrollment")
-    private ArrayList<Refugee> inscriptions;
+    private Set<Refugee> inscriptions;
 
     public long getId() {
         return id;

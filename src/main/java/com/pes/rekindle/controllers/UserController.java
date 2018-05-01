@@ -4,6 +4,7 @@ package com.pes.rekindle.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -141,16 +142,15 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
-    @RequestMapping(value = "/verPerfilVoluntario", method = RequestMethod.POST)
-    public ResponseEntity<Volunteer> infoVolunteer(@RequestBody LogInInfo logInInfo) {
-        Volunteer volunteer = userService.infoVolunteer(logInInfo.getMail());
+    @RequestMapping(value = "/voluntarios/{mail}", method = RequestMethod.GET)
+    public ResponseEntity<Volunteer> infoVolunteer(@PathVariable String mail) {
+        Volunteer volunteer = userService.infoVolunteer(mail);
         return ResponseEntity.status(HttpStatus.OK).body(volunteer);
     }
 
-    @RequestMapping(value = "/verPerfilRefugiado", method = RequestMethod.POST)
-    public ResponseEntity<Refugee> infoRefugee(@RequestBody LogInInfo logInInfo) {
-        Refugee refugee = userService.infoRefugee(logInInfo.getMail());
+    @RequestMapping(value = "/refugiados/{mail}", method = RequestMethod.GET)
+    public ResponseEntity<Refugee> infoRefugee(@PathVariable String mail) {
+        Refugee refugee = userService.infoRefugee(mail);
         return ResponseEntity.status(HttpStatus.OK).body(refugee);
     }
-
 }

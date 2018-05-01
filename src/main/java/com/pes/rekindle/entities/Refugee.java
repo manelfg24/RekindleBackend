@@ -3,6 +3,7 @@ package com.pes.rekindle.entities;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -35,19 +36,19 @@ public class Refugee {
 
     @ManyToMany
     @JoinTable(name = "LodgeEnrollment")
-    private ArrayList<Lodge> lodges;
+    private Set<Lodge> lodges;
 
     @ManyToMany
     @JoinTable(name = "DonationEnrollment")
-    private ArrayList<Donation> donations;
+    private Set<Donation> donations;
 
     @ManyToMany
     @JoinTable(name = "JobEnrollment")
-    private ArrayList<Job> jobs;
+    private Set<Job> jobs;
 
     @ManyToMany
     @JoinTable(name = "EducationEnrollment")
-    private ArrayList<Education> courses;
+    private Set<Education> courses;
 
     public String getMail() {
         return mail;
