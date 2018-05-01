@@ -3,6 +3,7 @@ package com.pes.rekindle.entities;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -38,7 +39,7 @@ public class Lodge {
 
     @ManyToMany
     @JoinTable(name = "LodgeEnrollment")
-    private ArrayList<Refugee> inscriptions;
+    private Set<Refugee> inscriptions;
 
     public long getId() {
         return id;
