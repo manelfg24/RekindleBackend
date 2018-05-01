@@ -142,9 +142,9 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
-    @RequestMapping(value = "/verPerfilVoluntario", method = RequestMethod.POST)
-    public ResponseEntity<Volunteer> infoVolunteer(@RequestBody LogInInfo logInInfo) {
-        Volunteer volunteer = userService.infoVolunteer(logInInfo.getMail());
+    @RequestMapping(value = "/voluntarios/{mail}", method = RequestMethod.GET)
+    public ResponseEntity<Volunteer> infoVolunteer(@PathVariable String mail) {
+        Volunteer volunteer = userService.infoVolunteer(mail);
         return ResponseEntity.status(HttpStatus.OK).body(volunteer);
     }
 
