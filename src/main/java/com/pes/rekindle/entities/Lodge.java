@@ -1,12 +1,15 @@
 
 package com.pes.rekindle.entities;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -32,6 +35,10 @@ public class Lodge {
     private Date dateLimit;
     @NotNull
     private String description;
+
+    @ManyToMany
+    @JoinTable(name = "LodgeEnrollment")
+    private ArrayList<Refugee> inscriptions;
 
     public long getId() {
         return id;

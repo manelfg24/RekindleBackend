@@ -2,9 +2,12 @@
 package com.pes.rekindle.entities;
 
 import java.sql.Date;
+import java.util.ArrayList;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -29,6 +32,22 @@ public class Refugee {
     private String ethnic;
     private String bloodType;
     private String eyeColor;
+
+    @ManyToMany
+    @JoinTable(name = "LodgeEnrollment")
+    private ArrayList<Lodge> lodges;
+
+    @ManyToMany
+    @JoinTable(name = "DonationEnrollment")
+    private ArrayList<Donation> donations;
+
+    @ManyToMany
+    @JoinTable(name = "JobEnrollment")
+    private ArrayList<Job> jobs;
+
+    @ManyToMany
+    @JoinTable(name = "EducationEnrollment")
+    private ArrayList<Education> courses;
 
     public String getMail() {
         return mail;

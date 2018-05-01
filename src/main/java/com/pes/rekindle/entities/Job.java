@@ -1,10 +1,14 @@
 
 package com.pes.rekindle.entities;
 
+import java.util.ArrayList;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -39,6 +43,10 @@ public class Job {
     private double salary;
     @NotNull
     private String description;
+
+    @ManyToMany
+    @JoinTable(name = "JobEnrollment")
+    private ArrayList<Refugee> inscriptions;
 
     public long getId() {
         return id;
