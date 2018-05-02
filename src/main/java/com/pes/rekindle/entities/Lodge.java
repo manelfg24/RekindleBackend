@@ -37,8 +37,7 @@ public class Lodge {
     @NotNull
     private String description;
 
-    @ManyToMany
-    @JoinTable(name = "Lodge_refugee")
+    @ManyToMany(mappedBy = "lodges")
     private Set<Refugee> inscriptions;
 
     public long getId() {

@@ -125,14 +125,15 @@ public class UserController {
         }
     }
 
-    @RequestMapping(value = "/modificarPerfilVoluntario", method = RequestMethod.POST)
+    @RequestMapping(value = "/voluntarios/{mail}", method = RequestMethod.PUT)
     public ResponseEntity<String> modifyProfileVolunteer(@RequestBody Volunteer volunteer) {
+    	//Cuidado tema seguridad
         userService.modifyProfileVolunteer(volunteer.getMail(), volunteer.getName(),
                 volunteer.getSurname1(), volunteer.getSurname2());
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
-    @RequestMapping(value = "/modificarPerfil", method = RequestMethod.POST)
+    @RequestMapping(value = "/refugiados/{mail}", method = RequestMethod.PUT)
     public ResponseEntity<String> modifyProfileRefugee(@RequestBody Refugee refugee) {
         userService.modifyProfileRefugee(refugee.getMail(), refugee.getName(),
                 refugee.getSurname1(),
@@ -161,6 +162,36 @@ public class UserController {
     	refugeeMail = "alex@gmail.com";
     	serviceId = 1;
         userService.enrollRefugeeLodge(refugeeMail, serviceId);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+    
+    @RequestMapping(value = "/testDonation", method = RequestMethod.GET)
+    public ResponseEntity<Refugee> donationTest() {
+    	String refugeeMail;
+    	long serviceId;
+    	refugeeMail = "alex@gmail.com";
+    	serviceId = 1;
+        userService.enrollRefugeeDonation(refugeeMail, serviceId);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+    
+    @RequestMapping(value = "/testJob", method = RequestMethod.GET)
+    public ResponseEntity<Refugee> jobTest() {
+    	String refugeeMail;
+    	long serviceId;
+    	refugeeMail = "alex@gmail.com";
+    	serviceId = 1;
+        userService.enrollRefugeeJob(refugeeMail, serviceId);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+    
+    @RequestMapping(value = "/testEducation", method = RequestMethod.GET)
+    public ResponseEntity<Refugee> educationTest() {
+    	String refugeeMail;
+    	long serviceId;
+    	refugeeMail = "alex@gmail.com";
+    	serviceId = 1;
+        userService.enrollRefugeeEducation(refugeeMail, serviceId);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
     

@@ -41,5 +41,11 @@ public interface UserService {
     Boolean exists(String mail, String password);
 
 	void enrollRefugeeLodge(String refugeeMail, long serviceId);
+	
+	void enrollRefugeeEducation(String refugeeMail, long serviceId);
+	
+	void enrollRefugeeJob(String refugeeMail, long serviceId);
+	
+	void enrollRefugeeDonation(String refugeeMail, long serviceId);
 
 }

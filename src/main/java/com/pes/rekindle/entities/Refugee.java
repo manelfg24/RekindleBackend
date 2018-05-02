@@ -5,8 +5,10 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
@@ -34,22 +36,51 @@ public class Refugee {
     private String bloodType;
     private String eyeColor;
 
-    @ManyToMany
-    @JoinTable(name = "Lodge_refugee")
+    
+    @ManyToMany(cascade = {
+    		CascadeType.PERSIST, 
+    		CascadeType.MERGE
+    })
+    @JoinTable(name = "LodgeEnrollment",
+            joinColumns = @JoinColumn(name = "refugeeMail"),
+            inverseJoinColumns = @JoinColumn(name = "lodgeId")
+    )
     private Set<Lodge> lodges;
 
-    @ManyToMany
-    @JoinTable(name = "DonationEnrollment")
+    
+    @ManyToMany(cascade = {
+    		CascadeType.PERSIST, 
+    		CascadeType.MERGE
+    })
+    @JoinTable(name = "DonationEnrollment",
+            joinColumns = @JoinColumn(name = "refugeeMail"),
+            inverseJoinColumns = @JoinColumn(name = "donationId")
+    )
     private Set<Donation> donations;
 
-    @ManyToMany
-    @JoinTable(name = "JobEnrollment")
+    
+    @ManyToMany(cascade = {
+    		CascadeType.PERSIST, 
+    		CascadeType.MERGE
+    })
+    @JoinTable(name = "JobEnrollment",
+            joinColumns = @JoinColumn(name = "refugeeMail"),
+            inverseJoinColumns = @JoinColumn(name = "jobId")
+    )
     private Set<Job> jobs;
 
-    @ManyToMany
-    @JoinTable(name = "EducationEnrollment")
+    
+    @ManyToMany(cascade = {
+    		CascadeType.PERSIST, 
+    		CascadeType.MERGE
+    })
+    @JoinTable(name = "EducationEnrollment",
+            joinColumns = @JoinColumn(name = "refugeeMail"),
+            inverseJoinColumns = @JoinColumn(name = "educationId")
+    )
     private Set<Education> courses;
 
+    
     public String getMail() {
         return mail;
     }

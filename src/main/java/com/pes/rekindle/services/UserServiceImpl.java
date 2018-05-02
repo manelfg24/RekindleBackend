@@ -8,9 +8,15 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.pes.rekindle.entities.Donation;
+import com.pes.rekindle.entities.Education;
+import com.pes.rekindle.entities.Job;
 import com.pes.rekindle.entities.Lodge;
 import com.pes.rekindle.entities.Refugee;
 import com.pes.rekindle.entities.Volunteer;
+import com.pes.rekindle.repositories.DonationRepository;
+import com.pes.rekindle.repositories.EducationRepository;
+import com.pes.rekindle.repositories.JobRepository;
 import com.pes.rekindle.repositories.LodgeRepository;
 import com.pes.rekindle.repositories.RefugeeRepository;
 import com.pes.rekindle.repositories.UserRepository;
@@ -28,6 +34,12 @@ public class UserServiceImpl implements UserService {
     
     @Autowired
     LodgeRepository lodgeRepository;
+    @Autowired
+    EducationRepository educationRepository;
+    @Autowired
+    DonationRepository donationRepository;
+    @Autowired
+    JobRepository jobRepository;
 
     public Volunteer createVolunteer(String mail, String password, String name, String surname1,
             String surname2) throws Exception {
@@ -190,6 +202,51 @@ public class UserServiceImpl implements UserService {
 		
 		refugeeRepository.save(r);
 		lodgeRepository.save(l);
+	}
+
+	@Override
+	public void enrollRefugeeEducation(String refugeeMail, long serviceId) {
+		Refugee r = refugeeRepository.findByMail(refugeeMail);
+		Education e = (Education) educationRepository.findById(serviceId);
+		
+		Set<Education> courses = r.getCourses();
+		Set<Refugee> refugees = e.getInscriptions();
+		
+		refugees.add(r);
+		courses.add(e);
+		
+		refugeeRepository.save(r);
+		educationRepository.save(e);
+	}
+
+	@Override
+	public void enrollRefugeeJob(String refugeeMail, long serviceId) {
+		Refugee r = refugeeRepository.findByMail(refugeeMail);
+		Job j = (Job) jobRepository.findById(serviceId);
+		
+		Set<Job> jobs = r.getJobs();
+		Set<Refugee> refugees = j.getInscriptions();
+		
+		refugees.add(r);
+		jobs.add(j);
+		
+		refugeeRepository.save(r);
+		jobRepository.save(j);
+	}
+
+	@Override
+	public void enrollRefugeeDonation(String refugeeMail, long serviceId) {
+		Refugee r = refugeeRepository.findByMail(refugeeMail);
+		Donation d = (Donation) donationRepository.findById(serviceId);
+		
+		Set<Donation> donations = r.getDonations();
+		Set<Refugee> refugees = d.getInscriptions();
+		
+		refugees.add(r);
+		donations.add(d);
+		
+		refugeeRepository.save(r);
+		donationRepository.save(d);
 	}
 }
 
