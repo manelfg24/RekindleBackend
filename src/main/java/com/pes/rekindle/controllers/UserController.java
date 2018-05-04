@@ -141,7 +141,6 @@ public class UserController {
     }
     */
 
-    /*
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<Object> logIn(@RequestBody MailandPassword logInInfo) {
     	System.out.println("-----------------------------------------------------------------------------------------------");
@@ -167,8 +166,8 @@ public class UserController {
         else 
         	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
-    */
     
+    /*
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<Object> logIn(@RequestAttribute("mail") String mail, @RequestAttribute("password") String password) {
     	System.out.println("-----------------------------------------------------------------------------------------------");
@@ -194,6 +193,7 @@ public class UserController {
         else 
         	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }    
+    */
 
     @RequestMapping(value = "/cambiarPasswordVoluntario", method = RequestMethod.POST)
     public ResponseEntity<String> changePasswordVolunteer(@RequestBody LogInInfo logInInfo) {
