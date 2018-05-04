@@ -1,8 +1,15 @@
 
 package com.pes.rekindle.controllers;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -45,9 +52,25 @@ public class UserController {
         public void setNewPassword(String newPassword) {
             this.newPassword = newPassword;
         }
-
     }
-
+    
+    public static class MailandPassword {
+    	String mail;
+    	String password;
+		public String getMail() {
+			return mail;
+		}
+		public void setMail(String mail) {
+			this.mail = mail;
+		}
+		public String getPassword() {
+			return password;
+		}
+		public void setPassword(String password) {
+			this.password = password;
+		}
+    }
+    
     @Autowired
     private UserService userService;
 
@@ -60,6 +83,17 @@ public class UserController {
         refugee.setSurname1("Casas");
         return refugee;
     }
+    
+    @RequestMapping(value = "/test4", method = RequestMethod.GET)
+    public ResponseEntity<Object> test4() {
+    	Refugee r = new Refugee();
+        r.setName("DonEscro");
+        r.setMail("dones@gmail.com");
+        r.setPassword("1234");
+        r.setSurname1("Casas");
+        //r.getSurname2("JASJD");
+        return ResponseEntity.status(HttpStatus.OK).body(r);
+    }  
 
     @RequestMapping(value = "/voluntarios", method = RequestMethod.POST)
     public ResponseEntity<Volunteer> createVolunteer(@RequestBody Volunteer volunteer) {
@@ -94,13 +128,29 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.OK).body(createdRefugee);
     }
+    
+    /*
+    @RequestMapping(value = "/login/{mail}&{password}", method = RequestMethod.GET)
+    public ResponseEntity<Object> logIn(@PathVariable String mail, @PathVariable String password) {
+    	Pair<Integer, Object> user = userService.exists(mail, password);
+        if (user.getFirst()==0 || user.getFirst()==1)
+            return ResponseEntity.status(HttpStatus.OK).header("Tipo", user.getFirst().toString()).body(user.getSecond());
+        	//return ResponseEntity.status(HttpStatus.OK).body(user.getSecond());
+        else 
+        	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    }
+    */
 
-    @RequestMapping(value = "/inicioSesion", method = RequestMethod.POST)
-    public ResponseEntity<String> logIn(@RequestBody LogInInfo logInInfo) {
-        if (userService.exists(logInInfo.getMail(), logInInfo.getPassword())) {
-            return ResponseEntity.status(HttpStatus.OK).body(null);
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public ResponseEntity<Object> logIn(LogInInfo logInInfo) {
+    	System.out.println("Informacion del usuario: " + logInInfo.getMail() + " " + logInInfo.getPassword());
+    	Pair<Integer, Object> user = userService.exists(logInInfo.getMail(), logInInfo.getPassword());
+        if (user.getFirst()==0 || user.getFirst()==1) {
+            return ResponseEntity.status(HttpStatus.OK).header("Tipo", user.getFirst().toString()).body(user.getSecond());
+        	//return ResponseEntity.status(HttpStatus.OK).body(user.getSecond());
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        else 
+        	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
     @RequestMapping(value = "/cambiarPasswordVoluntario", method = RequestMethod.POST)
@@ -125,14 +175,15 @@ public class UserController {
         }
     }
 
-    @RequestMapping(value = "/modificarPerfilVoluntario", method = RequestMethod.POST)
+    @RequestMapping(value = "/voluntarios/{mail}", method = RequestMethod.PUT)
     public ResponseEntity<String> modifyProfileVolunteer(@RequestBody Volunteer volunteer) {
+    	//Cuidado tema seguridad
         userService.modifyProfileVolunteer(volunteer.getMail(), volunteer.getName(),
                 volunteer.getSurname1(), volunteer.getSurname2());
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
-    @RequestMapping(value = "/modificarPerfil", method = RequestMethod.POST)
+    @RequestMapping(value = "/refugiados/{mail}", method = RequestMethod.PUT)
     public ResponseEntity<String> modifyProfileRefugee(@RequestBody Refugee refugee) {
         userService.modifyProfileRefugee(refugee.getMail(), refugee.getName(),
                 refugee.getSurname1(),
@@ -153,4 +204,45 @@ public class UserController {
         Refugee refugee = userService.infoRefugee(mail);
         return ResponseEntity.status(HttpStatus.OK).body(refugee);
     }
+    
+    @RequestMapping(value = "/testLodge", method = RequestMethod.GET)
+    public ResponseEntity<Refugee> lodgeTest() {
+    	String refugeeMail;
+    	long serviceId;
+    	refugeeMail = "alex@gmail.com";
+    	serviceId = 2;
+        userService.enrollRefugeeLodge(refugeeMail, serviceId);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+    
+    @RequestMapping(value = "/testDonation", method = RequestMethod.GET)
+    public ResponseEntity<Refugee> donationTest() {
+    	String refugeeMail;
+    	long serviceId;
+    	refugeeMail = "alex@gmail.com";
+    	serviceId = 1;
+        userService.enrollRefugeeDonation(refugeeMail, serviceId);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+    
+    @RequestMapping(value = "/testJob", method = RequestMethod.GET)
+    public ResponseEntity<Refugee> jobTest() {
+    	String refugeeMail;
+    	long serviceId;
+    	refugeeMail = "alex@gmail.com";
+    	serviceId = 1;
+        userService.enrollRefugeeJob(refugeeMail, serviceId);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+    
+    @RequestMapping(value = "/testEducation", method = RequestMethod.GET)
+    public ResponseEntity<Refugee> educationTest() {
+    	String refugeeMail;
+    	long serviceId;
+    	refugeeMail = "alex@gmail.com";
+    	serviceId = 2;
+        userService.enrollRefugeeEducation(refugeeMail, serviceId);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+    
 }

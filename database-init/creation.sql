@@ -137,3 +137,12 @@ CREATE TABLE DonationEnrollment (
 	FOREIGN KEY (refugeeMail) REFERENCES Refugee(mail),
 	FOREIGN KEY (donationId) REFERENCES Donation(id)
 );
+
+CREATE TABLE Lodge_refugee (
+	refugee_mail varchar(30), 
+	lodge_id int,
+	
+	PRIMARY KEY (refugee_mail, lodge_id),
+	FOREIGN KEY (refugee_mail) REFERENCES Refugee(mail),
+	FOREIGN KEY (lodge_id) REFERENCES Lodge(id)
+);

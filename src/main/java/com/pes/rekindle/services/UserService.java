@@ -3,6 +3,8 @@ package com.pes.rekindle.services;
 
 import java.sql.Date;
 
+import org.springframework.data.util.Pair;
+
 import com.pes.rekindle.entities.Refugee;
 import com.pes.rekindle.entities.Volunteer;
 
@@ -38,6 +40,14 @@ public interface UserService {
 
     Refugee infoRefugee(String mail);
 
-    Boolean exists(String mail, String password);
+    Pair<Integer, Object> exists(String mail, String password);
+
+	void enrollRefugeeLodge(String refugeeMail, long serviceId);
+	
+	void enrollRefugeeEducation(String refugeeMail, long serviceId);
+	
+	void enrollRefugeeJob(String refugeeMail, long serviceId);
+	
+	void enrollRefugeeDonation(String refugeeMail, long serviceId);
 
 }

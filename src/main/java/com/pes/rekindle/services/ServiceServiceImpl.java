@@ -132,4 +132,8 @@ public class ServiceServiceImpl implements ServiceService {
         return service;
     }
 
+	@Override
+	public Boolean deleteService(long id, char serviceType) {
+		return null;
+	}
 }

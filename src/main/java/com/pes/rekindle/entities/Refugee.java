@@ -3,10 +3,14 @@ package com.pes.rekindle.entities;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
@@ -34,22 +38,51 @@ public class Refugee {
     private String bloodType;
     private String eyeColor;
 
-    @ManyToMany
-    @JoinTable(name = "LodgeEnrollment")
-    private Set<Lodge> lodges;
+    
+    @ManyToMany(cascade = {
+    		CascadeType.PERSIST, 
+    		CascadeType.MERGE
+    })
+    @JoinTable(name = "LodgeEnrollment",
+            joinColumns = @JoinColumn(name = "refugeeMail"),
+            inverseJoinColumns = @JoinColumn(name = "lodgeId")
+    )
+    private Set<Lodge> lodges = new HashSet<Lodge>();
 
-    @ManyToMany
-    @JoinTable(name = "DonationEnrollment")
-    private Set<Donation> donations;
+    
+    @ManyToMany(cascade = {
+    		CascadeType.PERSIST, 
+    		CascadeType.MERGE,
+    })
+    @JoinTable(name = "DonationEnrollment",
+            joinColumns = @JoinColumn(name = "refugeeMail"),
+            inverseJoinColumns = @JoinColumn(name = "donationId")
+    )
+    private Set<Donation> donations = new HashSet<Donation>();
 
-    @ManyToMany
-    @JoinTable(name = "JobEnrollment")
-    private Set<Job> jobs;
+    
+    @ManyToMany(cascade = {
+    		CascadeType.PERSIST, 
+    		CascadeType.MERGE
+    })
+    @JoinTable(name = "JobEnrollment",
+            joinColumns = @JoinColumn(name = "refugeeMail"),
+            inverseJoinColumns = @JoinColumn(name = "jobId")
+    )
+    private Set<Job> jobs = new HashSet<Job>();
 
-    @ManyToMany
-    @JoinTable(name = "EducationEnrollment")
-    private Set<Education> courses;
+    
+    @ManyToMany(cascade = {
+    		CascadeType.PERSIST, 
+    		CascadeType.MERGE
+    })
+    @JoinTable(name = "EducationEnrollment",
+            joinColumns = @JoinColumn(name = "refugeeMail"),
+            inverseJoinColumns = @JoinColumn(name = "educationId")
+    )
+    private Set<Education> courses = new HashSet<Education>();
 
+    
     public String getMail() {
         return mail;
     }
@@ -153,4 +186,36 @@ public class Refugee {
     public void setEyeColor(String eyeColor) {
         this.eyeColor = eyeColor;
     }
+
+	public Set<Lodge> getLodges() {
+		return lodges;
+	}
+
+	public void setLodges(Set<Lodge> lodges) {
+		this.lodges = lodges;
+	}
+
+	public Set<Donation> getDonations() {
+		return donations;
+	}
+
+	public void setDonations(Set<Donation> donations) {
+		this.donations = donations;
+	}
+
+	public Set<Job> getJobs() {
+		return jobs;
+	}
+
+	public void setJobs(Set<Job> jobs) {
+		this.jobs = jobs;
+	}
+
+	public Set<Education> getCourses() {
+		return courses;
+	}
+
+	public void setCourses(Set<Education> courses) {
+		this.courses = courses;
+	}
 }

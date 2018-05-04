@@ -39,8 +39,7 @@ public class Donation {
     @NotNull
     private String description;
 
-    @ManyToMany
-    @JoinTable(name = "DonationEnrollment")
+    @ManyToMany(mappedBy = "donations")
     private Set<Refugee> inscriptions;
 
     public long getId() {
@@ -122,5 +121,13 @@ public class Donation {
     public void setDescription(String description) {
         this.description = description;
     }
+
+	public Set<Refugee> getInscriptions() {
+		return inscriptions;
+	}
+
+	public void setInscriptions(Set<Refugee> inscriptions) {
+		this.inscriptions = inscriptions;
+	}
 
 }

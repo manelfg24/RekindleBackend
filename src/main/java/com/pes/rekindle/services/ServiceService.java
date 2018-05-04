@@ -26,4 +26,6 @@ public interface ServiceService {
 
     Object infoService(Long id, char serviceType);
 
+	Boolean deleteService(long id, char serviceType);
+
 }

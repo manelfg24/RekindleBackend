@@ -45,8 +45,7 @@ public class Job {
     @NotNull
     private String description;
 
-    @ManyToMany
-    @JoinTable(name = "JobEnrollment")
+    @ManyToMany(mappedBy = "jobs")
     private Set<Refugee> inscriptions;
 
     public long getId() {
@@ -160,4 +159,12 @@ public class Job {
     public void setSalary(double salary) {
         this.salary = salary;
     }
+
+	public Set<Refugee> getInscriptions() {
+		return inscriptions;
+	}
+
+	public void setInscriptions(Set<Refugee> inscriptions) {
+		this.inscriptions = inscriptions;
+	}
 }
