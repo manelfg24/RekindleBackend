@@ -145,8 +145,8 @@ public class UserController {
     	System.out.println("Informacion del usuario: " + logInInfo.getMail() + " " + logInInfo.getPassword());
     	Pair<Integer, Object> user = userService.exists(logInInfo.getMail(), logInInfo.getPassword());
         if (user.getFirst()==0 || user.getFirst()==1) {
-            //return ResponseEntity.status(HttpStatus.OK).header("Tipo", user.getFirst().toString()).body(user.getSecond());
-        	return ResponseEntity.status(HttpStatus.OK).body(user.getSecond());
+            return ResponseEntity.status(HttpStatus.OK).header("Tipo", user.getFirst().toString()).body(user.getSecond());
+        	//return ResponseEntity.status(HttpStatus.OK).body(user.getSecond());
         }
         else 
         	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
