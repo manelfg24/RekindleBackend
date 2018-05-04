@@ -50,4 +50,6 @@ public interface UserService {
 	
 	void enrollRefugeeDonation(String refugeeMail, long serviceId);
 
+	boolean changePassword(String mail, String passwordOld, String passwordNew);
+
 }
