@@ -53,6 +53,23 @@ public class UserController {
         }
     }
     
+    public static class MailandPassword {
+    	String mail;
+    	String password;
+		public String getMail() {
+			return mail;
+		}
+		public void setMail(String mail) {
+			this.mail = mail;
+		}
+		public String getPassword() {
+			return password;
+		}
+		public void setPassword(String password) {
+			this.password = password;
+		}
+    }
+    
     @Autowired
     private UserService userService;
 
@@ -124,8 +141,8 @@ public class UserController {
     */
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity<Object> logIn(@RequestBody LogInInfo logInInfo) {
-    	System.out.println("Informacion del usuario: " + logInInfo.getMail() + " " + logInInfo.getPassword() + " " + logInInfo.getNewPassword());
+    public ResponseEntity<Object> logIn(@RequestBody MailandPassword logInInfo) {
+    	System.out.println("Informacion del usuario: " + logInInfo.getMail() + " " + logInInfo.getPassword());
     	Pair<Integer, Object> user = userService.exists(logInInfo.getMail(), logInInfo.getPassword());
         if (user.getFirst()==0 || user.getFirst()==1) {
             //return ResponseEntity.status(HttpStatus.OK).header("Tipo", user.getFirst().toString()).body(user.getSecond());
