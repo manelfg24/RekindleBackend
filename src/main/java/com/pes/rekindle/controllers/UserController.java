@@ -54,23 +54,6 @@ public class UserController {
         }
     }
     
-    public static class MailandPassword {
-    	String mail;
-    	String password;
-		public String getMail() {
-			return mail;
-		}
-		public void setMail(String mail) {
-			this.mail = mail;
-		}
-		public String getPassword() {
-			return password;
-		}
-		public void setPassword(String password) {
-			this.password = password;
-		}
-    }
-    
     @Autowired
     private UserService userService;
 
@@ -128,72 +111,6 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.OK).body(createdRefugee);
     }
-    
-    /*
-    @RequestMapping(value = "/login/{mail}&{password}", method = RequestMethod.GET)
-    public ResponseEntity<Object> logIn(@PathVariable String mail, @PathVariable String password) {
-    	Pair<Integer, Object> user = userService.exists(mail, password);
-        if (user.getFirst()==0 || user.getFirst()==1)
-            return ResponseEntity.status(HttpStatus.OK).header("Tipo", user.getFirst().toString()).body(user.getSecond());
-        	//return ResponseEntity.status(HttpStatus.OK).body(user.getSecond());
-        else 
-        	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-    }
-    */
-
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity<Object> logIn(@RequestBody MailandPassword logInInfo) {
-    	System.out.println("-----------------------------------------------------------------------------------------------");
-    	System.out.println("-----------------------------------------------------------------------------------------------");
-    	System.out.println("-----------------------------------------------------------------------------------------------");
-    	System.out.println("-----------------------------------------------------------------------------------------------");
-    	System.out.println("-----------------------------------------------------------------------------------------------");
-    	System.out.println("-----------------------------------------------------------------------------------------------");
-
-    	System.out.println("Informacion del usuario: " + logInInfo.getMail() + " " + logInInfo.getPassword());
-    	
-    	System.out.println("-----------------------------------------------------------------------------------------------");
-    	System.out.println("-----------------------------------------------------------------------------------------------");
-    	System.out.println("-----------------------------------------------------------------------------------------------");
-    	System.out.println("-----------------------------------------------------------------------------------------------");
-    	System.out.println("-----------------------------------------------------------------------------------------------");
-
-    	Pair<Integer, Object> user = userService.exists(logInInfo.getMail(), logInInfo.getPassword());
-        if (user.getFirst()==0 || user.getFirst()==1) {
-            return ResponseEntity.status(HttpStatus.OK).header("Tipo", user.getFirst().toString()).body(user.getSecond());
-        	//return ResponseEntity.status(HttpStatus.OK).body(user.getSecond());
-        }
-        else 
-        	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-    }
-    
-    /*
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity<Object> logIn(@RequestAttribute("mail") String mail, @RequestAttribute("password") String password) {
-    	System.out.println("-----------------------------------------------------------------------------------------------");
-    	System.out.println("-----------------------------------------------------------------------------------------------");
-    	System.out.println("-----------------------------------------------------------------------------------------------");
-    	System.out.println("-----------------------------------------------------------------------------------------------");
-    	System.out.println("-----------------------------------------------------------------------------------------------");
-    	System.out.println("-----------------------------------------------------------------------------------------------");
-
-    	System.out.println("Informacion del usuario: " + mail + " " + password);
-    	
-    	System.out.println("-----------------------------------------------------------------------------------------------");
-    	System.out.println("-----------------------------------------------------------------------------------------------");
-    	System.out.println("-----------------------------------------------------------------------------------------------");
-    	System.out.println("-----------------------------------------------------------------------------------------------");
-    	System.out.println("-----------------------------------------------------------------------------------------------");
-
-    	Pair<Integer, Object> user = userService.exists(mail, password);
-        if (user.getFirst()==0 || user.getFirst()==1) {
-            return ResponseEntity.status(HttpStatus.OK).header("Tipo", user.getFirst().toString()).body(user.getSecond());
-        	//return ResponseEntity.status(HttpStatus.OK).body(user.getSecond());
-        }
-        else 
-        	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-    }    
-    */
 
     @RequestMapping(value = "/cambiarPasswordVoluntario", method = RequestMethod.POST)
     public ResponseEntity<String> changePasswordVolunteer(@RequestBody LogInInfo logInInfo) {
