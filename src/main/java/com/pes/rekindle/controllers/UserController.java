@@ -52,23 +52,6 @@ public class UserController {
             this.newPassword = newPassword;
         }
     }
-
-    public static class Test {
-		int a;
-    	Set<Object> l;
-		public int getA() {
-			return a;
-		}
-		public void setA(int a) {
-			this.a = a;
-		}
-		public Set<Object> getL() {
-			return l;
-		}
-		public void setL(Set<Object> l) {
-			this.l = l;
-		}
-    }
     
     @Autowired
     private UserService userService;
@@ -92,19 +75,7 @@ public class UserController {
         r.setSurname1("Casas");
         //r.getSurname2("JASJD");
         return ResponseEntity.status(HttpStatus.OK).body(r);
-    }
-    
-    @RequestMapping(value = "/testeo", method = RequestMethod.GET)
-    public ResponseEntity<Object> testeo() {
-    	Test test = new Test();
-    	test.setA(4);
-    	Set<Object> s = new HashSet<Object>();
-    	s.add("asdad");
-    	s.add(333);
-    	s.add('c');
-    	test.setL(s);
-        return ResponseEntity.status(HttpStatus.OK).body(test);
-    }   
+    }  
 
     @RequestMapping(value = "/voluntarios", method = RequestMethod.POST)
     public ResponseEntity<Volunteer> createVolunteer(@RequestBody Volunteer volunteer) {
