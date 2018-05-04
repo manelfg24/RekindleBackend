@@ -112,4 +112,19 @@ public class ServiceController {
         Object service = serviceService.infoService(id, serviceType);
         return service;
     }
+    
+    @RequestMapping(value = "/eliminarServicio", method = RequestMethod.POST)
+    public ResponseEntity<Boolean> deleteService() { //id servicio, tipo servicio
+    	long id;
+    	char serviceType;
+    	
+    	id = 1;
+    	serviceType = 'l';
+    	
+    	if (serviceService.deleteService(id, serviceType))
+    		return ResponseEntity.status(HttpStatus.OK).body(null);
+    	else
+    		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    		
+    }
 }

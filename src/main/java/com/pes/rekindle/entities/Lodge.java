@@ -5,10 +5,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
@@ -37,7 +39,14 @@ public class Lodge {
     @NotNull
     private String description;
 
-    @ManyToMany(mappedBy = "lodges")
+    @ManyToMany(cascade = {
+    		CascadeType.PERSIST, 
+    		CascadeType.MERGE
+    })
+    @JoinTable(name = "LodgeEnrollment",
+            joinColumns = @JoinColumn(name = "lodgeId"),
+            inverseJoinColumns = @JoinColumn(name = "refugeeMail")
+    )
     private Set<Refugee> inscriptions;
 
     public long getId() {

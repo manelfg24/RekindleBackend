@@ -1,7 +1,13 @@
 
 package com.pes.rekindle.controllers;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,9 +51,25 @@ public class UserController {
         public void setNewPassword(String newPassword) {
             this.newPassword = newPassword;
         }
-
     }
 
+    public static class Test {
+		int a;
+    	Set<Object> l;
+		public int getA() {
+			return a;
+		}
+		public void setA(int a) {
+			this.a = a;
+		}
+		public Set<Object> getL() {
+			return l;
+		}
+		public void setL(Set<Object> l) {
+			this.l = l;
+		}
+    }
+    
     @Autowired
     private UserService userService;
 
@@ -60,6 +82,29 @@ public class UserController {
         refugee.setSurname1("Casas");
         return refugee;
     }
+    
+    @RequestMapping(value = "/test4", method = RequestMethod.GET)
+    public ResponseEntity<Object> test4() {
+    	Refugee r = new Refugee();
+        r.setName("DonEscro");
+        r.setMail("dones@gmail.com");
+        r.setPassword("1234");
+        r.setSurname1("Casas");
+        //r.getSurname2("JASJD");
+        return ResponseEntity.status(HttpStatus.OK).body(r);
+    }
+    
+    @RequestMapping(value = "/testeo", method = RequestMethod.GET)
+    public ResponseEntity<Object> testeo() {
+    	Test test = new Test();
+    	test.setA(4);
+    	Set<Object> s = new HashSet<Object>();
+    	s.add("asdad");
+    	s.add(333);
+    	s.add('c');
+    	test.setL(s);
+        return ResponseEntity.status(HttpStatus.OK).body(test);
+    }   
 
     @RequestMapping(value = "/voluntarios", method = RequestMethod.POST)
     public ResponseEntity<Volunteer> createVolunteer(@RequestBody Volunteer volunteer) {
@@ -95,12 +140,13 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(createdRefugee);
     }
 
-    @RequestMapping(value = "/inicioSesion", method = RequestMethod.POST)
-    public ResponseEntity<String> logIn(@RequestBody LogInInfo logInInfo) {
-        if (userService.exists(logInInfo.getMail(), logInInfo.getPassword())) {
-            return ResponseEntity.status(HttpStatus.OK).body(null);
-        }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public ResponseEntity<Object> logIn(@RequestBody LogInInfo logInInfo) {
+    	Pair<Integer, Object> user = userService.exists(logInInfo.getMail(), logInInfo.getPassword());
+        if (user.getFirst()==0 || user.getFirst()==1)
+            return ResponseEntity.status(HttpStatus.OK).header("Tipo-Usuario", user.getFirst().toString()).body(user.getSecond());
+        else 
+        	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
     @RequestMapping(value = "/cambiarPasswordVoluntario", method = RequestMethod.POST)
@@ -160,7 +206,7 @@ public class UserController {
     	String refugeeMail;
     	long serviceId;
     	refugeeMail = "alex@gmail.com";
-    	serviceId = 1;
+    	serviceId = 2;
         userService.enrollRefugeeLodge(refugeeMail, serviceId);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
@@ -190,7 +236,7 @@ public class UserController {
     	String refugeeMail;
     	long serviceId;
     	refugeeMail = "alex@gmail.com";
-    	serviceId = 1;
+    	serviceId = 2;
         userService.enrollRefugeeEducation(refugeeMail, serviceId);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }

@@ -3,10 +3,12 @@ package com.pes.rekindle.entities;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -45,18 +47,18 @@ public class Refugee {
             joinColumns = @JoinColumn(name = "refugeeMail"),
             inverseJoinColumns = @JoinColumn(name = "lodgeId")
     )
-    private Set<Lodge> lodges;
+    private Set<Lodge> lodges = new HashSet<Lodge>();
 
     
     @ManyToMany(cascade = {
     		CascadeType.PERSIST, 
-    		CascadeType.MERGE
+    		CascadeType.MERGE,
     })
     @JoinTable(name = "DonationEnrollment",
             joinColumns = @JoinColumn(name = "refugeeMail"),
             inverseJoinColumns = @JoinColumn(name = "donationId")
     )
-    private Set<Donation> donations;
+    private Set<Donation> donations = new HashSet<Donation>();
 
     
     @ManyToMany(cascade = {
@@ -67,7 +69,7 @@ public class Refugee {
             joinColumns = @JoinColumn(name = "refugeeMail"),
             inverseJoinColumns = @JoinColumn(name = "jobId")
     )
-    private Set<Job> jobs;
+    private Set<Job> jobs = new HashSet<Job>();
 
     
     @ManyToMany(cascade = {
@@ -78,7 +80,7 @@ public class Refugee {
             joinColumns = @JoinColumn(name = "refugeeMail"),
             inverseJoinColumns = @JoinColumn(name = "educationId")
     )
-    private Set<Education> courses;
+    private Set<Education> courses = new HashSet<Education>();
 
     
     public String getMail() {

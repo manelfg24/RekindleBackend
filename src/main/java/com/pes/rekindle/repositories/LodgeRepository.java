@@ -16,4 +16,6 @@ public interface LodgeRepository extends Repository<Lodge, String> {
     public ArrayList<Lodge> findAll();
 
     public Object findById(Long id);
+    
+    
 }

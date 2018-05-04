@@ -2,10 +2,12 @@
 package com.pes.rekindle.services;
 
 import java.sql.Date;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import com.pes.rekindle.entities.Donation;
@@ -173,20 +175,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Boolean exists(String mail, String password) {
+    public Pair<Integer, Object> exists(String mail, String password) {
         Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMailAndPassword(mail,
                 password);
-        Refugee refugee = new Refugee();
         if (oRefugee.isPresent()) {
-            return true;
+        	// Super sucio, se tiene que cambiar
+        	// Alex muerdealmohadas
+        	Refugee r = oRefugee.get();
+        	r.setCourses(new HashSet<Education>());
+        	r.setJobs(new HashSet<Job>());
+        	r.setLodges(new HashSet<Lodge>());
+        	r.setDonations(new HashSet<Donation>());
+        	return Pair.of(0, r);
         }
         Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMailAndPassword(mail,
                 password);
-        Volunteer volunteer = new Volunteer();
         if (oVolunteer.isPresent()) {
-            return true;
+            return Pair.of(1, oVolunteer.get());
         }
-        return false;
+        return Pair.of(-1, "Usuario pa' la pinga");
     }
 
 	@Override
