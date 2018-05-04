@@ -9,6 +9,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestAttribute;
@@ -111,7 +112,31 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.OK).body(createdRefugee);
     }
+    
+    /*
+    @RequestMapping(value = "/login/{mail}&{password}", method = RequestMethod.GET)
+    public ResponseEntity<Object> logIn(@PathVariable String mail, @PathVariable String password) {
+    	Pair<Integer, Object> user = userService.exists(mail, password);
+        if (user.getFirst()==0 || user.getFirst()==1)
+            return ResponseEntity.status(HttpStatus.OK).header("Tipo", user.getFirst().toString()).body(user.getSecond());
+        	//return ResponseEntity.status(HttpStatus.OK).body(user.getSecond());
+        else 
+        	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    }
+    */
 
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public ResponseEntity<Object> logIn(LogInInfo logInInfo) {
+    	System.out.println("Informacion del usuario: " + logInInfo.getMail() + " " + logInInfo.getPassword());
+    	Pair<Integer, Object> user = userService.exists(logInInfo.getMail(), logInInfo.getPassword());
+        if (user.getFirst()==0 || user.getFirst()==1) {
+            return ResponseEntity.status(HttpStatus.OK).header("Tipo", user.getFirst().toString()).body(user.getSecond());
+        	//return ResponseEntity.status(HttpStatus.OK).body(user.getSecond());
+        }
+        else 
+        	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    }
+    
     @RequestMapping(value = "/cambiarPasswordVoluntario", method = RequestMethod.POST)
     public ResponseEntity<String> changePasswordVolunteer(@RequestBody LogInInfo logInInfo) {
         Boolean cambio = userService.changePasswordVolunteer(logInInfo.getMail(),
