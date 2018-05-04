@@ -142,7 +142,21 @@ public class UserController {
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<Object> logIn(@RequestBody MailandPassword logInInfo) {
+    	System.out.println("-----------------------------------------------------------------------------------------------");
+    	System.out.println("-----------------------------------------------------------------------------------------------");
+    	System.out.println("-----------------------------------------------------------------------------------------------");
+    	System.out.println("-----------------------------------------------------------------------------------------------");
+    	System.out.println("-----------------------------------------------------------------------------------------------");
+    	System.out.println("-----------------------------------------------------------------------------------------------");
+
     	System.out.println("Informacion del usuario: " + logInInfo.getMail() + " " + logInInfo.getPassword());
+    	
+    	System.out.println("-----------------------------------------------------------------------------------------------");
+    	System.out.println("-----------------------------------------------------------------------------------------------");
+    	System.out.println("-----------------------------------------------------------------------------------------------");
+    	System.out.println("-----------------------------------------------------------------------------------------------");
+    	System.out.println("-----------------------------------------------------------------------------------------------");
+
     	Pair<Integer, Object> user = userService.exists(logInInfo.getMail(), logInInfo.getPassword());
         if (user.getFirst()==0 || user.getFirst()==1) {
             return ResponseEntity.status(HttpStatus.OK).header("Tipo", user.getFirst().toString()).body(user.getSecond());
