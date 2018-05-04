@@ -110,7 +110,18 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.OK).body(createdRefugee);
     }
+    
+    @RequestMapping(value = "/login/{mail}&{password}", method = RequestMethod.GET)
+    public ResponseEntity<Object> logIn(@PathVariable String mail, @PathVariable String password) {
+    	Pair<Integer, Object> user = userService.exists(mail, password);
+        if (user.getFirst()==0 || user.getFirst()==1)
+            return ResponseEntity.status(HttpStatus.OK).header("Tipo", user.getFirst().toString()).body(user.getSecond());
+        	//return ResponseEntity.status(HttpStatus.OK).body(user.getSecond());
+        else 
+        	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    }
 
+    /*
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<Object> logIn(@RequestBody LogInInfo logInInfo) {
     	System.out.println("Informacion del usuario: " + logInInfo.getMail() + " " + logInInfo.getPassword() + " " + logInInfo.getNewPassword());
@@ -122,6 +133,7 @@ public class UserController {
         else 
         	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
+    */
 
     @RequestMapping(value = "/cambiarPasswordVoluntario", method = RequestMethod.POST)
     public ResponseEntity<String> changePasswordVolunteer(@RequestBody LogInInfo logInInfo) {
