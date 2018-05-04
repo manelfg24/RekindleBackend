@@ -11,6 +11,7 @@ import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -140,6 +141,7 @@ public class UserController {
     }
     */
 
+    /*
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<Object> logIn(@RequestBody MailandPassword logInInfo) {
     	System.out.println("-----------------------------------------------------------------------------------------------");
@@ -165,6 +167,33 @@ public class UserController {
         else 
         	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
+    */
+    
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public ResponseEntity<Object> logIn(@RequestAttribute("mail") String mail, @RequestAttribute("password") String password) {
+    	System.out.println("-----------------------------------------------------------------------------------------------");
+    	System.out.println("-----------------------------------------------------------------------------------------------");
+    	System.out.println("-----------------------------------------------------------------------------------------------");
+    	System.out.println("-----------------------------------------------------------------------------------------------");
+    	System.out.println("-----------------------------------------------------------------------------------------------");
+    	System.out.println("-----------------------------------------------------------------------------------------------");
+
+    	System.out.println("Informacion del usuario: " + mail + " " + password);
+    	
+    	System.out.println("-----------------------------------------------------------------------------------------------");
+    	System.out.println("-----------------------------------------------------------------------------------------------");
+    	System.out.println("-----------------------------------------------------------------------------------------------");
+    	System.out.println("-----------------------------------------------------------------------------------------------");
+    	System.out.println("-----------------------------------------------------------------------------------------------");
+
+    	Pair<Integer, Object> user = userService.exists(mail, password);
+        if (user.getFirst()==0 || user.getFirst()==1) {
+            return ResponseEntity.status(HttpStatus.OK).header("Tipo", user.getFirst().toString()).body(user.getSecond());
+        	//return ResponseEntity.status(HttpStatus.OK).body(user.getSecond());
+        }
+        else 
+        	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    }    
 
     @RequestMapping(value = "/cambiarPasswordVoluntario", method = RequestMethod.POST)
     public ResponseEntity<String> changePasswordVolunteer(@RequestBody LogInInfo logInInfo) {
