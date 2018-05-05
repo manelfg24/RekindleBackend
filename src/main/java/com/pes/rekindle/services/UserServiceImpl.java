@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService {
             String surname2,
             Integer phoneNumber, Date birthdate, String sex, String country, String town,
             String ethnic,
-            String bloodType, String eyeColor) throws Exception {
+            String bloodType, String eyeColor, String biography) throws Exception {
         Refugee refugee = new Refugee();
         Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMail(mail);
         Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMail(mail);
@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
         } else {
             refugeeRepository.create(mail, password, name, surname1, surname2, phoneNumber,
                     birthdate, sex, country,
-                    town, ethnic, bloodType, eyeColor);
+                    town, ethnic, bloodType, eyeColor, biography);
             refugee = refugeeRepository.findByMail(mail);
         }
         return refugee;

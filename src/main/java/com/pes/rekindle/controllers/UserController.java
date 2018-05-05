@@ -120,7 +120,7 @@ public class UserController {
                     refugee.getName(), refugee.getSurname1(),
                     refugee.getSurname2(), refugee.getPhoneNumber(), refugee.getBirthdate(),
                     refugee.getSex(), refugee.getCountry(), refugee.getTown(),
-                    refugee.getEthnic(), refugee.getBloodType(), refugee.getEyeColor());
+                    refugee.getEthnic(), refugee.getBloodType(), refugee.getEyeColor(), refugee.getBiography());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }

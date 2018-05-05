@@ -23,7 +23,7 @@ public interface UserService {
             String surname2,
             Integer phoneNumber, Date birthdate, String sex, String country, String town,
             String ethnic,
-            String bloodType, String eyeColor) throws Exception;
+            String bloodType, String eyeColor, String biography) throws Exception;
 
     Volunteer logInVolunteer(String mail, String password);
 
