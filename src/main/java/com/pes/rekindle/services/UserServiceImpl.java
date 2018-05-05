@@ -256,7 +256,46 @@ public class UserServiceImpl implements UserService {
         Set<Lodge> lodges = refugee.getLodges();
         return lodges;
     }
+    
+	@Override
+	public Set<Refugee> findRefugee(String name, String surname1, String surname2, Date birthdate, String sex,
+			String country, String town, String ethnic, String blood, String eye) {
+		Set<Refugee> result = new HashSet<Refugee>();
+		result = refugeeRepository.findAll();
+		if(name != "") {
+			result.retainAll(refugeeRepository.findByName(name));
+		}
+		if (surname1 != "") {
+			result.retainAll(refugeeRepository.findBySurname1(surname1));
+		}
+		if (surname2 != "") {
+			result.retainAll(refugeeRepository.findBySurname2(surname2));
+		}
+		if(birthdate != Date.valueOf("1890-01-01")) {
+			result.retainAll(refugeeRepository.findByBirthdate(birthdate));
+		}
+		if(sex != "") {
+			result.retainAll(refugeeRepository.findBySex(sex));
+		}		
+		if(country != "") {
+			result.retainAll(refugeeRepository.findByCountry(country));
+		}	
+		if(town != "") {
+			result.retainAll(refugeeRepository.findByTown(town));
+		}	
+		if(ethnic != "") {
+			result.retainAll(refugeeRepository.findByEthnic(ethnic));
+		}	
+		if(blood != "-") {
+			result.retainAll(refugeeRepository.findByBloodType(blood));
+		}	
+		if(eye != "-") {
+			result.retainAll(refugeeRepository.findByEyeColor(eye));
+		}	
+		return result;
+	}
 
+    /*
 	@Override
 	public Set<Refugee> findRefugee(String name, String surname1, String surname2, Date birthdate, String sex,
 			String country, String town, String ethnic, String blood, String eye) {
@@ -312,6 +351,7 @@ public class UserServiceImpl implements UserService {
 		}	
 		return result;
 	}
+	*/
     
 /*
 	@Override
