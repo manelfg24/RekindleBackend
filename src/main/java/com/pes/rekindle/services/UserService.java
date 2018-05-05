@@ -61,4 +61,6 @@ public interface UserService {
 
 	boolean changePassword(String mail, String passwordOld, String passwordNew);
 
+	boolean recoverPassword(String mail, String passwordNew);
+
 }

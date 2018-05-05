@@ -400,6 +400,25 @@ public class UserServiceImpl implements UserService {
         } 
         return false;
 	}
+
+	@Override
+	public boolean recoverPassword(String mail, String passwordNew) {
+        Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMail(mail);
+        if (oRefugee.isPresent()) {
+        	Refugee refugee = oRefugee.get();
+        	refugee.setPassword(passwordNew);
+        	refugeeRepository.save(refugee);
+        	return true;
+        }
+        Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMail(mail);
+        if (oVolunteer.isPresent()) {
+        	Volunteer volunteer = oVolunteer.get();
+        	volunteer.setPassword(passwordNew);
+        	volunteerRepository.save(volunteer);
+        	return true;
+        }
+		return false;
+	}
 }
 
 /*

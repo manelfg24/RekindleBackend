@@ -256,6 +256,15 @@ public class UserController {
     	}
     }
     
+    @RequestMapping(value = "/recuperarPassword/{mail}", method = RequestMethod.PUT)
+    public ResponseEntity<Object> changePassword(@PathVariable String mail, String passwordNew) {
+    	if (userService.recoverPassword(mail, passwordNew)) {
+    		return ResponseEntity.status(HttpStatus.OK).body(null);
+    	} else {
+    		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    	}
+    }
+    
     @RequestMapping(value = "/cambiarPasswordVoluntario", method = RequestMethod.POST)
     public ResponseEntity<String> changePasswordVolunteer(@RequestBody LogInInfo logInInfo) {
         Boolean cambio = userService.changePasswordVolunteer(logInInfo.getMail(),
