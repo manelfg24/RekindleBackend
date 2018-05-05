@@ -203,8 +203,9 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(refugee);
     }
     
+    
     //Busqueda de refugiados
-    @RequestMapping(value = "/refugiados/", method = RequestMethod.GET)
+    @RequestMapping(value = "/refugiados", method = RequestMethod.GET)
     public ResponseEntity<Set<Refugee>> findRefugee(@RequestParam("name") String name, @RequestParam("surname1") String surname1, 
     		@RequestParam("surname2") String surname2, @RequestParam("birthdate") Date birthdate, @RequestParam("sex") String sex, 
     		@RequestParam("country") String country, @RequestParam("town") String town, @RequestParam("ethnic") String ethnic, 
@@ -212,6 +213,8 @@ public class UserController {
         Set<Refugee> refugees = userService.findRefugee(name, surname1,surname2, birthdate, sex, country, town, ethnic, blood, eye);
         return ResponseEntity.status(HttpStatus.OK).body(refugees);
     }
+    
+    
     @RequestMapping(value = "/refugiados/{mail}/servicios", method = RequestMethod.GET)
     public ResponseEntity<Set<Lodge>> refugeeServices(@PathVariable String mail) {
         Set<Lodge> lodges = userService.refugeeLodges(mail);

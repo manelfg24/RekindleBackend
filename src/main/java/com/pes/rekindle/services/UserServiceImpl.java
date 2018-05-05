@@ -260,13 +260,81 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Set<Refugee> findRefugee(String name, String surname1, String surname2, Date birthdate, String sex,
 			String country, String town, String ethnic, String blood, String eye) {
-		if(name != null) {
-			Set<Refugee> refugeeName = refugeeRepository.findByName(name);
+		Set<Refugee> result = new HashSet<Refugee>();
+		result = refugeeRepository.findAll();
+		if(name != "") {
+			if (refugeeRepository.existsByName(name)) {
+				result.retainAll(refugeeRepository.findByName(name));
+			}
 		}
-		
-		return null;
+		if (surname1 != "") {
+			if (refugeeRepository.existsBySurname1(surname1)) {
+				result.retainAll(refugeeRepository.findBySurname1(surname1));
+			}
+		}
+		if (surname2 != "") {
+			if (refugeeRepository.existsBySurname2(surname2)) {
+				result.retainAll(refugeeRepository.findBySurname2(surname2));
+			}
+		}
+		if(birthdate != Date.valueOf("1890-01-01")) {
+			if (refugeeRepository.existsByBirthdate(birthdate)) {
+				result.retainAll(refugeeRepository.findByBirthdate(birthdate));
+			}
+		}
+		if(sex != "") {
+			if (refugeeRepository.existsBySex(sex)) {
+				result.retainAll(refugeeRepository.findBySex(sex));
+			}
+		}		
+		if(country != "") {
+			if (refugeeRepository.existsByCountry(country)) {
+				result.retainAll(refugeeRepository.findByCountry(country));
+			}
+		}	
+		if(town != "") {
+			result.retainAll(refugeeRepository.findByTown(town));
+		}	
+		if(ethnic != "") {
+			if (refugeeRepository.existsByEthnic(ethnic)) {
+				result.retainAll(refugeeRepository.findByEthnic(ethnic));
+			}
+		}	
+		if(blood != "-") {
+			if (refugeeRepository.existsByBloodType(blood)) {
+				result.retainAll(refugeeRepository.findByBloodType(blood));
+			}
+		}	
+		if(eye != "-") {
+			if (refugeeRepository.existsByEyeColor(eye)) {
+				result.retainAll(refugeeRepository.findByEyeColor(eye));
+			}
+		}	
+		return result;
 	}
-
+    
+/*
+	@Override
+	public Set<Refugee> findRefugee(String name, String surname1, String surname2, Date birthdate, String sex,
+			String country, String town, String ethnic, String blood, String eye) {
+		Set<Refugee> result = new HashSet<Refugee>();
+		result = refugeeRepository.findAll();
+		if(name != null) {
+			Set<Optional<Refugee>> oSetRefugee = refugeeRepository.findOptionalByName(name);
+			if (!oSetRefugee.isEmpty()) {
+				Set<Refugee> sRefugee = new HashSet<Refugee>();
+				for (Optional<Refugee> oRefugee : oSetRefugee) {
+					sRefugee.add(oRefugee.get());
+				}
+				result.retainAll(sRefugee);
+			}
+		}
+		if (surname1 != null) {
+			
+		}
+		return result;
+	}
+*/
 }
 
 /*
