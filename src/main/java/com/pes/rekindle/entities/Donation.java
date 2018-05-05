@@ -5,14 +5,18 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "Donation")
@@ -39,7 +43,15 @@ public class Donation {
     @NotNull
     private String description;
 
-    @ManyToMany(mappedBy = "donations")
+    @ManyToMany(cascade = {
+    		CascadeType.PERSIST, 
+    		CascadeType.MERGE
+    })
+    @JoinTable(name = "DonationEnrollment",
+            joinColumns = @JoinColumn(name = "donationId"),
+            inverseJoinColumns = @JoinColumn(name = "refugeeMail")
+    )
+    @JsonBackReference
     private Set<Refugee> inscriptions;
 
     public long getId() {

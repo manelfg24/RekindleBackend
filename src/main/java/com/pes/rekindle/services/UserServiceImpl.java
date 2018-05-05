@@ -2,6 +2,7 @@
 package com.pes.rekindle.services;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -33,7 +34,7 @@ public class UserServiceImpl implements UserService {
     VolunteerRepository volunteerRepository;
     @Autowired
     RefugeeRepository refugeeRepository;
-    
+
     @Autowired
     LodgeRepository lodgeRepository;
     @Autowired
@@ -179,13 +180,7 @@ public class UserServiceImpl implements UserService {
         Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMailAndPassword(mail,
                 password);
         if (oRefugee.isPresent()) {
-        	// Super sucio, se tiene que cambiar
-        	Refugee r = oRefugee.get();
-        	r.setCourses(new HashSet<Education>());
-        	r.setJobs(new HashSet<Job>());
-        	r.setLodges(new HashSet<Lodge>());
-        	r.setDonations(new HashSet<Donation>());
-        	return Pair.of(0, r);
+            return Pair.of(0, oRefugee.get());
         }
         Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMailAndPassword(mail,
                 password);
@@ -195,66 +190,152 @@ public class UserServiceImpl implements UserService {
         return Pair.of(-1, "Usuario pa' la pinga");
     }
 
-	@Override
-	public void enrollRefugeeLodge(String refugeeMail, long serviceId) {
-		Refugee r = refugeeRepository.findByMail(refugeeMail);
-		Lodge l = (Lodge) lodgeRepository.findById(serviceId);
-		
-		Set<Lodge> lodges = r.getLodges();
-		Set<Refugee> refugees = l.getInscriptions();
-		
-		refugees.add(r);
-		lodges.add(l);
-		
-		refugeeRepository.save(r);
-		lodgeRepository.save(l);
-	}
+    @Override
+    public void enrollRefugeeLodge(String refugeeMail, long serviceId) {
+        Refugee r = refugeeRepository.findByMail(refugeeMail);
+        Lodge l = (Lodge) lodgeRepository.findById(serviceId);
+
+        Set<Lodge> lodges = r.getLodges();
+        Set<Refugee> refugees = l.getInscriptions();
+
+        refugees.add(r);
+        lodges.add(l);
+
+        refugeeRepository.save(r);
+        lodgeRepository.save(l);
+    }
+
+    @Override
+    public void enrollRefugeeEducation(String refugeeMail, long serviceId) {
+        Refugee r = refugeeRepository.findByMail(refugeeMail);
+        Education e = (Education) educationRepository.findById(serviceId);
+
+        Set<Education> courses = r.getCourses();
+        Set<Refugee> refugees = e.getInscriptions();
+
+        refugees.add(r);
+        courses.add(e);
+
+        refugeeRepository.save(r);
+        educationRepository.save(e);
+    }
+
+    @Override
+    public void enrollRefugeeJob(String refugeeMail, long serviceId) {
+        Refugee r = refugeeRepository.findByMail(refugeeMail);
+        Job j = (Job) jobRepository.findById(serviceId);
+
+        Set<Job> jobs = r.getJobs();
+        Set<Refugee> refugees = j.getInscriptions();
+
+        refugees.add(r);
+        jobs.add(j);
+
+        refugeeRepository.save(r);
+        jobRepository.save(j);
+    }
+
+    @Override
+    public void enrollRefugeeDonation(String refugeeMail, long serviceId) {
+        Refugee r = refugeeRepository.findByMail(refugeeMail);
+        Donation d = (Donation) donationRepository.findById(serviceId);
+
+        Set<Donation> donations = r.getDonations();
+        Set<Refugee> refugees = d.getInscriptions();
+
+        refugees.add(r);
+        donations.add(d);
+
+        refugeeRepository.save(r);
+        donationRepository.save(d);
+    }
+
+    @Override
+    public Set<Lodge> refugeeLodges(String mail) {
+        Refugee refugee = refugeeRepository.findByMail(mail);
+        Set<Lodge> lodges = refugee.getLodges();
+        return lodges;
+    }
 
 	@Override
-	public void enrollRefugeeEducation(String refugeeMail, long serviceId) {
-		Refugee r = refugeeRepository.findByMail(refugeeMail);
-		Education e = (Education) educationRepository.findById(serviceId);
-		
-		Set<Education> courses = r.getCourses();
-		Set<Refugee> refugees = e.getInscriptions();
-		
-		refugees.add(r);
-		courses.add(e);
-		
-		refugeeRepository.save(r);
-		educationRepository.save(e);
+	public Set<Refugee> findRefugee(String name, String surname1, String surname2, Date birthdate, String sex,
+			String country, String town, String ethnic, String blood, String eye) {
+		Set<Refugee> result = new HashSet<Refugee>();
+		result = refugeeRepository.findAll();
+		if(name != "") {
+			if (refugeeRepository.existsByName(name)) {
+				result.retainAll(refugeeRepository.findByName(name));
+			}
+		}
+		if (surname1 != "") {
+			if (refugeeRepository.existsBySurname1(surname1)) {
+				result.retainAll(refugeeRepository.findBySurname1(surname1));
+			}
+		}
+		if (surname2 != "") {
+			if (refugeeRepository.existsBySurname2(surname2)) {
+				result.retainAll(refugeeRepository.findBySurname2(surname2));
+			}
+		}
+		if(birthdate != Date.valueOf("1890-01-01")) {
+			if (refugeeRepository.existsByBirthdate(birthdate)) {
+				result.retainAll(refugeeRepository.findByBirthdate(birthdate));
+			}
+		}
+		if(sex != "") {
+			if (refugeeRepository.existsBySex(sex)) {
+				result.retainAll(refugeeRepository.findBySex(sex));
+			}
+		}		
+		if(country != "") {
+			if (refugeeRepository.existsByCountry(country)) {
+				result.retainAll(refugeeRepository.findByCountry(country));
+			}
+		}	
+		if(town != "") {
+			result.retainAll(refugeeRepository.findByTown(town));
+		}	
+		if(ethnic != "") {
+			if (refugeeRepository.existsByEthnic(ethnic)) {
+				result.retainAll(refugeeRepository.findByEthnic(ethnic));
+			}
+		}	
+		if(blood != "-") {
+			if (refugeeRepository.existsByBloodType(blood)) {
+				result.retainAll(refugeeRepository.findByBloodType(blood));
+			}
+		}	
+		if(eye != "-") {
+			if (refugeeRepository.existsByEyeColor(eye)) {
+				result.retainAll(refugeeRepository.findByEyeColor(eye));
+			}
+		}	
+		return result;
 	}
-
+    
+/*
 	@Override
-	public void enrollRefugeeJob(String refugeeMail, long serviceId) {
-		Refugee r = refugeeRepository.findByMail(refugeeMail);
-		Job j = (Job) jobRepository.findById(serviceId);
-		
-		Set<Job> jobs = r.getJobs();
-		Set<Refugee> refugees = j.getInscriptions();
-		
-		refugees.add(r);
-		jobs.add(j);
-		
-		refugeeRepository.save(r);
-		jobRepository.save(j);
+	public Set<Refugee> findRefugee(String name, String surname1, String surname2, Date birthdate, String sex,
+			String country, String town, String ethnic, String blood, String eye) {
+		Set<Refugee> result = new HashSet<Refugee>();
+		result = refugeeRepository.findAll();
+		if(name != null) {
+			Set<Optional<Refugee>> oSetRefugee = refugeeRepository.findOptionalByName(name);
+			if (!oSetRefugee.isEmpty()) {
+				Set<Refugee> sRefugee = new HashSet<Refugee>();
+				for (Optional<Refugee> oRefugee : oSetRefugee) {
+					sRefugee.add(oRefugee.get());
+				}
+				result.retainAll(sRefugee);
+			}
+		}
+		if (surname1 != null) {
+			
+		}
+		return result;
 	}
-
-	@Override
-	public void enrollRefugeeDonation(String refugeeMail, long serviceId) {
-		Refugee r = refugeeRepository.findByMail(refugeeMail);
-		Donation d = (Donation) donationRepository.findById(serviceId);
-		
-		Set<Donation> donations = r.getDonations();
-		Set<Refugee> refugees = d.getInscriptions();
-		
-		refugees.add(r);
-		donations.add(d);
-		
-		refugeeRepository.save(r);
-		donationRepository.save(d);
-	}
-
+*/
+  
 	@Override
 	public boolean changePassword(String mail, String passwordOld, String passwordNew) {
         Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMailAndPassword(mail,
