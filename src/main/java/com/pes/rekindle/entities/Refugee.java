@@ -16,6 +16,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "Refugee")
 public class Refugee {
@@ -47,6 +49,7 @@ public class Refugee {
             joinColumns = @JoinColumn(name = "refugeeMail"),
             inverseJoinColumns = @JoinColumn(name = "lodgeId")
     )
+    @JsonBackReference
     private Set<Lodge> lodges = new HashSet<Lodge>();
 
     
@@ -58,6 +61,7 @@ public class Refugee {
             joinColumns = @JoinColumn(name = "refugeeMail"),
             inverseJoinColumns = @JoinColumn(name = "donationId")
     )
+    @JsonBackReference
     private Set<Donation> donations = new HashSet<Donation>();
 
     
@@ -69,6 +73,7 @@ public class Refugee {
             joinColumns = @JoinColumn(name = "refugeeMail"),
             inverseJoinColumns = @JoinColumn(name = "jobId")
     )
+    @JsonBackReference
     private Set<Job> jobs = new HashSet<Job>();
 
     
@@ -80,6 +85,7 @@ public class Refugee {
             joinColumns = @JoinColumn(name = "refugeeMail"),
             inverseJoinColumns = @JoinColumn(name = "educationId")
     )
+    @JsonBackReference
     private Set<Education> courses = new HashSet<Education>();
 
     

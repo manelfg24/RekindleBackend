@@ -16,6 +16,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "Lodge")
 public class Lodge {
@@ -47,6 +49,7 @@ public class Lodge {
             joinColumns = @JoinColumn(name = "lodgeId"),
             inverseJoinColumns = @JoinColumn(name = "refugeeMail")
     )
+    @JsonBackReference
     private Set<Refugee> inscriptions;
 
     public long getId() {

@@ -180,12 +180,7 @@ public class UserServiceImpl implements UserService {
         Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMailAndPassword(mail,
                 password);
         if (oRefugee.isPresent()) {
-            Refugee r = oRefugee.get();
-            r.setCourses(new HashSet<Education>());
-            r.setJobs(new HashSet<Job>());
-            r.setLodges(new HashSet<Lodge>());
-            r.setDonations(new HashSet<Donation>());
-            return Pair.of(0, r);
+            return Pair.of(0, oRefugee.get());
         }
         Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMailAndPassword(mail,
                 password);
@@ -256,13 +251,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ArrayList<Lodge> refugeeLodges(String mail) {
+    public Set<Lodge> refugeeLodges(String mail) {
         Refugee refugee = refugeeRepository.findByMail(mail);
-        Set<Lodge> refLodges = refugee.getLodges();
-        ArrayList<Lodge> lodges = new ArrayList<Lodge>();
-        for (Lodge lodge : refLodges) {
-            lodges.add((Lodge) lodgeRepository.findById(lodge.getId()));
-        }
+        Set<Lodge> lodges = refugee.getLodges();
         return lodges;
     }
 }

@@ -2,6 +2,7 @@
 package com.pes.rekindle.controllers;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -201,11 +202,20 @@ public class UserController {
     }
 
     @RequestMapping(value = "/refugiados/{mail}/servicios", method = RequestMethod.GET)
-    public ResponseEntity<ArrayList<Lodge>> refugeeServices(@PathVariable String mail) {
-        ArrayList<Lodge> lodges = userService.refugeeLodges(mail);
+    public ResponseEntity<Set<Lodge>> refugeeServices(@PathVariable String mail) {
+        Set<Lodge> lodges = userService.refugeeLodges(mail);
         ServiceRefugee services = new ServiceRefugee();
+    	for (Lodge lodge : lodges) {
+    		System.out.println(lodge.getId());
+    		System.out.println(lodge.getDescription());
+    		System.out.println(lodge.getServiceType());
+    		System.out.println(lodge.getName());
+    		System.out.println(lodge.getVolunteer());
+    		System.out.println(lodge.getInscriptions());
+    	}
         // services.setLodgesRefugge(lodges);
-        return ResponseEntity.status(HttpStatus.OK).body(lodges);
+       return ResponseEntity.status(HttpStatus.OK).body(lodges);
+        //return null;
     }
 
     @RequestMapping(value = "/testLodge", method = RequestMethod.GET)
@@ -246,6 +256,29 @@ public class UserController {
         serviceId = 2;
         userService.enrollRefugeeEducation(refugeeMail, serviceId);
         return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+    
+    @RequestMapping(value = "/testtest", method = RequestMethod.GET) 
+    public ResponseEntity<Set<Lodge>> testtest() {
+    	Set<Lodge> lodges = new HashSet<Lodge>();
+    	Lodge l = new Lodge();
+    	l.setId(1);
+    	l.setName("servisio");
+    	
+    	Lodge l2 = new Lodge();
+    	l2.setId(2);
+    	l2.setName("servisio2");
+    	
+    	lodges.add(l);
+    	lodges.add(l2);
+    	
+    	for (Lodge lodge : lodges) {
+    		System.out.println(lodge.getId());
+    		System.out.println(lodge.getDescription());
+    		System.out.println(lodge.getServiceType());
+    	}
+    	
+    	return ResponseEntity.status(HttpStatus.OK).body(lodges);
     }
 
 }

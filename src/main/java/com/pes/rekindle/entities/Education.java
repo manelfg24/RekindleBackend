@@ -4,14 +4,18 @@ package com.pes.rekindle.entities;
 import java.util.ArrayList;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "Education")
@@ -39,7 +43,15 @@ public class Education {
     @NotNull
     private String description;
 
-    @ManyToMany(mappedBy = "courses")
+    @ManyToMany(cascade = {
+    		CascadeType.PERSIST, 
+    		CascadeType.MERGE
+    })
+    @JoinTable(name = "EducationEnrollment",
+            joinColumns = @JoinColumn(name = "educationId"),
+            inverseJoinColumns = @JoinColumn(name = "refugeeMail")
+    )
+    @JsonBackReference
     private Set<Refugee> inscriptions;
 
     public long getId() {
