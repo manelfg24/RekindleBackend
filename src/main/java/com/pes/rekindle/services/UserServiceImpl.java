@@ -257,7 +257,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public Set<Lodge> refugeeLodges(String mail) {
         Refugee refugee = refugeeRepository.findByMail(mail);
-        Set<Lodge> lodges = refugee.getLodges();
+        Set<Lodge> refLodges = refugee.getLodges();
+        Set<Lodge> lodges = new HashSet<Lodge>();
+        for (Lodge lodge : refLodges) {
+            lodges.add((Lodge) lodgeRepository.findById(lodge.getId()));
+        }
         return lodges;
     }
 }
