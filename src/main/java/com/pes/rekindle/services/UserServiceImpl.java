@@ -262,36 +262,36 @@ public class UserServiceImpl implements UserService {
 			String country, String town, String ethnic, String blood, String eye) {
 		Set<Refugee> result = new HashSet<Refugee>();
 		result = refugeeRepository.findAll();
-		if(name != "") {
+		if(!name.equals("")) {
 			result.retainAll(refugeeRepository.findByName(name));
 		}
-		if (surname1 != "") {
+		if (!surname1.equals("")) {
 			result.retainAll(refugeeRepository.findBySurname1(surname1));
 		}
-		if (surname2 != "") {
+		if (!surname2.equals("")) {
 			result.retainAll(refugeeRepository.findBySurname2(surname2));
 		}
-		if(birthdate != Date.valueOf("1890-01-01")) {
+		if(!birthdate.equals(Date.valueOf("1890-01-01"))) {
 			result.retainAll(refugeeRepository.findByBirthdate(birthdate));
 		}
-		if(sex != "") {
+		if(!sex.equals("-")) 
 			result.retainAll(refugeeRepository.findBySex(sex));
-		}		
-		if(country != "") {
+		
+		if(!country.equals("")) {
 			result.retainAll(refugeeRepository.findByCountry(country));
 		}	
-		if(town != "") {
+		if(!town.equals("")) {
 			result.retainAll(refugeeRepository.findByTown(town));
 		}	
-		if(ethnic != "") {
+		if(!ethnic.equals("")) {
 			result.retainAll(refugeeRepository.findByEthnic(ethnic));
 		}	
-		if(blood != "-") {
+		if(!blood.equals("-")) {
 			result.retainAll(refugeeRepository.findByBloodType(blood));
 		}	
-		if(eye != "-") {
+		if(!eye.equals("-")) {
 			result.retainAll(refugeeRepository.findByEyeColor(eye));
-		}	
+		}
 		return result;
 	}
 
