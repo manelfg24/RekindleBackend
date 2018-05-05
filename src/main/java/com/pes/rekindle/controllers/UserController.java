@@ -1,6 +1,7 @@
 
 package com.pes.rekindle.controllers;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -200,11 +201,11 @@ public class UserController {
     }
 
     @RequestMapping(value = "/refugiados/{mail}/servicios", method = RequestMethod.GET)
-    public ResponseEntity<ServiceRefugee> refugeeServices(@PathVariable String mail) {
-        Set<Lodge> lodges = userService.refugeeLodges(mail);
+    public ResponseEntity<ArrayList<Lodge>> refugeeServices(@PathVariable String mail) {
+        ArrayList<Lodge> lodges = userService.refugeeLodges(mail);
         ServiceRefugee services = new ServiceRefugee();
-        services.setLodgesRefugge(lodges);
-        return ResponseEntity.status(HttpStatus.OK).body(services);
+        // services.setLodgesRefugge(lodges);
+        return ResponseEntity.status(HttpStatus.OK).body(lodges);
     }
 
     @RequestMapping(value = "/testLodge", method = RequestMethod.GET)

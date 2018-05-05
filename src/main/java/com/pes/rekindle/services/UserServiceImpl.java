@@ -2,6 +2,7 @@
 package com.pes.rekindle.services;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -255,10 +256,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Set<Lodge> refugeeLodges(String mail) {
+    public ArrayList<Lodge> refugeeLodges(String mail) {
         Refugee refugee = refugeeRepository.findByMail(mail);
         Set<Lodge> refLodges = refugee.getLodges();
-        Set<Lodge> lodges = new HashSet<Lodge>();
+        ArrayList<Lodge> lodges = new ArrayList<Lodge>();
         for (Lodge lodge : refLodges) {
             lodges.add((Lodge) lodgeRepository.findById(lodge.getId()));
         }

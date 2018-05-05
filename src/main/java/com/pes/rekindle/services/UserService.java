@@ -2,7 +2,7 @@
 package com.pes.rekindle.services;
 
 import java.sql.Date;
-import java.util.Set;
+import java.util.ArrayList;
 
 import org.springframework.data.util.Pair;
 
@@ -52,6 +52,6 @@ public interface UserService {
 
     void enrollRefugeeDonation(String refugeeMail, long serviceId);
 
-    Set<Lodge> refugeeLodges(String mail);
+    ArrayList<Lodge> refugeeLodges(String mail);
 
 }
