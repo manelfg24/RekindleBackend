@@ -256,6 +256,17 @@ public class UserServiceImpl implements UserService {
         Set<Lodge> lodges = refugee.getLodges();
         return lodges;
     }
+
+	@Override
+	public Set<Refugee> findRefugee(String name, String surname1, String surname2, Date birthdate, String sex,
+			String country, String town, String ethnic, String blood, String eye) {
+		if(name != null) {
+			Set<Refugee> refugeeName = refugeeRepository.findByName(name);
+		}
+		
+		return null;
+	}
+
 }
 
 /*

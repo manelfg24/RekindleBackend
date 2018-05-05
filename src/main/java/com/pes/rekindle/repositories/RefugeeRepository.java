@@ -3,6 +3,7 @@ package com.pes.rekindle.repositories;
 
 import java.sql.Date;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -20,7 +21,9 @@ public interface RefugeeRepository extends Repository<Refugee, String> {
     public Optional<Refugee> findOptionalByMail(String mail);
 
     public void save(Refugee refugee);
-
+    
+    public Set<Refugee> findByName(String name);
+    
     @Modifying
     @Transactional
     @Query(value = "insert into Refugee"

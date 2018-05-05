@@ -1,6 +1,7 @@
 
 package com.pes.rekindle.controllers;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pes.rekindle.entities.Lodge;
@@ -51,7 +53,7 @@ public class UserController {
         public void setNewPassword(String newPassword) {
             this.newPassword = newPassword;
         }
-    }
+    }   
 
     public static class ServiceRefugee {
 
@@ -200,7 +202,16 @@ public class UserController {
         Refugee refugee = userService.infoRefugee(mail);
         return ResponseEntity.status(HttpStatus.OK).body(refugee);
     }
-
+    
+    //Busqueda de refugiados
+    @RequestMapping(value = "/refugiados/", method = RequestMethod.GET)
+    public ResponseEntity<Set<Refugee>> findRefugee(@RequestParam("name") String name, @RequestParam("surname1") String surname1, 
+    		@RequestParam("surname2") String surname2, @RequestParam("birthdate") Date birthdate, @RequestParam("sex") String sex, 
+    		@RequestParam("country") String country, @RequestParam("town") String town, @RequestParam("ethnic") String ethnic, 
+    		@RequestParam("blood") String blood, @RequestParam("eye") String eye) {
+        Set<Refugee> refugees = userService.findRefugee(name, surname1,surname2, birthdate, sex, country, town, ethnic, blood, eye);
+        return ResponseEntity.status(HttpStatus.OK).body(refugees);
+    }
     @RequestMapping(value = "/refugiados/{mail}/servicios", method = RequestMethod.GET)
     public ResponseEntity<Set<Lodge>> refugeeServices(@PathVariable String mail) {
         Set<Lodge> lodges = userService.refugeeLodges(mail);
@@ -222,8 +233,8 @@ public class UserController {
     public ResponseEntity<Refugee> lodgeTest() {
         String refugeeMail;
         long serviceId;
-        refugeeMail = "felipe@gmail.com";
-        serviceId = 2;
+        refugeeMail = "alex@gmail.com";
+        serviceId = 1;
         userService.enrollRefugeeLodge(refugeeMail, serviceId);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }

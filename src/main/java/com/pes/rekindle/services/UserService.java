@@ -55,4 +55,8 @@ public interface UserService {
 
     Set<Lodge> refugeeLodges(String mail);
 
+	Set<Refugee> findRefugee(String name, String surname1, String surname2, Date birthdate, String sex, String country,
+			String town, String ethnic, String blood, String eye);
+
+
 }
