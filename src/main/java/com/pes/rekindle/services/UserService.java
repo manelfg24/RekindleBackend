@@ -59,4 +59,6 @@ public interface UserService {
 			String town, String ethnic, String blood, String eye);
 
 
+	boolean changePassword(String mail, String passwordOld, String passwordNew);
+
 }

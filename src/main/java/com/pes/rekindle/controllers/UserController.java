@@ -11,6 +11,7 @@ import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -150,7 +151,16 @@ public class UserController {
         } else
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
-
+    
+    @RequestMapping(value = "/cambiarPassword/{mail}", method = RequestMethod.PUT)
+    public ResponseEntity<Object> changePassword(@PathVariable String mail, String passwordOld, String passwordNew) {
+    	if (userService.changePassword(mail, passwordOld, passwordNew)) {
+    		return ResponseEntity.status(HttpStatus.OK).body(null);
+    	} else {
+    		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    	}
+    }
+    
     @RequestMapping(value = "/cambiarPasswordVoluntario", method = RequestMethod.POST)
     public ResponseEntity<String> changePasswordVolunteer(@RequestBody LogInInfo logInInfo) {
         Boolean cambio = userService.changePasswordVolunteer(logInInfo.getMail(),
