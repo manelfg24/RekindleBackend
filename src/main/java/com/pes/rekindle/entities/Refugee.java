@@ -39,6 +39,7 @@ public class Refugee {
     private String ethnic;
     private String bloodType;
     private String eyeColor;
+    private String biography;
 
     
     @ManyToMany(cascade = {
@@ -192,6 +193,14 @@ public class Refugee {
     public void setEyeColor(String eyeColor) {
         this.eyeColor = eyeColor;
     }
+
+	public String getBiography() {
+		return biography;
+	}
+
+	public void setBiography(String biography) {
+		this.biography = biography;
+	}
 
 	public Set<Lodge> getLodges() {
 		return lodges;

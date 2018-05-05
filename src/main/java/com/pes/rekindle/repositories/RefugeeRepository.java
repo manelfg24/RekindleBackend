@@ -31,7 +31,7 @@ public interface RefugeeRepository extends Repository<Refugee, String> {
     @Transactional
     @Query(value = "insert into Refugee"
             + " values(:mail, :password, :name, :surname1, :surname2, :phoneNumber,"
-            + " :birthdate, :sex, :country, :town, :ethnic, :bloodType, :eyeColor)", nativeQuery = true)
+            + " :birthdate, :sex, :country, :town, :ethnic, :bloodType, :eyeColor, :biography)", nativeQuery = true)
     public void create(@Param("mail") String mail, @Param("password") String password,
             @Param("name") String name,
             @Param("surname1") String surname1, @Param("surname2") String surname2,
@@ -40,7 +40,8 @@ public interface RefugeeRepository extends Repository<Refugee, String> {
             @Param("country") String country,
             @Param("town") String town, @Param("ethnic") String ethnic,
             @Param("bloodType") String bloodType,
-            @Param("eyeColor") String eyeColor);
+            @Param("eyeColor") String eyeColor,
+            @Param("biography") String biography);
 
     public Optional<Refugee> findOptionalByMailAndPassword(String mail, String password);
 
