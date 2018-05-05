@@ -257,28 +257,4 @@ public class UserController {
         userService.enrollRefugeeEducation(refugeeMail, serviceId);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
-    
-    @RequestMapping(value = "/testtest", method = RequestMethod.GET) 
-    public ResponseEntity<Set<Lodge>> testtest() {
-    	Set<Lodge> lodges = new HashSet<Lodge>();
-    	Lodge l = new Lodge();
-    	l.setId(1);
-    	l.setName("servisio");
-    	
-    	Lodge l2 = new Lodge();
-    	l2.setId(2);
-    	l2.setName("servisio2");
-    	
-    	lodges.add(l);
-    	lodges.add(l2);
-    	
-    	for (Lodge lodge : lodges) {
-    		System.out.println(lodge.getId());
-    		System.out.println(lodge.getDescription());
-    		System.out.println(lodge.getServiceType());
-    	}
-    	
-    	return ResponseEntity.status(HttpStatus.OK).body(lodges);
-    }
-
 }
