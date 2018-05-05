@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
     VolunteerRepository volunteerRepository;
     @Autowired
     RefugeeRepository refugeeRepository;
-    
+
     @Autowired
     LodgeRepository lodgeRepository;
     @Autowired
@@ -179,14 +179,12 @@ public class UserServiceImpl implements UserService {
         Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMailAndPassword(mail,
                 password);
         if (oRefugee.isPresent()) {
-        	// Super sucio, se tiene que cambiar
-        	// Alex muerdealmohadas
-        	Refugee r = oRefugee.get();
-        	r.setCourses(new HashSet<Education>());
-        	r.setJobs(new HashSet<Job>());
-        	r.setLodges(new HashSet<Lodge>());
-        	r.setDonations(new HashSet<Donation>());
-        	return Pair.of(0, r);
+            Refugee r = oRefugee.get();
+            r.setCourses(new HashSet<Education>());
+            r.setJobs(new HashSet<Job>());
+            r.setLodges(new HashSet<Lodge>());
+            r.setDonations(new HashSet<Donation>());
+            return Pair.of(0, r);
         }
         Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMailAndPassword(mail,
                 password);
@@ -196,65 +194,72 @@ public class UserServiceImpl implements UserService {
         return Pair.of(-1, "Usuario pa' la pinga");
     }
 
-	@Override
-	public void enrollRefugeeLodge(String refugeeMail, long serviceId) {
-		Refugee r = refugeeRepository.findByMail(refugeeMail);
-		Lodge l = (Lodge) lodgeRepository.findById(serviceId);
-		
-		Set<Lodge> lodges = r.getLodges();
-		Set<Refugee> refugees = l.getInscriptions();
-		
-		refugees.add(r);
-		lodges.add(l);
-		
-		refugeeRepository.save(r);
-		lodgeRepository.save(l);
-	}
+    @Override
+    public void enrollRefugeeLodge(String refugeeMail, long serviceId) {
+        Refugee r = refugeeRepository.findByMail(refugeeMail);
+        Lodge l = (Lodge) lodgeRepository.findById(serviceId);
 
-	@Override
-	public void enrollRefugeeEducation(String refugeeMail, long serviceId) {
-		Refugee r = refugeeRepository.findByMail(refugeeMail);
-		Education e = (Education) educationRepository.findById(serviceId);
-		
-		Set<Education> courses = r.getCourses();
-		Set<Refugee> refugees = e.getInscriptions();
-		
-		refugees.add(r);
-		courses.add(e);
-		
-		refugeeRepository.save(r);
-		educationRepository.save(e);
-	}
+        Set<Lodge> lodges = r.getLodges();
+        Set<Refugee> refugees = l.getInscriptions();
 
-	@Override
-	public void enrollRefugeeJob(String refugeeMail, long serviceId) {
-		Refugee r = refugeeRepository.findByMail(refugeeMail);
-		Job j = (Job) jobRepository.findById(serviceId);
-		
-		Set<Job> jobs = r.getJobs();
-		Set<Refugee> refugees = j.getInscriptions();
-		
-		refugees.add(r);
-		jobs.add(j);
-		
-		refugeeRepository.save(r);
-		jobRepository.save(j);
-	}
+        refugees.add(r);
+        lodges.add(l);
 
-	@Override
-	public void enrollRefugeeDonation(String refugeeMail, long serviceId) {
-		Refugee r = refugeeRepository.findByMail(refugeeMail);
-		Donation d = (Donation) donationRepository.findById(serviceId);
-		
-		Set<Donation> donations = r.getDonations();
-		Set<Refugee> refugees = d.getInscriptions();
-		
-		refugees.add(r);
-		donations.add(d);
-		
-		refugeeRepository.save(r);
-		donationRepository.save(d);
-	}
+        refugeeRepository.save(r);
+        lodgeRepository.save(l);
+    }
+
+    @Override
+    public void enrollRefugeeEducation(String refugeeMail, long serviceId) {
+        Refugee r = refugeeRepository.findByMail(refugeeMail);
+        Education e = (Education) educationRepository.findById(serviceId);
+
+        Set<Education> courses = r.getCourses();
+        Set<Refugee> refugees = e.getInscriptions();
+
+        refugees.add(r);
+        courses.add(e);
+
+        refugeeRepository.save(r);
+        educationRepository.save(e);
+    }
+
+    @Override
+    public void enrollRefugeeJob(String refugeeMail, long serviceId) {
+        Refugee r = refugeeRepository.findByMail(refugeeMail);
+        Job j = (Job) jobRepository.findById(serviceId);
+
+        Set<Job> jobs = r.getJobs();
+        Set<Refugee> refugees = j.getInscriptions();
+
+        refugees.add(r);
+        jobs.add(j);
+
+        refugeeRepository.save(r);
+        jobRepository.save(j);
+    }
+
+    @Override
+    public void enrollRefugeeDonation(String refugeeMail, long serviceId) {
+        Refugee r = refugeeRepository.findByMail(refugeeMail);
+        Donation d = (Donation) donationRepository.findById(serviceId);
+
+        Set<Donation> donations = r.getDonations();
+        Set<Refugee> refugees = d.getInscriptions();
+
+        refugees.add(r);
+        donations.add(d);
+
+        refugeeRepository.save(r);
+        donationRepository.save(d);
+    }
+
+    @Override
+    public Set<Lodge> refugeeLodges(String mail) {
+        Refugee refugee = refugeeRepository.findByMail(mail);
+        Set<Lodge> lodges = refugee.getLodges();
+        return lodges;
+    }
 }
 
 /*
