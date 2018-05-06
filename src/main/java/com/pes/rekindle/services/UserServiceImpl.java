@@ -146,7 +146,7 @@ public class UserServiceImpl implements UserService {
     public void modifyProfileRefugee(String mail, String name, String surname1, String surname2,
             Integer phoneNumber,
             Date birthdate, String sex, String country, String town, String ethnic,
-            String bloodType, String eyeColor) {
+            String bloodType, String eyeColor, String biography) {
         Refugee refugee = refugeeRepository.findByMail(mail);
         refugee.setName(name);
         refugee.setSurname1(surname1);
@@ -159,6 +159,7 @@ public class UserServiceImpl implements UserService {
         refugee.setEthnic(ethnic);
         refugee.setBloodType(bloodType);
         refugee.setEyeColor(eyeColor);
+        refugee.setBiography(biography);
         refugeeRepository.flush();
 
     }

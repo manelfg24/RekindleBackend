@@ -28,4 +28,6 @@ public interface ServiceService {
 
 	Boolean deleteService(long id, char serviceType);
 
+	void deleteLodge(Long id);
+
 }

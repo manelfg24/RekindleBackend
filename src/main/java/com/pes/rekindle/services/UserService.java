@@ -37,7 +37,7 @@ public interface UserService {
 
     void modifyProfileRefugee(String mail, String name, String surname1, String surname2,
             Integer phonNumber, Date birthdate, String sex, String country, String town,
-            String ethnic, String bloodType, String eyeColor);
+            String ethnic, String bloodType, String eyeColor, String string);
 
     Volunteer infoVolunteer(String mail);
 
