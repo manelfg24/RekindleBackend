@@ -2,6 +2,7 @@
 package com.pes.rekindle.repositories;
 
 import java.util.Collection;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -13,7 +14,7 @@ import com.pes.rekindle.entities.Donation;
 public interface DonationRepository extends Repository<Donation, String> {
     public void save(Donation donation);
 
-    public Collection<Donation> findAll();
+    public Set<Donation> findAll();
 
     public Object findById(Long id);
 }
