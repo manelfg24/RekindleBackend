@@ -73,7 +73,7 @@ public class DonationRepositoryTest {
 		assertEquals("alex@gmail.com", foundDonation.getVolunteer());
 		assertEquals(5, (int) foundDonation.getPlaces());
 	}
-	
+	/*
 	@Test
 	public void findAllTest() {
 		ArrayList<Donation> donationServices = (ArrayList<Donation>) donationRepository.findAll();
@@ -86,4 +86,5 @@ public class DonationRepositoryTest {
 		}
 		assertTrue(trobat);
 	}
+	*/
 }
