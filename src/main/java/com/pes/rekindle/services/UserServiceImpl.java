@@ -211,11 +211,18 @@ public class UserServiceImpl implements UserService {
         Refugee r = refugeeRepository.findByMail(refugeeMail);
         Education e = (Education) educationRepository.findById(serviceId);
 
+        
         Set<Education> courses = r.getCourses();
         Set<Refugee> refugees = e.getInscriptions();
-
+        
+        System.out.println("Courses size before: " + courses.size());
+        System.out.println("Inscriptions size before: " + refugees.size());
+        
         refugees.add(r);
         courses.add(e);
+        
+        System.out.println("Courses size after: " + courses.size());
+        System.out.println("Inscriptions size after: " + refugees.size());
 
         refugeeRepository.save(r);
         educationRepository.save(e);

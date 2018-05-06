@@ -42,50 +42,38 @@ public class Refugee {
     private String biography;
 
     
-    @ManyToMany(cascade = {
+    @ManyToMany(mappedBy="inscriptions",
+    		cascade = {
     		CascadeType.PERSIST, 
     		CascadeType.MERGE
     })
-    @JoinTable(name = "LodgeEnrollment",
-            joinColumns = @JoinColumn(name = "refugeeMail"),
-            inverseJoinColumns = @JoinColumn(name = "lodgeId")
-    )
     @JsonBackReference
     private Set<Lodge> lodges = new HashSet<Lodge>();
 
     
-    @ManyToMany(cascade = {
+    @ManyToMany(mappedBy="inscriptions",
+    		cascade = {
     		CascadeType.PERSIST, 
     		CascadeType.MERGE,
     })
-    @JoinTable(name = "DonationEnrollment",
-            joinColumns = @JoinColumn(name = "refugeeMail"),
-            inverseJoinColumns = @JoinColumn(name = "donationId")
-    )
     @JsonBackReference
     private Set<Donation> donations = new HashSet<Donation>();
 
     
-    @ManyToMany(cascade = {
+    @ManyToMany(mappedBy="inscriptions",
+    		cascade = {
     		CascadeType.PERSIST, 
     		CascadeType.MERGE
     })
-    @JoinTable(name = "JobEnrollment",
-            joinColumns = @JoinColumn(name = "refugeeMail"),
-            inverseJoinColumns = @JoinColumn(name = "jobId")
-    )
     @JsonBackReference
     private Set<Job> jobs = new HashSet<Job>();
 
     
-    @ManyToMany(cascade = {
+    @ManyToMany(mappedBy="inscriptions",
+    		cascade = {
     		CascadeType.PERSIST, 
     		CascadeType.MERGE
     })
-    @JoinTable(name = "EducationEnrollment",
-            joinColumns = @JoinColumn(name = "refugeeMail"),
-            inverseJoinColumns = @JoinColumn(name = "educationId")
-    )
     @JsonBackReference
     private Set<Education> courses = new HashSet<Education>();
 
