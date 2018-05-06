@@ -1,7 +1,7 @@
 
 package com.pes.rekindle.controllers;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
+
 
 import java.sql.Time;
 import java.util.ArrayList;
