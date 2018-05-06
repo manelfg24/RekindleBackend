@@ -143,4 +143,24 @@ public class ServiceServiceImpl implements ServiceService {
 	public void deleteLodge(Long id) {
 		lodgeRepository.deleteById(id);
 	}
+
+	@Override
+	public Lodge infoLodge(Long id) {
+		return lodgeRepository.findById(id);
+	}
+
+	@Override
+	public Education infoEducation(Long id) {
+		return educationRepository.findById(id);
+	}
+
+	@Override
+	public Donation infoDonation(Long id) {
+		return donationRepository.findById(id);
+	}
+
+	@Override
+	public Job infoJob(Long id) {
+		return jobRepository.findById(id);
+	}
 }

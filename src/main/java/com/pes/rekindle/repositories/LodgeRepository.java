@@ -16,9 +16,7 @@ public interface LodgeRepository extends Repository<Lodge, String> {
 
     public Set<Lodge> findAll();
 
-    public Object findById(Long id);
+    public Lodge findById(Long id);
 
 	public void deleteById(Long id);
-    
-    
 }

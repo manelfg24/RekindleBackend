@@ -16,5 +16,5 @@ public interface JobRepository extends Repository<Job, String> {
 
     public Set<Job> findAll();
 
-    public Object findById(Long id);
+    public Job findById(Long id);
 }
