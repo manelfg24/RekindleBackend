@@ -116,6 +116,40 @@ public class ServiceController {
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
     
+    //Modificar servicios
+    
+    @RequestMapping(value = "/alojamientos/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<Lodge> modifyLodge(@PathVariable("id") long id , @RequestBody DTOLodge lodge) {
+    	serviceService.modifyLodge(id, lodge.getName(), lodge.getVolunteer(), lodge.getPhoneNumber(),
+    			lodge.getAdress(), lodge.getPlaces(), lodge.getDateLimit(), lodge.getDescription());
+    	return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+    
+    @RequestMapping(value = "/cursos/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<Education> modifyEducation(@PathVariable("id") long id, @RequestBody DTOEducation education) {
+    	serviceService.modifyEducation(id, education.getName(), education.getVolunteer(), education.getPhoneNumber(),
+    			education.getAdress(), education.getAmbit(), education.getRequirements(), education.getSchedule(),
+    			education.getPlaces(), education.getPrice(), education.getDescription());
+    	return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+    
+    @RequestMapping(value = "/donaciones/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<Donation> modifyDonation(@PathVariable("id") long id ,@RequestBody DTODonation donation) {
+    	serviceService.modifyDonation(id, donation.getName(), donation.getVolunteer(), donation.getPhoneNumber(),
+    			donation.getAdress(), donation.getPlaces(), donation.getStartTime(), donation.getEndTime(),
+    			donation.getDescription());
+    	return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+    
+    @RequestMapping(value = "/empleos/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<Job> modifyJob(@PathVariable("id") long id, @RequestBody DTOJob job) {
+    	serviceService.modifyJob(id, job.getName(), job.getVolunteer(), job.getPhoneNumber(), job.getAdress(),
+    			job.getCharge(), job.getRequirements(), job.getHoursDay(), job.getHoursWeek(),
+    			job.getContractDuration(), job.getPlaces(), job.getSalary(), job.getDescription());
+    	return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+    
+    
     // --------------------- Definicion de clases -------------------------------------
     
 	public static class DTODonation {
