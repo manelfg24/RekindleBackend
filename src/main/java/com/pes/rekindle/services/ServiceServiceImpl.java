@@ -3,7 +3,9 @@ package com.pes.rekindle.services;
 
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,12 +112,12 @@ public class ServiceServiceImpl implements ServiceService {
         jobRepository.save(job);
     }
 
-    public Set<Object> listServices() {
-        Set<Object> listServices = new HashSet<Object>();
-        listServices.addAll(lodgeRepository.findAll());
-        listServices.addAll(educationRepository.findAll());
-        listServices.addAll(donationRepository.findAll());
-        listServices.addAll(jobRepository.findAll());
+    public Map<Integer, Set<Object>> listServices() {
+    	Map<Integer, Set<Object>> listServices = new HashMap<Integer, Set<Object>>();
+        listServices.put(0, lodgeRepository.findAll());
+        listServices.put(1, educationRepository.findAll());
+        listServices.put(2, donationRepository.findAll());
+        listServices.put(3, jobRepository.findAll());
         return listServices;
     }
 

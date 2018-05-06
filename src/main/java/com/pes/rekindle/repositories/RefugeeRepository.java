@@ -84,5 +84,4 @@ public interface RefugeeRepository extends Repository<Refugee, String> {
 	public boolean existsByEyeColor(String eye);
 	
 	public Set<Refugee> findByEyeColor(String eye);
-
 }

@@ -25,6 +25,7 @@ import com.pes.rekindle.entities.Education;
 import com.pes.rekindle.entities.Job;
 import com.pes.rekindle.entities.Lodge;
 import com.pes.rekindle.services.ServiceService;
+import com.pes.rekindle.services.UserService;
 
 import org.springframework.data.util.Pair;
 
@@ -33,11 +34,9 @@ public class ServiceController {
 	
 	@Autowired
     private ServiceService serviceService;
-
-    @RequestMapping(value = "/test2")
-    public int test2() {
-        return 1;
-    }
+	
+	@Autowired
+	private UserService userService;
 
     @RequestMapping(value = "/alojamientos", method = RequestMethod.POST)
     public ResponseEntity<String> createLodge(@RequestBody DTOLodge lodge) {
@@ -75,8 +74,8 @@ public class ServiceController {
     }
     
     @RequestMapping(value = "/servicios", method = RequestMethod.GET)
-    public ResponseEntity<Pair<String, Set<Object>>> listServices() {
-        return ResponseEntity.status(HttpStatus.OK).body(Pair.of("Servicios", serviceService.listServices()));
+    public ResponseEntity<Map<Integer, Set<Object>>> listServices() {	
+        return ResponseEntity.status(HttpStatus.OK).body(serviceService.listServices());
     }
     
     @RequestMapping(value = "/alojamientos/{id}", method = RequestMethod.GET)
@@ -103,6 +102,14 @@ public class ServiceController {
     //-------------------------------------------- Falta acabarlas ------------------------------------------------
     //-------------------------------------------------------------------------------------------------------------
     
+    @RequestMapping(value = "/servicios/{mail}/{tipo}", method = RequestMethod.GET)
+    public ResponseEntity<Map<Integer, Set<Object>>> obtainOwnServices(@PathVariable("mail") String mail, 
+    		@PathVariable("tipo") Integer userType) {
+    	Map<Integer, Set<Object>> result = userService.obtainOwnServices(mail, userType);
+    	
+    	return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+        
     @RequestMapping(value = "/eliminarAlojamiento/{id}", method = RequestMethod.GET)
     public ResponseEntity<String> deleteLodge(@PathVariable Long id) {
         serviceService.deleteLodge(id);

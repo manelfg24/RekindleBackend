@@ -3,7 +3,9 @@ package com.pes.rekindle.services;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -426,6 +428,24 @@ public class UserServiceImpl implements UserService {
         	return true;
         }
 		return false;
+	}
+
+	@Override
+	public Map<Integer, Set<Object>> obtainOwnServices(String mail, Integer userType) {
+		Map<Integer, Set<Object>> result = new HashMap<Integer, Set<Object>>();
+		if (userType == 0) { //refugee	
+			result.put(0, lodgeRepository.findByInscriptions_Mail(mail));
+			result.put(1, donationRepository.findByInscriptions_Mail(mail));
+			result.put(2, educationRepository.findByInscriptions_Mail(mail));
+			result.put(3, jobRepository.findByInscriptions_Mail(mail));
+		}
+		else { //volunteer
+			result.put(0, lodgeRepository.findByVolunteer(mail));
+			result.put(1, donationRepository.findByVolunteer(mail));
+			result.put(2, educationRepository.findByVolunteer(mail));
+			result.put(3, jobRepository.findByVolunteer(mail));
+		}
+		return result;
 	}
 }
 

@@ -3,6 +3,7 @@ package com.pes.rekindle.services;
 
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Set;
 
 import com.pes.rekindle.entities.Donation;
@@ -15,7 +16,7 @@ public interface ServiceService {
     void createLodge(String name, String mail, Integer phoneNumber, String adress,
             Integer places, java.util.Date date, String description);
 
-    Set<Object> listServices();
+    Map<Integer, Set<Object>> listServices();
 
     void createDonation(String name, String mail, Integer phoneNumber, String adress,
             Integer places, Time startTime,

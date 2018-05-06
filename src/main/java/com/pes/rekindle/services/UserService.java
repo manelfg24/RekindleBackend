@@ -3,6 +3,7 @@ package com.pes.rekindle.services;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Set;
 
 import org.springframework.data.util.Pair;
@@ -62,5 +63,7 @@ public interface UserService {
 	boolean changePassword(String mail, String passwordOld, String passwordNew);
 
 	boolean recoverPassword(String mail, String passwordNew);
+
+	Map<Integer, Set<Object>> obtainOwnServices(String mail, Integer userType);
 
 }

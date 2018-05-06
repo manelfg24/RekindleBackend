@@ -14,7 +14,12 @@ import com.pes.rekindle.entities.Job;
 public interface JobRepository extends Repository<Job, String> {
     public void save(Job job);
 
-    public Set<Job> findAll();
+    public Set<Object> findAll();
 
     public Job findById(Long id);
+
+	public Set<Object> findByVolunteer(String mail);
+	
+	public Set<Object> findByInscriptions_Mail(String mail);
+
 }

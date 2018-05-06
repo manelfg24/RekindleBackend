@@ -14,7 +14,12 @@ import com.pes.rekindle.entities.Education;
 public interface EducationRepository extends Repository<Education, String> {
     public void save(Education education);
 
-    public Set<Education> findAll();
+    public Set<Object> findAll();
 
     public Education findById(Long id);
+
+	public Set<Object> findByVolunteer(String mail);
+	
+	public Set<Object> findByInscriptions_Mail(String mail);
+
 }
