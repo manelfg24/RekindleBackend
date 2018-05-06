@@ -45,4 +45,12 @@ public interface ServiceService {
 
 	Job infoJob(Long id);
 
+	void modifyLodge(Lodge lodge);
+
+	void modifyEducation(Education education);
+
+	void modifyDonation(Donation donation);
+
+	void modifyJob(Job job);
+
 }

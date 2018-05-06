@@ -116,6 +116,33 @@ public class ServiceController {
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
     
+    //Modificar servicios
+    
+    @RequestMapping(value = "/alojamientos/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<Lodge> modifyLodge(@RequestBody Lodge lodge) {
+    	serviceService.modifyLodge(lodge);
+    	return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+    
+    @RequestMapping(value = "/cursos/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<Education> modifyEducation(@RequestBody Education education) {
+    	serviceService.modifyEducation(education);
+    	return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+    
+    @RequestMapping(value = "/donaciones/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<Donation> modifyDonation(@RequestBody Donation donation) {
+    	serviceService.modifyDonation(donation);
+    	return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+    
+    @RequestMapping(value = "/empleos/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<Job> modifyJob(@RequestBody Job job) {
+    	serviceService.modifyJob(job);
+    	return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+    
+    
     // --------------------- Definicion de clases -------------------------------------
     
 	public static class DTODonation {

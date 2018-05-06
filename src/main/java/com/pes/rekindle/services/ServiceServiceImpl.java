@@ -165,4 +165,24 @@ public class ServiceServiceImpl implements ServiceService {
 	public Job infoJob(Long id) {
 		return jobRepository.findById(id);
 	}
+
+	@Override
+	public void modifyLodge(Lodge lodge) {
+		lodgeRepository.save(lodge);
+	}
+
+	@Override
+	public void modifyEducation(Education education) {
+		educationRepository.save(education);		
+	}
+
+	@Override
+	public void modifyDonation(Donation donation) {
+		donationRepository.save(donation);
+	}
+
+	@Override
+	public void modifyJob(Job job) {
+		jobRepository.save(job);
+	}
 }
