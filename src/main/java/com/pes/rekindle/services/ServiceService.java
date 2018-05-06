@@ -3,6 +3,7 @@ package com.pes.rekindle.services;
 
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 
@@ -45,12 +46,18 @@ public interface ServiceService {
 
 	Job infoJob(Long id);
 
-	void modifyLodge(Lodge lodge);
+	void modifyDonation(long id, String name, String volunteer, Integer phoneNumber, String adress, Integer places, Time startTime,
+			Time endTime, String description);
 
-	void modifyEducation(Education education);
+	void modifyLodge(long id, String name, String volunteer, Integer phoneNumber, String adress, Integer places,
+			Date dateLimit, String description);
 
-	void modifyDonation(Donation donation);
+	void modifyEducation(long id, String name, String volunteer, Integer phoneNumber, String adress, String ambit,
+			String requirements, String schedule, Integer places, Integer price, String description);
 
-	void modifyJob(Job job);
+	void modifyJob(long id, String name, String volunteer, Integer phoneNumber, String adress, String charge,
+			String requirements, double hoursDay, double hoursWeek, Integer contractDuration, Integer places,
+			double salary, String description);
+
 
 }

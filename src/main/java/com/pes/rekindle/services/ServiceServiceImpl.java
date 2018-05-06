@@ -3,6 +3,7 @@ package com.pes.rekindle.services;
 
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -167,22 +168,75 @@ public class ServiceServiceImpl implements ServiceService {
 	}
 
 	@Override
-	public void modifyLodge(Lodge lodge) {
-		lodgeRepository.save(lodge);
+	public void modifyDonation(long id, String name, String volunteer, Integer phoneNumber, String adress, Integer places,
+			Time startTime, Time endTime, String description) {
+		Donation donation = new Donation();
+		donation.setName(name);
+        donation.setVolunteer(volunteer);
+        donation.setServiceType('d');
+        donation.setPhoneNumber(phoneNumber);
+        donation.setAdress(adress);
+        donation.setPlaces(places);
+        donation.setStartTime(startTime);
+        donation.setEndTime(endTime);
+        donation.setDescription(description);
+        donationRepository.save(donation);
+		
 	}
 
 	@Override
-	public void modifyEducation(Education education) {
-		educationRepository.save(education);		
+	public void modifyLodge(long id, String name, String volunteer, Integer phoneNumber, String adress, Integer places,
+			Date dateLimit, String description) {
+		Lodge lodge = new Lodge();
+		lodge.setName(name);
+        lodge.setVolunteer(volunteer);
+        lodge.setPhoneNumber(phoneNumber);
+        lodge.setAdress(adress);
+        lodge.setPlaces(places);
+        lodge.setDateLimit(dateLimit);
+        lodge.setDescription(description);
+        lodgeRepository.save(lodge);
+		
 	}
 
 	@Override
-	public void modifyDonation(Donation donation) {
-		donationRepository.save(donation);
+	public void modifyEducation(long id, String name, String volunteer, Integer phoneNumber, String adress,
+			String ambit, String requirements, String schedule, Integer places, Integer price, String description) {
+		Education education = new Education();
+		education.setName(name);
+        education.setVolunteer(volunteer);
+        education.setServiceType('e');
+        education.setPhoneNumber(phoneNumber);
+        education.setAdress(adress);
+        education.setAmbit(ambit);
+        education.setRequirements(requirements);
+        education.setSchedule(schedule);
+        education.setPlaces(places);
+        education.setDescription(description);
+        educationRepository.save(education);
+		
 	}
 
 	@Override
-	public void modifyJob(Job job) {
-		jobRepository.save(job);
+	public void modifyJob(long id, String name, String volunteer, Integer phoneNumber, String adress, String charge,
+			String requirements, double hoursDay, double hoursWeek, Integer contractDuration, Integer places,
+			double salary, String description) {
+		Job job = new Job();
+		job.setName(name);
+        job.setVolunteer(volunteer);
+        job.setServiceType('j');
+        job.setPhoneNumber(phoneNumber);
+        job.setAdress(adress);
+        job.setCharge(charge);
+        job.setRequirements(requirements);
+        job.setHoursDay(hoursDay);
+        job.setHoursWeek(hoursWeek);
+        job.setContractDuration(contractDuration);
+        job.setPlaces(places);
+        job.setSalary(salary);
+        job.setDescription(description);
+        jobRepository.save(job);
+		
 	}
+
 }

@@ -96,7 +96,7 @@ CREATE TABLE Lodge (
 	phoneNumber int NOT NULL,
 	adress varchar(50) NOT NULL,
     places int,
-    dateLimit Date,
+    dateLimit Date NOT NULL,
 	description varchar(300) NOT NULL,
     
     FOREIGN KEY (volunteer) REFERENCES Volunteer(mail)
