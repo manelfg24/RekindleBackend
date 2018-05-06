@@ -5,7 +5,9 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.validation.constraints.NotNull;
 
@@ -24,9 +26,91 @@ import com.pes.rekindle.entities.Job;
 import com.pes.rekindle.entities.Lodge;
 import com.pes.rekindle.services.ServiceService;
 
+import org.springframework.data.util.Pair;
+
 @RestController
 public class ServiceController {
+	
+	@Autowired
+    private ServiceService serviceService;
 
+    @RequestMapping(value = "/test2")
+    public int test2() {
+        return 1;
+    }
+
+    @RequestMapping(value = "/alojamientos", method = RequestMethod.POST)
+    public ResponseEntity<String> createLodge(@RequestBody DTOLodge lodge) {
+        serviceService.createLodge(lodge.getName(), lodge.getVolunteer(), lodge.getPhoneNumber(),
+                lodge.getAdress(), lodge.getPlaces(), lodge.getDateLimit(),
+                lodge.getDescription());
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+
+    }
+
+    @RequestMapping(value = "/donaciones", method = RequestMethod.POST)
+    public ResponseEntity<String> createDonation(@RequestBody DTODonation donation) {
+        serviceService.createDonation(donation.getName(), donation.getVolunteer(),
+                donation.getPhoneNumber(), donation.getAdress(), donation.getPlaces(),
+                donation.getStartTime(), donation.getEndTime(), donation.getDescription());
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+
+    @RequestMapping(value = "/cursos", method = RequestMethod.POST)
+    public ResponseEntity<String> createEducation(@RequestBody DTOEducation education) {
+        serviceService.createEducation(education.getName(), education.getVolunteer(),
+                education.getPhoneNumber(), education.getAdress(), education.getAmbit(),
+                education.getRequirements(), education.getSchedule(), education.getPlaces(),
+                education.getPrice(), education.getDescription());
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+
+    @RequestMapping(value = "/empleos", method = RequestMethod.POST)
+    public ResponseEntity<String> createJob(@RequestBody DTOJob job) {
+        serviceService.createJob(job.getName(), job.getVolunteer(),
+                job.getPhoneNumber(), job.getAdress(), job.getCharge(), job.getRequirements(),
+                job.getHoursDay(), job.getHoursWeek(), job.getContractDuration(), job.getPlaces(),
+                job.getSalary(), job.getDescription());
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+    
+    @RequestMapping(value = "/servicios", method = RequestMethod.GET)
+    public ResponseEntity<Pair<String, Set<Object>>> listServices() {
+        return ResponseEntity.status(HttpStatus.OK).body(Pair.of("Servicios", serviceService.listServices()));
+    }
+    
+    @RequestMapping(value = "/alojamientos/{id}", method = RequestMethod.GET)
+    public ResponseEntity<Lodge> infoLodge(@PathVariable("id") Long id) {
+    	return ResponseEntity.status(HttpStatus.OK).body(serviceService.infoLodge(id));
+    }
+    
+    @RequestMapping(value = "/cursos/{id}", method = RequestMethod.GET)
+    public ResponseEntity<Education> infoEducation(@PathVariable("id") Long id) {
+    	return ResponseEntity.status(HttpStatus.OK).body(serviceService.infoEducation(id));
+    }
+    
+    @RequestMapping(value = "/donaciones/{id}", method = RequestMethod.GET)
+    public ResponseEntity<Donation> infoDonation(@PathVariable("id") Long id) {
+    	return ResponseEntity.status(HttpStatus.OK).body(serviceService.infoDonation(id));
+    }
+    
+    @RequestMapping(value = "/empleos/{id}", method = RequestMethod.GET)
+    public ResponseEntity<Job> infoJob(@PathVariable("id") Long id) {
+    	return ResponseEntity.status(HttpStatus.OK).body(serviceService.infoJob(id));
+    }
+    
+    //-------------------------------------------------------------------------------------------------------------
+    //-------------------------------------------- Falta acabarlas ------------------------------------------------
+    //-------------------------------------------------------------------------------------------------------------
+    
+    @RequestMapping(value = "/eliminarAlojamiento/{id}", method = RequestMethod.GET)
+    public ResponseEntity<String> deleteLodge(@PathVariable Long id) {
+        serviceService.deleteLodge(id);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+    
+    // --------------------- Definicion de clases -------------------------------------
+    
 	public static class DTODonation {
 		private char serviceType;
 	    private String name;
@@ -328,117 +412,5 @@ public class ServiceController {
 		public void setDescription(String description) {
 			this.description = description;
 		}
-	}
-	
-	@Autowired
-    private ServiceService serviceService;
-
-    @RequestMapping(value = "/test2")
-    public int test2() {
-        return 1;
-    }
-
-    @RequestMapping(value = "/crearAlojamiento", method = RequestMethod.POST)
-    public ResponseEntity<String> createLodge(@RequestBody DTOLodge lodge) {
-        serviceService.createLodge(lodge.getName(), lodge.getVolunteer(), lodge.getPhoneNumber(),
-                lodge.getAdress(), lodge.getPlaces(), lodge.getDateLimit(),
-                lodge.getDescription());
-        return ResponseEntity.status(HttpStatus.OK).body(null);
-
-    }
-    
-    @RequestMapping(value = "/eliminarAlojamiento", method = RequestMethod.PUT)
-    public ResponseEntity<String> deleteLodge(Long id) {
-        serviceService.deleteLodge(id);
-        return ResponseEntity.status(HttpStatus.OK).body(null);
-
-    }
-
-    @RequestMapping(value = "/crearDonacion", method = RequestMethod.POST)
-    public ResponseEntity<String> createDonation(@RequestBody DTODonation donation) {
-        serviceService.createDonation(donation.getName(), donation.getVolunteer(),
-                donation.getPhoneNumber(), donation.getAdress(), donation.getPlaces(),
-                donation.getStartTime(), donation.getEndTime(), donation.getDescription());
-        return ResponseEntity.status(HttpStatus.OK).body(null);
-    }
-
-    @RequestMapping(value = "/crearCursoEducativo", method = RequestMethod.POST)
-    public ResponseEntity<String> createEducation(@RequestBody DTOEducation education) {
-        serviceService.createEducation(education.getName(), education.getVolunteer(),
-                education.getPhoneNumber(), education.getAdress(), education.getAmbit(),
-                education.getRequirements(), education.getSchedule(), education.getPlaces(),
-                education.getPrice(), education.getDescription());
-        return ResponseEntity.status(HttpStatus.OK).body(null);
-    }
-
-    // Cambiar prerequisite por requirements
-    /*
-     * @RequestMapping(value=
-     * "/crearCursoEducativo/nombre={name}&email={mail}&telefono={phoneNumber}" +
-     * "&direccion={adress}&ambito={ambit}&requisitos-previos={prerequisite}" +
-     * "&horario={schedule}&plazas-disponibles={places}&precio={price}&descripcion={description}",
-     * method=RequestMethod.POST) public String createEducation(@PathVariable("name")String
-     * name, @PathVariable("mail")String mail,
-     * @PathVariable("phoneNumber")Integer phoneNumber, @PathVariable("adress")String adress,
-     * @PathVariable("ambit")String ambit,@PathVariable("prerequisite")String prerequisite,
-     * @PathVariable("schedule")String schedule, @PathVariable("places")Integer
-     * places, @PathVariable("price")Integer price,
-     * @PathVariable("description")String description) { String creationResult =
-     * serviceService.createEducation(name, mail, phoneNumber, adress,ambit, prerequisite, schedule,
-     * places, price, description); return creationResult; }
-     */
-
-    @RequestMapping(value = "/crearOfertaEmpleo", method = RequestMethod.POST)
-    public ResponseEntity<String> createJob(@RequestBody DTOJob job) {
-        serviceService.createJob(job.getName(), job.getVolunteer(),
-                job.getPhoneNumber(), job.getAdress(), job.getCharge(), job.getRequirements(),
-                job.getHoursDay(), job.getHoursWeek(), job.getContractDuration(), job.getPlaces(),
-                job.getSalary(), job.getDescription());
-        return ResponseEntity.status(HttpStatus.OK).body(null);
-    }
-
-    /*
-     * @RequestMapping(value="/crearOfertaEmpleo/nombre={name}&email={mail}&telefono={phoneNumber}"
-     * + "&direccion={adress}&puesto={charge}&requisitos-necesarios={requirements}" +
-     * "&jornada={hoursDay}&horas-semanales={hoursWeek}&duracion={duration}&plazas-disponibles={places}"
-     * + "&sueldo={salary}&descripcion={description}", method=RequestMethod.POST) public String
-     * createEducation(@PathVariable("name")String name, @PathVariable("mail")String mail,
-     * @PathVariable("phoneNumber")Integer phoneNumber, @PathVariable("adress")String adress,
-     * @PathVariable("charge")String charge,@PathVariable("requirements")String requirements,
-     * @PathVariable("hoursDay")Double hoursDay, @PathVariable("hoursWeek")Double hoursWeek,
-     * @PathVariable("duration")Integer duration, @PathVariable("places")Integer places,
-     * @PathVariable("salary")Double salary, @PathVariable("description")String description) {
-     * String creationResult = serviceService.createJob(name, mail, phoneNumber, adress, charge,
-     * requirements, hoursDay, hoursWeek, duration, places, salary, description); return
-     * creationResult; }
-     */
-
-    @RequestMapping(value = "/listarServicios", method = RequestMethod.GET)
-    public Map<String, ArrayList<Object>> listServices() {
-        Map<String, ArrayList<Object>> result = new HashMap<String, ArrayList<Object>>();
-        result.put("Servicios", serviceService.listServices());
-        return result;
-    }
-
-    @RequestMapping(value = "/seleccionarServicio/id={id}&tipo-servicio={serviceType}", method = RequestMethod.POST)
-    public Object infoService(@PathVariable("id") Long id,
-            @PathVariable("serviceType") char serviceType) {
-        Object service = serviceService.infoService(id, serviceType);
-        return service;
-    }
-    
-    @RequestMapping(value = "/eliminarServicio", method = RequestMethod.POST)
-    public ResponseEntity<Boolean> deleteService() { //id servicio, tipo servicio
-    	long id;
-    	char serviceType;
-    	
-    	id = 1;
-    	serviceType = 'l';
-    	
-    	if (serviceService.deleteService(id, serviceType))
-    		return ResponseEntity.status(HttpStatus.OK).body(null);
-    	else
-    		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-    		
-    }
+	}   
 }

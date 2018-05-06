@@ -2,6 +2,7 @@
 package com.pes.rekindle.repositories;
 
 import java.util.Collection;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -13,7 +14,7 @@ import com.pes.rekindle.entities.Education;
 public interface EducationRepository extends Repository<Education, String> {
     public void save(Education education);
 
-    public Collection<Education> findAll();
+    public Set<Education> findAll();
 
-    public Object findById(Long id);
+    public Education findById(Long id);
 }

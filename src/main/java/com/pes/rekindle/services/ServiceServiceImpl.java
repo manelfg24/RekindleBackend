@@ -3,6 +3,8 @@ package com.pes.rekindle.services;
 
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -108,8 +110,8 @@ public class ServiceServiceImpl implements ServiceService {
         jobRepository.save(job);
     }
 
-    public ArrayList<Object> listServices() {
-        ArrayList<Object> listServices = new ArrayList<Object>();
+    public Set<Object> listServices() {
+        Set<Object> listServices = new HashSet<Object>();
         listServices.addAll(lodgeRepository.findAll());
         listServices.addAll(educationRepository.findAll());
         listServices.addAll(donationRepository.findAll());
@@ -140,5 +142,25 @@ public class ServiceServiceImpl implements ServiceService {
 	@Override
 	public void deleteLodge(Long id) {
 		lodgeRepository.deleteById(id);
+	}
+
+	@Override
+	public Lodge infoLodge(Long id) {
+		return lodgeRepository.findById(id);
+	}
+
+	@Override
+	public Education infoEducation(Long id) {
+		return educationRepository.findById(id);
+	}
+
+	@Override
+	public Donation infoDonation(Long id) {
+		return donationRepository.findById(id);
+	}
+
+	@Override
+	public Job infoJob(Long id) {
+		return jobRepository.findById(id);
 	}
 }
