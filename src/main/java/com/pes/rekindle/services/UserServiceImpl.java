@@ -146,7 +146,7 @@ public class UserServiceImpl implements UserService {
     public void modifyProfileRefugee(String mail, String name, String surname1, String surname2,
             Integer phoneNumber,
             Date birthdate, String sex, String country, String town, String ethnic,
-            String bloodType, String eyeColor) {
+            String bloodType, String eyeColor, String biography) {
         Refugee refugee = refugeeRepository.findByMail(mail);
         refugee.setName(name);
         refugee.setSurname1(surname1);
@@ -159,6 +159,7 @@ public class UserServiceImpl implements UserService {
         refugee.setEthnic(ethnic);
         refugee.setBloodType(bloodType);
         refugee.setEyeColor(eyeColor);
+        refugee.setBiography(biography);
         refugeeRepository.flush();
 
     }
@@ -210,11 +211,18 @@ public class UserServiceImpl implements UserService {
         Refugee r = refugeeRepository.findByMail(refugeeMail);
         Education e = (Education) educationRepository.findById(serviceId);
 
+        
         Set<Education> courses = r.getCourses();
         Set<Refugee> refugees = e.getInscriptions();
-
+        
+        System.out.println("Courses size before: " + courses.size());
+        System.out.println("Inscriptions size before: " + refugees.size());
+        
         refugees.add(r);
         courses.add(e);
+        
+        System.out.println("Courses size after: " + courses.size());
+        System.out.println("Inscriptions size after: " + refugees.size());
 
         refugeeRepository.save(r);
         educationRepository.save(e);

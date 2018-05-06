@@ -136,4 +136,9 @@ public class ServiceServiceImpl implements ServiceService {
 	public Boolean deleteService(long id, char serviceType) {
 		return null;
 	}
+
+	@Override
+	public void deleteLodge(Long id) {
+		lodgeRepository.deleteById(id);
+	}
 }

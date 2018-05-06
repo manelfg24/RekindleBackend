@@ -242,7 +242,6 @@ public class UserController {
         if (user.getFirst() == 0 || user.getFirst() == 1) {
             return ResponseEntity.status(HttpStatus.OK).header("Tipo", user.getFirst().toString())
                     .body(user.getSecond());
-            // return ResponseEntity.status(HttpStatus.OK).body(user.getSecond());
         } else
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
@@ -265,7 +264,7 @@ public class UserController {
     	}
     }
     
-    @RequestMapping(value = "/cambiarPasswordVoluntario", method = RequestMethod.POST)
+    /*@RequestMapping(value = "/cambiarPasswordVoluntario", method = RequestMethod.POST)
     public ResponseEntity<String> changePasswordVolunteer(@RequestBody LogInInfo logInInfo) {
         Boolean cambio = userService.changePasswordVolunteer(logInInfo.getMail(),
                 logInInfo.getPassword(), logInInfo.getNewPassword());
@@ -285,7 +284,7 @@ public class UserController {
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
-    }
+    }*/
 
     @RequestMapping(value = "/voluntarios/{mail}", method = RequestMethod.PUT)
     public ResponseEntity<String> modifyProfileVolunteer(@RequestBody Volunteer volunteer) {
@@ -301,7 +300,7 @@ public class UserController {
                 refugee.getSurname1(),
                 refugee.getSurname2(), refugee.getPhoneNumber(), refugee.getBirthdate(),
                 refugee.getSex(), refugee.getCountry(), refugee.getTown(),
-                refugee.getEthnic(), refugee.getBloodType(), refugee.getEyeColor());
+                refugee.getEthnic(), refugee.getBloodType(), refugee.getEyeColor(), refugee.getBiography());
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
@@ -350,7 +349,7 @@ public class UserController {
     public ResponseEntity<Refugee> lodgeTest() {
         String refugeeMail;
         long serviceId;
-        refugeeMail = "alex@gmail.com";
+        refugeeMail = "felipe@gmail.com";
         serviceId = 1;
         userService.enrollRefugeeLodge(refugeeMail, serviceId);
         return ResponseEntity.status(HttpStatus.OK).body(null);
@@ -360,7 +359,7 @@ public class UserController {
     public ResponseEntity<Refugee> donationTest() {
         String refugeeMail;
         long serviceId;
-        refugeeMail = "alex@gmail.com";
+        refugeeMail = "felipe@gmail.com";
         serviceId = 1;
         userService.enrollRefugeeDonation(refugeeMail, serviceId);
         return ResponseEntity.status(HttpStatus.OK).body(null);
@@ -370,7 +369,7 @@ public class UserController {
     public ResponseEntity<Refugee> jobTest() {
         String refugeeMail;
         long serviceId;
-        refugeeMail = "alex@gmail.com";
+        refugeeMail = "felipe@gmail.com";
         serviceId = 1;
         userService.enrollRefugeeJob(refugeeMail, serviceId);
         return ResponseEntity.status(HttpStatus.OK).body(null);
@@ -380,8 +379,8 @@ public class UserController {
     public ResponseEntity<Refugee> educationTest() {
         String refugeeMail;
         long serviceId;
-        refugeeMail = "alex@gmail.com";
-        serviceId = 2;
+        refugeeMail = "felipe@gmail.com";
+        serviceId = 1;
         userService.enrollRefugeeEducation(refugeeMail, serviceId);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }

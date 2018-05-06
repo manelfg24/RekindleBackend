@@ -346,6 +346,13 @@ public class ServiceController {
         return ResponseEntity.status(HttpStatus.OK).body(null);
 
     }
+    
+    @RequestMapping(value = "/eliminarAlojamiento", method = RequestMethod.PUT)
+    public ResponseEntity<String> deleteLodge(Long id) {
+        serviceService.deleteLodge(id);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+
+    }
 
     @RequestMapping(value = "/crearDonacion", method = RequestMethod.POST)
     public ResponseEntity<String> createDonation(@RequestBody DTODonation donation) {
