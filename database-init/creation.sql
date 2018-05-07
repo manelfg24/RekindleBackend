@@ -26,7 +26,8 @@ CREATE TABLE Refugee (
 	town varchar(40),
 	ethnic varchar(20),
 	bloodType varchar(20),
-	eyeColor varchar(20)
+	eyeColor varchar(20),
+    biography varchar(300)
 );
 
 CREATE TABLE Volunteer (
@@ -43,7 +44,7 @@ CREATE TABLE Donation (
     name varchar(50) NOT NULL,
     volunteer varchar(30) NOT NULL,
 	phoneNumber int NOT NULL,
-	adress varchar(50) NOT NULL,
+	adress varchar(250) NOT NULL,
     places int,
     startTime time(0) NOT NULL,
     endTime time(0) NOT NULL,
@@ -58,7 +59,7 @@ CREATE TABLE Job (
 	name varchar(50) NOT NULL,
 	volunteer varchar(30) NOT NULL,
 	phoneNumber int NOT NULL,
-	adress varchar(50) NOT NULL,
+	adress varchar(250) NOT NULL,
 	charge varchar(30) NOT NULL,
 	requirements varchar(50) NOT NULL,
 	hoursDay decimal(10,2) NOT NULL,
@@ -77,7 +78,7 @@ CREATE TABLE Education (
     name varchar(50) NOT NULL,
     volunteer varchar(30) NOT NULL,
 	phoneNumber int NOT NULL,
-	adress varchar(50) NOT NULL,
+	adress varchar(250) NOT NULL,
 	ambit varchar(50) NOT NULL,
     requirements varchar(100) NOT NULL,
     schedule varchar(30) NOT NULL,
@@ -94,9 +95,9 @@ CREATE TABLE Lodge (
     name varchar(50) NOT NULL,
     volunteer varchar(30) NOT NULL,
 	phoneNumber int NOT NULL,
-	adress varchar(50) NOT NULL,
+	adress varchar(250) NOT NULL,
     places int,
-    dateLimit Date NOT NULL,
+    dateLimit Date,
 	description varchar(300) NOT NULL,
     
     FOREIGN KEY (volunteer) REFERENCES Volunteer(mail)
@@ -136,13 +137,4 @@ CREATE TABLE DonationEnrollment (
 	PRIMARY KEY (refugeeMail, donationId),
 	FOREIGN KEY (refugeeMail) REFERENCES Refugee(mail),
 	FOREIGN KEY (donationId) REFERENCES Donation(id)
-);
-
-CREATE TABLE Lodge_refugee (
-	refugee_mail varchar(30), 
-	lodge_id int,
-	
-	PRIMARY KEY (refugee_mail, lodge_id),
-	FOREIGN KEY (refugee_mail) REFERENCES Refugee(mail),
-	FOREIGN KEY (lodge_id) REFERENCES Lodge(id)
 );
