@@ -116,8 +116,8 @@ public class ServiceServiceImpl implements ServiceService {
     public Map<Integer, Set<Object>> listServices() {
     	Map<Integer, Set<Object>> listServices = new HashMap<Integer, Set<Object>>();
         listServices.put(0, lodgeRepository.findAll());
-        listServices.put(1, educationRepository.findAll());
-        listServices.put(2, donationRepository.findAll());
+        listServices.put(1, donationRepository.findAll());
+        listServices.put(2, educationRepository.findAll());
         listServices.put(3, jobRepository.findAll());
         return listServices;
     }
