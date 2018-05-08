@@ -150,7 +150,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/refugiados/{mail}", method = RequestMethod.PUT)
-    public ResponseEntity<String> modifyProfileRefugee(@RequestBody Refugee refugee) {
+    public ResponseEntity<String> modifyProfileRefugee(@RequestBody DTORefugee refugee) {
         userService.modifyProfileRefugee(refugee.getMail(), refugee.getName(),
                 refugee.getSurname1(),
                 refugee.getSurname2(), refugee.getPhoneNumber(), refugee.getBirthdate(),
