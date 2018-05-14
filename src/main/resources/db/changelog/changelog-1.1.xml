@@ -6,7 +6,38 @@
 	http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 	
 	<changeSet id="2" author="bob" >
-		
+		<createTable tableName="LodgeEnrollment">
+			<column name="refugeeMail" type="varchar(30)">
+				<constraints primaryKey="true" nullable="false" foreignKeyName="fk_lodgeEnrollment_refugee" references="Refugee(mail)"/>
+			</column>
+			<column name="lodgeId" type="int">
+				<constraints primaryKey="true" nullable="false" foreignKeyName="fk_lodgeEnrollment_lodge" references="Lodge(id)"/>
+			</column>
+		</createTable>
+		<createTable tableName="EducationEnrollment">
+			<column name="refugeeMail" type="varchar(30)">
+				<constraints primaryKey="true" nullable="false" foreignKeyName="fk_educationEnrollment_refugee" references="Refugee(mail)"/>
+			</column>
+			<column name="educationId" type="int">
+				<constraints primaryKey="true" nullable="false" foreignKeyName="fk_educationEnrollment_education" references="Education(id)"/>
+			</column>
+		</createTable>
+		<createTable tableName="JobEnrollment">
+			<column name="refugeeMail" type="varchar(30)">
+				<constraints primaryKey="true" nullable="false" foreignKeyName="fk_jobEnrollment_refugee" references="Refugee(mail)"/>
+			</column>
+			<column name="jobId" type="int">
+				<constraints primaryKey="true" nullable="false" foreignKeyName="fk_jobEnrollment_job" references="Job(id)"/>
+			</column>
+		</createTable>
+		<createTable tableName="DonationEnrollment">
+			<column name="refugeeMail" type="varchar(30)">
+				<constraints primaryKey="true" nullable="false" foreignKeyName="fk_donationEnrollment_refugee" references="Refugee(mail)"/>
+			</column>
+			<column name="donationId" type="int">
+				<constraints primaryKey="true" nullable="false" foreignKeyName="fk_donationEnrollment_donation" references="Donation(id)"/>
+			</column>
+		</createTable>
 	</changeSet>
 	
 </databaseChangeLog>

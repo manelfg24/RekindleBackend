@@ -1,17 +1,17 @@
 
 package com.pes.rekindle.services;
 
-import java.sql.Time;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.pes.rekindle.dto.DTODonation;
+import com.pes.rekindle.dto.DTOEducation;
+import com.pes.rekindle.dto.DTOJob;
+import com.pes.rekindle.dto.DTOLodge;
 import com.pes.rekindle.entities.Donation;
 import com.pes.rekindle.entities.Education;
 import com.pes.rekindle.entities.Job;
@@ -34,18 +34,16 @@ public class ServiceServiceImpl implements ServiceService {
     JobRepository jobRepository;
 
     @Override
-    public void createLodge(String name, String mail, Integer phoneNumber, String adress,
-            Integer places,
-            java.util.Date date, String description) {
+    public void createLodge(DTOLodge dtoLodge) {
         Lodge lodge = new Lodge();
-        lodge.setName(name);
-        lodge.setVolunteer(mail);
+        lodge.setName(dtoLodge.getName());
+        lodge.setVolunteer(dtoLodge.getVolunteer());
         lodge.setServiceType('l');
-        lodge.setPhoneNumber(phoneNumber);
-        lodge.setAdress(adress);
-        lodge.setPlaces(places);
-        lodge.setDateLimit(date);
-        lodge.setDescription(description);
+        lodge.setPhoneNumber(dtoLodge.getPhoneNumber());
+        lodge.setAdress(dtoLodge.getAdress());
+        lodge.setPlaces(dtoLodge.getPlaces());
+        lodge.setDateLimit(dtoLodge.getDateLimit());
+        lodge.setDescription(dtoLodge.getDescription());
         lodgeRepository.save(lodge);
     }
     /*
@@ -57,64 +55,55 @@ public class ServiceServiceImpl implements ServiceService {
      * lodgeRepository.save(lodge); return true; }
      */
 
-    public void createDonation(String name, String mail, Integer phoneNumber, String adress,
-            Integer places, Time startTime,
-            Time endTime, String description) {
+    public void createDonation(DTODonation dtoDonation) {
         Donation donation = new Donation();
-        donation.setName(name);
-        donation.setVolunteer(mail);
+        donation.setName(dtoDonation.getName());
+        donation.setVolunteer(dtoDonation.getVolunteer());
         donation.setServiceType('d');
-        donation.setPhoneNumber(phoneNumber);
-        donation.setAdress(adress);
-        donation.setPlaces(places);
-        donation.setStartTime(startTime);
-        donation.setEndTime(endTime);
-        donation.setDescription(description);
+        donation.setPhoneNumber(dtoDonation.getPhoneNumber());
+        donation.setAdress(dtoDonation.getAdress());
+        donation.setPlaces(dtoDonation.getPlaces());
+        donation.setStartTime(dtoDonation.getStartTime());
+        donation.setEndTime(dtoDonation.getEndTime());
+        donation.setDescription(dtoDonation.getDescription());
         donationRepository.save(donation);
     }
 
-    public void createEducation(String name, String mail, Integer phoneNumber, String adress,
-            String ambit,
-            String requirements, String schedule, Integer places, Integer price,
-            String description) {
+    public void createEducation(DTOEducation dtoEducation) {
         Education education = new Education();
-        education.setName(name);
-        education.setVolunteer(mail);
+        education.setName(dtoEducation.getName());
+        education.setVolunteer(dtoEducation.getVolunteer());
         education.setServiceType('e');
-        education.setPhoneNumber(phoneNumber);
-        education.setAdress(adress);
-        education.setAmbit(ambit);
-        education.setRequirements(requirements);
-        education.setSchedule(schedule);
-        education.setPlaces(places);
-        education.setDescription(description);
+        education.setPhoneNumber(dtoEducation.getPhoneNumber());
+        education.setAdress(dtoEducation.getAdress());
+        education.setAmbit(dtoEducation.getAmbit());
+        education.setRequirements(dtoEducation.getRequirements());
+        education.setSchedule(dtoEducation.getSchedule());
+        education.setPlaces(dtoEducation.getPlaces());
+        education.setDescription(dtoEducation.getDescription());
         educationRepository.save(education);
     }
 
-    public void createJob(String name, String mail, Integer phoneNumber, String adress,
-            String charge,
-            String requirements, Double hoursDay, Double hoursWeek, Integer duration,
-            Integer places, Double salary,
-            String description) {
+    public void createJob(DTOJob dtoJob) {
         Job job = new Job();
-        job.setName(name);
-        job.setVolunteer(mail);
+        job.setName(dtoJob.getName());
+        job.setVolunteer(dtoJob.getVolunteer());
         job.setServiceType('j');
-        job.setPhoneNumber(phoneNumber);
-        job.setAdress(adress);
-        job.setCharge(charge);
-        job.setRequirements(requirements);
-        job.setHoursDay(hoursDay);
-        job.setHoursWeek(hoursWeek);
-        job.setContractDuration(duration);
-        job.setPlaces(places);
-        job.setSalary(salary);
-        job.setDescription(description);
+        job.setPhoneNumber(dtoJob.getPhoneNumber());
+        job.setAdress(dtoJob.getAdress());
+        job.setCharge(dtoJob.getCharge());
+        job.setRequirements(dtoJob.getRequirements());
+        job.setHoursDay(dtoJob.getHoursDay());
+        job.setHoursWeek(dtoJob.getHoursWeek());
+        job.setContractDuration(dtoJob.getContractDuration());
+        job.setPlaces(dtoJob.getPlaces());
+        job.setSalary(dtoJob.getSalary());
+        job.setDescription(dtoJob.getDescription());
         jobRepository.save(job);
     }
 
     public Map<Integer, Set<Object>> listServices() {
-    	Map<Integer, Set<Object>> listServices = new HashMap<Integer, Set<Object>>();
+        Map<Integer, Set<Object>> listServices = new HashMap<Integer, Set<Object>>();
         listServices.put(0, lodgeRepository.findAll());
         listServices.put(1, donationRepository.findAll());
         listServices.put(2, educationRepository.findAll());
@@ -137,106 +126,102 @@ public class ServiceServiceImpl implements ServiceService {
         return service;
     }
 
-	@Override
-	public Boolean deleteService(long id, char serviceType) {
-		return null;
-	}
+    @Override
+    public Boolean deleteService(long id, char serviceType) {
+        return null;
+    }
 
-	@Override
-	public void deleteLodge(Long id) {
-		lodgeRepository.deleteById(id);
-	}
+    @Override
+    public void deleteLodge(Long id) {
+        lodgeRepository.deleteById(id);
+    }
 
-	@Override
-	public Lodge infoLodge(Long id) {
-		return lodgeRepository.findById(id);
-	}
+    // tienen que devolver DTO
+    @Override
+    public Lodge infoLodge(Long id) {
+        return lodgeRepository.findById(id);
+    }
 
-	@Override
-	public Education infoEducation(Long id) {
-		return educationRepository.findById(id);
-	}
+    @Override
+    public Education infoEducation(Long id) {
+        return educationRepository.findById(id);
+    }
 
-	@Override
-	public Donation infoDonation(Long id) {
-		return donationRepository.findById(id);
-	}
+    @Override
+    public Donation infoDonation(Long id) {
+        return donationRepository.findById(id);
+    }
 
-	@Override
-	public Job infoJob(Long id) {
-		return jobRepository.findById(id);
-	}
+    @Override
+    public Job infoJob(Long id) {
+        return jobRepository.findById(id);
+    }
 
-	@Override
-	public void modifyDonation(long id, String name, String volunteer, Integer phoneNumber, String adress, Integer places,
-			Time startTime, Time endTime, String description) {
-		Donation donation = new Donation();
-		donation.setName(name);
-        donation.setVolunteer(volunteer);
+    @Override
+    public void modifyDonation(long id, DTODonation dtoDonation) {
+        Donation donation = new Donation();
+        donation.setName(dtoDonation.getName());
+        donation.setVolunteer(dtoDonation.getVolunteer());
         donation.setServiceType('d');
-        donation.setPhoneNumber(phoneNumber);
-        donation.setAdress(adress);
-        donation.setPlaces(places);
-        donation.setStartTime(startTime);
-        donation.setEndTime(endTime);
-        donation.setDescription(description);
+        donation.setPhoneNumber(dtoDonation.getPhoneNumber());
+        donation.setAdress(dtoDonation.getAdress());
+        donation.setPlaces(dtoDonation.getPlaces());
+        donation.setStartTime(dtoDonation.getStartTime());
+        donation.setEndTime(dtoDonation.getEndTime());
+        donation.setDescription(dtoDonation.getDescription());
         donationRepository.save(donation);
-		
-	}
 
-	@Override
-	public void modifyLodge(long id, String name, String volunteer, Integer phoneNumber, String adress, Integer places,
-			Date dateLimit, String description) {
-		Lodge lodge = new Lodge();
-		lodge.setName(name);
-        lodge.setVolunteer(volunteer);
-        lodge.setPhoneNumber(phoneNumber);
-        lodge.setAdress(adress);
-        lodge.setPlaces(places);
-        lodge.setDateLimit(dateLimit);
-        lodge.setDescription(description);
+    }
+
+    @Override
+    public void modifyLodge(long id, DTOLodge dtoLodge) {
+        Lodge lodge = new Lodge();
+        lodge.setName(dtoLodge.getName());
+        lodge.setVolunteer(dtoLodge.getVolunteer());
+        lodge.setPhoneNumber(dtoLodge.getPhoneNumber());
+        lodge.setAdress(dtoLodge.getAdress());
+        lodge.setPlaces(dtoLodge.getPlaces());
+        lodge.setDateLimit(dtoLodge.getDateLimit());
+        lodge.setDescription(dtoLodge.getDescription());
         lodgeRepository.save(lodge);
-		
-	}
 
-	@Override
-	public void modifyEducation(long id, String name, String volunteer, Integer phoneNumber, String adress,
-			String ambit, String requirements, String schedule, Integer places, Integer price, String description) {
-		Education education = new Education();
-		education.setName(name);
-        education.setVolunteer(volunteer);
+    }
+
+    @Override
+    public void modifyEducation(long id, DTOEducation dtoEducation) {
+        Education education = new Education();
+        education.setName(dtoEducation.getName());
+        education.setVolunteer(dtoEducation.getVolunteer());
         education.setServiceType('e');
-        education.setPhoneNumber(phoneNumber);
-        education.setAdress(adress);
-        education.setAmbit(ambit);
-        education.setRequirements(requirements);
-        education.setSchedule(schedule);
-        education.setPlaces(places);
-        education.setDescription(description);
+        education.setPhoneNumber(dtoEducation.getPhoneNumber());
+        education.setAdress(dtoEducation.getAdress());
+        education.setAmbit(dtoEducation.getAmbit());
+        education.setRequirements(dtoEducation.getRequirements());
+        education.setSchedule(dtoEducation.getSchedule());
+        education.setPlaces(dtoEducation.getPlaces());
+        education.setDescription(dtoEducation.getDescription());
         educationRepository.save(education);
-		
-	}
 
-	@Override
-	public void modifyJob(long id, String name, String volunteer, Integer phoneNumber, String adress, String charge,
-			String requirements, double hoursDay, double hoursWeek, Integer contractDuration, Integer places,
-			double salary, String description) {
-		Job job = new Job();
-		job.setName(name);
-        job.setVolunteer(volunteer);
+    }
+
+    @Override
+    public void modifyJob(long id, DTOJob dtoJob) {
+        Job job = new Job();
+        job.setName(dtoJob.getName());
+        job.setVolunteer(dtoJob.getVolunteer());
         job.setServiceType('j');
-        job.setPhoneNumber(phoneNumber);
-        job.setAdress(adress);
-        job.setCharge(charge);
-        job.setRequirements(requirements);
-        job.setHoursDay(hoursDay);
-        job.setHoursWeek(hoursWeek);
-        job.setContractDuration(contractDuration);
-        job.setPlaces(places);
-        job.setSalary(salary);
-        job.setDescription(description);
+        job.setPhoneNumber(dtoJob.getPhoneNumber());
+        job.setAdress(dtoJob.getAdress());
+        job.setCharge(dtoJob.getCharge());
+        job.setRequirements(dtoJob.getRequirements());
+        job.setHoursDay(dtoJob.getHoursDay());
+        job.setHoursWeek(dtoJob.getHoursWeek());
+        job.setContractDuration(dtoJob.getContractDuration());
+        job.setPlaces(dtoJob.getPlaces());
+        job.setSalary(dtoJob.getSalary());
+        job.setDescription(dtoJob.getDescription());
         jobRepository.save(job);
-		
-	}
+
+    }
 
 }
