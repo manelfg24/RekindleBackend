@@ -58,7 +58,7 @@ public class ServiceController {
     }
 
     @RequestMapping(value = "/servicios", method = RequestMethod.GET)
-    public ResponseEntity<Map<Integer, Set<Object>>> listServices() {
+    public ResponseEntity<Set<Object>> listServices() {
         return ResponseEntity.status(HttpStatus.OK).body(serviceService.listServices());
     }
 

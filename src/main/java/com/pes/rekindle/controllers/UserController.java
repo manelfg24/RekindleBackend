@@ -40,8 +40,8 @@ public class UserController {
     }
 
     @RequestMapping(value = "/refugiados", method = RequestMethod.POST)
-    public ResponseEntity<Refugee> createRefugee(@RequestBody DTORefugee refugee) {
-        Refugee createdRefugee;
+    public ResponseEntity<DTORefugee> createRefugee(@RequestBody DTORefugee refugee) {
+        DTORefugee createdRefugee;
         try {
             createdRefugee = userService.createRefugee(refugee);
         } catch (Exception e) {
@@ -90,12 +90,7 @@ public class UserController {
 
     @RequestMapping(value = "/refugiados/{mail}", method = RequestMethod.PUT)
     public ResponseEntity<String> modifyProfileRefugee(@RequestBody DTORefugee refugee) {
-        userService.modifyProfileRefugee(refugee.getMail(), refugee.getName(),
-                refugee.getSurname1(),
-                refugee.getSurname2(), refugee.getPhoneNumber(), refugee.getBirthdate(),
-                refugee.getSex(), refugee.getCountry(), refugee.getTown(),
-                refugee.getEthnic(), refugee.getBloodType(), refugee.getEyeColor(),
-                refugee.getBiography());
+        userService.modifyProfileRefugee(refugee);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
@@ -106,21 +101,21 @@ public class UserController {
     }
 
     @RequestMapping(value = "/refugiados/{mail}", method = RequestMethod.GET)
-    public ResponseEntity<Refugee> infoRefugee(@PathVariable String mail) {
-        Refugee refugee = userService.infoRefugee(mail);
+    public ResponseEntity<DTORefugee> infoRefugee(@PathVariable String mail) {
+        DTORefugee refugee = userService.infoRefugee(mail);
         return ResponseEntity.status(HttpStatus.OK).body(refugee);
     }
 
     // Busqueda de refugiados
     @RequestMapping(value = "/refugiados", method = RequestMethod.GET)
-    public ResponseEntity<Set<Refugee>> findRefugee(@RequestParam("name") String name,
+    public ResponseEntity<Set<DTORefugee>> findRefugee(@RequestParam("name") String name,
             @RequestParam("surname1") String surname1,
             @RequestParam("surname2") String surname2, @RequestParam("birthdate") Date birthdate,
             @RequestParam("sex") String sex,
             @RequestParam("country") String country, @RequestParam("town") String town,
             @RequestParam("ethnic") String ethnic,
             @RequestParam("blood") String blood, @RequestParam("eye") String eye) {
-        Set<Refugee> refugees = userService.findRefugee(name, surname1, surname2, birthdate, sex,
+        Set<DTORefugee> refugees = userService.findRefugee(name, surname1, surname2, birthdate, sex,
                 country, town, ethnic, blood, eye);
         return ResponseEntity.status(HttpStatus.OK).body(refugees);
     }

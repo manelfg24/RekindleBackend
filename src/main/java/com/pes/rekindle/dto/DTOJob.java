@@ -1,8 +1,10 @@
 
 package com.pes.rekindle.dto;
 
+import com.pes.rekindle.entities.Job;
+
 public class DTOJob {
-    private char serviceType;
+    private String serviceType;
     private String name;
     private String volunteer;
     private Integer phoneNumber;
@@ -16,11 +18,32 @@ public class DTOJob {
     private double salary;
     private String description;
 
-    public char getServiceType() {
+    public DTOJob() {
+        super();
+    }
+
+    public DTOJob(Job job) {
+        super();
+        this.serviceType = job.getServiceType();
+        this.name = job.getName();
+        this.volunteer = job.getVolunteer();
+        this.phoneNumber = job.getPhoneNumber();
+        this.adress = job.getAdress();
+        this.charge = job.getCharge();
+        this.requirements = job.getRequirements();
+        this.hoursDay = job.getHoursDay();
+        this.hoursWeek = job.getHoursWeek();
+        this.contractDuration = job.getContractDuration();
+        this.places = job.getPlaces();
+        this.salary = job.getSalary();
+        this.description = job.getDescription();
+    }
+
+    public String getServiceType() {
         return serviceType;
     }
 
-    public void setServiceType(char serviceType) {
+    public void setServiceType(String serviceType) {
         this.serviceType = serviceType;
     }
 

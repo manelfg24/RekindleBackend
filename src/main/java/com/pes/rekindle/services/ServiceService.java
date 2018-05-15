@@ -1,7 +1,6 @@
 
 package com.pes.rekindle.services;
 
-import java.util.Map;
 import java.util.Set;
 
 import com.pes.rekindle.dto.DTODonation;
@@ -13,7 +12,7 @@ public interface ServiceService {
 
     void createLodge(DTOLodge lodge);
 
-    Map<Integer, Set<Object>> listServices();
+    Set<Object> listServices();
 
     void createDonation(DTODonation donation);
 

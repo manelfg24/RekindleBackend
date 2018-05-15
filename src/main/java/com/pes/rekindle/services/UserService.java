@@ -9,7 +9,6 @@ import org.springframework.data.util.Pair;
 
 import com.pes.rekindle.dto.DTORefugee;
 import com.pes.rekindle.entities.Lodge;
-import com.pes.rekindle.entities.Refugee;
 import com.pes.rekindle.entities.Volunteer;
 
 public interface UserService {
@@ -19,11 +18,11 @@ public interface UserService {
 
     Volunteer createVolunteer(Volunteer volunteer) throws Exception;
 
-    Refugee createRefugee(DTORefugee refugee) throws Exception;
+    DTORefugee createRefugee(DTORefugee refugee) throws Exception;
 
     Volunteer logInVolunteer(String mail, String password);
 
-    Refugee logInRefugee(String mail, String password);
+    DTORefugee logInRefugee(String mail, String password);
 
     Boolean changePasswordVolunteer(String mail, String password, String newPassword);
 
@@ -31,13 +30,11 @@ public interface UserService {
 
     void modifyProfileVolunteer(String mail, String name, String surname1, String surname2);
 
-    void modifyProfileRefugee(String mail, String name, String surname1, String surname2,
-            Integer phonNumber, Date birthdate, String sex, String country, String town,
-            String ethnic, String bloodType, String eyeColor, String string);
+    void modifyProfileRefugee(DTORefugee refugee);
 
     Volunteer infoVolunteer(String mail);
 
-    Refugee infoRefugee(String mail);
+    DTORefugee infoRefugee(String mail);
 
     Pair<Integer, Object> exists(String mail, String password);
 
@@ -51,7 +48,7 @@ public interface UserService {
 
     Set<Lodge> refugeeLodges(String mail);
 
-    Set<Refugee> findRefugee(String name, String surname1, String surname2, Date birthdate,
+    Set<DTORefugee> findRefugee(String name, String surname1, String surname2, Date birthdate,
             String sex, String country,
             String town, String ethnic, String blood, String eye);
 

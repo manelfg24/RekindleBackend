@@ -1,8 +1,7 @@
 
 package com.pes.rekindle.services;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +37,7 @@ public class ServiceServiceImpl implements ServiceService {
         Lodge lodge = new Lodge();
         lodge.setName(dtoLodge.getName());
         lodge.setVolunteer(dtoLodge.getVolunteer());
-        lodge.setServiceType('l');
+        lodge.setServiceType("Lodge");
         lodge.setPhoneNumber(dtoLodge.getPhoneNumber());
         lodge.setAdress(dtoLodge.getAdress());
         lodge.setPlaces(dtoLodge.getPlaces());
@@ -46,20 +45,12 @@ public class ServiceServiceImpl implements ServiceService {
         lodge.setDescription(dtoLodge.getDescription());
         lodgeRepository.save(lodge);
     }
-    /*
-     * public Boolean createLodge(String name, String mail, Integer phoneNumber, String adress,
-     * Integer places, Date dateLimit, String description) { Lodge lodge = new Lodge();
-     * lodge.setName(name); lodge.setVolunteer(mail); lodge.setServiceType('l');
-     * lodge.setPhoneNumber(phoneNumber); lodge.setAdress(adress); lodge.setPlaces(places);
-     * lodge.setDateLimit(dateLimit); lodge.setDescription(description);
-     * lodgeRepository.save(lodge); return true; }
-     */
 
     public void createDonation(DTODonation dtoDonation) {
         Donation donation = new Donation();
         donation.setName(dtoDonation.getName());
         donation.setVolunteer(dtoDonation.getVolunteer());
-        donation.setServiceType('d');
+        donation.setServiceType("Donation");
         donation.setPhoneNumber(dtoDonation.getPhoneNumber());
         donation.setAdress(dtoDonation.getAdress());
         donation.setPlaces(dtoDonation.getPlaces());
@@ -73,7 +64,7 @@ public class ServiceServiceImpl implements ServiceService {
         Education education = new Education();
         education.setName(dtoEducation.getName());
         education.setVolunteer(dtoEducation.getVolunteer());
-        education.setServiceType('e');
+        education.setServiceType("Education");
         education.setPhoneNumber(dtoEducation.getPhoneNumber());
         education.setAdress(dtoEducation.getAdress());
         education.setAmbit(dtoEducation.getAmbit());
@@ -88,7 +79,7 @@ public class ServiceServiceImpl implements ServiceService {
         Job job = new Job();
         job.setName(dtoJob.getName());
         job.setVolunteer(dtoJob.getVolunteer());
-        job.setServiceType('j');
+        job.setServiceType("Job");
         job.setPhoneNumber(dtoJob.getPhoneNumber());
         job.setAdress(dtoJob.getAdress());
         job.setCharge(dtoJob.getCharge());
@@ -102,13 +93,30 @@ public class ServiceServiceImpl implements ServiceService {
         jobRepository.save(job);
     }
 
-    public Map<Integer, Set<Object>> listServices() {
-        Map<Integer, Set<Object>> listServices = new HashMap<Integer, Set<Object>>();
-        listServices.put(0, lodgeRepository.findAll());
-        listServices.put(1, donationRepository.findAll());
-        listServices.put(2, educationRepository.findAll());
-        listServices.put(3, jobRepository.findAll());
-        return listServices;
+    public Set<Object> listServices() {
+        Set<Object> dtosService = new HashSet<Object>();
+        Set<Lodge> lodges = lodgeRepository.findAll();
+        for (Lodge lodge : lodges) {
+            DTOLodge dtoLodge = new DTOLodge(lodge);
+            dtosService.add(dtoLodge);
+        }
+        Set<Donation> donations = donationRepository.findAll();
+        for (Donation donation : donations) {
+            DTODonation dtoDonation = new DTODonation(donation);
+            dtosService.add(dtoDonation);
+        }
+        Set<Education> courses = educationRepository.findAll();
+        for (Education education : courses) {
+            DTOEducation dtoEducation = new DTOEducation(education);
+            dtosService.add(dtoEducation);
+        }
+        Set<Job> jobs = jobRepository.findAll();
+        for (Job job : jobs) {
+            DTOJob dtoJob = new DTOJob(job);
+            dtosService.add(dtoJob);
+        }
+
+        return dtosService;
     }
 
     public Object infoService(Long id, char serviceType) {
@@ -142,7 +150,7 @@ public class ServiceServiceImpl implements ServiceService {
         DTOLodge dtoLodge = new DTOLodge();
         dtoLodge.setName(lodge.getName());
         dtoLodge.setVolunteer(lodge.getVolunteer());
-        dtoLodge.setServiceType('l');
+        dtoLodge.setServiceType("Lodge");
         dtoLodge.setPhoneNumber(lodge.getPhoneNumber());
         dtoLodge.setAdress(lodge.getAdress());
         dtoLodge.setPlaces(lodge.getPlaces());
@@ -157,7 +165,7 @@ public class ServiceServiceImpl implements ServiceService {
         DTOEducation dtoEducation = new DTOEducation();
         dtoEducation.setName(education.getName());
         dtoEducation.setVolunteer(education.getVolunteer());
-        dtoEducation.setServiceType('e');
+        dtoEducation.setServiceType("Education");
         dtoEducation.setPhoneNumber(education.getPhoneNumber());
         dtoEducation.setAdress(education.getAdress());
         dtoEducation.setAmbit(education.getAmbit());
@@ -174,7 +182,7 @@ public class ServiceServiceImpl implements ServiceService {
         DTODonation dtoDonation = new DTODonation();
         dtoDonation.setName(donation.getName());
         dtoDonation.setVolunteer(donation.getVolunteer());
-        dtoDonation.setServiceType('d');
+        dtoDonation.setServiceType("Donation");
         dtoDonation.setPhoneNumber(donation.getPhoneNumber());
         dtoDonation.setAdress(donation.getAdress());
         dtoDonation.setPlaces(donation.getPlaces());
@@ -190,7 +198,7 @@ public class ServiceServiceImpl implements ServiceService {
         DTOJob dtoJob = new DTOJob();
         dtoJob.setName(job.getName());
         dtoJob.setVolunteer(job.getVolunteer());
-        dtoJob.setServiceType('j');
+        dtoJob.setServiceType("Job");
         dtoJob.setPhoneNumber(job.getPhoneNumber());
         dtoJob.setAdress(job.getAdress());
         dtoJob.setCharge(job.getCharge());
@@ -209,7 +217,7 @@ public class ServiceServiceImpl implements ServiceService {
         Donation donation = new Donation();
         donation.setName(dtoDonation.getName());
         donation.setVolunteer(dtoDonation.getVolunteer());
-        donation.setServiceType('d');
+        donation.setServiceType("Donation");
         donation.setPhoneNumber(dtoDonation.getPhoneNumber());
         donation.setAdress(dtoDonation.getAdress());
         donation.setPlaces(dtoDonation.getPlaces());
@@ -225,7 +233,7 @@ public class ServiceServiceImpl implements ServiceService {
         Lodge lodge = new Lodge();
         lodge.setName(dtoLodge.getName());
         lodge.setVolunteer(dtoLodge.getVolunteer());
-        lodge.setServiceType('l');
+        lodge.setServiceType("Lodge");
         lodge.setPhoneNumber(dtoLodge.getPhoneNumber());
         lodge.setAdress(dtoLodge.getAdress());
         lodge.setPlaces(dtoLodge.getPlaces());
@@ -240,7 +248,7 @@ public class ServiceServiceImpl implements ServiceService {
         Education education = new Education();
         education.setName(dtoEducation.getName());
         education.setVolunteer(dtoEducation.getVolunteer());
-        education.setServiceType('e');
+        education.setServiceType("Education");
         education.setPhoneNumber(dtoEducation.getPhoneNumber());
         education.setAdress(dtoEducation.getAdress());
         education.setAmbit(dtoEducation.getAmbit());
@@ -257,7 +265,7 @@ public class ServiceServiceImpl implements ServiceService {
         Job job = new Job();
         job.setName(dtoJob.getName());
         job.setVolunteer(dtoJob.getVolunteer());
-        job.setServiceType('j');
+        job.setServiceType("Job");
         job.setPhoneNumber(dtoJob.getPhoneNumber());
         job.setAdress(dtoJob.getAdress());
         job.setCharge(dtoJob.getCharge());

@@ -3,8 +3,10 @@ package com.pes.rekindle.dto;
 
 import java.sql.Time;
 
+import com.pes.rekindle.entities.Donation;
+
 public class DTODonation {
-    private char serviceType;
+    private String serviceType;
     private String name;
     private String volunteer;
     private Integer phoneNumber;
@@ -14,11 +16,28 @@ public class DTODonation {
     private Time endTime;
     private String description;
 
-    public char getServiceType() {
+    public DTODonation() {
+        super();
+    }
+
+    public DTODonation(Donation donation) {
+        super();
+        this.serviceType = donation.getServiceType();
+        this.name = donation.getName();
+        this.volunteer = donation.getVolunteer();
+        this.phoneNumber = donation.getPhoneNumber();
+        this.adress = donation.getAdress();
+        this.places = donation.getPlaces();
+        this.startTime = donation.getStartTime();
+        this.endTime = donation.getEndTime();
+        this.description = donation.getDescription();
+    }
+
+    public String getServiceType() {
         return serviceType;
     }
 
-    public void setServiceType(char serviceType) {
+    public void setServiceType(String serviceType) {
         this.serviceType = serviceType;
     }
 

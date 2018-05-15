@@ -1,8 +1,10 @@
 
 package com.pes.rekindle.dto;
 
+import com.pes.rekindle.entities.Education;
+
 public class DTOEducation {
-    private char serviceType;
+    private String serviceType;
     private String name;
     private String volunteer;
     private Integer phoneNumber;
@@ -14,11 +16,30 @@ public class DTOEducation {
     private Integer price;
     private String description;
 
-    public char getServiceType() {
+    public DTOEducation() {
+        super();
+    }
+
+    public DTOEducation(Education education) {
+        super();
+        this.serviceType = education.getServiceType();
+        this.name = education.getName();
+        this.volunteer = education.getVolunteer();
+        this.phoneNumber = education.getPhoneNumber();
+        this.adress = education.getAdress();
+        this.ambit = education.getAmbit();
+        this.requirements = education.getRequirements();
+        this.schedule = education.getSchedule();
+        this.places = education.getPlaces();
+        this.price = education.getPrice();
+        this.description = education.getDescription();
+    }
+
+    public String getServiceType() {
         return serviceType;
     }
 
-    public void setServiceType(char serviceType) {
+    public void setServiceType(String serviceType) {
         this.serviceType = serviceType;
     }
 

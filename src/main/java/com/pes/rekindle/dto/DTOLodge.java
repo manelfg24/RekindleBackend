@@ -3,8 +3,10 @@ package com.pes.rekindle.dto;
 
 import java.util.Date;
 
+import com.pes.rekindle.entities.Lodge;
+
 public class DTOLodge {
-    private char serviceType;
+    private String serviceType;
     private String name;
     private String volunteer;
     private Integer phoneNumber;
@@ -13,11 +15,27 @@ public class DTOLodge {
     private Date dateLimit;
     private String description;
 
-    public char getServiceType() {
+    public DTOLodge() {
+        super();
+    }
+
+    public DTOLodge(Lodge lodge) {
+        super();
+        this.serviceType = lodge.getServiceType();
+        this.name = lodge.getName();
+        this.volunteer = lodge.getVolunteer();
+        this.phoneNumber = lodge.getPhoneNumber();
+        this.adress = lodge.getAdress();
+        this.places = lodge.getPlaces();
+        this.dateLimit = lodge.getDateLimit();
+        this.description = lodge.getDescription();
+    }
+
+    public String getServiceType() {
         return serviceType;
     }
 
-    public void setServiceType(char serviceType) {
+    public void setServiceType(String serviceType) {
         this.serviceType = serviceType;
     }
 
