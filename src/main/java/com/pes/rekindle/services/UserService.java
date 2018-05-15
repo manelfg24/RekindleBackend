@@ -2,12 +2,12 @@
 package com.pes.rekindle.services;
 
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 
 import org.springframework.data.util.Pair;
 
+import com.pes.rekindle.dto.DTORefugee;
 import com.pes.rekindle.entities.Lodge;
 import com.pes.rekindle.entities.Refugee;
 import com.pes.rekindle.entities.Volunteer;
@@ -17,14 +17,9 @@ public interface UserService {
     // boolean logIn(String user, String password);
     Object logIn(String user, String password);
 
-    Volunteer createVolunteer(String mail, String password, String name, String surname1,
-            String surname2) throws Exception;
+    Volunteer createVolunteer(Volunteer volunteer) throws Exception;
 
-    Refugee createRefugee(String mail, String password, String name, String surname1,
-            String surname2,
-            Integer phoneNumber, Date birthdate, String sex, String country, String town,
-            String ethnic,
-            String bloodType, String eyeColor, String biography) throws Exception;
+    Refugee createRefugee(DTORefugee refugee) throws Exception;
 
     Volunteer logInVolunteer(String mail, String password);
 
@@ -56,14 +51,14 @@ public interface UserService {
 
     Set<Lodge> refugeeLodges(String mail);
 
-	Set<Refugee> findRefugee(String name, String surname1, String surname2, Date birthdate, String sex, String country,
-			String town, String ethnic, String blood, String eye);
+    Set<Refugee> findRefugee(String name, String surname1, String surname2, Date birthdate,
+            String sex, String country,
+            String town, String ethnic, String blood, String eye);
 
+    boolean changePassword(String mail, String passwordOld, String passwordNew);
 
-	boolean changePassword(String mail, String passwordOld, String passwordNew);
+    boolean recoverPassword(String mail, String passwordNew);
 
-	boolean recoverPassword(String mail, String passwordNew);
-
-	Map<Integer, Set<Object>> obtainOwnServices(String mail, Integer userType);
+    Map<Integer, Set<Object>> obtainOwnServices(String mail, Integer userType);
 
 }

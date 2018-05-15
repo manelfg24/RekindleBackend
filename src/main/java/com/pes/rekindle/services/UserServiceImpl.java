@@ -2,7 +2,6 @@
 package com.pes.rekindle.services;
 
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -13,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
+import com.pes.rekindle.dto.DTORefugee;
 import com.pes.rekindle.entities.Donation;
 import com.pes.rekindle.entities.Education;
 import com.pes.rekindle.entities.Job;
@@ -46,36 +46,36 @@ public class UserServiceImpl implements UserService {
     @Autowired
     JobRepository jobRepository;
 
-    public Volunteer createVolunteer(String mail, String password, String name, String surname1,
-            String surname2) throws Exception {
-        Volunteer volunteer = new Volunteer();
-        Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMail(mail);
-        Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMail(mail);
+    public Volunteer createVolunteer(Volunteer volunteer) throws Exception {
+        Volunteer createdVolunteer = new Volunteer();
+        Optional<Volunteer> oVolunteer = volunteerRepository
+                .findOptionalByMail(volunteer.getMail());
+        Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMail(volunteer.getMail());
         if (oVolunteer.isPresent() || oRefugee.isPresent()) {
             throw new Exception();
         } else {
-            volunteerRepository.create(mail, password, name, surname1, surname2);
-            volunteer = volunteerRepository.findByMail(mail);
+            volunteerRepository.create(volunteer.getMail(), volunteer.getPassword(),
+                    volunteer.getName(), volunteer.getSurname1(), volunteer.getSurname2());
+            createdVolunteer = volunteerRepository.findByMail(volunteer.getMail());
         }
-        return volunteer;
+        return createdVolunteer;
     }
 
     @Override
-    public Refugee createRefugee(String mail, String password, String name, String surname1,
-            String surname2,
-            Integer phoneNumber, Date birthdate, String sex, String country, String town,
-            String ethnic,
-            String bloodType, String eyeColor, String biography) throws Exception {
+    public Refugee createRefugee(DTORefugee dtoRefugee) throws Exception {
         Refugee refugee = new Refugee();
-        Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMail(mail);
-        Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMail(mail);
+        Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMail(dtoRefugee.getMail());
+        Optional<Volunteer> oVolunteer = volunteerRepository
+                .findOptionalByMail(dtoRefugee.getMail());
         if (oRefugee.isPresent() || oVolunteer.isPresent()) {
             throw new Exception();
         } else {
-            refugeeRepository.create(mail, password, name, surname1, surname2, phoneNumber,
-                    birthdate, sex, country,
-                    town, ethnic, bloodType, eyeColor, biography);
-            refugee = refugeeRepository.findByMail(mail);
+            refugeeRepository.create(dtoRefugee.getMail(), dtoRefugee.getPassword(),
+                    dtoRefugee.getName(), dtoRefugee.getSurname1(), dtoRefugee.getSurname2(),
+                    dtoRefugee.getPhoneNumber(), dtoRefugee.getBirthdate(), dtoRefugee.getSex(),
+                    dtoRefugee.getCountry(), dtoRefugee.getTown(), dtoRefugee.getEthnic(),
+                    dtoRefugee.getBloodType(), dtoRefugee.getEyeColor(), dtoRefugee.getBiography());
+            refugee = refugeeRepository.findByMail(dtoRefugee.getMail());
         }
         return refugee;
     }
@@ -213,16 +213,15 @@ public class UserServiceImpl implements UserService {
         Refugee r = refugeeRepository.findByMail(refugeeMail);
         Education e = (Education) educationRepository.findById(serviceId);
 
-        
         Set<Education> courses = r.getCourses();
         Set<Refugee> refugees = e.getInscriptions();
-        
+
         System.out.println("Courses size before: " + courses.size());
         System.out.println("Inscriptions size before: " + refugees.size());
-        
+
         refugees.add(r);
         courses.add(e);
-        
+
         System.out.println("Courses size after: " + courses.size());
         System.out.println("Inscriptions size after: " + refugees.size());
 
@@ -266,187 +265,140 @@ public class UserServiceImpl implements UserService {
         Set<Lodge> lodges = refugee.getLodges();
         return lodges;
     }
-    
-	@Override
-	public Set<Refugee> findRefugee(String name, String surname1, String surname2, Date birthdate, String sex,
-			String country, String town, String ethnic, String blood, String eye) {
-		Set<Refugee> result = new HashSet<Refugee>();
-		result = refugeeRepository.findAll();
-		if(!name.equals("")) {
-			result.retainAll(refugeeRepository.findByName(name));
-		}
-		if (!surname1.equals("")) {
-			result.retainAll(refugeeRepository.findBySurname1(surname1));
-		}
-		if (!surname2.equals("")) {
-			result.retainAll(refugeeRepository.findBySurname2(surname2));
-		}
-		if(!birthdate.equals(Date.valueOf("1890-01-01"))) {
-			result.retainAll(refugeeRepository.findByBirthdate(birthdate));
-		}
-		if(!sex.equals("-")) 
-			result.retainAll(refugeeRepository.findBySex(sex));
-		
-		if(!country.equals("")) {
-			result.retainAll(refugeeRepository.findByCountry(country));
-		}	
-		if(!town.equals("")) {
-			result.retainAll(refugeeRepository.findByTown(town));
-		}	
-		if(!ethnic.equals("")) {
-			result.retainAll(refugeeRepository.findByEthnic(ethnic));
-		}	
-		if(!blood.equals("-")) {
-			result.retainAll(refugeeRepository.findByBloodType(blood));
-		}	
-		if(!eye.equals("-")) {
-			result.retainAll(refugeeRepository.findByEyeColor(eye));
-		}
-		return result;
-	}
+
+    @Override
+    public Set<Refugee> findRefugee(String name, String surname1, String surname2, Date birthdate,
+            String sex,
+            String country, String town, String ethnic, String blood, String eye) {
+        Set<Refugee> result = new HashSet<Refugee>();
+        result = refugeeRepository.findAll();
+        if (!name.equals("")) {
+            result.retainAll(refugeeRepository.findByName(name));
+        }
+        if (!surname1.equals("")) {
+            result.retainAll(refugeeRepository.findBySurname1(surname1));
+        }
+        if (!surname2.equals("")) {
+            result.retainAll(refugeeRepository.findBySurname2(surname2));
+        }
+        if (!birthdate.equals(Date.valueOf("1890-01-01"))) {
+            result.retainAll(refugeeRepository.findByBirthdate(birthdate));
+        }
+        if (!sex.equals("-"))
+            result.retainAll(refugeeRepository.findBySex(sex));
+
+        if (!country.equals("")) {
+            result.retainAll(refugeeRepository.findByCountry(country));
+        }
+        if (!town.equals("")) {
+            result.retainAll(refugeeRepository.findByTown(town));
+        }
+        if (!ethnic.equals("")) {
+            result.retainAll(refugeeRepository.findByEthnic(ethnic));
+        }
+        if (!blood.equals("-")) {
+            result.retainAll(refugeeRepository.findByBloodType(blood));
+        }
+        if (!eye.equals("-")) {
+            result.retainAll(refugeeRepository.findByEyeColor(eye));
+        }
+        return result;
+    }
 
     /*
-	@Override
-	public Set<Refugee> findRefugee(String name, String surname1, String surname2, Date birthdate, String sex,
-			String country, String town, String ethnic, String blood, String eye) {
-		Set<Refugee> result = new HashSet<Refugee>();
-		result = refugeeRepository.findAll();
-		if(name != "") {
-			if (refugeeRepository.existsByName(name)) {
-				result.retainAll(refugeeRepository.findByName(name));
-			}
-		}
-		if (surname1 != "") {
-			if (refugeeRepository.existsBySurname1(surname1)) {
-				result.retainAll(refugeeRepository.findBySurname1(surname1));
-			}
-		}
-		if (surname2 != "") {
-			if (refugeeRepository.existsBySurname2(surname2)) {
-				result.retainAll(refugeeRepository.findBySurname2(surname2));
-			}
-		}
-		if(birthdate != Date.valueOf("1890-01-01")) {
-			if (refugeeRepository.existsByBirthdate(birthdate)) {
-				result.retainAll(refugeeRepository.findByBirthdate(birthdate));
-			}
-		}
-		if(sex != "") {
-			if (refugeeRepository.existsBySex(sex)) {
-				result.retainAll(refugeeRepository.findBySex(sex));
-			}
-		}		
-		if(country != "") {
-			if (refugeeRepository.existsByCountry(country)) {
-				result.retainAll(refugeeRepository.findByCountry(country));
-			}
-		}	
-		if(town != "") {
-			result.retainAll(refugeeRepository.findByTown(town));
-		}	
-		if(ethnic != "") {
-			if (refugeeRepository.existsByEthnic(ethnic)) {
-				result.retainAll(refugeeRepository.findByEthnic(ethnic));
-			}
-		}	
-		if(blood != "-") {
-			if (refugeeRepository.existsByBloodType(blood)) {
-				result.retainAll(refugeeRepository.findByBloodType(blood));
-			}
-		}	
-		if(eye != "-") {
-			if (refugeeRepository.existsByEyeColor(eye)) {
-				result.retainAll(refugeeRepository.findByEyeColor(eye));
-			}
-		}	
-		return result;
-	}
-	*/
-    
-/*
-	@Override
-	public Set<Refugee> findRefugee(String name, String surname1, String surname2, Date birthdate, String sex,
-			String country, String town, String ethnic, String blood, String eye) {
-		Set<Refugee> result = new HashSet<Refugee>();
-		result = refugeeRepository.findAll();
-		if(name != null) {
-			Set<Optional<Refugee>> oSetRefugee = refugeeRepository.findOptionalByName(name);
-			if (!oSetRefugee.isEmpty()) {
-				Set<Refugee> sRefugee = new HashSet<Refugee>();
-				for (Optional<Refugee> oRefugee : oSetRefugee) {
-					sRefugee.add(oRefugee.get());
-				}
-				result.retainAll(sRefugee);
-			}
-		}
-		if (surname1 != null) {
-			
-		}
-		return result;
-	}
-*/
-  
-	@Override
-	public boolean changePassword(String mail, String passwordOld, String passwordNew) {
+     * @Override public Set<Refugee> findRefugee(String name, String surname1, String surname2, Date
+     * birthdate, String sex, String country, String town, String ethnic, String blood, String eye)
+     * { Set<Refugee> result = new HashSet<Refugee>(); result = refugeeRepository.findAll(); if(name
+     * != "") { if (refugeeRepository.existsByName(name)) {
+     * result.retainAll(refugeeRepository.findByName(name)); } } if (surname1 != "") { if
+     * (refugeeRepository.existsBySurname1(surname1)) {
+     * result.retainAll(refugeeRepository.findBySurname1(surname1)); } } if (surname2 != "") { if
+     * (refugeeRepository.existsBySurname2(surname2)) {
+     * result.retainAll(refugeeRepository.findBySurname2(surname2)); } } if(birthdate !=
+     * Date.valueOf("1890-01-01")) { if (refugeeRepository.existsByBirthdate(birthdate)) {
+     * result.retainAll(refugeeRepository.findByBirthdate(birthdate)); } } if(sex != "") { if
+     * (refugeeRepository.existsBySex(sex)) { result.retainAll(refugeeRepository.findBySex(sex)); }
+     * } if(country != "") { if (refugeeRepository.existsByCountry(country)) {
+     * result.retainAll(refugeeRepository.findByCountry(country)); } } if(town != "") {
+     * result.retainAll(refugeeRepository.findByTown(town)); } if(ethnic != "") { if
+     * (refugeeRepository.existsByEthnic(ethnic)) {
+     * result.retainAll(refugeeRepository.findByEthnic(ethnic)); } } if(blood != "-") { if
+     * (refugeeRepository.existsByBloodType(blood)) {
+     * result.retainAll(refugeeRepository.findByBloodType(blood)); } } if(eye != "-") { if
+     * (refugeeRepository.existsByEyeColor(eye)) {
+     * result.retainAll(refugeeRepository.findByEyeColor(eye)); } } return result; }
+     */
+
+    /*
+     * @Override public Set<Refugee> findRefugee(String name, String surname1, String surname2, Date
+     * birthdate, String sex, String country, String town, String ethnic, String blood, String eye)
+     * { Set<Refugee> result = new HashSet<Refugee>(); result = refugeeRepository.findAll(); if(name
+     * != null) { Set<Optional<Refugee>> oSetRefugee = refugeeRepository.findOptionalByName(name);
+     * if (!oSetRefugee.isEmpty()) { Set<Refugee> sRefugee = new HashSet<Refugee>(); for
+     * (Optional<Refugee> oRefugee : oSetRefugee) { sRefugee.add(oRefugee.get()); }
+     * result.retainAll(sRefugee); } } if (surname1 != null) { } return result; }
+     */
+
+    @Override
+    public boolean changePassword(String mail, String passwordOld, String passwordNew) {
         Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMailAndPassword(mail,
                 passwordOld);
         if (oRefugee.isPresent()) {
-        	Refugee refugee = oRefugee.get();
-        	if (refugee.getPassword().equals(passwordOld)) {
-        		refugee.setPassword(passwordNew);
-        		refugeeRepository.save(refugee);
-        		return true;
-        	}
+            Refugee refugee = oRefugee.get();
+            if (refugee.getPassword().equals(passwordOld)) {
+                refugee.setPassword(passwordNew);
+                refugeeRepository.save(refugee);
+                return true;
+            }
         }
         Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMailAndPassword(mail,
                 passwordOld);
         if (oVolunteer.isPresent()) {
-        	Volunteer volunteer = oVolunteer.get();
-        	if (volunteer.getPassword().equals(passwordOld)) {
-        		volunteer.setPassword(passwordNew);
-        		volunteerRepository.save(volunteer);
-        		return true;
-        	}
-        } 
+            Volunteer volunteer = oVolunteer.get();
+            if (volunteer.getPassword().equals(passwordOld)) {
+                volunteer.setPassword(passwordNew);
+                volunteerRepository.save(volunteer);
+                return true;
+            }
+        }
         return false;
-	}
+    }
 
-	@Override
-	public boolean recoverPassword(String mail, String passwordNew) {
+    @Override
+    public boolean recoverPassword(String mail, String passwordNew) {
         Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMail(mail);
         if (oRefugee.isPresent()) {
-        	Refugee refugee = oRefugee.get();
-        	refugee.setPassword(passwordNew);
-        	refugeeRepository.save(refugee);
-        	return true;
+            Refugee refugee = oRefugee.get();
+            refugee.setPassword(passwordNew);
+            refugeeRepository.save(refugee);
+            return true;
         }
         Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMail(mail);
         if (oVolunteer.isPresent()) {
-        	Volunteer volunteer = oVolunteer.get();
-        	volunteer.setPassword(passwordNew);
-        	volunteerRepository.save(volunteer);
-        	return true;
+            Volunteer volunteer = oVolunteer.get();
+            volunteer.setPassword(passwordNew);
+            volunteerRepository.save(volunteer);
+            return true;
         }
-		return false;
-	}
+        return false;
+    }
 
-	@Override
-	public Map<Integer, Set<Object>> obtainOwnServices(String mail, Integer userType) {
-		Map<Integer, Set<Object>> result = new HashMap<Integer, Set<Object>>();
-		if (userType == 0) { //refugee	
-			result.put(0, lodgeRepository.findByInscriptions_Mail(mail));
-			result.put(1, donationRepository.findByInscriptions_Mail(mail));
-			result.put(2, educationRepository.findByInscriptions_Mail(mail));
-			result.put(3, jobRepository.findByInscriptions_Mail(mail));
-		}
-		else { //volunteer
-			result.put(0, lodgeRepository.findByVolunteer(mail));
-			result.put(1, donationRepository.findByVolunteer(mail));
-			result.put(2, educationRepository.findByVolunteer(mail));
-			result.put(3, jobRepository.findByVolunteer(mail));
-		}
-		return result;
-	}
+    @Override
+    public Map<Integer, Set<Object>> obtainOwnServices(String mail, Integer userType) {
+        Map<Integer, Set<Object>> result = new HashMap<Integer, Set<Object>>();
+        if (userType == 0) { // refugee
+            result.put(0, lodgeRepository.findByInscriptions_Mail(mail));
+            result.put(1, donationRepository.findByInscriptions_Mail(mail));
+            result.put(2, educationRepository.findByInscriptions_Mail(mail));
+            result.put(3, jobRepository.findByInscriptions_Mail(mail));
+        } else { // volunteer
+            result.put(0, lodgeRepository.findByVolunteer(mail));
+            result.put(1, donationRepository.findByVolunteer(mail));
+            result.put(2, educationRepository.findByVolunteer(mail));
+            result.put(3, jobRepository.findByVolunteer(mail));
+        }
+        return result;
+    }
 }
 
 /*

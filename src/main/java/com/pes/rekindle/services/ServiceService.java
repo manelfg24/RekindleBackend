@@ -8,10 +8,6 @@ import com.pes.rekindle.dto.DTODonation;
 import com.pes.rekindle.dto.DTOEducation;
 import com.pes.rekindle.dto.DTOJob;
 import com.pes.rekindle.dto.DTOLodge;
-import com.pes.rekindle.entities.Donation;
-import com.pes.rekindle.entities.Education;
-import com.pes.rekindle.entities.Job;
-import com.pes.rekindle.entities.Lodge;
 
 public interface ServiceService {
 
@@ -31,13 +27,13 @@ public interface ServiceService {
 
     void deleteLodge(Long id);
 
-    Lodge infoLodge(Long id);
+    DTOLodge infoLodge(Long id);
 
-    Education infoEducation(Long id);
+    DTOEducation infoEducation(Long id);
 
-    Donation infoDonation(Long id);
+    DTODonation infoDonation(Long id);
 
-    Job infoJob(Long id);
+    DTOJob infoJob(Long id);
 
     void modifyDonation(long id, DTODonation donation);
 

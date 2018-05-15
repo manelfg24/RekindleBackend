@@ -37,7 +37,6 @@ public class ServiceController {
     public ResponseEntity<String> createLodge(@RequestBody DTOLodge lodge) {
         serviceService.createLodge(lodge);
         return ResponseEntity.status(HttpStatus.OK).body(null);
-
     }
 
     @RequestMapping(value = "/donaciones", method = RequestMethod.POST)
@@ -64,22 +63,22 @@ public class ServiceController {
     }
 
     @RequestMapping(value = "/alojamientos/{id}", method = RequestMethod.GET)
-    public ResponseEntity<Lodge> infoLodge(@PathVariable("id") Long id) {
+    public ResponseEntity<DTOLodge> infoLodge(@PathVariable("id") Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(serviceService.infoLodge(id));
     }
 
     @RequestMapping(value = "/cursos/{id}", method = RequestMethod.GET)
-    public ResponseEntity<Education> infoEducation(@PathVariable("id") Long id) {
+    public ResponseEntity<DTOEducation> infoEducation(@PathVariable("id") Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(serviceService.infoEducation(id));
     }
 
     @RequestMapping(value = "/donaciones/{id}", method = RequestMethod.GET)
-    public ResponseEntity<Donation> infoDonation(@PathVariable("id") Long id) {
+    public ResponseEntity<DTODonation> infoDonation(@PathVariable("id") Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(serviceService.infoDonation(id));
     }
 
     @RequestMapping(value = "/empleos/{id}", method = RequestMethod.GET)
-    public ResponseEntity<Job> infoJob(@PathVariable("id") Long id) {
+    public ResponseEntity<DTOJob> infoJob(@PathVariable("id") Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(serviceService.infoJob(id));
     }
 
