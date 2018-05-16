@@ -15,8 +15,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.pes.rekindle.dto.DTOChat;
 import com.pes.rekindle.dto.DTOLogInInfo;
-import com.pes.rekindle.dto.DTORefugee;
+import com.pes.rekindle.dto.DTOMessage;
+import com.pes.rekindle.dto.DTOUser;
+import com.pes.rekindle.entities.Chat;
 import com.pes.rekindle.entities.Lodge;
 import com.pes.rekindle.entities.Refugee;
 import com.pes.rekindle.entities.Volunteer;
@@ -40,8 +43,8 @@ public class UserController {
     }
 
     @RequestMapping(value = "/refugiados", method = RequestMethod.POST)
-    public ResponseEntity<DTORefugee> createRefugee(@RequestBody DTORefugee refugee) {
-        DTORefugee createdRefugee;
+    public ResponseEntity<DTOUser> createRefugee(@RequestBody DTOUser refugee) {
+        DTOUser createdRefugee;
         try {
             createdRefugee = userService.createRefugee(refugee);
         } catch (Exception e) {
@@ -89,7 +92,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/refugiados/{mail}", method = RequestMethod.PUT)
-    public ResponseEntity<String> modifyProfileRefugee(@RequestBody DTORefugee refugee) {
+    public ResponseEntity<String> modifyProfileRefugee(@RequestBody DTOUser refugee) {
         userService.modifyProfileRefugee(refugee);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
@@ -101,21 +104,21 @@ public class UserController {
     }
 
     @RequestMapping(value = "/refugiados/{mail}", method = RequestMethod.GET)
-    public ResponseEntity<DTORefugee> infoRefugee(@PathVariable String mail) {
-        DTORefugee refugee = userService.infoRefugee(mail);
+    public ResponseEntity<DTOUser> infoRefugee(@PathVariable String mail) {
+        DTOUser refugee = userService.infoRefugee(mail);
         return ResponseEntity.status(HttpStatus.OK).body(refugee);
     }
 
     // Busqueda de refugiados
     @RequestMapping(value = "/refugiados", method = RequestMethod.GET)
-    public ResponseEntity<Set<DTORefugee>> findRefugee(@RequestParam("name") String name,
+    public ResponseEntity<Set<DTOUser>> findRefugee(@RequestParam("name") String name,
             @RequestParam("surname1") String surname1,
             @RequestParam("surname2") String surname2, @RequestParam("birthdate") Date birthdate,
             @RequestParam("sex") String sex,
             @RequestParam("country") String country, @RequestParam("town") String town,
             @RequestParam("ethnic") String ethnic,
             @RequestParam("blood") String blood, @RequestParam("eye") String eye) {
-        Set<DTORefugee> refugees = userService.findRefugee(name, surname1, surname2, birthdate, sex,
+        Set<DTOUser> refugees = userService.findRefugee(name, surname1, surname2, birthdate, sex,
                 country, town, ethnic, blood, eye);
         return ResponseEntity.status(HttpStatus.OK).body(refugees);
     }
@@ -178,6 +181,24 @@ public class UserController {
         public void setLodgesRefugge(Set<Lodge> lodgesRefugge) {
             this.lodgesRefugge = lodgesRefugge;
         }
-
     }
+    
+    @RequestMapping(value = "/usuarios/{mail}/chats", method = RequestMethod.GET)
+    public ResponseEntity<Set<DTOChat>> listUserChats(@PathVariable String mail) {
+        Set<DTOChat> dtoChats = userService.listUserChats(mail);
+        return ResponseEntity.status(HttpStatus.OK).body(dtoChats);
+    }  
+    /*
+    @RequestMapping(value = "/usuarios/{mail}/chats/{idChat}/messages", method = RequestMethod.GET)
+    public ResponseEntity<Set<DTOMessage>> getChatMessages(@PathVariable String mail, @PathVariable String idChat) {
+        Set<DTOMessage> dtoMessages = userService.listUserChats(mail);
+        return ResponseEntity.status(HttpStatus.OK).body(dtoChats);
+    }  
+    
+    */
+    /*
+    @RequestMapping(value = "/usuarios/{mail}/chats", method = RequestMethod.GET)
+    public ResponseEntity<Set<DTOUser>> newChat(@PathVariable String mailUser1, @RequestBody String mailUser2) {
+    	return ResponseEntity.status(HttpStatus.OK).body(userService.newChat(mailUser1, mailUser2));
+    }   */
 }

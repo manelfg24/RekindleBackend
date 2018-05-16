@@ -40,7 +40,7 @@ public class EducationRepositoryTest {
 	public void init() {
 		education = new Education();
 		education.setId((long) 1);
-		education.setServiceType('e');
+		education.setServiceType("Education");
 		education.setName("Curso español avanzado");
 		education.setPhoneNumber(688342393);
 		education.setAdress("C/Pare Sallares");

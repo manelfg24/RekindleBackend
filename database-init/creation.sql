@@ -138,3 +138,19 @@ CREATE TABLE DonationEnrollment (
 	FOREIGN KEY (refugeeMail) REFERENCES Refugee(mail),
 	FOREIGN KEY (donationId) REFERENCES Donation(id)
 );
+
+CREATE TABLE Chat (
+	id int PRIMARY KEY auto_increment,
+	mailUser1 varchar(30) NOT NULL,
+	mailUser2 varchar(30) NOT NULL
+);
+
+CREATE TABLE Message (
+	id int PRIMARY KEY auto_increment,
+	idChat int NOT NULL,
+	mailSender varchar(30) NOT NULL,
+	content varchar(200) NOT NULL,
+	timeStamp Date NOT NULL,
+    
+	FOREIGN KEY (idChat) REFERENCES Chat(id)
+);

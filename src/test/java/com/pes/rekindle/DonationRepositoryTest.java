@@ -40,7 +40,7 @@ public class DonationRepositoryTest {
 	public void init() {
 		donation = new Donation();
 		donation.setId((long) 1);
-		donation.setServiceType('d');
+		donation.setServiceType("Donation");
 		donation.setName("Donación de ropa");
 		donation.setPhoneNumber(32843479);
 		donation.setAdress("C/Aragon");

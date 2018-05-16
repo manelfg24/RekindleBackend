@@ -4,8 +4,9 @@ package com.pes.rekindle.dto;
 import java.sql.Date;
 
 import com.pes.rekindle.entities.Refugee;
+import com.pes.rekindle.entities.Volunteer;
 
-public class DTORefugee {
+public class DTOUser {
     private String mail;
     private String password;
     private String userType;
@@ -22,11 +23,11 @@ public class DTORefugee {
     private String eyeColor;
     private String biography;
 
-    public DTORefugee() {
+    public DTOUser() {
         super();
     }
 
-    public DTORefugee(Refugee refugee) {
+    public DTOUser(Refugee refugee) {
         super();
         this.mail = refugee.getMail();
         this.password = refugee.getPassword();
@@ -43,6 +44,16 @@ public class DTORefugee {
         this.bloodType = refugee.getBloodType();
         this.eyeColor = refugee.getEyeColor();
         this.biography = refugee.getBiography();
+    }
+    
+    public DTOUser(Volunteer volunteer) {
+    	super();
+        this.mail = volunteer.getMail();
+        this.password = volunteer.getPassword();
+        this.userType = "Volunteer";
+        this.name = volunteer.getName();
+        this.surname1 = volunteer.getSurname1();
+        this.surname2 = volunteer.getSurname2();
     }
 
     public String getMail() {

@@ -40,7 +40,7 @@ public class JobRepositoryTest {
 		
 		job = new Job();
 		job.setId((long) 1);
-		job.setServiceType('j');
+		job.setServiceType("Job");
 		job.setName("Especialista en residuos");
 		job.setPhoneNumber(684342382);
 		job.setAdress("C/Barcelona");

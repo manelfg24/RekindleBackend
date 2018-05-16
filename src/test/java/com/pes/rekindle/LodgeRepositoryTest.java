@@ -38,7 +38,7 @@ public class LodgeRepositoryTest {
 		Long id = (long) 1;
 		lodge.setId(id);
 		lodge.setAdress("C/Balmes");
-		lodge.setServiceType('l');
+		lodge.setServiceType("Lodge");
 		lodge.setDateLimit(new Date(2018-05-05));
 		lodge.setDescription("Description");
 		lodge.setName("Barcelona's house");

@@ -12,13 +12,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
-import com.pes.rekindle.dto.DTORefugee;
+import com.pes.rekindle.dto.DTOChat;
+import com.pes.rekindle.dto.DTOUser;
+import com.pes.rekindle.dto.DTOUser;
+import com.pes.rekindle.entities.Chat;
 import com.pes.rekindle.entities.Donation;
 import com.pes.rekindle.entities.Education;
 import com.pes.rekindle.entities.Job;
 import com.pes.rekindle.entities.Lodge;
 import com.pes.rekindle.entities.Refugee;
 import com.pes.rekindle.entities.Volunteer;
+import com.pes.rekindle.repositories.ChatRepository;
 import com.pes.rekindle.repositories.DonationRepository;
 import com.pes.rekindle.repositories.EducationRepository;
 import com.pes.rekindle.repositories.JobRepository;
@@ -42,6 +46,9 @@ public class UserServiceImpl implements UserService {
     DonationRepository donationRepository;
     @Autowired
     JobRepository jobRepository;
+    
+    @Autowired 
+    ChatRepository chatRepository;
 
     public Volunteer createVolunteer(Volunteer volunteer) throws Exception {
         Volunteer createdVolunteer = new Volunteer();
@@ -59,29 +66,29 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public DTORefugee createRefugee(DTORefugee dtoRefugee) throws Exception {
+    public DTOUser createRefugee(DTOUser DTOUser) throws Exception {
         Refugee refugee = new Refugee();
-        DTORefugee createdDtoRefugee;
-        Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMail(dtoRefugee.getMail());
+        DTOUser createdDTOUser;
+        Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMail(DTOUser.getMail());
         Optional<Volunteer> oVolunteer = volunteerRepository
-                .findOptionalByMail(dtoRefugee.getMail());
+                .findOptionalByMail(DTOUser.getMail());
         if (oRefugee.isPresent() || oVolunteer.isPresent()) {
             throw new Exception();
         } else {
-            refugeeRepository.create(dtoRefugee.getMail(), dtoRefugee.getPassword(),
-                    dtoRefugee.getName(), dtoRefugee.getSurname1(), dtoRefugee.getSurname2(),
-                    dtoRefugee.getPhoneNumber(), dtoRefugee.getBirthdate(), dtoRefugee.getSex(),
-                    dtoRefugee.getCountry(), dtoRefugee.getTown(), dtoRefugee.getEthnic(),
-                    dtoRefugee.getBloodType(), dtoRefugee.getEyeColor(), dtoRefugee.getBiography());
-            refugee = refugeeRepository.findByMail(dtoRefugee.getMail());
-            createdDtoRefugee = new DTORefugee(refugee);
+            refugeeRepository.create(DTOUser.getMail(), DTOUser.getPassword(),
+                    DTOUser.getName(), DTOUser.getSurname1(), DTOUser.getSurname2(),
+                    DTOUser.getPhoneNumber(), DTOUser.getBirthdate(), DTOUser.getSex(),
+                    DTOUser.getCountry(), DTOUser.getTown(), DTOUser.getEthnic(),
+                    DTOUser.getBloodType(), DTOUser.getEyeColor(), DTOUser.getBiography());
+            refugee = refugeeRepository.findByMail(DTOUser.getMail());
+            createdDTOUser = new DTOUser(refugee);
         }
-        return createdDtoRefugee;
+        return createdDTOUser;
     }
 
     public Object logIn(String mail, String password) {
         Object user = new Object();
-        DTORefugee refugee = logInRefugee(mail, password);
+        DTOUser refugee = logInRefugee(mail, password);
         if (refugee.getMail() == null) {
             Volunteer volunteer = logInVolunteer(mail, password);
             user = volunteer;
@@ -101,16 +108,16 @@ public class UserServiceImpl implements UserService {
         return volunteer;
     }
 
-    public DTORefugee logInRefugee(String mail, String password) {
+    public DTOUser logInRefugee(String mail, String password) {
         Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMailAndPassword(mail,
                 password);
-        DTORefugee dtoRefugee = null;
+        DTOUser DTOUser = null;
         Refugee refugee = new Refugee();
         if (oRefugee.isPresent()) {
             refugee = oRefugee.get();
-            dtoRefugee = new DTORefugee(refugee);
+            DTOUser = new DTOUser(refugee);
         }
-        return dtoRefugee;
+        return DTOUser;
     }
 
     public Boolean changePasswordVolunteer(String mail, String password, String newPassword) {
@@ -144,20 +151,20 @@ public class UserServiceImpl implements UserService {
         volunteerRepository.flush();
     }
 
-    public void modifyProfileRefugee(DTORefugee dtoRefugee) {
-        Refugee refugee = refugeeRepository.findByMail(dtoRefugee.getMail());
-        refugee.setName(dtoRefugee.getName());
-        refugee.setSurname1(dtoRefugee.getSurname1());
-        refugee.setSurname2(dtoRefugee.getSurname2());
-        refugee.setPhoneNumber(dtoRefugee.getPhoneNumber());
-        refugee.setBirthdate(dtoRefugee.getBirthdate());
-        refugee.setSex(dtoRefugee.getSex());
-        refugee.setCountry(dtoRefugee.getCountry());
-        refugee.setTown(dtoRefugee.getTown());
-        refugee.setEthnic(dtoRefugee.getEthnic());
-        refugee.setBloodType(dtoRefugee.getBloodType());
-        refugee.setEyeColor(dtoRefugee.getEyeColor());
-        refugee.setBiography(dtoRefugee.getBiography());
+    public void modifyProfileRefugee(DTOUser DTOUser) {
+        Refugee refugee = refugeeRepository.findByMail(DTOUser.getMail());
+        refugee.setName(DTOUser.getName());
+        refugee.setSurname1(DTOUser.getSurname1());
+        refugee.setSurname2(DTOUser.getSurname2());
+        refugee.setPhoneNumber(DTOUser.getPhoneNumber());
+        refugee.setBirthdate(DTOUser.getBirthdate());
+        refugee.setSex(DTOUser.getSex());
+        refugee.setCountry(DTOUser.getCountry());
+        refugee.setTown(DTOUser.getTown());
+        refugee.setEthnic(DTOUser.getEthnic());
+        refugee.setBloodType(DTOUser.getBloodType());
+        refugee.setEyeColor(DTOUser.getEyeColor());
+        refugee.setBiography(DTOUser.getBiography());
         refugeeRepository.flush();
     }
 
@@ -168,10 +175,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public DTORefugee infoRefugee(String mail) {
+    public DTOUser infoRefugee(String mail) {
         Refugee refugee = refugeeRepository.findByMail(mail);
-        DTORefugee dtoRefugee = new DTORefugee(refugee);
-        return dtoRefugee;
+        DTOUser DTOUser = new DTOUser(refugee);
+        return DTOUser;
     }
 
     @Override
@@ -263,7 +270,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Set<DTORefugee> findRefugee(String name, String surname1, String surname2,
+    public Set<DTOUser> findRefugee(String name, String surname1, String surname2,
             Date birthdate,
             String sex,
             String country, String town, String ethnic, String blood, String eye) {
@@ -299,11 +306,11 @@ public class UserServiceImpl implements UserService {
         if (!eye.equals("-")) {
             result.retainAll(refugeeRepository.findByEyeColor(eye));
         }
-        Set<DTORefugee> dtosRefugee = new HashSet<DTORefugee>();
+        Set<DTOUser> dtosRefugee = new HashSet<DTOUser>();
         for (Refugee refugee : result) {
-            DTORefugee dtoRefugee = new DTORefugee(refugee);
-            dtoRefugee.setUserType("Refugee");
-            dtosRefugee.add(dtoRefugee);
+            DTOUser dtoUser = new DTOUser(refugee);
+            dtoUser.setUserType("Refugee");
+            dtosRefugee.add(dtoUser);
         }
         return dtosRefugee;
     }
@@ -368,21 +375,45 @@ public class UserServiceImpl implements UserService {
         }
         return result;
     }
+
+	@Override
+	public Set<DTOChat> listUserChats(String mail) {
+		Set<DTOChat> dtoChats = new HashSet<DTOChat>();
+		if (chatRepository.existsByMailUser1(mail) || chatRepository.existsByMailUser2(mail)) {
+			Set<Chat> chats = chatRepository.findByMailUser1(mail);
+			chats.addAll(chatRepository.findByMailUser2(mail));
+			
+			for (Chat chat : chats) {
+				DTOChat dtoChat = new DTOChat();
+				dtoChat.setId(chat.getId());
+				Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMail(chat.getMailUser1());
+				if (oRefugee.isPresent()) {
+					DTOUser dtoUser = new DTOUser(oRefugee.get());
+					dtoChat.setUser1(dtoUser);
+				}
+				else {
+					Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMail(chat.getMailUser1());
+					DTOUser dtoUser = new DTOUser(oVolunteer.get());
+					dtoChat.setUser1(dtoUser);
+				}
+				
+				oRefugee = refugeeRepository.findOptionalByMail(chat.getMailUser2());
+				if (oRefugee.isPresent()) {
+					DTOUser dtoUser = new DTOUser(oRefugee.get());
+					dtoChat.setUser2(dtoUser);
+				}
+				else {
+					Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMail(chat.getMailUser2());
+					DTOUser dtoUser = new DTOUser(oVolunteer.get());
+					dtoChat.setUser2(dtoUser);
+				}
+				dtoChats.add(dtoChat);
+			}
+		}		
+		return dtoChats;
+	}
+
+	public DTOUser newChat(String mailUser1, String mailUser2) {
+		return null;
+	}
 }
-
-/*
- * public String createVolunteer(String mail, String password, String name, String surname1, String
- * surname2){ System.out.println("Mail "+mail+"   Password "+password); Optional<Volunteer>
- * oVolunteer = volunteerRepository.findOptionalByMail(mail); String creationResult =
- * "El voluntario ya existe"; if(!oVolunteer.isPresent()) { Volunteer v = new Volunteer();
- * v.setMail(mail); v.setPassword(password); v.setName(name); v.setSurname1(surname1);
- * v.setSurname2(surname2); creationResult = volunteerRepository.save(v); } return creationResult; }
- */
-
-/*
- * public boolean logIn(String mail, String password) { Optional<User> oUser =
- * userRepository.findOptionalByMail(mail); boolean correctPassword = false; if(oUser.isPresent()) {
- * User user = oUser.get(); correctPassword = (user.getPassword() == password); } return
- * correctPassword; } spring.datasource.url=jdbc:mysql://10.4.41.149:3306/pes
- * spring.datasource.username=aplicacion
- */
