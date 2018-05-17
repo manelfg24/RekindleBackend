@@ -54,18 +54,17 @@ public class UserController {
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity<Object> logIn(DTOLogInInfo logInInfo) {
-        Pair<Integer, Object> user = userService.exists(logInInfo.getMail(),
+    public ResponseEntity<DTOUser> logIn(DTOLogInInfo logInInfo) {
+        DTOUser dtoUser = userService.exists(logInInfo.getMail(),
                 logInInfo.getPassword());
-        if (user.getFirst() == 0 || user.getFirst() == 1) {
-            return ResponseEntity.status(HttpStatus.OK).header("Tipo", user.getFirst().toString())
-                    .body(user.getSecond());
+        if (dtoUser.getUserType().equals("Refugee") || dtoUser.getUserType().equals("Volunteer")) {
+            return ResponseEntity.status(HttpStatus.OK).body(dtoUser);
         } else
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
     @RequestMapping(value = "/cambiarPassword/{mail}", method = RequestMethod.PUT)
-    public ResponseEntity<Object> changePassword(@PathVariable String mail, String passwordOld,
+    public ResponseEntity changePassword(@PathVariable String mail, String passwordOld,
             String passwordNew) {
         if (userService.changePassword(mail, passwordOld, passwordNew)) {
             return ResponseEntity.status(HttpStatus.OK).body(null);

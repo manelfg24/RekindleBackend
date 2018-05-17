@@ -184,18 +184,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Pair<Integer, Object> exists(String mail, String password) {
+    public DTOUser exists(String mail, String password) {
         Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMailAndPassword(mail,
                 password);
         if (oRefugee.isPresent()) {
-            return Pair.of(0, oRefugee.get());
+            return new DTOUser(oRefugee.get());
         }
         Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMailAndPassword(mail,
                 password);
         if (oVolunteer.isPresent()) {
-            return Pair.of(1, oVolunteer.get());
+            return new DTOUser(oVolunteer.get());
         }
-        return Pair.of(-1, "Usuario pa' la pinga");
+        DTOUser loginFail = new DTOUser();
+        loginFail.setUserType("Error");
+        return loginFail;
     }
 
     @Override

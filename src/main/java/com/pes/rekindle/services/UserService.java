@@ -39,7 +39,7 @@ public interface UserService {
 
     DTOUser infoRefugee(String mail);
 
-    Pair<Integer, Object> exists(String mail, String password);
+    DTOUser exists(String mail, String password);
 
     void enrollRefugeeLodge(String refugeeMail, long serviceId);
 
