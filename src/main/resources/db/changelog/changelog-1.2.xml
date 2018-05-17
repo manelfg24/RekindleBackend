@@ -8,28 +8,28 @@
 	<changeSet author="bob" id="modifyDonationServiceType">
     	<modifyDataType columnName="serviceType"
             newDataType="varchar(20)"
-            schemaName="local_rekindle"
+            schemaName="PES"
             tableName="Donation"/>
 	</changeSet>
 	
 	<changeSet author="bob" id="modifyEducationServiceType">
     	<modifyDataType columnName="serviceType"
             newDataType="varchar(20)"
-            schemaName="local_rekindle"
+            schemaName="PES"
             tableName="Education"/>
 	</changeSet>
 	
 	<changeSet author="bob" id="modifyJobServiceType">
     	<modifyDataType columnName="serviceType"
             newDataType="varchar(20)"
-            schemaName="local_rekindle"
+            schemaName="PES"
             tableName="Job"/>
 	</changeSet>
 	
 	<changeSet author="bob" id="modifyLodgeServiceType">
     	<modifyDataType columnName="serviceType"
             newDataType="varchar(20)"
-            schemaName="local_rekindle"
+            schemaName="PES"
             tableName="Lodge"/>
 	</changeSet>
 
