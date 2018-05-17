@@ -47,7 +47,6 @@ public class Refugee {
     		CascadeType.PERSIST, 
     		CascadeType.MERGE
     })
-    @JsonBackReference
     private Set<Lodge> lodges = new HashSet<Lodge>();
 
     

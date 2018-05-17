@@ -6,6 +6,7 @@ import java.util.Date;
 import com.pes.rekindle.entities.Lodge;
 
 public class DTOLodge {
+	private long id;
     private String serviceType;
     private String name;
     private String volunteer;
@@ -21,6 +22,7 @@ public class DTOLodge {
 
     public DTOLodge(Lodge lodge) {
         super();
+        this.id = lodge.getId();
         this.serviceType = lodge.getServiceType();
         this.name = lodge.getName();
         this.volunteer = lodge.getVolunteer();
@@ -31,7 +33,15 @@ public class DTOLodge {
         this.description = lodge.getDescription();
     }
 
-    public String getServiceType() {
+    public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public String getServiceType() {
         return serviceType;
     }
 

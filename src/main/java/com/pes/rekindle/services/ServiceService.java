@@ -21,8 +21,6 @@ public interface ServiceService {
 
     void createJob(DTOJob job);
 
-    Object infoService(Long id, char serviceType);
-
     Boolean deleteService(long id, char serviceType);
 
     void deleteLodge(Long id);

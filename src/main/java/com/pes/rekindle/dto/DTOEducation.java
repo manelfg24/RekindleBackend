@@ -4,6 +4,7 @@ package com.pes.rekindle.dto;
 import com.pes.rekindle.entities.Education;
 
 public class DTOEducation {
+	private long id;
     private String serviceType;
     private String name;
     private String volunteer;
@@ -20,8 +21,17 @@ public class DTOEducation {
         super();
     }
 
-    public DTOEducation(Education education) {
+    public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public DTOEducation(Education education) {
         super();
+        this.id = education.getId();
         this.serviceType = education.getServiceType();
         this.name = education.getName();
         this.volunteer = education.getVolunteer();

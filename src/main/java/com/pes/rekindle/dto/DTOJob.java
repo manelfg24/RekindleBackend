@@ -4,6 +4,7 @@ package com.pes.rekindle.dto;
 import com.pes.rekindle.entities.Job;
 
 public class DTOJob {
+	private long id;
     private String serviceType;
     private String name;
     private String volunteer;
@@ -24,6 +25,7 @@ public class DTOJob {
 
     public DTOJob(Job job) {
         super();
+        this.id = job.getId();
         this.serviceType = job.getServiceType();
         this.name = job.getName();
         this.volunteer = job.getVolunteer();
@@ -39,7 +41,15 @@ public class DTOJob {
         this.description = job.getDescription();
     }
 
-    public String getServiceType() {
+    public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public String getServiceType() {
         return serviceType;
     }
 

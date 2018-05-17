@@ -19,9 +19,9 @@ public interface UserService {
     // boolean logIn(String user, String password);
     Object logIn(String user, String password);
 
-    Volunteer createVolunteer(Volunteer volunteer) throws Exception;
+    void createVolunteer(Volunteer volunteer) throws Exception;
 
-    DTOUser createRefugee(DTOUser refugee) throws Exception;
+    void createRefugee(DTOUser refugee) throws Exception;
 
     Volunteer logInVolunteer(String mail, String password);
 

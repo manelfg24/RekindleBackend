@@ -6,6 +6,7 @@ import java.sql.Time;
 import com.pes.rekindle.entities.Donation;
 
 public class DTODonation {
+	private long id;
     private String serviceType;
     private String name;
     private String volunteer;
@@ -22,6 +23,7 @@ public class DTODonation {
 
     public DTODonation(Donation donation) {
         super();
+        this.id = donation.getId();
         this.serviceType = donation.getServiceType();
         this.name = donation.getName();
         this.volunteer = donation.getVolunteer();
@@ -33,7 +35,15 @@ public class DTODonation {
         this.description = donation.getDescription();
     }
 
-    public String getServiceType() {
+    public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public String getServiceType() {
         return serviceType;
     }
 

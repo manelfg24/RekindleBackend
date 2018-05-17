@@ -37,25 +37,25 @@ public class ServiceController {
     private UserService userService;
 
     @RequestMapping(value = "/alojamientos", method = RequestMethod.POST)
-    public ResponseEntity<String> createLodge(@RequestBody DTOLodge lodge) {
+    public ResponseEntity createLodge(@RequestBody DTOLodge lodge) {
         serviceService.createLodge(lodge);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
     @RequestMapping(value = "/donaciones", method = RequestMethod.POST)
-    public ResponseEntity<String> createDonation(@RequestBody DTODonation donation) {
+    public ResponseEntity createDonation(@RequestBody DTODonation donation) {
         serviceService.createDonation(donation);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
     @RequestMapping(value = "/cursos", method = RequestMethod.POST)
-    public ResponseEntity<String> createEducation(@RequestBody DTOEducation education) {
+    public ResponseEntity createEducation(@RequestBody DTOEducation education) {
         serviceService.createEducation(education);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
     @RequestMapping(value = "/empleos", method = RequestMethod.POST)
-    public ResponseEntity<String> createJob(@RequestBody DTOJob job) {
+    public ResponseEntity createJob(@RequestBody DTOJob job) {
         serviceService.createJob(job);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }

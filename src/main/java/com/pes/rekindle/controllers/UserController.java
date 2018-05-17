@@ -32,25 +32,23 @@ public class UserController {
     private UserService userService;
 
     @RequestMapping(value = "/voluntarios", method = RequestMethod.POST)
-    public ResponseEntity<Volunteer> createVolunteer(@RequestBody Volunteer volunteer) {
-        Volunteer createdVolunteer;
+    public ResponseEntity createVolunteer(@RequestBody Volunteer volunteer) {
         try {
-            createdVolunteer = userService.createVolunteer(volunteer);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(createdVolunteer);
-    }
-
-    @RequestMapping(value = "/refugiados", method = RequestMethod.POST)
-    public ResponseEntity<DTOUser> createRefugee(@RequestBody DTOUser refugee) {
-        DTOUser createdRefugee;
-        try {
-            createdRefugee = userService.createRefugee(refugee);
+            userService.createVolunteer(volunteer);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         }
-        return ResponseEntity.status(HttpStatus.OK).body(createdRefugee);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+
+    @RequestMapping(value = "/refugiados", method = RequestMethod.POST)
+    public ResponseEntity createRefugee(@RequestBody DTOUser refugee) {
+        try {
+            userService.createRefugee(refugee);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
@@ -74,7 +72,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/recuperarPassword/{mail}", method = RequestMethod.PUT)
-    public ResponseEntity<Object> changePassword(@PathVariable String mail, String passwordNew) {
+    public ResponseEntity changePassword(@PathVariable String mail, String passwordNew) {
         if (userService.recoverPassword(mail, passwordNew)) {
             return ResponseEntity.status(HttpStatus.OK).body(null);
         } else {
@@ -83,7 +81,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/voluntarios/{mail}", method = RequestMethod.PUT)
-    public ResponseEntity<String> modifyProfileVolunteer(@RequestBody Volunteer volunteer) {
+    public ResponseEntity modifyProfileVolunteer(@RequestBody Volunteer volunteer) {
         // Cuidado tema seguridad
         userService.modifyProfileVolunteer(volunteer.getMail(), volunteer.getName(),
                 volunteer.getSurname1(), volunteer.getSurname2());
@@ -91,7 +89,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/refugiados/{mail}", method = RequestMethod.PUT)
-    public ResponseEntity<String> modifyProfileRefugee(@RequestBody DTOUser refugee) {
+    public ResponseEntity modifyProfileRefugee(@RequestBody DTOUser refugee) {
         userService.modifyProfileRefugee(refugee);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
@@ -105,7 +103,10 @@ public class UserController {
     @RequestMapping(value = "/refugiados/{mail}", method = RequestMethod.GET)
     public ResponseEntity<DTOUser> infoRefugee(@PathVariable String mail) {
         DTOUser refugee = userService.infoRefugee(mail);
-        return ResponseEntity.status(HttpStatus.OK).body(refugee);
+        if (!(refugee == null))
+        	return ResponseEntity.status(HttpStatus.OK).body(refugee);
+        else 
+        	return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
 
     // Busqueda de refugiados

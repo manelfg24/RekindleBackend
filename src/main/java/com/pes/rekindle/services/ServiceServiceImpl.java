@@ -120,21 +120,6 @@ public class ServiceServiceImpl implements ServiceService {
         return dtosService;
     }
 
-    public Object infoService(Long id, char serviceType) {
-        Object service = new Object();
-        if (serviceType == 'l')
-            service = lodgeRepository.findById(id);
-        else if (serviceType == 'e')
-            service = educationRepository.findById(id);
-        else if (serviceType == 'j')
-            service = jobRepository.findById(id);
-        else if (serviceType == 'd')
-            service = donationRepository.findById(id);
-        else
-            service = "Servicio no encontrado";
-        return service;
-    }
-
     @Override
     public Boolean deleteService(long id, char serviceType) {
         return null;
@@ -148,7 +133,8 @@ public class ServiceServiceImpl implements ServiceService {
     @Override
     public DTOLodge infoLodge(Long id) {
         Lodge lodge = lodgeRepository.findById(id);
-        DTOLodge dtoLodge = new DTOLodge();
+        DTOLodge dtoLodge = new DTOLodge(lodge);
+        /*
         dtoLodge.setName(lodge.getName());
         dtoLodge.setVolunteer(lodge.getVolunteer());
         dtoLodge.setServiceType("Lodge");
@@ -157,13 +143,15 @@ public class ServiceServiceImpl implements ServiceService {
         dtoLodge.setPlaces(lodge.getPlaces());
         dtoLodge.setDateLimit(lodge.getDateLimit());
         dtoLodge.setDescription(lodge.getDescription());
+        */
         return dtoLodge;
     }
 
     @Override
     public DTOEducation infoEducation(Long id) {
         Education education = educationRepository.findById(id);
-        DTOEducation dtoEducation = new DTOEducation();
+        DTOEducation dtoEducation = new DTOEducation(education);
+        /*
         dtoEducation.setName(education.getName());
         dtoEducation.setVolunteer(education.getVolunteer());
         dtoEducation.setServiceType("Education");
@@ -174,13 +162,15 @@ public class ServiceServiceImpl implements ServiceService {
         dtoEducation.setSchedule(education.getSchedule());
         dtoEducation.setPlaces(education.getPlaces());
         dtoEducation.setDescription(education.getDescription());
+        */
         return dtoEducation;
     }
 
     @Override
     public DTODonation infoDonation(Long id) {
         Donation donation = donationRepository.findById(id);
-        DTODonation dtoDonation = new DTODonation();
+        DTODonation dtoDonation = new DTODonation(donation);
+        /*
         dtoDonation.setName(donation.getName());
         dtoDonation.setVolunteer(donation.getVolunteer());
         dtoDonation.setServiceType("Donation");
@@ -190,13 +180,15 @@ public class ServiceServiceImpl implements ServiceService {
         dtoDonation.setStartTime(donation.getStartTime());
         dtoDonation.setEndTime(donation.getEndTime());
         dtoDonation.setDescription(donation.getDescription());
+        */
         return dtoDonation;
     }
 
     @Override
     public DTOJob infoJob(Long id) {
         Job job = jobRepository.findById(id);
-        DTOJob dtoJob = new DTOJob();
+        DTOJob dtoJob = new DTOJob(job);
+        /*
         dtoJob.setName(job.getName());
         dtoJob.setVolunteer(job.getVolunteer());
         dtoJob.setServiceType("Job");
@@ -210,6 +202,7 @@ public class ServiceServiceImpl implements ServiceService {
         dtoJob.setPlaces(job.getPlaces());
         dtoJob.setSalary(job.getSalary());
         dtoJob.setDescription(job.getDescription());
+        */
         return dtoJob;
     }
 

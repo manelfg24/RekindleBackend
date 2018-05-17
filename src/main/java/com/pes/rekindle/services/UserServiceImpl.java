@@ -52,8 +52,7 @@ public class UserServiceImpl implements UserService {
     @Autowired 
     ChatRepository chatRepository;
 
-    public Volunteer createVolunteer(Volunteer volunteer) throws Exception {
-        Volunteer createdVolunteer = new Volunteer();
+    public void createVolunteer(Volunteer volunteer) throws Exception {
         Optional<Volunteer> oVolunteer = volunteerRepository
                 .findOptionalByMail(volunteer.getMail());
         Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMail(volunteer.getMail());
@@ -62,15 +61,11 @@ public class UserServiceImpl implements UserService {
         } else {
             volunteerRepository.create(volunteer.getMail(), volunteer.getPassword(),
                     volunteer.getName(), volunteer.getSurname1(), volunteer.getSurname2());
-            createdVolunteer = volunteerRepository.findByMail(volunteer.getMail());
         }
-        return createdVolunteer;
     }
 
     @Override
-    public DTOUser createRefugee(DTOUser DTOUser) throws Exception {
-        Refugee refugee = new Refugee();
-        DTOUser createdDTOUser;
+    public void createRefugee(DTOUser DTOUser) throws Exception {
         Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMail(DTOUser.getMail());
         Optional<Volunteer> oVolunteer = volunteerRepository
                 .findOptionalByMail(DTOUser.getMail());
@@ -82,10 +77,7 @@ public class UserServiceImpl implements UserService {
                     DTOUser.getPhoneNumber(), DTOUser.getBirthdate(), DTOUser.getSex(),
                     DTOUser.getCountry(), DTOUser.getTown(), DTOUser.getEthnic(),
                     DTOUser.getBloodType(), DTOUser.getEyeColor(), DTOUser.getBiography());
-            refugee = refugeeRepository.findByMail(DTOUser.getMail());
-            createdDTOUser = new DTOUser(refugee);
         }
-        return createdDTOUser;
     }
 
     public Object logIn(String mail, String password) {
@@ -172,15 +164,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Volunteer infoVolunteer(String mail) {
-        Volunteer volunteer = volunteerRepository.findByMail(mail);
-        return volunteer;
+    	Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMail(mail);
+        if (oVolunteer.isPresent())
+        	return oVolunteer.get(); 
+        return null;
     }
 
     @Override
     public DTOUser infoRefugee(String mail) {
-        Refugee refugee = refugeeRepository.findByMail(mail);
-        DTOUser DTOUser = new DTOUser(refugee);
-        return DTOUser;
+    	Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMail(mail);
+    	if (oRefugee.isPresent()) 
+    		return new DTOUser(oRefugee.get());
+        return null;
     }
 
     @Override
