@@ -194,7 +194,6 @@ public class UserController {
         Set<DTOMessage> dtoMessages = userService.listUserChats(mail);
         return ResponseEntity.status(HttpStatus.OK).body(dtoChats);
     }  
-    
     */
     /*
     @RequestMapping(value = "/usuarios/{mail}/chats", method = RequestMethod.GET)
