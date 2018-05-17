@@ -22,4 +22,7 @@ public interface ChatRepository extends Repository<Chat, String> {
 	
 	public Set<Chat> findByMailUser1(String mail);
 	public Set<Chat> findByMailUser2(String mail);
+	
+	public Chat findByMailUser1AndMailUser2(String mailUser1, String mailUser2);
+	public void save(Chat chat);
 }

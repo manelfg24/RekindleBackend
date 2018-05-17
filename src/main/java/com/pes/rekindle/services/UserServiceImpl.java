@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.pes.rekindle.dto.DTOChat;
 import com.pes.rekindle.dto.DTOLodge;
+import com.pes.rekindle.dto.DTOMessage;
 import com.pes.rekindle.dto.DTOService;
 import com.pes.rekindle.dto.DTOUser;
 import com.pes.rekindle.dto.DTOUser;
@@ -419,5 +420,19 @@ public class UserServiceImpl implements UserService {
 
 	public DTOUser newChat(String mailUser1, String mailUser2) {
 		return null;
+	}
+
+	@Override
+	public DTOChat createChat(DTOChat dtoChat) {
+		Chat chat = new Chat();
+		chat.setMailUser1(dtoChat.getUser1().getMail());
+		chat.setMailUser2(dtoChat.getUser2().getMail());	
+		chatRepository.save(chat);
+		Chat newChat = chatRepository.findByMailUser1AndMailUser2(dtoChat.getUser1().getMail(), dtoChat.getUser2().getMail());
+		DTOChat newDtoChat = new DTOChat();
+		newDtoChat.setId(newChat.getId());
+		newDtoChat.setUser1(dtoChat.getUser1());
+		newDtoChat.setUser1(dtoChat.getUser2());
+		return newDtoChat;
 	}
 }

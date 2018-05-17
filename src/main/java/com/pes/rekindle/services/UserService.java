@@ -8,6 +8,7 @@ import java.util.Set;
 import org.springframework.data.util.Pair;
 
 import com.pes.rekindle.dto.DTOChat;
+import com.pes.rekindle.dto.DTOMessage;
 import com.pes.rekindle.dto.DTOService;
 import com.pes.rekindle.dto.DTOUser;
 import com.pes.rekindle.entities.Chat;
@@ -62,5 +63,7 @@ public interface UserService {
 	Set<DTOChat> listUserChats(String mail);
 
 	DTOUser newChat(String mailUser1, String mailUser2);
+
+	DTOChat createChat(DTOChat dtoChat);
 
 }

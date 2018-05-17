@@ -168,6 +168,12 @@ public class UserController {
         Set<DTOChat> dtoChats = userService.listUserChats(mail);
         return ResponseEntity.status(HttpStatus.OK).body(dtoChats);
     }  
+    
+    @RequestMapping(value = "/usuarios/{mail}/chats", method = RequestMethod.POST)
+    public ResponseEntity<DTOChat> createChat(@RequestBody DTOChat dtoChat) {
+    	return ResponseEntity.status(HttpStatus.OK).body(userService.createChat(dtoChat));    	    	    	    	
+    }
+    
     /*
     @RequestMapping(value = "/usuarios/{mail}/chats/{idChat}/messages", method = RequestMethod.GET)
     public ResponseEntity<Set<DTOMessage>> getChatMessages(@PathVariable String mail, @PathVariable String idChat) {
