@@ -17,8 +17,8 @@ public interface EducationRepository extends Repository<Education, String> {
 
     public Education findById(Long id);
 
-    public Set<Object> findByVolunteer(String mail);
+    public Set<Education> findByVolunteer(String mail);
 
-    public Set<Object> findByInscriptions_Mail(String mail);
+    public Set<Education> findByInscriptions_Mail(String mail);
 
 }

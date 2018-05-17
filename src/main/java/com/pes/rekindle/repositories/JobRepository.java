@@ -17,8 +17,8 @@ public interface JobRepository extends Repository<Job, String> {
 
     public Job findById(Long id);
 
-    public Set<Object> findByVolunteer(String mail);
+    public Set<Job> findByVolunteer(String mail);
 
-    public Set<Object> findByInscriptions_Mail(String mail);
+    public Set<Job> findByInscriptions_Mail(String mail);
 
 }

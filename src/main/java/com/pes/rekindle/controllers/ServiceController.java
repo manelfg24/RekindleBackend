@@ -1,10 +1,12 @@
 
 package com.pes.rekindle.controllers;
 
+import java.awt.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +19,7 @@ import com.pes.rekindle.dto.DTODonation;
 import com.pes.rekindle.dto.DTOEducation;
 import com.pes.rekindle.dto.DTOJob;
 import com.pes.rekindle.dto.DTOLodge;
+import com.pes.rekindle.dto.DTOService;
 import com.pes.rekindle.entities.Donation;
 import com.pes.rekindle.entities.Education;
 import com.pes.rekindle.entities.Job;
@@ -88,11 +91,11 @@ public class ServiceController {
     // -------------------------------------------------------------------------------------------------------------
 
     @RequestMapping(value = "/servicios/{mail}/{tipo}", method = RequestMethod.GET)
-    public ResponseEntity<Map<Integer, Set<Object>>> obtainOwnServices(
+    public ResponseEntity<Set<DTOService>> obtainOwnServices(
             @PathVariable("mail") String mail,
-            @PathVariable("tipo") Integer userType) {
-        Map<Integer, Set<Object>> result = userService.obtainOwnServices(mail, userType);
-
+            @PathVariable("tipo") String userType) {
+        Set<DTOService> result = userService.obtainOwnServices(mail, userType);
+        
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 

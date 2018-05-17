@@ -17,7 +17,7 @@ public interface DonationRepository extends Repository<Donation, String> {
 
     public Donation findById(Long id);
 
-    public Set<Object> findByVolunteer(String mail);
+    public Set<Donation> findByVolunteer(String mail);
 
-    public Set<Object> findByInscriptions_Mail(String mail);
+    public Set<Donation> findByInscriptions_Mail(String mail);
 }

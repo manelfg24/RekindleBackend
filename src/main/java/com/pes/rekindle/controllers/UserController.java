@@ -123,13 +123,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(refugees);
     }
 
-    @RequestMapping(value = "/refugiados/{mail}/servicios", method = RequestMethod.GET)
-    public ResponseEntity<Set<Lodge>> refugeeServices(@PathVariable String mail) {
-        Set<Lodge> lodges = userService.refugeeLodges(mail);
-        ServiceRefugee services = new ServiceRefugee();
-        return ResponseEntity.status(HttpStatus.OK).body(lodges);
-    }
-
     @RequestMapping(value = "/testLodge", method = RequestMethod.GET)
     public ResponseEntity<Refugee> lodgeTest() {
         String refugeeMail;
@@ -170,19 +163,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
-    public static class ServiceRefugee {
-
-        public Set<Lodge> lodgesRefugge;
-
-        public Set<Lodge> getLodgesRefugge() {
-            return lodgesRefugge;
-        }
-
-        public void setLodgesRefugge(Set<Lodge> lodgesRefugge) {
-            this.lodgesRefugge = lodgesRefugge;
-        }
-    }
-    
     @RequestMapping(value = "/usuarios/{mail}/chats", method = RequestMethod.GET)
     public ResponseEntity<Set<DTOChat>> listUserChats(@PathVariable String mail) {
         Set<DTOChat> dtoChats = userService.listUserChats(mail);

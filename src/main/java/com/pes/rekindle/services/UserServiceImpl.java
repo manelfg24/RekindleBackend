@@ -13,6 +13,8 @@ import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import com.pes.rekindle.dto.DTOChat;
+import com.pes.rekindle.dto.DTOLodge;
+import com.pes.rekindle.dto.DTOService;
 import com.pes.rekindle.dto.DTOUser;
 import com.pes.rekindle.dto.DTOUser;
 import com.pes.rekindle.entities.Chat;
@@ -263,13 +265,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Set<Lodge> refugeeLodges(String mail) {
-        Refugee refugee = refugeeRepository.findByMail(mail);
-        Set<Lodge> lodges = refugee.getLodges();
-        return lodges;
-    }
-
-    @Override
     public Set<DTOUser> findRefugee(String name, String surname1, String surname2,
             Date birthdate,
             String sex,
@@ -360,19 +355,31 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Map<Integer, Set<Object>> obtainOwnServices(String mail, Integer userType) {
-        Map<Integer, Set<Object>> result = new HashMap<Integer, Set<Object>>();
-        if (userType == 0) { // refugee
-            result.put(0, lodgeRepository.findByInscriptions_Mail(mail));
-            result.put(1, donationRepository.findByInscriptions_Mail(mail));
-            result.put(2, educationRepository.findByInscriptions_Mail(mail));
-            result.put(3, jobRepository.findByInscriptions_Mail(mail));
+    public Set<DTOService> obtainOwnServices(String mail, String userType) {
+        Set<DTOService> result = new HashSet<DTOService>();
+        Set<Lodge> lodges;
+        Set<Donation> donations;
+        Set<Job> jobs;
+        Set<Education> courses;
+        if (userType.equals("Refugee")) { // refugee
+        	lodges = lodgeRepository.findByInscriptions_Mail(mail);
+            donations = donationRepository.findByInscriptions_Mail(mail);
+            courses = educationRepository.findByInscriptions_Mail(mail);
+            jobs = jobRepository.findByInscriptions_Mail(mail);
         } else { // volunteer
-            result.put(0, lodgeRepository.findByVolunteer(mail));
-            result.put(1, donationRepository.findByVolunteer(mail));
-            result.put(2, educationRepository.findByVolunteer(mail));
-            result.put(3, jobRepository.findByVolunteer(mail));
+            lodges = lodgeRepository.findByVolunteer(mail);
+            donations = donationRepository.findByVolunteer(mail);
+            courses = educationRepository.findByVolunteer(mail);
+            jobs = jobRepository.findByVolunteer(mail);
         }
+    	for(Lodge lodge : lodges) 
+    		result.add(new DTOService(lodge));
+    	for (Education education : courses) 
+    		result.add(new DTOService(education));
+    	for (Donation donation : donations) 
+    		result.add(new DTOService(donation));
+    	for (Job job : jobs) 
+    		result.add(new DTOService(job));
         return result;
     }
 

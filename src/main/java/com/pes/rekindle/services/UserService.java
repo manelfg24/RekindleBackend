@@ -8,6 +8,7 @@ import java.util.Set;
 import org.springframework.data.util.Pair;
 
 import com.pes.rekindle.dto.DTOChat;
+import com.pes.rekindle.dto.DTOService;
 import com.pes.rekindle.dto.DTOUser;
 import com.pes.rekindle.entities.Chat;
 import com.pes.rekindle.entities.Lodge;
@@ -48,8 +49,6 @@ public interface UserService {
 
     void enrollRefugeeDonation(String refugeeMail, long serviceId);
 
-    Set<Lodge> refugeeLodges(String mail);
-
     Set<DTOUser> findRefugee(String name, String surname1, String surname2, Date birthdate,
             String sex, String country,
             String town, String ethnic, String blood, String eye);
@@ -58,7 +57,7 @@ public interface UserService {
 
     boolean recoverPassword(String mail, String passwordNew);
 
-    Map<Integer, Set<Object>> obtainOwnServices(String mail, Integer userType);
+    Set<DTOService> obtainOwnServices(String mail, String userType);
 
 	Set<DTOChat> listUserChats(String mail);
 

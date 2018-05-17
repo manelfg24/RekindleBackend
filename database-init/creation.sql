@@ -40,7 +40,7 @@ CREATE TABLE Volunteer (
 
 CREATE TABLE Donation (
 	id int PRIMARY KEY auto_increment,
-    serviceType char,
+    serviceType varchar(20),
     name varchar(50) NOT NULL,
     volunteer varchar(30) NOT NULL,
 	phoneNumber int NOT NULL,
@@ -55,7 +55,7 @@ CREATE TABLE Donation (
 
 CREATE TABLE Job (
 	id int PRIMARY KEY auto_increment,
-    serviceType char,
+    serviceType varchar(20),
 	name varchar(50) NOT NULL,
 	volunteer varchar(30) NOT NULL,
 	phoneNumber int NOT NULL,
@@ -74,7 +74,7 @@ CREATE TABLE Job (
 
 CREATE TABLE Education (
 	id int PRIMARY KEY auto_increment,
-    serviceType char,
+    serviceType varchar(20),
     name varchar(50) NOT NULL,
     volunteer varchar(30) NOT NULL,
 	phoneNumber int NOT NULL,
@@ -91,7 +91,7 @@ CREATE TABLE Education (
 
 CREATE TABLE Lodge (
 	id int PRIMARY KEY auto_increment,
-    serviceType char,
+    serviceType varchar(20),
     name varchar(50) NOT NULL,
     volunteer varchar(30) NOT NULL,
 	phoneNumber int NOT NULL,
