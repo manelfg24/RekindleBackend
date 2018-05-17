@@ -173,6 +173,7 @@ public class UserController {
     public ResponseEntity<DTOChat> createChat(@RequestBody DTOChat dtoChat) {
     	return ResponseEntity.status(HttpStatus.OK).body(userService.createChat(dtoChat));    	    	    	    	
     }
+   
     
     /*
     @RequestMapping(value = "/usuarios/{mail}/chats/{idChat}/messages", method = RequestMethod.GET)
