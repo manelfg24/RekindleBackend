@@ -11,6 +11,7 @@ import com.pes.rekindle.dto.DTODonation;
 import com.pes.rekindle.dto.DTOEducation;
 import com.pes.rekindle.dto.DTOJob;
 import com.pes.rekindle.dto.DTOLodge;
+import com.pes.rekindle.dto.DTOService;
 import com.pes.rekindle.entities.Donation;
 import com.pes.rekindle.entities.Education;
 import com.pes.rekindle.entities.Job;
@@ -93,26 +94,26 @@ public class ServiceServiceImpl implements ServiceService {
         jobRepository.save(job);
     }
 
-    public Set<Object> listServices() {
-        Set<Object> dtosService = new HashSet<Object>();
+    public Set<DTOService> listServices() {
+        Set<DTOService> dtosService = new HashSet<DTOService>();
         Set<Lodge> lodges = lodgeRepository.findAll();
         for (Lodge lodge : lodges) {
-            DTOLodge dtoLodge = new DTOLodge(lodge);
+        	DTOService dtoLodge = new DTOService(lodge);
             dtosService.add(dtoLodge);
         }
         Set<Donation> donations = donationRepository.findAll();
         for (Donation donation : donations) {
-            DTODonation dtoDonation = new DTODonation(donation);
+        	DTOService dtoDonation = new DTOService(donation);
             dtosService.add(dtoDonation);
         }
         Set<Education> courses = educationRepository.findAll();
         for (Education education : courses) {
-            DTOEducation dtoEducation = new DTOEducation(education);
+        	DTOService dtoEducation = new DTOService(education);
             dtosService.add(dtoEducation);
         }
         Set<Job> jobs = jobRepository.findAll();
         for (Job job : jobs) {
-            DTOJob dtoJob = new DTOJob(job);
+        	DTOService dtoJob = new DTOService(job);
             dtosService.add(dtoJob);
         }
 

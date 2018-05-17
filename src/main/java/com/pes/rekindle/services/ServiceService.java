@@ -7,12 +7,13 @@ import com.pes.rekindle.dto.DTODonation;
 import com.pes.rekindle.dto.DTOEducation;
 import com.pes.rekindle.dto.DTOJob;
 import com.pes.rekindle.dto.DTOLodge;
+import com.pes.rekindle.dto.DTOService;
 
 public interface ServiceService {
 
     void createLodge(DTOLodge lodge);
 
-    Set<Object> listServices();
+    Set<DTOService> listServices();
 
     void createDonation(DTODonation donation);
 
