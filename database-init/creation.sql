@@ -40,7 +40,7 @@ CREATE TABLE Volunteer (
 
 CREATE TABLE Donation (
 	id int PRIMARY KEY auto_increment,
-    serviceType char,
+    serviceType varchar(20),
     name varchar(50) NOT NULL,
     volunteer varchar(30) NOT NULL,
 	phoneNumber int NOT NULL,
@@ -55,7 +55,7 @@ CREATE TABLE Donation (
 
 CREATE TABLE Job (
 	id int PRIMARY KEY auto_increment,
-    serviceType char,
+    serviceType varchar(20),
 	name varchar(50) NOT NULL,
 	volunteer varchar(30) NOT NULL,
 	phoneNumber int NOT NULL,
@@ -74,7 +74,7 @@ CREATE TABLE Job (
 
 CREATE TABLE Education (
 	id int PRIMARY KEY auto_increment,
-    serviceType char,
+    serviceType varchar(20),
     name varchar(50) NOT NULL,
     volunteer varchar(30) NOT NULL,
 	phoneNumber int NOT NULL,
@@ -91,7 +91,7 @@ CREATE TABLE Education (
 
 CREATE TABLE Lodge (
 	id int PRIMARY KEY auto_increment,
-    serviceType char,
+    serviceType varchar(20),
     name varchar(50) NOT NULL,
     volunteer varchar(30) NOT NULL,
 	phoneNumber int NOT NULL,
@@ -137,4 +137,20 @@ CREATE TABLE DonationEnrollment (
 	PRIMARY KEY (refugeeMail, donationId),
 	FOREIGN KEY (refugeeMail) REFERENCES Refugee(mail),
 	FOREIGN KEY (donationId) REFERENCES Donation(id)
+);
+
+CREATE TABLE Chat (
+	id int PRIMARY KEY auto_increment,
+	mailUser1 varchar(30) NOT NULL,
+	mailUser2 varchar(30) NOT NULL
+);
+
+CREATE TABLE Message (
+	id int PRIMARY KEY auto_increment,
+	idChat int NOT NULL,
+	mailSender varchar(30) NOT NULL,
+	content varchar(200) NOT NULL,
+	timeStamp Date NOT NULL,
+    
+	FOREIGN KEY (idChat) REFERENCES Chat(id)
 );

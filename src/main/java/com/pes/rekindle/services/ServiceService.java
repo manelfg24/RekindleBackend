@@ -1,63 +1,44 @@
 
 package com.pes.rekindle.services;
 
-import java.sql.Time;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Map;
 import java.util.Set;
 
-import com.pes.rekindle.entities.Donation;
-import com.pes.rekindle.entities.Education;
-import com.pes.rekindle.entities.Job;
-import com.pes.rekindle.entities.Lodge;
+import com.pes.rekindle.dto.DTODonation;
+import com.pes.rekindle.dto.DTOEducation;
+import com.pes.rekindle.dto.DTOJob;
+import com.pes.rekindle.dto.DTOLodge;
+import com.pes.rekindle.dto.DTOService;
 
 public interface ServiceService {
 
-    void createLodge(String name, String mail, Integer phoneNumber, String adress,
-            Integer places, java.util.Date date, String description);
+    void createLodge(DTOLodge lodge);
 
-    Map<Integer, Set<Object>> listServices();
+    Set<DTOService> listServices();
 
-    void createDonation(String name, String mail, Integer phoneNumber, String adress,
-            Integer places, Time startTime,
-            Time endTime, String description);
+    void createDonation(DTODonation donation);
 
-    void createEducation(String name, String mail, Integer phoneNumber, String adress, String ambit,
-            String requirements, String schedule, Integer places, Integer price,
-            String description);
+    void createEducation(DTOEducation education);
 
-    void createJob(String name, String mail, Integer phoneNumber, String adress, String charge,
-            String requirements,
-            Double hoursDay, Double hoursWeek, Integer duration, Integer places, Double salaray,
-            String description);
+    void createJob(DTOJob job);
 
-    Object infoService(Long id, char serviceType);
+    Boolean deleteService(long id, char serviceType);
 
-	Boolean deleteService(long id, char serviceType);
+    void deleteLodge(Long id);
 
-	void deleteLodge(Long id);
+    DTOLodge infoLodge(Long id);
 
-	Lodge infoLodge(Long id);
+    DTOEducation infoEducation(Long id);
 
-	Education infoEducation(Long id);
+    DTODonation infoDonation(Long id);
 
-	Donation infoDonation(Long id);
+    DTOJob infoJob(Long id);
 
-	Job infoJob(Long id);
+    void modifyDonation(long id, DTODonation donation);
 
-	void modifyDonation(long id, String name, String volunteer, Integer phoneNumber, String adress, Integer places, Time startTime,
-			Time endTime, String description);
+    void modifyLodge(long id, DTOLodge lodge);
 
-	void modifyLodge(long id, String name, String volunteer, Integer phoneNumber, String adress, Integer places,
-			Date dateLimit, String description);
+    void modifyEducation(long id, DTOEducation education);
 
-	void modifyEducation(long id, String name, String volunteer, Integer phoneNumber, String adress, String ambit,
-			String requirements, String schedule, Integer places, Integer price, String description);
-
-	void modifyJob(long id, String name, String volunteer, Integer phoneNumber, String adress, String charge,
-			String requirements, double hoursDay, double hoursWeek, Integer contractDuration, Integer places,
-			double salary, String description);
-
+    void modifyJob(long id, DTOJob job);
 
 }

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+	http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+	
+	<changeSet author="bob" id="modifyDonationServiceType">
+    	<modifyDataType columnName="serviceType"
+            newDataType="varchar(20)"
+            schemaName="local_rekindle"
+            tableName="Donation"/>
+	</changeSet>
+	
+	<changeSet author="bob" id="modifyEducationServiceType">
+    	<modifyDataType columnName="serviceType"
+            newDataType="varchar(20)"
+            schemaName="local_rekindle"
+            tableName="Education"/>
+	</changeSet>
+	
+	<changeSet author="bob" id="modifyJobServiceType">
+    	<modifyDataType columnName="serviceType"
+            newDataType="varchar(20)"
+            schemaName="local_rekindle"
+            tableName="Job"/>
+	</changeSet>
+	
+	<changeSet author="bob" id="modifyLodgeServiceType">
+    	<modifyDataType columnName="serviceType"
+            newDataType="varchar(20)"
+            schemaName="local_rekindle"
+            tableName="Lodge"/>
+	</changeSet>
+
+</databaseChangeLog>

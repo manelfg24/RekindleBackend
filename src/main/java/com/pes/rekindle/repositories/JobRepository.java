@@ -1,7 +1,6 @@
 
 package com.pes.rekindle.repositories;
 
-import java.util.Collection;
 import java.util.Set;
 
 import javax.transaction.Transactional;
@@ -14,12 +13,12 @@ import com.pes.rekindle.entities.Job;
 public interface JobRepository extends Repository<Job, String> {
     public void save(Job job);
 
-    public Set<Object> findAll();
+    public Set<Job> findAll();
 
     public Job findById(Long id);
 
-	public Set<Object> findByVolunteer(String mail);
-	
-	public Set<Object> findByInscriptions_Mail(String mail);
+    public Set<Job> findByVolunteer(String mail);
+
+    public Set<Job> findByInscriptions_Mail(String mail);
 
 }

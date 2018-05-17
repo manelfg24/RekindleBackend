@@ -1,7 +1,6 @@
 
 package com.pes.rekindle.entities;
 
-import java.util.ArrayList;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -15,8 +14,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 @Entity
 @Table(name = "Job")
 public class Job {
@@ -24,7 +21,7 @@ public class Job {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @NotNull
-    private char serviceType;
+    private String serviceType;
     @NotNull
     private String name;
     @NotNull
@@ -50,14 +47,10 @@ public class Job {
     private String description;
 
     @ManyToMany(cascade = {
-    		CascadeType.PERSIST, 
-    		CascadeType.MERGE
+            CascadeType.PERSIST,
+            CascadeType.MERGE
     })
-    @JoinTable(name = "JobEnrollment",
-            joinColumns = @JoinColumn(name = "jobId"),
-            inverseJoinColumns = @JoinColumn(name = "refugeeMail")
-    )
-    @JsonBackReference
+    @JoinTable(name = "JobEnrollment", joinColumns = @JoinColumn(name = "jobId"), inverseJoinColumns = @JoinColumn(name = "refugeeMail"))
     private Set<Refugee> inscriptions;
 
     public long getId() {
@@ -68,11 +61,11 @@ public class Job {
         this.id = id;
     }
 
-    public char getServiceType() {
+    public String getServiceType() {
         return serviceType;
     }
 
-    public void setServiceType(char serviceType) {
+    public void setServiceType(String serviceType) {
         this.serviceType = serviceType;
     }
 
@@ -172,11 +165,11 @@ public class Job {
         this.salary = salary;
     }
 
-	public Set<Refugee> getInscriptions() {
-		return inscriptions;
-	}
+    public Set<Refugee> getInscriptions() {
+        return inscriptions;
+    }
 
-	public void setInscriptions(Set<Refugee> inscriptions) {
-		this.inscriptions = inscriptions;
-	}
+    public void setInscriptions(Set<Refugee> inscriptions) {
+        this.inscriptions = inscriptions;
+    }
 }
