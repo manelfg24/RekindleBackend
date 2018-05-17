@@ -32,5 +32,36 @@
             schemaName="PES"
             tableName="Lodge"/>
 	</changeSet>
-
+	
+	<changeSet id="chatTable" author="bob" runOnChange="true">
+		<createTable tableName="Chat">
+			<column autoIncrement="true" name="id" type="int">
+				<constraints primaryKey="true" nullable="false"/>
+			</column>
+			<column name="mailUser1" type="varchar(30)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="mailUser2" type="varchar(30)">
+				<constraints nullable="false"/>
+			</column>
+		</createTable>
+		
+		<createTable tableName="Message">
+			<column autoIncrement="true" name="id" type="int">
+				<constraints primaryKey="true" nullable="false"/>
+			</column>
+			<column name="idChat" type="int">
+				<constraints nullable="false" foreignKeyName="fk_chat_message" references="Chat(id)"/>
+			</column>
+			<column name="mailSender" type="varchar(30)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="content" type="varchar(200)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="timeStamp" type="date">
+				<constraints nullable="false"/>
+			</column>
+		</createTable>
+	</changeSet>
 </databaseChangeLog>
