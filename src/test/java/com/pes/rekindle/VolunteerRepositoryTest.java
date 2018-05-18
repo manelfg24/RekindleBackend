@@ -7,7 +7,6 @@ import static org.junit.Assert.assertNull;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
@@ -18,9 +17,8 @@ import com.pes.rekindle.repositories.VolunteerRepository;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@AutoConfigureTestDatabase
 @DataJpaTest
-@Sql()
+@Sql(scripts = "classpath:database-init/inserts.sql")
 public class VolunteerRepositoryTest {
 
     @Autowired
