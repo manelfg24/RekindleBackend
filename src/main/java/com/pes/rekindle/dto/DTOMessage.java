@@ -29,7 +29,7 @@ public class DTOMessage {
     public DTOMessage(Message message) {
         super();
         this.id = message.getId();
-        this.idChat = message.getIdChat();
+        //this.idChat = message.getIdChat();
         this.content = message.getContent();
         this.timestamp = message.getTimestamp();
     }
