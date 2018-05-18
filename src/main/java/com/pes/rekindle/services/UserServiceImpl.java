@@ -2,21 +2,16 @@
 package com.pes.rekindle.services;
 
 import java.sql.Date;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import com.pes.rekindle.dto.DTOChat;
-import com.pes.rekindle.dto.DTOLodge;
 import com.pes.rekindle.dto.DTOMessage;
 import com.pes.rekindle.dto.DTOService;
-import com.pes.rekindle.dto.DTOUser;
 import com.pes.rekindle.dto.DTOUser;
 import com.pes.rekindle.entities.Chat;
 import com.pes.rekindle.entities.Donation;
@@ -50,8 +45,8 @@ public class UserServiceImpl implements UserService {
     DonationRepository donationRepository;
     @Autowired
     JobRepository jobRepository;
-    
-    @Autowired 
+
+    @Autowired
     ChatRepository chatRepository;
 
     public void createVolunteer(Volunteer volunteer) throws Exception {
@@ -61,8 +56,7 @@ public class UserServiceImpl implements UserService {
         if (oVolunteer.isPresent() || oRefugee.isPresent()) {
             throw new Exception();
         } else {
-            volunteerRepository.create(volunteer.getMail(), volunteer.getPassword(),
-                    volunteer.getName(), volunteer.getSurname1(), volunteer.getSurname2());
+            volunteerRepository.save(volunteer);
         }
     }
 
@@ -166,17 +160,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Volunteer infoVolunteer(String mail) {
-    	Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMail(mail);
+        Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMail(mail);
         if (oVolunteer.isPresent())
-        	return oVolunteer.get(); 
+            return oVolunteer.get();
         return null;
     }
 
     @Override
     public DTOUser infoRefugee(String mail) {
-    	Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMail(mail);
-    	if (oRefugee.isPresent()) 
-    		return new DTOUser(oRefugee.get());
+        Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMail(mail);
+        if (oRefugee.isPresent())
+            return new DTOUser(oRefugee.get());
         return null;
     }
 
@@ -361,7 +355,7 @@ public class UserServiceImpl implements UserService {
         Set<Job> jobs;
         Set<Education> courses;
         if (userType.equals("Refugee")) { // refugee
-        	lodges = lodgeRepository.findByInscriptions_Mail(mail);
+            lodges = lodgeRepository.findByInscriptions_Mail(mail);
             donations = donationRepository.findByInscriptions_Mail(mail);
             courses = educationRepository.findByInscriptions_Mail(mail);
             jobs = jobRepository.findByInscriptions_Mail(mail);
@@ -371,91 +365,94 @@ public class UserServiceImpl implements UserService {
             courses = educationRepository.findByVolunteer(mail);
             jobs = jobRepository.findByVolunteer(mail);
         }
-    	for(Lodge lodge : lodges) 
-    		result.add(new DTOService(lodge));
-    	for (Education education : courses) 
-    		result.add(new DTOService(education));
-    	for (Donation donation : donations) 
-    		result.add(new DTOService(donation));
-    	for (Job job : jobs) 
-    		result.add(new DTOService(job));
+        for (Lodge lodge : lodges)
+            result.add(new DTOService(lodge));
+        for (Education education : courses)
+            result.add(new DTOService(education));
+        for (Donation donation : donations)
+            result.add(new DTOService(donation));
+        for (Job job : jobs)
+            result.add(new DTOService(job));
         return result;
     }
 
-	@Override
-	public Set<DTOChat> listUserChats(String mail) {
-		Set<DTOChat> dtoChats = new HashSet<DTOChat>();
-		if (chatRepository.existsByMailUser1(mail) || chatRepository.existsByMailUser2(mail)) {
-			Set<Chat> chats = chatRepository.findByMailUser1(mail);
-			chats.addAll(chatRepository.findByMailUser2(mail));
-			
-			for (Chat chat : chats) {
-				DTOChat dtoChat = new DTOChat();
-				dtoChat.setId(chat.getId());
-				Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMail(chat.getMailUser1());
-				if (oRefugee.isPresent()) {
-					DTOUser dtoUser = new DTOUser(oRefugee.get());
-					dtoChat.setUser1(dtoUser);
-				}
-				else {
-					Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMail(chat.getMailUser1());
-					DTOUser dtoUser = new DTOUser(oVolunteer.get());
-					dtoChat.setUser1(dtoUser);
-				}
-				
-				oRefugee = refugeeRepository.findOptionalByMail(chat.getMailUser2());
-				if (oRefugee.isPresent()) {
-					DTOUser dtoUser = new DTOUser(oRefugee.get());
-					dtoChat.setUser2(dtoUser);
-				}
-				else {
-					Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMail(chat.getMailUser2());
-					DTOUser dtoUser = new DTOUser(oVolunteer.get());
-					dtoChat.setUser2(dtoUser);
-				}
-				dtoChats.add(dtoChat);
-			}
-		}		
-		return dtoChats;
-	}
+    @Override
+    public Set<DTOChat> listUserChats(String mail) {
+        Set<DTOChat> dtoChats = new HashSet<DTOChat>();
+        if (chatRepository.existsByMailUser1(mail) || chatRepository.existsByMailUser2(mail)) {
+            Set<Chat> chats = chatRepository.findByMailUser1(mail);
+            chats.addAll(chatRepository.findByMailUser2(mail));
 
-	public DTOUser newChat(String mailUser1, String mailUser2) {
-		return null;
-	}
+            for (Chat chat : chats) {
+                DTOChat dtoChat = new DTOChat();
+                dtoChat.setId(chat.getId());
+                Optional<Refugee> oRefugee = refugeeRepository
+                        .findOptionalByMail(chat.getMailUser1());
+                if (oRefugee.isPresent()) {
+                    DTOUser dtoUser = new DTOUser(oRefugee.get());
+                    dtoChat.setUser1(dtoUser);
+                } else {
+                    Optional<Volunteer> oVolunteer = volunteerRepository
+                            .findOptionalByMail(chat.getMailUser1());
+                    DTOUser dtoUser = new DTOUser(oVolunteer.get());
+                    dtoChat.setUser1(dtoUser);
+                }
 
-	@Override
-	public DTOChat createChat(DTOChat dtoChat) {
-		Chat chat = new Chat();
-		chat.setMailUser1(dtoChat.getUser1().getMail());
-		chat.setMailUser2(dtoChat.getUser2().getMail());	
-		chatRepository.save(chat);
-		Chat newChat = chatRepository.findByMailUser1AndMailUser2(dtoChat.getUser1().getMail(), dtoChat.getUser2().getMail());
-		DTOChat newDtoChat = new DTOChat();
-		newDtoChat.setId(newChat.getId());
-		newDtoChat.setUser1(dtoChat.getUser1());
-		newDtoChat.setUser1(dtoChat.getUser2());
-		return newDtoChat;
-	}
+                oRefugee = refugeeRepository.findOptionalByMail(chat.getMailUser2());
+                if (oRefugee.isPresent()) {
+                    DTOUser dtoUser = new DTOUser(oRefugee.get());
+                    dtoChat.setUser2(dtoUser);
+                } else {
+                    Optional<Volunteer> oVolunteer = volunteerRepository
+                            .findOptionalByMail(chat.getMailUser2());
+                    DTOUser dtoUser = new DTOUser(oVolunteer.get());
+                    dtoChat.setUser2(dtoUser);
+                }
+                dtoChats.add(dtoChat);
+            }
+        }
+        return dtoChats;
+    }
 
-	@Override
-	public Set<DTOMessage> listMessagesChat(String mail, long idChat) {
-		//Set<Message> messages = chatRepository.findByMessages_IdChat(idChat);
-		Set<Message> messages = chatRepository.findById(idChat).getMessages();
-		Set<DTOMessage> dtoMessages = new HashSet<DTOMessage>();
-		for (Message message: messages) {
-			DTOMessage dtoMessage = new DTOMessage(message);
-			Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMail(message.getMailSender());
-			if (oRefugee.isPresent()) {
-				DTOUser dtoUser = new DTOUser(oRefugee.get());
-				dtoMessage.setOwner(dtoUser);
-			}
-			else {
-				Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMail(message.getMailSender());
-				DTOUser dtoUser = new DTOUser(oVolunteer.get());
-				dtoMessage.setOwner(dtoUser);
-			}
-			dtoMessages.add(dtoMessage);
-		}
-		return dtoMessages;
-	}
+    public DTOUser newChat(String mailUser1, String mailUser2) {
+        return null;
+    }
+
+    @Override
+    public DTOChat createChat(DTOChat dtoChat) {
+        Chat chat = new Chat();
+        chat.setMailUser1(dtoChat.getUser1().getMail());
+        chat.setMailUser2(dtoChat.getUser2().getMail());
+        chatRepository.save(chat);
+        Chat newChat = chatRepository.findByMailUser1AndMailUser2(dtoChat.getUser1().getMail(),
+                dtoChat.getUser2().getMail());
+        DTOChat newDtoChat = new DTOChat();
+        newDtoChat.setId(newChat.getId());
+        newDtoChat.setUser1(dtoChat.getUser1());
+        newDtoChat.setUser1(dtoChat.getUser2());
+        return newDtoChat;
+    }
+
+    @Override
+    public Set<DTOMessage> listMessagesChat(String mail, long idChat) {
+        // Set<Message> messages = chatRepository.findByMessages_IdChat(idChat);
+        Set<Message> messages = chatRepository.findById(idChat).getMessages();
+        Set<DTOMessage> dtoMessages = new HashSet<DTOMessage>();
+        for (Message message : messages) {
+            DTOMessage dtoMessage = new DTOMessage(message);
+            Optional<Refugee> oRefugee = refugeeRepository
+                    .findOptionalByMail(message.getMailSender());
+            if (oRefugee.isPresent()) {
+                DTOUser dtoUser = new DTOUser(oRefugee.get());
+                dtoMessage.setOwner(dtoUser);
+            } else {
+                Optional<Volunteer> oVolunteer = volunteerRepository
+                        .findOptionalByMail(message.getMailSender());
+                DTOUser dtoUser = new DTOUser(oVolunteer.get());
+                dtoMessage.setOwner(dtoUser);
+            }
+            dtoMessages.add(dtoMessage);
+        }
+        return dtoMessages;
+    }
 }

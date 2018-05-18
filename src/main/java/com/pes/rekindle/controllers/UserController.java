@@ -5,7 +5,6 @@ import java.sql.Date;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,8 +18,6 @@ import com.pes.rekindle.dto.DTOChat;
 import com.pes.rekindle.dto.DTOLogInInfo;
 import com.pes.rekindle.dto.DTOMessage;
 import com.pes.rekindle.dto.DTOUser;
-import com.pes.rekindle.entities.Chat;
-import com.pes.rekindle.entities.Lodge;
 import com.pes.rekindle.entities.Refugee;
 import com.pes.rekindle.entities.Volunteer;
 import com.pes.rekindle.services.UserService;
@@ -104,9 +101,9 @@ public class UserController {
     public ResponseEntity<DTOUser> infoRefugee(@PathVariable String mail) {
         DTOUser refugee = userService.infoRefugee(mail);
         if (!(refugee == null))
-        	return ResponseEntity.status(HttpStatus.OK).body(refugee);
-        else 
-        	return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            return ResponseEntity.status(HttpStatus.OK).body(refugee);
+        else
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
 
     // Busqueda de refugiados
@@ -167,24 +164,24 @@ public class UserController {
     public ResponseEntity<Set<DTOChat>> listUserChats(@PathVariable String mail) {
         Set<DTOChat> dtoChats = userService.listUserChats(mail);
         return ResponseEntity.status(HttpStatus.OK).body(dtoChats);
-    }  
-    
+    }
+
     @RequestMapping(value = "/usuarios/{mail}/chats", method = RequestMethod.POST)
     public ResponseEntity<DTOChat> createChat(@RequestBody DTOChat dtoChat) {
-    	return ResponseEntity.status(HttpStatus.OK).body(userService.createChat(dtoChat));    	    	    	    	
+        return ResponseEntity.status(HttpStatus.OK).body(userService.createChat(dtoChat));
     }
-   
-    
-    
+
     @RequestMapping(value = "/usuarios/{mail}/chats/{idChat}/messages", method = RequestMethod.GET)
-    public ResponseEntity<Set<DTOMessage>> getChatMessages(@PathVariable String mail, @PathVariable long idChat) {
+    public ResponseEntity<Set<DTOMessage>> getChatMessages(@PathVariable String mail,
+            @PathVariable long idChat) {
         Set<DTOMessage> dtoMessages = userService.listMessagesChat(mail, idChat);
         return ResponseEntity.status(HttpStatus.OK).body(dtoMessages);
-    }  
-    
+    }
+
     /*
-    @RequestMapping(value = "/usuarios/{mail}/chats", method = RequestMethod.GET)
-    public ResponseEntity<Set<DTOUser>> newChat(@PathVariable String mailUser1, @RequestBody String mailUser2) {
-    	return ResponseEntity.status(HttpStatus.OK).body(userService.newChat(mailUser1, mailUser2));
-    }   */
+     * @RequestMapping(value = "/usuarios/{mail}/chats", method = RequestMethod.GET) public
+     * ResponseEntity<Set<DTOUser>> newChat(@PathVariable String mailUser1, @RequestBody String
+     * mailUser2) { return ResponseEntity.status(HttpStatus.OK).body(userService.newChat(mailUser1,
+     * mailUser2)); }
+     */
 }

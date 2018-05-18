@@ -2,17 +2,12 @@
 package com.pes.rekindle.services;
 
 import java.sql.Date;
-import java.util.Map;
 import java.util.Set;
-
-import org.springframework.data.util.Pair;
 
 import com.pes.rekindle.dto.DTOChat;
 import com.pes.rekindle.dto.DTOMessage;
 import com.pes.rekindle.dto.DTOService;
 import com.pes.rekindle.dto.DTOUser;
-import com.pes.rekindle.entities.Chat;
-import com.pes.rekindle.entities.Lodge;
 import com.pes.rekindle.entities.Volunteer;
 
 public interface UserService {
@@ -60,12 +55,12 @@ public interface UserService {
 
     Set<DTOService> obtainOwnServices(String mail, String userType);
 
-	Set<DTOChat> listUserChats(String mail);
-	
-	Set<DTOMessage> listMessagesChat(String mail, long idChat);
-	
-	DTOUser newChat(String mailUser1, String mailUser2);
+    Set<DTOChat> listUserChats(String mail);
 
-	DTOChat createChat(DTOChat dtoChat);
+    Set<DTOMessage> listMessagesChat(String mail, long idChat);
+
+    DTOUser newChat(String mailUser1, String mailUser2);
+
+    DTOChat createChat(DTOChat dtoChat);
 
 }
