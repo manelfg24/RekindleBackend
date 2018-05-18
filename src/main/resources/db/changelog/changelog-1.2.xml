@@ -18,6 +18,7 @@
 	</changeSet>
 	
 	<changeSet author="bob" id="modifyJobServiceType">
+		<validCheckSum>ANY</validCheckSum>
     	<modifyDataType columnName="serviceType"
             newDataType="varchar(20)"
             tableName="Job"/>

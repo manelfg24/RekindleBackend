@@ -33,8 +33,9 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-data-rest')
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile('com.pusher:pusher-http-java:1.0.0')
-	testCompile('org.liquibase:liquibase-core')
+	compile('net.sf.dozer:dozer:5.5.1') 
 	runtime('mysql:mysql-connector-java')
+	testCompile('org.liquibase:liquibase-core')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile('org.springframework.security:spring-security-test')
 	testCompile('com.h2database:h2:1.4.197')
@@ -44,8 +45,8 @@ liquibase {
   activities {
     main {
       changeLogFile 'src/main/resources/db/changelog/db.changelog-master.xml'
-      url 'jdbc:mysql://10.4.41.149:3306/PES'
-	  username 'aplicacion'
+      url 'jdbc:mysql://localhost:3306/local_rekindle'
+	  username 'alumne'
 	  password 'rekindle'
     }
   }
