@@ -8,6 +8,7 @@ import javax.transaction.Transactional;
 import org.springframework.data.repository.Repository;
 
 import com.pes.rekindle.entities.Chat;
+import com.pes.rekindle.entities.Message;
 
 @Transactional
 public interface ChatRepository extends Repository<Chat, String> {
@@ -22,4 +23,8 @@ public interface ChatRepository extends Repository<Chat, String> {
     public void save(Chat chat);
 
     public Chat findByMailUser1AndMailUser2(String mail, String mail2);
+
+	//public Set<Message> findByMessages_IdChat(long idChat);
+
+	public Chat findById(long idChat);
 }

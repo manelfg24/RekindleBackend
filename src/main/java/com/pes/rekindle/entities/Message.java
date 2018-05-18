@@ -26,6 +26,8 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @NotNull
+    private long idChat;
+    @NotNull
     private String mailSender;
     @NotNull
     private String content;
@@ -42,6 +44,14 @@ public class Message {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public long getIdChat() {
+		return idChat;
+	}
+
+	public void setIdChat(long idChat) {
+		this.idChat = idChat;
 	}
 
 	public String getMailSender() {

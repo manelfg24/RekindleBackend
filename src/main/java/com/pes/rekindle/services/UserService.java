@@ -61,7 +61,9 @@ public interface UserService {
     Set<DTOService> obtainOwnServices(String mail, String userType);
 
 	Set<DTOChat> listUserChats(String mail);
-
+	
+	Set<DTOMessage> listMessagesChat(String mail, long idChat);
+	
 	DTOUser newChat(String mailUser1, String mailUser2);
 
 	DTOChat createChat(DTOChat dtoChat);
