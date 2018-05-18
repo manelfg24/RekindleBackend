@@ -23,6 +23,7 @@ import com.pes.rekindle.entities.Donation;
 import com.pes.rekindle.entities.Education;
 import com.pes.rekindle.entities.Job;
 import com.pes.rekindle.entities.Lodge;
+import com.pes.rekindle.entities.Message;
 import com.pes.rekindle.entities.Refugee;
 import com.pes.rekindle.entities.Volunteer;
 import com.pes.rekindle.repositories.ChatRepository;
@@ -434,5 +435,27 @@ public class UserServiceImpl implements UserService {
 		newDtoChat.setUser1(dtoChat.getUser1());
 		newDtoChat.setUser1(dtoChat.getUser2());
 		return newDtoChat;
+	}
+
+	@Override
+	public Set<DTOMessage> listMessagesChat(String mail, long idChat) {
+		//Set<Message> messages = chatRepository.findByMessages_IdChat(idChat);
+		Set<Message> messages = chatRepository.findById(idChat).getMessages();
+		Set<DTOMessage> dtoMessages = new HashSet<DTOMessage>();
+		for (Message message: messages) {
+			DTOMessage dtoMessage = new DTOMessage(message);
+			Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMail(message.getMailSender());
+			if (oRefugee.isPresent()) {
+				DTOUser dtoUser = new DTOUser(oRefugee.get());
+				dtoMessage.setOwner(dtoUser);
+			}
+			else {
+				Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMail(message.getMailSender());
+				DTOUser dtoUser = new DTOUser(oVolunteer.get());
+				dtoMessage.setOwner(dtoUser);
+			}
+			dtoMessages.add(dtoMessage);
+		}
+		return dtoMessages;
 	}
 }

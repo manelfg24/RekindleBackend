@@ -175,13 +175,13 @@ public class UserController {
     }
    
     
-    /*
+    
     @RequestMapping(value = "/usuarios/{mail}/chats/{idChat}/messages", method = RequestMethod.GET)
-    public ResponseEntity<Set<DTOMessage>> getChatMessages(@PathVariable String mail, @PathVariable String idChat) {
-        Set<DTOMessage> dtoMessages = userService.listUserChats(mail);
-        return ResponseEntity.status(HttpStatus.OK).body(dtoChats);
+    public ResponseEntity<Set<DTOMessage>> getChatMessages(@PathVariable String mail, @PathVariable long idChat) {
+        Set<DTOMessage> dtoMessages = userService.listMessagesChat(mail, idChat);
+        return ResponseEntity.status(HttpStatus.OK).body(dtoMessages);
     }  
-    */
+    
     /*
     @RequestMapping(value = "/usuarios/{mail}/chats", method = RequestMethod.GET)
     public ResponseEntity<Set<DTOUser>> newChat(@PathVariable String mailUser1, @RequestBody String mailUser2) {

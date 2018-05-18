@@ -1,11 +1,14 @@
 
 package com.pes.rekindle.dto;
 
+import java.util.Date;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
+import com.pes.rekindle.entities.Message;
 import com.pes.rekindle.entities.Refugee;
 
 public class DTOMessage {
@@ -16,7 +19,21 @@ public class DTOMessage {
     private DTOUser owner;
     
     private String content;
+    
+    private Date timestamp;
 
+    public DTOMessage() {
+        super();
+    }
+
+    public DTOMessage(Message message) {
+        super();
+        this.id = message.getId();
+        this.idChat = message.getIdChat();
+        this.content = message.getContent();
+        this.timestamp = message.getTimestamp();
+    }
+    
 	public long getId() {
 		return id;
 	}
@@ -47,6 +64,14 @@ public class DTOMessage {
 
 	public void setContent(String content) {
 		this.content = content;
+	}
+
+	public Date getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(Date timestamp) {
+		this.timestamp = timestamp;
 	}
     
     
