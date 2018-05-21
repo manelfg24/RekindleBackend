@@ -426,7 +426,7 @@ public class UserServiceImpl implements UserService {
         DTOChat newDtoChat = new DTOChat();
         newDtoChat.setId(newChat.getId());
         newDtoChat.setUser1(dtoChat.getUser1());
-        newDtoChat.setUser1(dtoChat.getUser2());
+        newDtoChat.setUser2(dtoChat.getUser2());
         return newDtoChat;
     }
 
