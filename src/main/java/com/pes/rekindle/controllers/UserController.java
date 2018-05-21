@@ -92,9 +92,9 @@ public class UserController {
     }
 
     @RequestMapping(value = "/voluntarios/{mail}", method = RequestMethod.GET)
-    public ResponseEntity<Volunteer> infoVolunteer(@PathVariable String mail) {
-        Volunteer volunteer = userService.infoVolunteer(mail);
-        return ResponseEntity.status(HttpStatus.OK).body(volunteer);
+    public ResponseEntity<DTOUser> infoVolunteer(@PathVariable String mail) {
+        DTOUser dtoUser = userService.infoVolunteer(mail);
+        return ResponseEntity.status(HttpStatus.OK).body(dtoUser);
     }
 
     @RequestMapping(value = "/refugiados/{mail}", method = RequestMethod.GET)
@@ -177,7 +177,7 @@ public class UserController {
     
     //Devuelve el chat entre dos personas, mismo nombre que listUserChats
     @RequestMapping(value = "/usuarios/{mail}/chat", method = RequestMethod.GET)
-    public ResponseEntity<DTOChat> getChat(@PathVariable String mail,  @RequestParam("mail1") String mail1,
+    public ResponseEntity<DTOChat> getChat(@PathVariable String mail, @RequestParam("mail1") String mail1,
     		 @RequestParam("mail2") String mail2) {
         DTOChat dtoChats = userService.getChat(mail1, mail2);
         return ResponseEntity.status(HttpStatus.OK).body(dtoChats);

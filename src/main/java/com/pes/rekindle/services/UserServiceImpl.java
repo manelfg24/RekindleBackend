@@ -156,10 +156,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Volunteer infoVolunteer(String mail) {
+    public DTOUser infoVolunteer(String mail) {
         Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMail(mail);
         if (oVolunteer.isPresent())
-            return oVolunteer.get();
+            return new DTOUser(oVolunteer.get());
         return null;
     }
 

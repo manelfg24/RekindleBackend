@@ -31,7 +31,7 @@ public interface UserService {
 
     void modifyProfileRefugee(DTOUser refugee);
 
-    Volunteer infoVolunteer(String mail);
+    DTOUser infoVolunteer(String mail);
 
     DTOUser infoRefugee(String mail);
 
