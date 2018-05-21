@@ -2,6 +2,7 @@
 package com.pes.rekindle.controllers;
 
 import java.sql.Date;
+import java.util.Collections;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import com.pes.rekindle.dto.DTOUser;
 import com.pes.rekindle.entities.Refugee;
 import com.pes.rekindle.entities.Volunteer;
 import com.pes.rekindle.services.UserService;
+import com.pusher.rest.Pusher;
 
 @RestController
 public class UserController {
@@ -194,6 +196,13 @@ public class UserController {
     public ResponseEntity sendMessage(@PathVariable String mail,
             @PathVariable long idChat, @RequestBody DTOMessage dtoMessage) {
     	userService.sendMessage(mail, idChat, dtoMessage);
+    	
+        Pusher messageManager = new Pusher("525518", "743a4fb4a1370f0ca9a4", "c78f3bfa72330a58ee1f");
+        messageManager.setCluster("eu");
+        messageManager.setEncrypted(true);
+
+        messageManager.trigger("my-channel", "my-event", Collections.singletonMap("message", dtoMessage));  	
+        
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }    
 
@@ -208,5 +217,5 @@ public class UserController {
     public ResponseEntity<String> test() {
     	String id = userService.test();
     	return ResponseEntity.status(HttpStatus.OK).body(id);
-    }           
+    }      
 }
