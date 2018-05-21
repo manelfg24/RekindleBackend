@@ -76,26 +76,23 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    public Object logIn(String mail, String password) {
-        Object user = new Object();
-        DTOUser refugee = logInRefugee(mail, password);
-        if (refugee.getMail() == null) {
-            Volunteer volunteer = logInVolunteer(mail, password);
-            user = volunteer;
-        } else
-            user = refugee;
+    public DTOUser logIn(String mail, String password) {
+        DTOUser user = logInRefugee(mail, password);
+        if (user == null) {
+            user = logInVolunteer(mail, password);
+        }
         return user;
     }
 
     // Mirar visibilidad
-    public Volunteer logInVolunteer(String mail, String password) {
+    public DTOUser logInVolunteer(String mail, String password) {
         Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMailAndPassword(mail,
                 password);
         Volunteer volunteer = new Volunteer();
         if (oVolunteer.isPresent()) {
             volunteer = oVolunteer.get();
         }
-        return volunteer;
+        return new DTOUser(volunteer);
     }
 
     public DTOUser logInRefugee(String mail, String password) {
