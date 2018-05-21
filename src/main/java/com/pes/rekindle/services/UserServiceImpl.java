@@ -26,6 +26,7 @@ import com.pes.rekindle.repositories.DonationRepository;
 import com.pes.rekindle.repositories.EducationRepository;
 import com.pes.rekindle.repositories.JobRepository;
 import com.pes.rekindle.repositories.LodgeRepository;
+import com.pes.rekindle.repositories.MessageRepository;
 import com.pes.rekindle.repositories.RefugeeRepository;
 import com.pes.rekindle.repositories.VolunteerRepository;
 
@@ -48,6 +49,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     ChatRepository chatRepository;
+    @Autowired
+    MessageRepository messageRepository;
 
     public void createVolunteer(Volunteer volunteer) throws Exception {
         Optional<Volunteer> oVolunteer = volunteerRepository
@@ -501,13 +504,16 @@ public class UserServiceImpl implements UserService {
 	public void sendMessage(String mail, long idChat, DTOMessage dtoMessage) {
 		Chat chat = chatRepository.findById(idChat);
 		Message message = new Message();
-		//message.setChat(chat);
+		message.setChat(chat);
 		message.setContent(dtoMessage.getContent());
 		message.setMailSender(dtoMessage.getOwner().getMail());
 		message.setTimestamp(dtoMessage.getTimestamp());
 		
+		messageRepository.save(message);
+		/*
 		chat.addMessage(message);
 		chatRepository.save(chat);
+		*/
 	}
     
 	//-------------------------------------------------------------------
