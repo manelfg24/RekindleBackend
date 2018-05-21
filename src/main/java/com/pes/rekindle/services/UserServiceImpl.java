@@ -455,4 +455,62 @@ public class UserServiceImpl implements UserService {
         }
         return dtoMessages;
     }
+
+	@Override
+	public DTOChat getChat(String mail1, String mail2) {
+		Optional<Chat> oChat = chatRepository.findOptionalByMailUser1AndMailUser2(mail1, mail2);
+		Chat chat;
+		if (oChat.isPresent()) {
+			chat = oChat.get();
+		}
+		else {
+			chat = chatRepository.findByMailUser1AndMailUser2(mail2, mail1);
+		}
+		DTOChat dtoChat = new DTOChat();
+		
+		dtoChat.setId(chat.getId());
+		
+        Optional<Refugee> oRefugee = refugeeRepository
+                .findOptionalByMail(chat.getMailUser1());
+        if (oRefugee.isPresent()) {
+            DTOUser dtoUser = new DTOUser(oRefugee.get());
+            dtoChat.setUser1(dtoUser);
+        } else {
+            Optional<Volunteer> oVolunteer = volunteerRepository
+                    .findOptionalByMail(chat.getMailUser1());
+            DTOUser dtoUser = new DTOUser(oVolunteer.get());
+            dtoChat.setUser1(dtoUser);
+        }
+
+        oRefugee = refugeeRepository.findOptionalByMail(chat.getMailUser2());
+        if (oRefugee.isPresent()) {
+            DTOUser dtoUser = new DTOUser(oRefugee.get());
+            dtoChat.setUser2(dtoUser);
+        } else {
+            Optional<Volunteer> oVolunteer = volunteerRepository
+                    .findOptionalByMail(chat.getMailUser2());
+            DTOUser dtoUser = new DTOUser(oVolunteer.get());
+            dtoChat.setUser2(dtoUser);
+        }
+		return dtoChat;
+	}
+	
+	@Override
+	public void sendMessage(String mail, long idChat, DTOMessage dtoMessage) {
+		Chat chat = chatRepository.findById(idChat);
+		Message message = new Message();
+		//message.setChat(chat);
+		message.setContent(dtoMessage.getContent());
+		message.setMailSender(dtoMessage.getOwner().getMail());
+		message.setTimestamp(dtoMessage.getTimestamp());
+		
+		chat.addMessage(message);
+		chatRepository.save(chat);
+	}
+    
+	//-------------------------------------------------------------------
+	@Override
+	public String test() {
+		return "Hola";
+	}
 }

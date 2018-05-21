@@ -160,23 +160,42 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
+    //Todos chats del mail
     @RequestMapping(value = "/usuarios/{mail}/chats", method = RequestMethod.GET)
     public ResponseEntity<Set<DTOChat>> listUserChats(@PathVariable String mail) {
         Set<DTOChat> dtoChats = userService.listUserChats(mail);
         return ResponseEntity.status(HttpStatus.OK).body(dtoChats);
     }
-
-    @RequestMapping(value = "/usuarios/{mail}/chats", method = RequestMethod.POST)
-    public ResponseEntity<DTOChat> createChat(@RequestBody DTOChat dtoChat) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.createChat(dtoChat));
-    }
-
+    
+    //Todos los mensajes de un chat
     @RequestMapping(value = "/usuarios/{mail}/chats/{idChat}/messages", method = RequestMethod.GET)
     public ResponseEntity<Set<DTOMessage>> getChatMessages(@PathVariable String mail,
             @PathVariable long idChat) {
         Set<DTOMessage> dtoMessages = userService.listMessagesChat(mail, idChat);
         return ResponseEntity.status(HttpStatus.OK).body(dtoMessages);
     }
+    
+    //Devuelve el chat entre dos personas, mismo nombre que listUserChats
+    @RequestMapping(value = "/usuarios/{mail}/chat", method = RequestMethod.GET)
+    public ResponseEntity<DTOChat> getChat(@PathVariable String mail,  @RequestParam("mail1") String mail1,
+    		 @RequestParam("mail2") String mail2) {
+        DTOChat dtoChats = userService.getChat(mail1, mail2);
+        return ResponseEntity.status(HttpStatus.OK).body(dtoChats);
+    }
+
+    //Crea un chat
+    @RequestMapping(value = "/usuarios/{mail}/chats", method = RequestMethod.POST)
+    public ResponseEntity<DTOChat> createChat(@RequestBody DTOChat dtoChat) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.createChat(dtoChat));
+    }
+    
+    //Enviar mensaje
+    @RequestMapping(value = "/usuarios/{mail}/chats/{idChat}/messages", method = RequestMethod.POST)
+    public ResponseEntity sendMessage(@PathVariable String mail,
+            @PathVariable long idChat, @RequestBody DTOMessage dtoMessage) {
+    	userService.sendMessage(mail, idChat, dtoMessage);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }    
 
     /*
      * @RequestMapping(value = "/usuarios/{mail}/chats", method = RequestMethod.GET) public
@@ -184,4 +203,10 @@ public class UserController {
      * mailUser2) { return ResponseEntity.status(HttpStatus.OK).body(userService.newChat(mailUser1,
      * mailUser2)); }
      */
+    
+    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    public ResponseEntity<String> test() {
+    	String id = userService.test();
+    	return ResponseEntity.status(HttpStatus.OK).body(id);
+    }           
 }

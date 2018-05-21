@@ -63,4 +63,10 @@ public interface UserService {
 
     DTOChat createChat(DTOChat dtoChat);
 
+	String test();
+
+	DTOChat getChat(String mail1, String mail2);
+
+	void sendMessage(String mail, long idChat, DTOMessage dtoMessage);
+
 }
