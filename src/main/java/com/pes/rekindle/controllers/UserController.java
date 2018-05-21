@@ -180,7 +180,10 @@ public class UserController {
     public ResponseEntity<DTOChat> getChat(@PathVariable String mail, @RequestParam("mail1") String mail1,
     		 @RequestParam("mail2") String mail2) {
         DTOChat dtoChats = userService.getChat(mail1, mail2);
-        return ResponseEntity.status(HttpStatus.OK).body(dtoChats);
+        if (dtoChats!=null) {
+        	return ResponseEntity.status(HttpStatus.OK).body(dtoChats);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(dtoChats);
     }
 
     //Crea un chat
