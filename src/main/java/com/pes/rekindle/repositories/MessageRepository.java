@@ -12,5 +12,6 @@ import com.pes.rekindle.entities.Message;
 @Transactional
 public interface MessageRepository extends Repository<Message, String> {
 
-	
+	void save(Message message);
+		
 }
