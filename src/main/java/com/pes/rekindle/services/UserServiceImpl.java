@@ -463,10 +463,15 @@ public class UserServiceImpl implements UserService {
 		else {
 			chat = chatRepository.findByMailUser1AndMailUser2(mail2, mail1);
 		}
+		
+		if (chat==null) {
+			return null;
+		}
+		
 		DTOChat dtoChat = new DTOChat();
 		
 		dtoChat.setId(chat.getId());
-		
+			
         Optional<Refugee> oRefugee = refugeeRepository
                 .findOptionalByMail(chat.getMailUser1());
         if (oRefugee.isPresent()) {
