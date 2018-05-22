@@ -62,10 +62,10 @@
 	</changeSet>
 	<changeSet author="bob" id="addColumnImage">
 	    <addColumn tableName="Refugee">
-	        <column name="image" type="varchar(300)"/>
+	        <column name="photo" type="varchar(300)"/>
 	    </addColumn>
 	    <addColumn tableName="Volunteer">
-	        <column name="image" type="varchar(300)"/>
+	        <column name="photo" type="varchar(300)"/>
 	    </addColumn>
 	</changeSet>
 </databaseChangeLog>
