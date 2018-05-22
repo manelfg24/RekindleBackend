@@ -19,6 +19,7 @@ public class Volunteer {
     @NotNull
     private String surname1;
     private String surname2;
+    private String photo;
 
     public String getMail() {
         return mail;
@@ -59,4 +60,12 @@ public class Volunteer {
     public void setSurname2(String surname2) {
         this.surname2 = surname2;
     }
+
+	public String getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(String photo) {
+		this.photo = photo;
+	}
 }

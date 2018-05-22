@@ -80,10 +80,9 @@ public class UserController {
     }
 
     @RequestMapping(value = "/voluntarios/{mail}", method = RequestMethod.PUT)
-    public ResponseEntity modifyProfileVolunteer(@RequestBody Volunteer volunteer) {
+    public ResponseEntity modifyProfileVolunteer(@RequestBody DTOUser dtoUser) {
         // Cuidado tema seguridad
-        userService.modifyProfileVolunteer(volunteer.getMail(), volunteer.getName(),
-                volunteer.getSurname1(), volunteer.getSurname2());
+        userService.modifyProfileVolunteer(dtoUser);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
@@ -199,13 +198,10 @@ public class UserController {
     public ResponseEntity sendMessage(@PathVariable String mail,
             @PathVariable long idChat, @RequestBody DTOMessage dtoMessage) {
     	userService.sendMessage(mail, idChat, dtoMessage);
-    	
-        Pusher messageManager = new Pusher("525518", "743a4fb4a1370f0ca9a4", "c78f3bfa72330a58ee1f");
-        messageManager.setCluster("eu");
-        messageManager.setEncrypted(true);
-
-        messageManager.trigger("my-channel", "my-event", Collections.singletonMap("message", dtoMessage));  	
-        
+    	Pusher pusher = new Pusher("525518", "743a4fb4a1370f0ca9a4", "c78f3bfa72330a58ee1f");
+    	pusher.setCluster("eu");
+    	pusher.setEncrypted(true);
+    	pusher.trigger("my-channel", "my-event", Collections.singletonMap("message", dtoMessage));
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }    
 

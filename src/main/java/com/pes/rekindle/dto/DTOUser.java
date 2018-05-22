@@ -22,6 +22,7 @@ public class DTOUser {
     private String bloodType;
     private String eyeColor;
     private String biography;
+    private String photo;
 
     public DTOUser() {
         super();
@@ -44,6 +45,7 @@ public class DTOUser {
         this.bloodType = refugee.getBloodType();
         this.eyeColor = refugee.getEyeColor();
         this.biography = refugee.getBiography();
+        this.photo = refugee.getPhoto();
     }
     
     public DTOUser(Volunteer volunteer) {
@@ -54,6 +56,7 @@ public class DTOUser {
         this.name = volunteer.getName();
         this.surname1 = volunteer.getSurname1();
         this.surname2 = volunteer.getSurname2();
+        this.photo = volunteer.getPhoto();
     }
 
     public String getMail() {
@@ -168,7 +171,15 @@ public class DTOUser {
         this.biography = biography;
     }
 
-    public String getUserType() {
+    public String getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(String photo) {
+		this.photo = photo;
+	}
+
+	public String getUserType() {
         return userType;
     }
 
