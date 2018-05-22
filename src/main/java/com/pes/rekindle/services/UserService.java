@@ -27,7 +27,7 @@ public interface UserService {
 
     Boolean changePasswordRefugee(String mail, String password, String newPassword);
 
-    void modifyProfileVolunteer(String mail, String name, String surname1, String surname2);
+    void modifyProfileVolunteer(DTOUser dtoUser);
 
     void modifyProfileRefugee(DTOUser refugee);
 

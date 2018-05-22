@@ -80,10 +80,9 @@ public class UserController {
     }
 
     @RequestMapping(value = "/voluntarios/{mail}", method = RequestMethod.PUT)
-    public ResponseEntity modifyProfileVolunteer(@RequestBody Volunteer volunteer) {
+    public ResponseEntity modifyProfileVolunteer(@RequestBody DTOUser dtoUser) {
         // Cuidado tema seguridad
-        userService.modifyProfileVolunteer(volunteer.getMail(), volunteer.getName(),
-                volunteer.getSurname1(), volunteer.getSurname2());
+        userService.modifyProfileVolunteer(dtoUser);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
