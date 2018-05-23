@@ -199,6 +199,7 @@ public class UserController {
     @RequestMapping(value = "/usuarios/{mail}/chats/{idChat}/messages", method = RequestMethod.POST)
     public ResponseEntity sendMessage(@PathVariable String mail,
             @PathVariable long idChat, @RequestBody DTOMessage dtoMessage) {
+
         userService.sendMessage(mail, idChat, dtoMessage);
 
         Pusher pusher = new Pusher("525518", "743a4fb4a1370f0ca9a4", "c78f3bfa72330a58ee1f");
@@ -206,6 +207,7 @@ public class UserController {
         pusher.setEncrypted(true);
 
         pusher.trigger("my-channel", "my-event", Collections.singletonMap("message", dtoMessage));
+
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
@@ -218,7 +220,8 @@ public class UserController {
 
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     public ResponseEntity<String> test() {
-        String id = userService.test();
-        return ResponseEntity.status(HttpStatus.OK).body(id);
-    }
+
+    	String id = userService.test();
+    	return ResponseEntity.status(HttpStatus.OK).body(id);
+    }      
 }

@@ -71,11 +71,7 @@ public class UserServiceImpl implements UserService {
         if (oRefugee.isPresent() || oVolunteer.isPresent()) {
             throw new Exception();
         } else {
-            refugeeRepository.create(DTOUser.getMail(), DTOUser.getPassword(),
-                    DTOUser.getName(), DTOUser.getSurname1(), DTOUser.getSurname2(),
-                    DTOUser.getPhoneNumber(), DTOUser.getBirthdate(), DTOUser.getSex(),
-                    DTOUser.getCountry(), DTOUser.getTown(), DTOUser.getEthnic(),
-                    DTOUser.getBloodType(), DTOUser.getEyeColor(), DTOUser.getBiography());
+            refugeeRepository.save(new Refugee(DTOUser));
         }
     }
 
@@ -433,7 +429,7 @@ public class UserServiceImpl implements UserService {
         DTOChat newDtoChat = new DTOChat();
         newDtoChat.setId(newChat.getId());
         newDtoChat.setUser1(dtoChat.getUser1());
-        newDtoChat.setUser1(dtoChat.getUser2());
+        newDtoChat.setUser2(dtoChat.getUser2());
         return newDtoChat;
     }
 
