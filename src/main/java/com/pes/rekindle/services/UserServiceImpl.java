@@ -2,6 +2,9 @@
 package com.pes.rekindle.services;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -436,7 +439,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public Set<DTOMessage> listMessagesChat(String mail, long idChat) {
         // Set<Message> messages = chatRepository.findByMessages_IdChat(idChat);
-        Set<Message> messages = chatRepository.findById(idChat).getMessages();
+        ArrayList<Message> messages = new ArrayList<Message>();
+        messages.addAll(chatRepository.findById(idChat).getMessages());
+        Collections.sort(messages, new Comparator<Message>() {
+            public int compare(Message m1, Message m2) {
+                return m1.getTimestamp().compareTo(m2.getTimestamp());
+            }
+        });
         Set<DTOMessage> dtoMessages = new HashSet<DTOMessage>();
         for (Message message : messages) {
             DTOMessage dtoMessage = new DTOMessage(message);
