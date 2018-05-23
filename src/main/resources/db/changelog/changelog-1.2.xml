@@ -68,4 +68,9 @@
 	        <column name="photo" type="varchar(300)"/>
 	    </addColumn>
 	</changeSet>
+	<changeSet author="bob" id="modifyTimestampMessage">
+    	<modifyDataType columnName="timeStamp"
+            newDataType="datetime"
+            tableName="Message"/>
+	</changeSet>
 </databaseChangeLog>
