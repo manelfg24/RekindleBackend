@@ -71,11 +71,7 @@ public class UserServiceImpl implements UserService {
         if (oRefugee.isPresent() || oVolunteer.isPresent()) {
             throw new Exception();
         } else {
-            refugeeRepository.create(DTOUser.getMail(), DTOUser.getPassword(),
-                    DTOUser.getName(), DTOUser.getSurname1(), DTOUser.getSurname2(),
-                    DTOUser.getPhoneNumber(), DTOUser.getBirthdate(), DTOUser.getSex(),
-                    DTOUser.getCountry(), DTOUser.getTown(), DTOUser.getEthnic(),
-                    DTOUser.getBloodType(), DTOUser.getEyeColor(), DTOUser.getBiography());
+            refugeeRepository.save(new Refugee(DTOUser));
         }
     }
 
