@@ -259,7 +259,7 @@ public class UserServiceImpl implements UserService {
     public Set<DTOUser> findRefugee(String name, String surname1, String surname2,
             Date birthdate,
             String sex,
-            String country, String town, String ethnic, String blood, String eye) {
+            String country, String town, String ethnic, String blood, String eye, String mail) {
         Set<Refugee> result = new HashSet<Refugee>();
         result = refugeeRepository.findAll();
         if (!name.equals("")) {
@@ -294,9 +294,11 @@ public class UserServiceImpl implements UserService {
         }
         Set<DTOUser> dtosRefugee = new HashSet<DTOUser>();
         for (Refugee refugee : result) {
-            DTOUser dtoUser = new DTOUser(refugee);
-            dtoUser.setUserType("Refugee");
-            dtosRefugee.add(dtoUser);
+            if (!refugee.getMail().equals(mail)) {
+                DTOUser dtoUser = new DTOUser(refugee);
+                dtoUser.setUserType("Refugee");
+                dtosRefugee.add(dtoUser);
+            }
         }
         return dtosRefugee;
     }
@@ -454,25 +456,24 @@ public class UserServiceImpl implements UserService {
         return dtoMessages;
     }
 
-	@Override
-	public DTOChat getChat(String mail1, String mail2) {
-		Optional<Chat> oChat = chatRepository.findOptionalByMailUser1AndMailUser2(mail1, mail2);
-		Chat chat;
-		if (oChat.isPresent()) {
-			chat = oChat.get();
-		}
-		else {
-			chat = chatRepository.findByMailUser1AndMailUser2(mail2, mail1);
-		}
-		
-		if (chat==null) {
-			return null;
-		}
-		
-		DTOChat dtoChat = new DTOChat();
-		
-		dtoChat.setId(chat.getId());
-			
+    @Override
+    public DTOChat getChat(String mail1, String mail2) {
+        Optional<Chat> oChat = chatRepository.findOptionalByMailUser1AndMailUser2(mail1, mail2);
+        Chat chat;
+        if (oChat.isPresent()) {
+            chat = oChat.get();
+        } else {
+            chat = chatRepository.findByMailUser1AndMailUser2(mail2, mail1);
+        }
+
+        if (chat == null) {
+            return null;
+        }
+
+        DTOChat dtoChat = new DTOChat();
+
+        dtoChat.setId(chat.getId());
+
         Optional<Refugee> oRefugee = refugeeRepository
                 .findOptionalByMail(chat.getMailUser1());
         if (oRefugee.isPresent()) {
@@ -495,28 +496,28 @@ public class UserServiceImpl implements UserService {
             DTOUser dtoUser = new DTOUser(oVolunteer.get());
             dtoChat.setUser2(dtoUser);
         }
-		return dtoChat;
-	}
-	
-	@Override
-	public void sendMessage(String mail, long idChat, DTOMessage dtoMessage) {
-		Chat chat = chatRepository.findById(idChat);
-		Message message = new Message();
-		message.setChat(chat);
-		message.setContent(dtoMessage.getContent());
-		message.setMailSender(dtoMessage.getOwner().getMail());
-		message.setTimestamp(dtoMessage.getTimestamp());
-		
-		messageRepository.save(message);
-		/*
-		chat.addMessage(message);
-		chatRepository.save(chat);
-		*/
-	}
-    
-	//-------------------------------------------------------------------
-	@Override
-	public String test() {
-		return "Hola";
-	}
+        return dtoChat;
+    }
+
+    @Override
+    public void sendMessage(String mail, long idChat, DTOMessage dtoMessage) {
+        Chat chat = chatRepository.findById(idChat);
+        Message message = new Message();
+
+        message.setChat(chat);
+        message.setContent(dtoMessage.getContent());
+        message.setMailSender(dtoMessage.getOwner().getMail());
+        message.setTimestamp(dtoMessage.getTimestamp());
+
+        messageRepository.save(message);
+        /*
+         * chat.addMessage(message); chatRepository.save(chat);
+         */
+    }
+
+    // -------------------------------------------------------------------
+    @Override
+    public String test() {
+        return "Hola";
+    }
 }

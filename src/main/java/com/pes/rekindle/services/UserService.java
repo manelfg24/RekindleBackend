@@ -47,7 +47,7 @@ public interface UserService {
 
     Set<DTOUser> findRefugee(String name, String surname1, String surname2, Date birthdate,
             String sex, String country,
-            String town, String ethnic, String blood, String eye);
+            String town, String ethnic, String blood, String eye, String mail);
 
     boolean changePassword(String mail, String passwordOld, String passwordNew);
 
@@ -63,10 +63,10 @@ public interface UserService {
 
     DTOChat createChat(DTOChat dtoChat);
 
-	String test();
+    String test();
 
-	DTOChat getChat(String mail1, String mail2);
+    DTOChat getChat(String mail1, String mail2);
 
-	void sendMessage(String mail, long idChat, DTOMessage dtoMessage);
+    void sendMessage(String mail, long idChat, DTOMessage dtoMessage);
 
 }
