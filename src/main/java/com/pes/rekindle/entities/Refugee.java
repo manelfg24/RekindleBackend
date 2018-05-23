@@ -17,6 +17,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.pes.rekindle.dto.DTOUser;
 
 @Entity
 @Table(name = "Refugee")
@@ -76,6 +77,29 @@ public class Refugee {
     })
     @JsonBackReference
     private Set<Education> courses = new HashSet<Education>();
+    
+    public Refugee() {
+        super();
+    }
+
+    public Refugee(DTOUser refugee) {
+        super();
+        this.mail = refugee.getMail();
+        this.password = refugee.getPassword();
+        this.name = refugee.getName();
+        this.surname1 = refugee.getSurname1();
+        this.surname2 = refugee.getSurname2();
+        this.phoneNumber = refugee.getPhoneNumber();
+        this.birthdate = refugee.getBirthdate();
+        this.sex = refugee.getSex();
+        this.country = refugee.getCountry();
+        this.town = refugee.getTown();
+        this.ethnic = refugee.getEthnic();
+        this.bloodType = refugee.getBloodType();
+        this.eyeColor = refugee.getEyeColor();
+        this.biography = refugee.getBiography();
+        this.photo = refugee.getPhoto();
+    }
 
     
     public String getMail() {
