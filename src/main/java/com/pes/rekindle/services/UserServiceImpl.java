@@ -133,28 +133,30 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void modifyProfileVolunteer(String mail, String name, String surname1, String surname2) {
-        Volunteer volunteer = volunteerRepository.findByMail(mail);
-        volunteer.setName(name);
-        volunteer.setSurname1(surname1);
-        volunteer.setSurname2(surname2);
+    public void modifyProfileVolunteer(DTOUser dtoUser) {
+        Volunteer volunteer = volunteerRepository.findByMail(dtoUser.getMail());
+        volunteer.setName(dtoUser.getName());
+        volunteer.setSurname1(dtoUser.getSurname1());
+        volunteer.setSurname2(dtoUser.getSurname2());
+        volunteer.setPhoto(dtoUser.getPhoto());
         volunteerRepository.flush();
     }
 
-    public void modifyProfileRefugee(DTOUser DTOUser) {
-        Refugee refugee = refugeeRepository.findByMail(DTOUser.getMail());
-        refugee.setName(DTOUser.getName());
-        refugee.setSurname1(DTOUser.getSurname1());
-        refugee.setSurname2(DTOUser.getSurname2());
-        refugee.setPhoneNumber(DTOUser.getPhoneNumber());
-        refugee.setBirthdate(DTOUser.getBirthdate());
-        refugee.setSex(DTOUser.getSex());
-        refugee.setCountry(DTOUser.getCountry());
-        refugee.setTown(DTOUser.getTown());
-        refugee.setEthnic(DTOUser.getEthnic());
-        refugee.setBloodType(DTOUser.getBloodType());
-        refugee.setEyeColor(DTOUser.getEyeColor());
-        refugee.setBiography(DTOUser.getBiography());
+    public void modifyProfileRefugee(DTOUser dtoUser) {
+        Refugee refugee = refugeeRepository.findByMail(dtoUser.getMail());
+        refugee.setName(dtoUser.getName());
+        refugee.setSurname1(dtoUser.getSurname1());
+        refugee.setSurname2(dtoUser.getSurname2());
+        refugee.setPhoneNumber(dtoUser.getPhoneNumber());
+        refugee.setBirthdate(dtoUser.getBirthdate());
+        refugee.setSex(dtoUser.getSex());
+        refugee.setCountry(dtoUser.getCountry());
+        refugee.setTown(dtoUser.getTown());
+        refugee.setEthnic(dtoUser.getEthnic());
+        refugee.setBloodType(dtoUser.getBloodType());
+        refugee.setEyeColor(dtoUser.getEyeColor());
+        refugee.setBiography(dtoUser.getBiography());
+        refugee.setPhoto(dtoUser.getPhoto());
         refugeeRepository.flush();
     }
 

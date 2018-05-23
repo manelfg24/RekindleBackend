@@ -40,6 +40,7 @@ public class Refugee {
     private String bloodType;
     private String eyeColor;
     private String biography;
+    private String photo; 
 
     
     @ManyToMany(mappedBy="inscriptions",
@@ -187,6 +188,14 @@ public class Refugee {
 
 	public void setBiography(String biography) {
 		this.biography = biography;
+	}
+
+	public String getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(String photo) {
+		this.photo = photo;
 	}
 
 	public Set<Lodge> getLodges() {

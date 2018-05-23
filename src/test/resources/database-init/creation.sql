@@ -27,7 +27,8 @@ CREATE TABLE Refugee (
 	ethnic varchar(20),
 	bloodType varchar(20),
 	eyeColor varchar(20),
-    biography varchar(300)
+    biography varchar(300),
+    photo varchar(200)
 );
 
 CREATE TABLE Volunteer (
@@ -35,7 +36,8 @@ CREATE TABLE Volunteer (
 	password varchar(15) NOT NULL,
 	name varchar(20) NOT NULL,
 	surname1 varchar(20) NOT NULL,
-	surname2 varchar(20)
+	surname2 varchar(20),
+	photo varchar(200)
 );
 
 CREATE TABLE Donation (
