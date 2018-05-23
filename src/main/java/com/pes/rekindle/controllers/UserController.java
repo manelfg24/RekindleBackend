@@ -115,9 +115,10 @@ public class UserController {
             @RequestParam("sex") String sex,
             @RequestParam("country") String country, @RequestParam("town") String town,
             @RequestParam("ethnic") String ethnic,
-            @RequestParam("blood") String blood, @RequestParam("eye") String eye) {
+            @RequestParam("blood") String blood, @RequestParam("eye") String eye,
+            @RequestParam("mail") String mail) {
         Set<DTOUser> refugees = userService.findRefugee(name, surname1, surname2, birthdate, sex,
-                country, town, ethnic, blood, eye);
+                country, town, ethnic, blood, eye, mail);
         return ResponseEntity.status(HttpStatus.OK).body(refugees);
     }
 

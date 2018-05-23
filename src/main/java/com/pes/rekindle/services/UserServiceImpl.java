@@ -263,7 +263,7 @@ public class UserServiceImpl implements UserService {
     public Set<DTOUser> findRefugee(String name, String surname1, String surname2,
             Date birthdate,
             String sex,
-            String country, String town, String ethnic, String blood, String eye) {
+            String country, String town, String ethnic, String blood, String eye, String mail) {
         Set<Refugee> result = new HashSet<Refugee>();
         result = refugeeRepository.findAll();
         if (!name.equals("")) {
@@ -298,9 +298,11 @@ public class UserServiceImpl implements UserService {
         }
         Set<DTOUser> dtosRefugee = new HashSet<DTOUser>();
         for (Refugee refugee : result) {
-            DTOUser dtoUser = new DTOUser(refugee);
-            dtoUser.setUserType("Refugee");
-            dtosRefugee.add(dtoUser);
+            if (!refugee.getMail().equals(mail)) {
+                DTOUser dtoUser = new DTOUser(refugee);
+                dtoUser.setUserType("Refugee");
+                dtosRefugee.add(dtoUser);
+            }
         }
         return dtosRefugee;
     }
