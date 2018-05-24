@@ -137,7 +137,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
-    @RequestMapping(value = "/usuarios/{mail}/inscripciones/{id}/{tipo}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/refugiados/{mail}/inscripciones/{id}/{tipo}", method = RequestMethod.DELETE)
     public ResponseEntity unenrollUserFromService(@PathVariable String mail, @PathVariable Long id,
             @PathVariable String tipo) throws Exception {
         userService.unenrollUserFromService(mail, id, tipo);
