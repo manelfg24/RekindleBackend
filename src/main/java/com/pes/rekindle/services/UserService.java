@@ -56,8 +56,6 @@ public interface UserService {
 
     List<DTOMessage> listMessagesChat(String mail, long idChat);
 
-    DTOUser newChat(String mailUser1, String mailUser2);
-
     DTOChat createChat(DTOChat dtoChat);
 
     String test();
