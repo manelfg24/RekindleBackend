@@ -7,8 +7,10 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -570,10 +572,6 @@ public class UserServiceImpl implements UserService {
         return dtoChats;
     }
 
-    public DTOUser newChat(String mailUser1, String mailUser2) {
-        return null;
-    }
-
     @Override
     public DTOChat createChat(DTOChat dtoChat) {
         Chat chat = new Chat();
@@ -590,7 +588,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Set<DTOMessage> listMessagesChat(String mail, long idChat) {
+    public List<DTOMessage> listMessagesChat(String mail, long idChat) {
         // Set<Message> messages = chatRepository.findByMessages_IdChat(idChat);
         ArrayList<Message> messages = new ArrayList<Message>();
         messages.addAll(chatRepository.findById(idChat).getMessages());
@@ -599,7 +597,7 @@ public class UserServiceImpl implements UserService {
                 return m1.getTimestamp().compareTo(m2.getTimestamp());
             }
         });
-        Set<DTOMessage> dtoMessages = new HashSet<DTOMessage>();
+        List<DTOMessage> dtoMessages = new ArrayList<DTOMessage>();
         for (Message message : messages) {
             DTOMessage dtoMessage = new DTOMessage(message);
             Optional<Refugee> oRefugee = refugeeRepository
@@ -614,7 +612,7 @@ public class UserServiceImpl implements UserService {
                 dtoMessage.setOwner(dtoUser);
             }
             dtoMessages.add(dtoMessage);
-        }
+        }        
         return dtoMessages;
     }
 
