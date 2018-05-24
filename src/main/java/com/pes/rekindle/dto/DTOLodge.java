@@ -1,19 +1,20 @@
 
 package com.pes.rekindle.dto;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.pes.rekindle.entities.Lodge;
 
 public class DTOLodge {
-	private long id;
+    private long id;
     private String serviceType;
     private String name;
     private String volunteer;
     private Integer phoneNumber;
     private String adress;
     private Integer places;
-    private Date dateLimit;
+    private String dateLimit;
     private String description;
 
     public DTOLodge() {
@@ -29,19 +30,20 @@ public class DTOLodge {
         this.phoneNumber = lodge.getPhoneNumber();
         this.adress = lodge.getAdress();
         this.places = lodge.getPlaces();
-        this.dateLimit = lodge.getDateLimit();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        this.dateLimit = formatter.format(lodge.getDateLimit());
         this.description = lodge.getDescription();
     }
 
     public long getId() {
-		return id;
-	}
+        return id;
+    }
 
-	public void setId(long id) {
-		this.id = id;
-	}
+    public void setId(long id) {
+        this.id = id;
+    }
 
-	public String getServiceType() {
+    public String getServiceType() {
         return serviceType;
     }
 
@@ -89,12 +91,13 @@ public class DTOLodge {
         this.places = places;
     }
 
-    public Date getDateLimit() {
+    public String getDateLimit() {
         return dateLimit;
     }
 
     public void setDateLimit(Date dateLimit) {
-        this.dateLimit = dateLimit;
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        this.dateLimit = formatter.format(dateLimit);
     }
 
     public String getDescription() {
