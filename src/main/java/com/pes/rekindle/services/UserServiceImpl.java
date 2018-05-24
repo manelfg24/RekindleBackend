@@ -551,13 +551,13 @@ public class UserServiceImpl implements UserService {
         Set<Refugee> refugees = lodge.getInscriptions();
 
         lodges.remove(lodge);
-        refugees.remove(refugee);
+        // refugees.remove(refugee);
 
         refugee.setLodges(lodges);
-        lodge.setInscriptions(refugees);
+        // lodge.setInscriptions(refugees);
 
         refugeeRepository.save(refugee);
-        lodgeRepository.save(lodge);
+        // lodgeRepository.save(lodge);
     }
 
     @Override
