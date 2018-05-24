@@ -417,10 +417,6 @@ public class UserServiceImpl implements UserService {
         return dtoChats;
     }
 
-    public DTOUser newChat(String mailUser1, String mailUser2) {
-        return null;
-    }
-
     @Override
     public DTOChat createChat(DTOChat dtoChat) {
         Chat chat = new Chat();
@@ -440,12 +436,12 @@ public class UserServiceImpl implements UserService {
     public Set<DTOMessage> listMessagesChat(String mail, long idChat) {
         // Set<Message> messages = chatRepository.findByMessages_IdChat(idChat);
         ArrayList<Message> messages = new ArrayList<Message>();
-        messages.addAll(chatRepository.findById(idChat).getMessages());
-        Collections.sort(messages, new Comparator<Message>() {
+        messages.addAll(chatRepository.findByIdOrderByTimestamp(idChat).getMessages());
+        /*Collections.sort(messages, new Comparator<Message>() {
             public int compare(Message m1, Message m2) {
                 return m1.getTimestamp().compareTo(m2.getTimestamp());
             }
-        });
+        });*/
         Set<DTOMessage> dtoMessages = new HashSet<DTOMessage>();
         for (Message message : messages) {
             DTOMessage dtoMessage = new DTOMessage(message);
@@ -529,4 +525,10 @@ public class UserServiceImpl implements UserService {
     public String test() {
         return "Hola";
     }
+
+	@Override
+	public DTOUser newChat(String mailUser1, String mailUser2) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
