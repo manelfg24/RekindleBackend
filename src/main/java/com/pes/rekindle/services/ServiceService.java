@@ -8,6 +8,10 @@ import com.pes.rekindle.dto.DTOEducation;
 import com.pes.rekindle.dto.DTOJob;
 import com.pes.rekindle.dto.DTOLodge;
 import com.pes.rekindle.dto.DTOService;
+import com.pes.rekindle.entities.Donation;
+import com.pes.rekindle.entities.Education;
+import com.pes.rekindle.entities.Job;
+import com.pes.rekindle.entities.Lodge;
 
 public interface ServiceService {
 
@@ -40,5 +44,13 @@ public interface ServiceService {
     void modifyJob(long id, DTOJob job);
 
 	Boolean userAlreadyEnrolled(String mail, Long id, String serviceType);
+
+	Lodge getLodge(Long id);
+	
+	Donation getDonation(Long id);
+	
+	Education getEducation(Long id);
+	
+	Job getJob(Long id);
 
 }

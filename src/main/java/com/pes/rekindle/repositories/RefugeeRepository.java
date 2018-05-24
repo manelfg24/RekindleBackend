@@ -1,7 +1,7 @@
 
 package com.pes.rekindle.repositories;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;

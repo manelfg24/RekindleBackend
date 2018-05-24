@@ -33,6 +33,7 @@ public class Lodge {
     @NotNull
     private String adress;
     private Integer places;
+    @NotNull
     private Date dateLimit;
     @NotNull
     private String description;

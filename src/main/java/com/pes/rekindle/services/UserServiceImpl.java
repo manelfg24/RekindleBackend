@@ -1,8 +1,9 @@
 
 package com.pes.rekindle.services;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -49,6 +50,9 @@ public class UserServiceImpl implements UserService {
     DonationRepository donationRepository;
     @Autowired
     JobRepository jobRepository;
+    
+    @Autowired
+    ServiceService serviceService;
 
     @Autowired
     ChatRepository chatRepository;
@@ -193,72 +197,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void enrollRefugeeLodge(String refugeeMail, long serviceId) {
-        Refugee r = refugeeRepository.findByMail(refugeeMail);
-        Lodge l = (Lodge) lodgeRepository.findById(serviceId);
-
-        Set<Lodge> lodges = r.getLodges();
-        Set<Refugee> refugees = l.getInscriptions();
-
-        refugees.add(r);
-        lodges.add(l);
-
-        refugeeRepository.save(r);
-        lodgeRepository.save(l);
-    }
-
-    @Override
-    public void enrollRefugeeEducation(String refugeeMail, long serviceId) {
-        Refugee r = refugeeRepository.findByMail(refugeeMail);
-        Education e = (Education) educationRepository.findById(serviceId);
-
-        Set<Education> courses = r.getCourses();
-        Set<Refugee> refugees = e.getInscriptions();
-
-        System.out.println("Courses size before: " + courses.size());
-        System.out.println("Inscriptions size before: " + refugees.size());
-
-        refugees.add(r);
-        courses.add(e);
-
-        System.out.println("Courses size after: " + courses.size());
-        System.out.println("Inscriptions size after: " + refugees.size());
-
-        refugeeRepository.save(r);
-        educationRepository.save(e);
-    }
-
-    @Override
-    public void enrollRefugeeJob(String refugeeMail, long serviceId) {
-        Refugee r = refugeeRepository.findByMail(refugeeMail);
-        Job j = (Job) jobRepository.findById(serviceId);
-
-        Set<Job> jobs = r.getJobs();
-        Set<Refugee> refugees = j.getInscriptions();
-
-        refugees.add(r);
-        jobs.add(j);
-
-        refugeeRepository.save(r);
-        jobRepository.save(j);
-    }
-
-    @Override
-    public void enrollRefugeeDonation(String refugeeMail, long serviceId) {
-        Refugee r = refugeeRepository.findByMail(refugeeMail);
-        Donation d = (Donation) donationRepository.findById(serviceId);
-
-        Set<Donation> donations = r.getDonations();
-        Set<Refugee> refugees = d.getInscriptions();
-
-        refugees.add(r);
-        donations.add(d);
-
-        refugeeRepository.save(r);
-        donationRepository.save(d);
-    }
-
-    @Override
     public Set<DTOUser> findRefugee(String name, String surname1, String surname2,
             Date birthdate,
             String sex,
@@ -274,7 +212,7 @@ public class UserServiceImpl implements UserService {
         if (!surname2.equals("")) {
             result.retainAll(refugeeRepository.findBySurname2(surname2));
         }
-        if (!birthdate.equals(Date.valueOf("1890-01-01"))) {
+        if (!birthdate.equals(Date.parse("1890-01-01"))) {
             result.retainAll(refugeeRepository.findByBirthdate(birthdate));
         }
         if (!sex.equals("-"))
@@ -378,8 +316,223 @@ public class UserServiceImpl implements UserService {
             result.add(new DTOService(job));
         return result;
     }
+    
+	@Override
+	public void enrollUserToService(String mail, Long id, String serviceType) throws Exception {
+    	switch(serviceType) {
+			case "Lodge": 
+				enrollUserToLodge(mail, id);
+				break;
+			case "Education":
+				enrollUserToEducation(mail, id);
+				break;
+			case "Donation":
+				enrollUserToDonation(mail, id);
+				break;				
+			case "Job":
+				enrollUserToJob(mail, id);
+				break;
+    	}
+	}
 
-    @Override
+	private void enrollUserToLodge(String mail, Long id) throws Exception {
+		Lodge lodge = serviceService.getLodge(id);
+		java.util.Date today = Calendar.getInstance().getTime();
+		int enrolledCount = lodge.getInscriptions().size()+1;
+		/*
+		System.out.println("---------------------------------------");
+		System.out.println("Numero de places total: " + lodge.getPlaces());
+		System.out.println("Numero de places ocupadas: " + lodge.getInscriptions().size()+1);
+		System.out.println("---------------------------------------");
+		System.out.println("Data del servicio: " + lodge.getDateLimit());
+		System.out.println("Data actual: " + Calendar.getInstance().getTime());
+		System.out.println("---------------------------------------");
+		*/
+		
+		if (enrolledCount > lodge.getPlaces() /*|| today.after(lodge.getDateLimit())*/) {
+			throw new Exception();
+		}
+		else {
+			Refugee refugee = refugeeRepository.findByMail(mail);
+			
+		    Set<Lodge> lodges = refugee.getLodges();
+		    Set<Refugee> refugees = lodge.getInscriptions();
+		    
+		    lodges.add(lodge);
+		    refugees.add(refugee);
+		    
+		    refugee.setLodges(lodges);
+		    lodge.setInscriptions(refugees);
+		    
+		    refugeeRepository.save(refugee);
+		    lodgeRepository.save(lodge);
+		}
+	}
+	
+	private void enrollUserToEducation(String mail, Long id) throws Exception {
+		Education education = serviceService.getEducation(id);
+		java.util.Date today = Calendar.getInstance().getTime();
+		int enrolledCount = education.getInscriptions().size()+1;
+		
+		if (enrolledCount > education.getPlaces()) {
+			throw new Exception();
+		}
+		else {
+			Refugee refugee = refugeeRepository.findByMail(mail);
+			
+		    Set<Education> courses = refugee.getCourses();
+		    Set<Refugee> refugees = education.getInscriptions();
+		    
+		    courses.add(education);
+		    refugees.add(refugee);
+		    
+		    refugee.setCourses(courses);
+		    education.setInscriptions(refugees);
+		    
+		    refugeeRepository.save(refugee);
+		    educationRepository.save(education);
+		}
+	}
+	
+	private void enrollUserToDonation(String mail, Long id) throws Exception {
+		Donation donation = serviceService.getDonation(id);
+		java.util.Date today = Calendar.getInstance().getTime();
+		int enrolledCount = donation.getInscriptions().size()+1;
+		
+		if (enrolledCount > donation.getPlaces()) {
+			throw new Exception();
+		}
+		else {
+			Refugee refugee = refugeeRepository.findByMail(mail);
+			
+		    Set<Donation> donations = refugee.getDonations();
+		    Set<Refugee> refugees = donation.getInscriptions();
+		    
+		    donations.add(donation);
+		    refugees.add(refugee);
+		    
+		    refugee.setDonations(donations);
+		    donation.setInscriptions(refugees);
+		    
+		    refugeeRepository.save(refugee);
+		    donationRepository.save(donation);
+		}
+	}
+	
+	private void enrollUserToJob(String mail, Long id) throws Exception {
+		Job job = serviceService.getJob(id);
+		Date today = Calendar.getInstance().getTime();
+		int enrolledCount = job.getInscriptions().size()+1;
+		
+		if (enrolledCount > job.getPlaces()) {
+			throw new Exception();
+		}
+		else {
+			Refugee refugee = refugeeRepository.findByMail(mail);
+			
+		    Set<Job> jobs = refugee.getJobs();
+		    Set<Refugee> refugees = job.getInscriptions();
+		    
+		    jobs.add(job);
+		    refugees.add(refugee);
+		    
+		    refugee.setJobs(jobs);
+		    job.setInscriptions(refugees);
+		    
+		    refugeeRepository.save(refugee);
+		    jobRepository.save(job);
+		}
+	}
+	
+	@Override
+	public void unenrollUserFromService(String mail, Long id, String serviceType) {
+    	switch(serviceType) {
+			case "Lodge": 
+				unenrollUserFromLodge(mail, id);
+				break;
+			case "Education":
+				unenrollUserFromEducation(mail, id);
+				break;
+			case "Donation":
+				unenrollUserFromDonation(mail, id);
+				break;				
+			case "Job":
+				unenrollUserFromJob(mail, id);
+				break;
+    	}
+	}
+
+    private void unenrollUserFromJob(String mail, Long id) {
+		Refugee refugee = refugeeRepository.findByMail(mail);
+		Job job = serviceService.getJob(id);
+		
+	    Set<Job> jobs = refugee.getJobs();
+	    Set<Refugee> refugees = job.getInscriptions();
+	    
+	    jobs.remove(job);
+	    refugees.remove(refugee);
+	    
+	    refugee.setJobs(jobs);
+	    job.setInscriptions(refugees);
+	    
+	    refugeeRepository.save(refugee);
+	    jobRepository.save(job);
+	}
+
+	private void unenrollUserFromDonation(String mail, Long id) {
+		Refugee refugee = refugeeRepository.findByMail(mail);
+		Donation donation = serviceService.getDonation(id);
+		
+	    Set<Donation> donations = refugee.getDonations();
+	    Set<Refugee> refugees = donation.getInscriptions();
+	    
+	    donations.remove(donation);
+	    refugees.remove(refugee);
+	    
+	    refugee.setDonations(donations);
+	    donation.setInscriptions(refugees);
+	    
+	    refugeeRepository.save(refugee);
+	    donationRepository.save(donation);
+		
+	}
+
+	private void unenrollUserFromEducation(String mail, Long id) {
+		Refugee refugee = refugeeRepository.findByMail(mail);
+		Education education = serviceService.getEducation(id);
+		
+	    Set<Education> courses = refugee.getCourses();
+	    Set<Refugee> refugees = education.getInscriptions();
+	    
+	    courses.remove(education);
+	    refugees.remove(refugee);
+	    
+	    refugee.setCourses(courses);
+	    education.setInscriptions(refugees);
+	    
+	    refugeeRepository.save(refugee);
+	    educationRepository.save(education);
+		
+	}
+
+	private void unenrollUserFromLodge(String mail, Long id) {
+		Refugee refugee = refugeeRepository.findByMail(mail);
+		Lodge lodge = serviceService.getLodge(id);
+		
+	    Set<Lodge> lodges = refugee.getLodges();
+	    Set<Refugee> refugees = lodge.getInscriptions();
+	    
+	    lodges.remove(lodge);
+	    refugees.remove(refugee);
+	    
+	    refugee.setLodges(lodges);
+	    lodge.setInscriptions(refugees);
+	    
+	    refugeeRepository.save(refugee);
+	    lodgeRepository.save(lodge);		
+	}
+
+	@Override
     public Set<DTOChat> listUserChats(String mail) {
         Set<DTOChat> dtoChats = new HashSet<DTOChat>();
         if (chatRepository.existsByMailUser1(mail) || chatRepository.existsByMailUser2(mail)) {

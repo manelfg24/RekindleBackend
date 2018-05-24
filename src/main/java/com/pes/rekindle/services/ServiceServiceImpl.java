@@ -151,9 +151,10 @@ public class ServiceServiceImpl implements ServiceService {
 			case "Donation": 
 				return userService.userAlreadyEnrolledDonation(mail, id);
 			case "Job": 
-				userService.userAlreadyEnrolledJob(mail, id);
+				return userService.userAlreadyEnrolledJob(mail, id);
+			default: // no deberia pasar nunca
+				return null;
     	}
-		return null;
 	}
 
     @Override
@@ -299,4 +300,24 @@ public class ServiceServiceImpl implements ServiceService {
         jobRepository.save(job);
 
     }
+
+	@Override
+	public Lodge getLodge(Long id) {
+		return lodgeRepository.findById(id);
+	}
+
+	@Override
+	public Donation getDonation(Long id) {
+		return donationRepository.findById(id);
+	}
+
+	@Override
+	public Education getEducation(Long id) {
+		return educationRepository.findById(id);
+	}
+
+	@Override
+	public Job getJob(Long id) {
+		return jobRepository.findById(id);
+	}
 }
