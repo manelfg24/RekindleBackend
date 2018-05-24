@@ -21,4 +21,6 @@ public interface JobRepository extends Repository<Job, String> {
 
     public Set<Job> findByInscriptions_Mail(String mail);
 
+	public void deleteById(long id);
+
 }

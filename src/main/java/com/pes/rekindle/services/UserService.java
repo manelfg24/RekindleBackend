@@ -1,7 +1,7 @@
 
 package com.pes.rekindle.services;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -37,14 +37,8 @@ public interface UserService {
     DTOUser infoRefugee(String mail);
 
     DTOUser exists(String mail, String password);
-
-    void enrollRefugeeLodge(String refugeeMail, long serviceId);
-
-    void enrollRefugeeEducation(String refugeeMail, long serviceId);
-
-    void enrollRefugeeJob(String refugeeMail, long serviceId);
-
-    void enrollRefugeeDonation(String refugeeMail, long serviceId);
+    
+	void enrollUserToService(String mail, Long id, String userType) throws Exception;
 
     Set<DTOUser> findRefugee(String name, String surname1, String surname2, Date birthdate,
             String sex, String country,
@@ -55,6 +49,8 @@ public interface UserService {
     boolean recoverPassword(String mail, String passwordNew);
 
     Set<DTOService> obtainOwnServices(String mail, String userType);
+    
+	void unenrollUserFromService(String mail, Long id, String serviceType);
 
     Set<DTOChat> listUserChats(String mail);
 
@@ -69,5 +65,15 @@ public interface UserService {
     DTOChat getChat(String mail1, String mail2);
 
     void sendMessage(String mail, long idChat, DTOMessage dtoMessage);
+
+    // Se llama desde el ServiceService
+	Boolean userAlreadyEnrolledLodge(String mail, Long id);
+
+	Boolean userAlreadyEnrolledEducation(String mail, Long id);
+
+	Boolean userAlreadyEnrolledDonation(String mail, Long id);
+
+	Boolean userAlreadyEnrolledJob(String mail, Long id);
+
 
 }

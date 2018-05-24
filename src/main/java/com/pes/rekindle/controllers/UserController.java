@@ -123,44 +123,23 @@ public class UserController {
                 country, town, ethnic, blood, eye, mail);
         return ResponseEntity.status(HttpStatus.OK).body(refugees);
     }
-
-    @RequestMapping(value = "/testLodge", method = RequestMethod.GET)
-    public ResponseEntity<Refugee> lodgeTest() {
-        String refugeeMail;
-        long serviceId;
-        refugeeMail = "felipe@gmail.com";
-        serviceId = 1;
-        userService.enrollRefugeeLodge(refugeeMail, serviceId);
+ 
+    @RequestMapping(value = "/usuarios/{mail}/inscripciones/{id}/{tipo}", method = RequestMethod.POST)
+    public ResponseEntity enrollUserToService(@PathVariable String mail, @PathVariable Long id,
+    		@PathVariable String tipo) throws Exception{
+    	try {
+    		userService.enrollUserToService(mail, id, tipo);
+    	}
+    	catch (Exception e){
+    		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+    	}
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
-
-    @RequestMapping(value = "/testDonation", method = RequestMethod.GET)
-    public ResponseEntity<Refugee> donationTest() {
-        String refugeeMail;
-        long serviceId;
-        refugeeMail = "felipe@gmail.com";
-        serviceId = 1;
-        userService.enrollRefugeeDonation(refugeeMail, serviceId);
-        return ResponseEntity.status(HttpStatus.OK).body(null);
-    }
-
-    @RequestMapping(value = "/testJob", method = RequestMethod.GET)
-    public ResponseEntity<Refugee> jobTest() {
-        String refugeeMail;
-        long serviceId;
-        refugeeMail = "felipe@gmail.com";
-        serviceId = 1;
-        userService.enrollRefugeeJob(refugeeMail, serviceId);
-        return ResponseEntity.status(HttpStatus.OK).body(null);
-    }
-
-    @RequestMapping(value = "/testEducation", method = RequestMethod.GET)
-    public ResponseEntity<Refugee> educationTest() {
-        String refugeeMail;
-        long serviceId;
-        refugeeMail = "felipe@gmail.com";
-        serviceId = 1;
-        userService.enrollRefugeeEducation(refugeeMail, serviceId);
+    
+    @RequestMapping(value = "/usuarios/{mail}/inscripciones/{id}/{tipo}", method = RequestMethod.DELETE)
+    public ResponseEntity unenrollUserFromService(@PathVariable String mail, @PathVariable Long id,
+    		@PathVariable String tipo) throws Exception{
+    	userService.unenrollUserFromService(mail, id, tipo);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 

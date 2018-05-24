@@ -1,4 +1,3 @@
-
 package com.pes.rekindle.repositories;
 
 import java.util.Optional;
@@ -27,9 +26,5 @@ public interface ChatRepository extends Repository<Chat, String> {
     
     public Optional<Chat> findOptionalByMailUser1AndMailUser2(String mail, String mail2);
 
-
-	//public Set<Message> findByMessages_IdChat(long idChat);
-
-	public Chat findById(long idChat);
-
+	  public Chat findById(long idChat);
 }

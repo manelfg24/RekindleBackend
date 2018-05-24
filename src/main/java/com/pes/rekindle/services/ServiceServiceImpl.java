@@ -32,6 +32,9 @@ public class ServiceServiceImpl implements ServiceService {
     DonationRepository donationRepository;
     @Autowired
     JobRepository jobRepository;
+    
+    @Autowired 
+    UserService userService;
 
     @Override
     public void createLodge(DTOLodge dtoLodge) {
@@ -121,14 +124,38 @@ public class ServiceServiceImpl implements ServiceService {
     }
 
     @Override
-    public Boolean deleteService(long id, char serviceType) {
-        return null;
+    public void deleteService(long id, String serviceType) {
+    	switch(serviceType) {
+			case "Lodge": 
+				lodgeRepository.deleteById(id);
+				break;
+			case "Education": 
+				educationRepository.deleteById(id);
+				break;
+			case "Donation": 
+				donationRepository.deleteById(id);
+				break;
+			case "Job": 
+				jobRepository.deleteById(id);
+				break;
+    	}
     }
 
-    @Override
-    public void deleteLodge(Long id) {
-        lodgeRepository.deleteById(id);
-    }
+	@Override
+	public Boolean userAlreadyEnrolled(String mail, Long id, String serviceType) {
+    	switch(serviceType) {
+			case "Lodge": 
+				return userService.userAlreadyEnrolledLodge(mail, id);
+			case "Education": 
+				return userService.userAlreadyEnrolledEducation(mail, id);
+			case "Donation": 
+				return userService.userAlreadyEnrolledDonation(mail, id);
+			case "Job": 
+				return userService.userAlreadyEnrolledJob(mail, id);
+			default: // no deberia pasar nunca
+				return null;
+    	}
+	}
 
     @Override
     public DTOLodge infoLodge(Long id) {
@@ -274,4 +301,23 @@ public class ServiceServiceImpl implements ServiceService {
 
     }
 
+	@Override
+	public Lodge getLodge(Long id) {
+		return lodgeRepository.findById(id);
+	}
+
+	@Override
+	public Donation getDonation(Long id) {
+		return donationRepository.findById(id);
+	}
+
+	@Override
+	public Education getEducation(Long id) {
+		return educationRepository.findById(id);
+	}
+
+	@Override
+	public Job getJob(Long id) {
+		return jobRepository.findById(id);
+	}
 }
