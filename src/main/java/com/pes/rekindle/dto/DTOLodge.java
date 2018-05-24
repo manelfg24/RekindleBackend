@@ -91,12 +91,13 @@ public class DTOLodge {
         this.places = places;
     }
 
-    public Date getDateLimit() {
+    public String getDateLimit() {
         return dateLimit;
     }
 
     public void setDateLimit(Date dateLimit) {
-        this.dateLimit = dateLimit;
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        this.dateLimit = formatter.format(dateLimit);
     }
 
     public String getDescription() {
