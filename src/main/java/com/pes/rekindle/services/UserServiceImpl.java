@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import com.pes.rekindle.dto.DTOChat;
 import com.pes.rekindle.dto.DTOMessage;
+import com.pes.rekindle.dto.DTOReport;
 import com.pes.rekindle.dto.DTOService;
 import com.pes.rekindle.dto.DTOUser;
 import com.pes.rekindle.entities.Admin;
@@ -26,6 +27,7 @@ import com.pes.rekindle.entities.Job;
 import com.pes.rekindle.entities.Lodge;
 import com.pes.rekindle.entities.Message;
 import com.pes.rekindle.entities.Refugee;
+import com.pes.rekindle.entities.Report;
 import com.pes.rekindle.entities.Volunteer;
 import com.pes.rekindle.repositories.AdminRepository;
 import com.pes.rekindle.repositories.ChatRepository;
@@ -35,6 +37,7 @@ import com.pes.rekindle.repositories.JobRepository;
 import com.pes.rekindle.repositories.LodgeRepository;
 import com.pes.rekindle.repositories.MessageRepository;
 import com.pes.rekindle.repositories.RefugeeRepository;
+import com.pes.rekindle.repositories.ReportRepository;
 import com.pes.rekindle.repositories.VolunteerRepository;
 
 @Service
@@ -58,6 +61,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     ServiceService serviceService;
+    
+    @Autowired 
+    ReportRepository reportRepository;
 
     @Autowired
     ChatRepository chatRepository;
@@ -691,6 +697,67 @@ public class UserServiceImpl implements UserService {
          * chat.addMessage(message); chatRepository.save(chat);
          */
     }
+    
+	@Override
+	public void createReport(DTOReport dtoReport) {
+		Report report = new Report(dtoReport);
+		reportRepository.save(report);
+	}
+	
+	@Override
+	public Set<DTOReport> listReports() {
+		Set<Report> reports = reportRepository.findAll();
+		Set<DTOReport> dtoReports = new HashSet<DTOReport>();
+		
+		for(Report report : reports) {
+			DTOReport dtoReport = new DTOReport();
+			dtoReport.setIdReport(report.getId());
+			
+            Optional<Refugee> oRefugee = refugeeRepository
+                    .findOptionalByMail(report.getMailInformer());
+            if (oRefugee.isPresent()) {
+                DTOUser dtoUser = new DTOUser(oRefugee.get());
+                dtoReport.setInformerUser(dtoUser);
+            }
+
+            oRefugee = refugeeRepository.findOptionalByMail(report.getMailReported());
+            if (oRefugee.isPresent()) {
+                DTOUser dtoUser = new DTOUser(oRefugee.get());
+                dtoReport.setReportedUser(dtoUser);
+            }
+            
+            dtoReport.setMotive(report.getMotive());
+            
+            dtoReports.add(dtoReport);
+		}
+		
+		return dtoReports;
+	}
+	
+	@Override
+	public DTOReport getReport(Long id) {
+		Report report = reportRepository.findById(id);
+		
+		DTOReport dtoReport = new DTOReport();
+		dtoReport.setIdReport(report.getId());
+		
+        Optional<Refugee> oRefugee = refugeeRepository
+                .findOptionalByMail(report.getMailInformer());
+        if (oRefugee.isPresent()) {
+            DTOUser dtoUser = new DTOUser(oRefugee.get());
+            dtoReport.setInformerUser(dtoUser);
+        }
+
+        oRefugee = refugeeRepository.findOptionalByMail(report.getMailReported());
+        if (oRefugee.isPresent()) {
+            DTOUser dtoUser = new DTOUser(oRefugee.get());
+            dtoReport.setReportedUser(dtoUser);
+        }
+        
+        dtoReport.setMotive(report.getMotive());
+		
+		return dtoReport;
+	}
 
     // -------------------------------------------------------------------
     @Override

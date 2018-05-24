@@ -15,6 +15,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.pes.rekindle.dto.DTOReport;
+
 @Entity
 @Table(name = "Report")
 public class Report {
@@ -28,6 +30,18 @@ public class Report {
     private String mailReported;
     @NotNull
     private String motive;
+    
+    public Report() {
+        super();
+    }
+    
+    public Report(DTOReport dtoReport) {
+        super();
+        this.id = dtoReport.getIdReport();
+        this.mailInformer = dtoReport.getInformerUser().getMail();
+        this.mailReported = dtoReport.getReportedUser().getMail();
+        this.motive = dtoReport.getMotive();
+    }
     
 	public long getId() {
 		return id;

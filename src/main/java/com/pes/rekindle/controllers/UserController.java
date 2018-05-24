@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.pes.rekindle.dto.DTOChat;
 import com.pes.rekindle.dto.DTOLogInInfo;
 import com.pes.rekindle.dto.DTOMessage;
+import com.pes.rekindle.dto.DTOReport;
 import com.pes.rekindle.dto.DTOUser;
 import com.pes.rekindle.entities.Refugee;
 import com.pes.rekindle.entities.Volunteer;
@@ -196,6 +197,22 @@ public class UserController {
      * mailUser2) { return ResponseEntity.status(HttpStatus.OK).body(userService.newChat(mailUser1,
      * mailUser2)); }
      */
+    
+    @RequestMapping(value = "/reportes", method = RequestMethod.POST)
+    public ResponseEntity createReport(@RequestBody DTOReport dtoReport) {
+    	userService.createReport(dtoReport);
+    	return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+    
+    @RequestMapping(value = "/reportes", method = RequestMethod.GET)
+    public ResponseEntity<Set<DTOReport>> createReport() {
+    	return ResponseEntity.status(HttpStatus.OK).body(userService.listReports());
+    }    
+    
+    @RequestMapping(value = "/reportes/{id}", method = RequestMethod.GET)
+    public ResponseEntity<DTOReport> getReport(@PathVariable Long id) {
+    	return ResponseEntity.status(HttpStatus.OK).body(userService.getReport(id));
+    }    
 
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     public ResponseEntity<String> test() {
