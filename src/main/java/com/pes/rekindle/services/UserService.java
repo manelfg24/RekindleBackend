@@ -2,6 +2,7 @@
 package com.pes.rekindle.services;
 
 import java.sql.Date;
+import java.util.List;
 import java.util.Set;
 
 import com.pes.rekindle.dto.DTOChat;
@@ -57,7 +58,7 @@ public interface UserService {
 
     Set<DTOChat> listUserChats(String mail);
 
-    Set<DTOMessage> listMessagesChat(String mail, long idChat);
+    List<DTOMessage> listMessagesChat(String mail, long idChat);
 
     DTOUser newChat(String mailUser1, String mailUser2);
 

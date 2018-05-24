@@ -3,6 +3,7 @@ package com.pes.rekindle.controllers;
 
 import java.sql.Date;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -171,9 +172,9 @@ public class UserController {
 
     // Todos los mensajes de un chat
     @RequestMapping(value = "/usuarios/{mail}/chats/{idChat}/messages", method = RequestMethod.GET)
-    public ResponseEntity<Set<DTOMessage>> getChatMessages(@PathVariable String mail,
+    public ResponseEntity<List<DTOMessage>> getChatMessages(@PathVariable String mail,
             @PathVariable long idChat) {
-        Set<DTOMessage> dtoMessages = userService.listMessagesChat(mail, idChat);
+        List<DTOMessage> dtoMessages = userService.listMessagesChat(mail, idChat);
         return ResponseEntity.status(HttpStatus.OK).body(dtoMessages);
     }
 
