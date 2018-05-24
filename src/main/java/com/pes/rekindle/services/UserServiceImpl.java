@@ -439,7 +439,8 @@ public class UserServiceImpl implements UserService {
         messages.addAll(chatRepository.findById(idChat).getMessages());
         Collections.sort(messages, new Comparator<Message>() {
             public int compare(Message m1, Message m2) {
-                return (int) (m1.getId() - (m2.getId()));
+            	if(m1.getId() < m2.getId()) return 1;
+            	else return -1;
             }
         });
         Set<DTOMessage> dtoMessages = new HashSet<DTOMessage>();
