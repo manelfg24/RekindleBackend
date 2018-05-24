@@ -1,6 +1,8 @@
 
 package com.pes.rekindle.services;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -32,8 +34,8 @@ public class ServiceServiceImpl implements ServiceService {
     DonationRepository donationRepository;
     @Autowired
     JobRepository jobRepository;
-    
-    @Autowired 
+
+    @Autowired
     UserService userService;
 
     @Override
@@ -45,7 +47,13 @@ public class ServiceServiceImpl implements ServiceService {
         lodge.setPhoneNumber(dtoLodge.getPhoneNumber());
         lodge.setAdress(dtoLodge.getAdress());
         lodge.setPlaces(dtoLodge.getPlaces());
-        lodge.setDateLimit(dtoLodge.getDateLimit());
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date dateLimit = formatter.parse(dtoLodge.getDateLimit());
+            lodge.setDateLimit(dateLimit);
+        } catch (Exception e) {
+
+        }
         lodge.setDescription(dtoLodge.getDescription());
         lodgeRepository.save(lodge);
     }
@@ -101,22 +109,22 @@ public class ServiceServiceImpl implements ServiceService {
         Set<DTOService> dtosService = new HashSet<DTOService>();
         Set<Lodge> lodges = lodgeRepository.findAll();
         for (Lodge lodge : lodges) {
-        	DTOService dtoLodge = new DTOService(lodge);
+            DTOService dtoLodge = new DTOService(lodge);
             dtosService.add(dtoLodge);
         }
         Set<Donation> donations = donationRepository.findAll();
         for (Donation donation : donations) {
-        	DTOService dtoDonation = new DTOService(donation);
+            DTOService dtoDonation = new DTOService(donation);
             dtosService.add(dtoDonation);
         }
         Set<Education> courses = educationRepository.findAll();
         for (Education education : courses) {
-        	DTOService dtoEducation = new DTOService(education);
+            DTOService dtoEducation = new DTOService(education);
             dtosService.add(dtoEducation);
         }
         Set<Job> jobs = jobRepository.findAll();
         for (Job job : jobs) {
-        	DTOService dtoJob = new DTOService(job);
+            DTOService dtoJob = new DTOService(job);
             dtosService.add(dtoJob);
         }
 
@@ -125,52 +133,49 @@ public class ServiceServiceImpl implements ServiceService {
 
     @Override
     public void deleteService(long id, String serviceType) {
-    	switch(serviceType) {
-			case "Lodge": 
-				lodgeRepository.deleteById(id);
-				break;
-			case "Education": 
-				educationRepository.deleteById(id);
-				break;
-			case "Donation": 
-				donationRepository.deleteById(id);
-				break;
-			case "Job": 
-				jobRepository.deleteById(id);
-				break;
-    	}
+        switch (serviceType) {
+            case "Lodge":
+                lodgeRepository.deleteById(id);
+                break;
+            case "Education":
+                educationRepository.deleteById(id);
+                break;
+            case "Donation":
+                donationRepository.deleteById(id);
+                break;
+            case "Job":
+                jobRepository.deleteById(id);
+                break;
+        }
     }
 
-	@Override
-	public Boolean userAlreadyEnrolled(String mail, Long id, String serviceType) {
-    	switch(serviceType) {
-			case "Lodge": 
-				return userService.userAlreadyEnrolledLodge(mail, id);
-			case "Education": 
-				return userService.userAlreadyEnrolledEducation(mail, id);
-			case "Donation": 
-				return userService.userAlreadyEnrolledDonation(mail, id);
-			case "Job": 
-				return userService.userAlreadyEnrolledJob(mail, id);
-			default: // no deberia pasar nunca
-				return null;
-    	}
-	}
+    @Override
+    public Boolean userAlreadyEnrolled(String mail, Long id, String serviceType) {
+        switch (serviceType) {
+            case "Lodge":
+                return userService.userAlreadyEnrolledLodge(mail, id);
+            case "Education":
+                return userService.userAlreadyEnrolledEducation(mail, id);
+            case "Donation":
+                return userService.userAlreadyEnrolledDonation(mail, id);
+            case "Job":
+                return userService.userAlreadyEnrolledJob(mail, id);
+            default: // no deberia pasar nunca
+                return null;
+        }
+    }
 
     @Override
     public DTOLodge infoLodge(Long id) {
         Lodge lodge = lodgeRepository.findById(id);
         DTOLodge dtoLodge = new DTOLodge(lodge);
         /*
-        dtoLodge.setName(lodge.getName());
-        dtoLodge.setVolunteer(lodge.getVolunteer());
-        dtoLodge.setServiceType("Lodge");
-        dtoLodge.setPhoneNumber(lodge.getPhoneNumber());
-        dtoLodge.setAdress(lodge.getAdress());
-        dtoLodge.setPlaces(lodge.getPlaces());
-        dtoLodge.setDateLimit(lodge.getDateLimit());
-        dtoLodge.setDescription(lodge.getDescription());
-        */
+         * dtoLodge.setName(lodge.getName()); dtoLodge.setVolunteer(lodge.getVolunteer());
+         * dtoLodge.setServiceType("Lodge"); dtoLodge.setPhoneNumber(lodge.getPhoneNumber());
+         * dtoLodge.setAdress(lodge.getAdress()); dtoLodge.setPlaces(lodge.getPlaces());
+         * dtoLodge.setDateLimit(lodge.getDateLimit());
+         * dtoLodge.setDescription(lodge.getDescription());
+         */
         return dtoLodge;
     }
 
@@ -179,17 +184,17 @@ public class ServiceServiceImpl implements ServiceService {
         Education education = educationRepository.findById(id);
         DTOEducation dtoEducation = new DTOEducation(education);
         /*
-        dtoEducation.setName(education.getName());
-        dtoEducation.setVolunteer(education.getVolunteer());
-        dtoEducation.setServiceType("Education");
-        dtoEducation.setPhoneNumber(education.getPhoneNumber());
-        dtoEducation.setAdress(education.getAdress());
-        dtoEducation.setAmbit(education.getAmbit());
-        dtoEducation.setRequirements(education.getRequirements());
-        dtoEducation.setSchedule(education.getSchedule());
-        dtoEducation.setPlaces(education.getPlaces());
-        dtoEducation.setDescription(education.getDescription());
-        */
+         * dtoEducation.setName(education.getName());
+         * dtoEducation.setVolunteer(education.getVolunteer());
+         * dtoEducation.setServiceType("Education");
+         * dtoEducation.setPhoneNumber(education.getPhoneNumber());
+         * dtoEducation.setAdress(education.getAdress());
+         * dtoEducation.setAmbit(education.getAmbit());
+         * dtoEducation.setRequirements(education.getRequirements());
+         * dtoEducation.setSchedule(education.getSchedule());
+         * dtoEducation.setPlaces(education.getPlaces());
+         * dtoEducation.setDescription(education.getDescription());
+         */
         return dtoEducation;
     }
 
@@ -198,16 +203,15 @@ public class ServiceServiceImpl implements ServiceService {
         Donation donation = donationRepository.findById(id);
         DTODonation dtoDonation = new DTODonation(donation);
         /*
-        dtoDonation.setName(donation.getName());
-        dtoDonation.setVolunteer(donation.getVolunteer());
-        dtoDonation.setServiceType("Donation");
-        dtoDonation.setPhoneNumber(donation.getPhoneNumber());
-        dtoDonation.setAdress(donation.getAdress());
-        dtoDonation.setPlaces(donation.getPlaces());
-        dtoDonation.setStartTime(donation.getStartTime());
-        dtoDonation.setEndTime(donation.getEndTime());
-        dtoDonation.setDescription(donation.getDescription());
-        */
+         * dtoDonation.setName(donation.getName());
+         * dtoDonation.setVolunteer(donation.getVolunteer());
+         * dtoDonation.setServiceType("Donation");
+         * dtoDonation.setPhoneNumber(donation.getPhoneNumber());
+         * dtoDonation.setAdress(donation.getAdress()); dtoDonation.setPlaces(donation.getPlaces());
+         * dtoDonation.setStartTime(donation.getStartTime());
+         * dtoDonation.setEndTime(donation.getEndTime());
+         * dtoDonation.setDescription(donation.getDescription());
+         */
         return dtoDonation;
     }
 
@@ -216,20 +220,14 @@ public class ServiceServiceImpl implements ServiceService {
         Job job = jobRepository.findById(id);
         DTOJob dtoJob = new DTOJob(job);
         /*
-        dtoJob.setName(job.getName());
-        dtoJob.setVolunteer(job.getVolunteer());
-        dtoJob.setServiceType("Job");
-        dtoJob.setPhoneNumber(job.getPhoneNumber());
-        dtoJob.setAdress(job.getAdress());
-        dtoJob.setCharge(job.getCharge());
-        dtoJob.setRequirements(job.getRequirements());
-        dtoJob.setHoursDay(job.getHoursDay());
-        dtoJob.setHoursWeek(job.getHoursWeek());
-        dtoJob.setContractDuration(job.getContractDuration());
-        dtoJob.setPlaces(job.getPlaces());
-        dtoJob.setSalary(job.getSalary());
-        dtoJob.setDescription(job.getDescription());
-        */
+         * dtoJob.setName(job.getName()); dtoJob.setVolunteer(job.getVolunteer());
+         * dtoJob.setServiceType("Job"); dtoJob.setPhoneNumber(job.getPhoneNumber());
+         * dtoJob.setAdress(job.getAdress()); dtoJob.setCharge(job.getCharge());
+         * dtoJob.setRequirements(job.getRequirements()); dtoJob.setHoursDay(job.getHoursDay());
+         * dtoJob.setHoursWeek(job.getHoursWeek());
+         * dtoJob.setContractDuration(job.getContractDuration()); dtoJob.setPlaces(job.getPlaces());
+         * dtoJob.setSalary(job.getSalary()); dtoJob.setDescription(job.getDescription());
+         */
         return dtoJob;
     }
 
@@ -258,7 +256,13 @@ public class ServiceServiceImpl implements ServiceService {
         lodge.setPhoneNumber(dtoLodge.getPhoneNumber());
         lodge.setAdress(dtoLodge.getAdress());
         lodge.setPlaces(dtoLodge.getPlaces());
-        lodge.setDateLimit(dtoLodge.getDateLimit());
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date dateLimit = formatter.parse(dtoLodge.getDateLimit());
+            lodge.setDateLimit(dateLimit);
+        } catch (Exception e) {
+
+        }
         lodge.setDescription(dtoLodge.getDescription());
         lodgeRepository.save(lodge);
 
@@ -301,23 +305,23 @@ public class ServiceServiceImpl implements ServiceService {
 
     }
 
-	@Override
-	public Lodge getLodge(Long id) {
-		return lodgeRepository.findById(id);
-	}
+    @Override
+    public Lodge getLodge(Long id) {
+        return lodgeRepository.findById(id);
+    }
 
-	@Override
-	public Donation getDonation(Long id) {
-		return donationRepository.findById(id);
-	}
+    @Override
+    public Donation getDonation(Long id) {
+        return donationRepository.findById(id);
+    }
 
-	@Override
-	public Education getEducation(Long id) {
-		return educationRepository.findById(id);
-	}
+    @Override
+    public Education getEducation(Long id) {
+        return educationRepository.findById(id);
+    }
 
-	@Override
-	public Job getJob(Long id) {
-		return jobRepository.findById(id);
-	}
+    @Override
+    public Job getJob(Long id) {
+        return jobRepository.findById(id);
+    }
 }
