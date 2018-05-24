@@ -1,4 +1,3 @@
-
 package com.pes.rekindle.dto;
 
 import java.util.Date;

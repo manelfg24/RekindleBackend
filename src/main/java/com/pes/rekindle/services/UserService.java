@@ -7,6 +7,7 @@ import java.util.Set;
 
 import com.pes.rekindle.dto.DTOChat;
 import com.pes.rekindle.dto.DTOMessage;
+import com.pes.rekindle.dto.DTOReport;
 import com.pes.rekindle.dto.DTOService;
 import com.pes.rekindle.dto.DTOUser;
 import com.pes.rekindle.entities.Volunteer;
@@ -73,5 +74,10 @@ public interface UserService {
 
 	Boolean userAlreadyEnrolledJob(String mail, Long id);
 
+	void createReport(DTOReport dtoReport);
+
+	Set<DTOReport> listReports();
+
+	DTOReport getReport(Long id);
 
 }
