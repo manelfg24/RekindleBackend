@@ -21,6 +21,8 @@ public interface UserService {
     void createRefugee(DTOUser refugee) throws Exception;
 
     DTOUser logInVolunteer(String mail, String password);
+    
+    DTOUser logInAdmin(String mail, String password);
 
     DTOUser logInRefugee(String mail, String password);
 

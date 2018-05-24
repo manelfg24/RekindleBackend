@@ -91,6 +91,9 @@ public class UserServiceImpl implements UserService {
         DTOUser user = logInRefugee(mail, password);
         if (user == null) {
             user = logInVolunteer(mail, password);
+            if(user == null) {
+            	user = logInAdmin(mail, password);
+            }
         }
         return user;
     }
@@ -104,6 +107,16 @@ public class UserServiceImpl implements UserService {
             volunteer = oVolunteer.get();
         }
         return new DTOUser(volunteer);
+    }
+    
+    public DTOUser logInAdmin(String mail, String password) {
+        Optional<Admin> oAdmin = adminRepository.findOptionalByMailAndPassword(mail,
+                password);
+        Admin admin = new Admin();
+        if (oAdmin.isPresent()) {
+        	admin = oAdmin.get();
+        }
+        return new DTOUser(admin);
     }
 
     public DTOUser logInRefugee(String mail, String password) {
