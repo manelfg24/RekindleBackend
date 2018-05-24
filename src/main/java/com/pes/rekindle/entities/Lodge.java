@@ -40,7 +40,8 @@ public class Lodge {
 
     @ManyToMany(cascade = {
             CascadeType.PERSIST,
-            CascadeType.MERGE
+            CascadeType.MERGE,
+            CascadeType.REMOVE
     })
     @JoinTable(name = "LodgeEnrollment", joinColumns = @JoinColumn(name = "lodgeId"), inverseJoinColumns = @JoinColumn(name = "refugeeMail"))
     private Set<Refugee> inscriptions;
