@@ -19,6 +19,7 @@ import com.pes.rekindle.dto.DTOChat;
 import com.pes.rekindle.dto.DTOMessage;
 import com.pes.rekindle.dto.DTOService;
 import com.pes.rekindle.dto.DTOUser;
+import com.pes.rekindle.entities.Admin;
 import com.pes.rekindle.entities.Chat;
 import com.pes.rekindle.entities.Donation;
 import com.pes.rekindle.entities.Education;
@@ -27,6 +28,7 @@ import com.pes.rekindle.entities.Lodge;
 import com.pes.rekindle.entities.Message;
 import com.pes.rekindle.entities.Refugee;
 import com.pes.rekindle.entities.Volunteer;
+import com.pes.rekindle.repositories.AdminRepository;
 import com.pes.rekindle.repositories.ChatRepository;
 import com.pes.rekindle.repositories.DonationRepository;
 import com.pes.rekindle.repositories.EducationRepository;
@@ -41,6 +43,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     VolunteerRepository volunteerRepository;
+    @Autowired
+    AdminRepository adminRepository;
     @Autowired
     RefugeeRepository refugeeRepository;
 
@@ -192,6 +196,11 @@ public class UserServiceImpl implements UserService {
                 password);
         if (oVolunteer.isPresent()) {
             return new DTOUser(oVolunteer.get());
+        }
+        Optional<Admin> oAdmin = adminRepository.findOptionalByMailAndPassword(mail,
+                password);
+        if (oAdmin.isPresent()) {
+            return new DTOUser(oAdmin.get());
         }
         DTOUser loginFail = new DTOUser();
         loginFail.setUserType("Error");
