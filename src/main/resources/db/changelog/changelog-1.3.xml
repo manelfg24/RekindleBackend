@@ -39,4 +39,18 @@
 			</column>
 		</createTable>
 	</changeSet>
+	
+	<changeSet author="bob" id="changePhotoType">
+		<modifyDataType columnName="photo"
+            newDataType="varchar(45000)"
+            tableName="Refugee"/>
+            
+        <modifyDataType columnName="photo"
+            newDataType="varchar(45000)"
+            tableName="Volunteer"/>
+        
+        <modifyDataType columnName="photo"
+            newDataType="varchar(45000)"
+            tableName="Admin"/>
+	</changeSet>
 </databaseChangeLog>
