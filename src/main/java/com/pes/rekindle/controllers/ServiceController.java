@@ -99,7 +99,7 @@ public class ServiceController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @RequestMapping(value = "/refugiados/{mail}/servicios/{id}/{tipo}", method = RequestMethod.POST)
+    @RequestMapping(value = "/refugiados/{mail}/inscripciones/{id}/{tipo}", method = RequestMethod.GET)
     public ResponseEntity<Boolean> userAlreadyEnrolled(@PathVariable String mail, @PathVariable Long id,
     		@PathVariable String tipo) {
         return ResponseEntity.status(HttpStatus.OK).body(serviceService.userAlreadyEnrolled(mail, id, tipo));
