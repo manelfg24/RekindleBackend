@@ -22,6 +22,7 @@ import com.pes.rekindle.dto.DTOMessage;
 import com.pes.rekindle.dto.DTOUser;
 import com.pes.rekindle.entities.Refugee;
 import com.pes.rekindle.entities.Volunteer;
+import com.pes.rekindle.entities.Admin;
 import com.pes.rekindle.services.UserService;
 import com.pusher.rest.Pusher;
 
