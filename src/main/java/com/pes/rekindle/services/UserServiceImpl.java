@@ -436,7 +436,7 @@ public class UserServiceImpl implements UserService {
     public Set<DTOMessage> listMessagesChat(String mail, long idChat) {
         // Set<Message> messages = chatRepository.findByMessages_IdChat(idChat);
         ArrayList<Message> messages = new ArrayList<Message>();
-        messages.addAll(chatRepository.findByIdOrderByTimeStamp(idChat).getMessages());
+        messages.addAll(chatRepository.findByIdOrderByTimeStampAsc(idChat).getMessages());
         /*Collections.sort(messages, new Comparator<Message>() {
             public int compare(Message m1, Message m2) {
                 return m1.getTimestamp().compareTo(m2.getTimestamp());
