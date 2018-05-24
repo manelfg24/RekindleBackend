@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+	http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+	
+	<changeSet author="bob" id="AdminTable">
+		<createTable tableName="Admin">
+			<column name="mail" type="varchar(50)">
+				<constraints primaryKey="true" nullable="false"/>
+			</column>
+			<column name="password" type="varchar(15)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="name" type="varchar(20)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="surname1" type="varchar(20)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="surname2" type="varchar(20)"/>
+		</createTable>
+	</changeSet>
+	
+	<changeSet author="bob" id="ReportTable">	
+		<createTable tableName="Report">
+			<column autoIncrement="true" name="id" type="int">
+				<constraints primaryKey="true" nullable="false"/>
+			</column>
+			<column name="mailInformer" type="varchar(50)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="mailReported" type="varchar(50)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="motive" type="varchar(300)">
+				<constraints nullable="false"/>
+			</column>
+		</createTable>
+	</changeSet>
+	
+	<changeSet author="bob" id="changePhotoType">
+		<modifyDataType columnName="photo"
+            newDataType="varchar(45000)"
+            tableName="Refugee"/>
+            
+        <modifyDataType columnName="photo"
+            newDataType="varchar(45000)"
+            tableName="Volunteer"/>
+        
+        <modifyDataType columnName="photo"
+            newDataType="varchar(45000)"
+            tableName="Admin"/>
+	</changeSet>
+</databaseChangeLog>

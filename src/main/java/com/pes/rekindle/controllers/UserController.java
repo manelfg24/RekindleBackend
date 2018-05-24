@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.pes.rekindle.dto.DTOChat;
 import com.pes.rekindle.dto.DTOLogInInfo;
 import com.pes.rekindle.dto.DTOMessage;
+import com.pes.rekindle.dto.DTOReport;
 import com.pes.rekindle.dto.DTOUser;
 import com.pes.rekindle.entities.Refugee;
 import com.pes.rekindle.entities.Volunteer;
@@ -123,44 +124,23 @@ public class UserController {
                 country, town, ethnic, blood, eye, mail);
         return ResponseEntity.status(HttpStatus.OK).body(refugees);
     }
-
-    @RequestMapping(value = "/testLodge", method = RequestMethod.GET)
-    public ResponseEntity<Refugee> lodgeTest() {
-        String refugeeMail;
-        long serviceId;
-        refugeeMail = "felipe@gmail.com";
-        serviceId = 1;
-        userService.enrollRefugeeLodge(refugeeMail, serviceId);
+ 
+    @RequestMapping(value = "/usuarios/{mail}/inscripciones/{id}/{tipo}", method = RequestMethod.POST)
+    public ResponseEntity enrollUserToService(@PathVariable String mail, @PathVariable Long id,
+    		@PathVariable String tipo) throws Exception{
+    	try {
+    		userService.enrollUserToService(mail, id, tipo);
+    	}
+    	catch (Exception e){
+    		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+    	}
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
-
-    @RequestMapping(value = "/testDonation", method = RequestMethod.GET)
-    public ResponseEntity<Refugee> donationTest() {
-        String refugeeMail;
-        long serviceId;
-        refugeeMail = "felipe@gmail.com";
-        serviceId = 1;
-        userService.enrollRefugeeDonation(refugeeMail, serviceId);
-        return ResponseEntity.status(HttpStatus.OK).body(null);
-    }
-
-    @RequestMapping(value = "/testJob", method = RequestMethod.GET)
-    public ResponseEntity<Refugee> jobTest() {
-        String refugeeMail;
-        long serviceId;
-        refugeeMail = "felipe@gmail.com";
-        serviceId = 1;
-        userService.enrollRefugeeJob(refugeeMail, serviceId);
-        return ResponseEntity.status(HttpStatus.OK).body(null);
-    }
-
-    @RequestMapping(value = "/testEducation", method = RequestMethod.GET)
-    public ResponseEntity<Refugee> educationTest() {
-        String refugeeMail;
-        long serviceId;
-        refugeeMail = "felipe@gmail.com";
-        serviceId = 1;
-        userService.enrollRefugeeEducation(refugeeMail, serviceId);
+    
+    @RequestMapping(value = "/usuarios/{mail}/inscripciones/{id}/{tipo}", method = RequestMethod.DELETE)
+    public ResponseEntity unenrollUserFromService(@PathVariable String mail, @PathVariable Long id,
+    		@PathVariable String tipo) throws Exception{
+    	userService.unenrollUserFromService(mail, id, tipo);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
@@ -217,6 +197,22 @@ public class UserController {
      * mailUser2) { return ResponseEntity.status(HttpStatus.OK).body(userService.newChat(mailUser1,
      * mailUser2)); }
      */
+    
+    @RequestMapping(value = "/reportes", method = RequestMethod.POST)
+    public ResponseEntity createReport(@RequestBody DTOReport dtoReport) {
+    	userService.createReport(dtoReport);
+    	return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+    
+    @RequestMapping(value = "/reportes", method = RequestMethod.GET)
+    public ResponseEntity<Set<DTOReport>> createReport() {
+    	return ResponseEntity.status(HttpStatus.OK).body(userService.listReports());
+    }    
+    
+    @RequestMapping(value = "/reportes/{id}", method = RequestMethod.GET)
+    public ResponseEntity<DTOReport> getReport(@PathVariable Long id) {
+    	return ResponseEntity.status(HttpStatus.OK).body(userService.getReport(id));
+    }    
 
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     public ResponseEntity<String> test() {

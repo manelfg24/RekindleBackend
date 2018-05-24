@@ -15,19 +15,33 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.pes.rekindle.dto.DTOReport;
+
 @Entity
-@Table(name = "Chat")
+@Table(name = "Report")
 public class Report {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @NotNull
-    private String informerUser;
+    private String mailInformer;
     @NotNull
-    private String reportedUser;
+    private String mailReported;
     @NotNull
     private String motive;
+    
+    public Report() {
+        super();
+    }
+    
+    public Report(DTOReport dtoReport) {
+        super();
+        this.id = dtoReport.getIdReport();
+        this.mailInformer = dtoReport.getInformerUser().getMail();
+        this.mailReported = dtoReport.getReportedUser().getMail();
+        this.motive = dtoReport.getMotive();
+    }
     
 	public long getId() {
 		return id;
@@ -35,17 +49,17 @@ public class Report {
 	public void setId(long id) {
 		this.id = id;
 	}
-	public String getInformerUser() {
-		return informerUser;
+	public String getMailInformer() {
+		return mailInformer;
 	}
-	public void setInformerUser(String informerUser) {
-		this.informerUser = informerUser;
+	public void setMailInformer(String mailInformer) {
+		this.mailInformer = mailInformer;
 	}
-	public String getReportedUser() {
-		return reportedUser;
+	public String getMailReported() {
+		return mailReported;
 	}
-	public void setReportedUser(String reportedUser) {
-		this.reportedUser = reportedUser;
+	public void setMailReported(String mailReported) {
+		this.mailReported = mailReported;
 	}
 	public String getMotive() {
 		return motive;

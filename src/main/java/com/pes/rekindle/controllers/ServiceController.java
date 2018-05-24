@@ -99,9 +99,15 @@ public class ServiceController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @RequestMapping(value = "/eliminarAlojamiento/{id}", method = RequestMethod.GET)
-    public ResponseEntity<String> deleteLodge(@PathVariable Long id) {
-        serviceService.deleteLodge(id);
+    @RequestMapping(value = "/refugiados/{mail}/servicios/{id}/{tipo}", method = RequestMethod.POST)
+    public ResponseEntity<Boolean> userAlreadyEnrolled(@PathVariable String mail, @PathVariable Long id,
+    		@PathVariable String tipo) {
+        return ResponseEntity.status(HttpStatus.OK).body(serviceService.userAlreadyEnrolled(mail, id, tipo));
+    }
+    
+    @RequestMapping(value = "/servicios/{id}/{tipo}", method = RequestMethod.DELETE)
+    public ResponseEntity<String> deleteService(@PathVariable Long id, @PathVariable String tipo) {
+        serviceService.deleteService(id, tipo);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
