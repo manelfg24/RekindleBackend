@@ -1,6 +1,7 @@
 
 package com.pes.rekindle.services;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -241,7 +242,9 @@ public class UserServiceImpl implements UserService {
         if (!surname2.equals("")) {
             result.retainAll(refugeeRepository.findBySurname2(surname2));
         }
-        if (!birthdate.equals(Date.parse("1890-01-01"))) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        String birthdateString = formatter.format(birthdate);
+        if (!birthdateString.equals("1890-01-01")) {
             result.retainAll(refugeeRepository.findByBirthdate(birthdate));
         }
         if (!sex.equals("-"))
