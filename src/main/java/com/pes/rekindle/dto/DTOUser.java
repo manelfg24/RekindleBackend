@@ -3,6 +3,7 @@ package com.pes.rekindle.dto;
 
 import java.sql.Date;
 
+import com.pes.rekindle.entities.Admin;
 import com.pes.rekindle.entities.Refugee;
 import com.pes.rekindle.entities.Volunteer;
 
@@ -57,6 +58,17 @@ public class DTOUser {
         this.surname1 = volunteer.getSurname1();
         this.surname2 = volunteer.getSurname2();
         this.photo = volunteer.getPhoto();
+    }
+    
+    public DTOUser(Admin admin) {
+    	super();
+        this.mail = admin.getMail();
+        this.password = admin.getPassword();
+        this.userType = "Admin";
+        this.name = admin.getName();
+        this.surname1 = admin.getSurname1();
+        this.surname2 = admin.getSurname2();
+        this.photo = admin.getPhoto();
     }
 
     public String getMail() {
