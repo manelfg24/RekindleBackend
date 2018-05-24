@@ -61,8 +61,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     ServiceService serviceService;
-    
-    @Autowired 
+
+    @Autowired
     ReportRepository reportRepository;
 
     @Autowired
@@ -97,8 +97,8 @@ public class UserServiceImpl implements UserService {
         DTOUser user = logInRefugee(mail, password);
         if (user == null) {
             user = logInVolunteer(mail, password);
-            if(user == null) {
-            	user = logInAdmin(mail, password);
+            if (user == null) {
+                user = logInAdmin(mail, password);
             }
         }
         return user;
@@ -114,13 +114,13 @@ public class UserServiceImpl implements UserService {
         }
         return new DTOUser(volunteer);
     }
-    
+
     public DTOUser logInAdmin(String mail, String password) {
         Optional<Admin> oAdmin = adminRepository.findOptionalByMailAndPassword(mail,
                 password);
         Admin admin = new Admin();
         if (oAdmin.isPresent()) {
-        	admin = oAdmin.get();
+            admin = oAdmin.get();
         }
         return new DTOUser(admin);
     }
@@ -697,22 +697,22 @@ public class UserServiceImpl implements UserService {
          * chat.addMessage(message); chatRepository.save(chat);
          */
     }
-    
-	@Override
-	public void createReport(DTOReport dtoReport) {
-		Report report = new Report(dtoReport);
-		reportRepository.save(report);
-	}
-	
-	@Override
-	public Set<DTOReport> listReports() {
-		Set<Report> reports = reportRepository.findAll();
-		Set<DTOReport> dtoReports = new HashSet<DTOReport>();
-		
-		for(Report report : reports) {
-			DTOReport dtoReport = new DTOReport();
-			dtoReport.setIdReport(report.getId());
-			
+
+    @Override
+    public void createReport(DTOReport dtoReport) {
+        Report report = new Report(dtoReport);
+        reportRepository.save(report);
+    }
+
+    @Override
+    public Set<DTOReport> listReports() {
+        Set<Report> reports = reportRepository.findAll();
+        Set<DTOReport> dtoReports = new HashSet<DTOReport>();
+
+        for (Report report : reports) {
+            DTOReport dtoReport = new DTOReport();
+            dtoReport.setIdReport(report.getId());
+
             Optional<Refugee> oRefugee = refugeeRepository
                     .findOptionalByMail(report.getMailInformer());
             if (oRefugee.isPresent()) {
@@ -725,22 +725,22 @@ public class UserServiceImpl implements UserService {
                 DTOUser dtoUser = new DTOUser(oRefugee.get());
                 dtoReport.setReportedUser(dtoUser);
             }
-            
+
             dtoReport.setMotive(report.getMotive());
-            
+
             dtoReports.add(dtoReport);
-		}
-		
-		return dtoReports;
-	}
-	
-	@Override
-	public DTOReport getReport(Long id) {
-		Report report = reportRepository.findById(id);
-		
-		DTOReport dtoReport = new DTOReport();
-		dtoReport.setIdReport(report.getId());
-		
+        }
+
+        return dtoReports;
+    }
+
+    @Override
+    public DTOReport getReport(Long id) {
+        Report report = reportRepository.findById(id);
+
+        DTOReport dtoReport = new DTOReport();
+        dtoReport.setIdReport(report.getId());
+
         Optional<Refugee> oRefugee = refugeeRepository
                 .findOptionalByMail(report.getMailInformer());
         if (oRefugee.isPresent()) {
@@ -753,11 +753,11 @@ public class UserServiceImpl implements UserService {
             DTOUser dtoUser = new DTOUser(oRefugee.get());
             dtoReport.setReportedUser(dtoUser);
         }
-        
+
         dtoReport.setMotive(report.getMotive());
-		
-		return dtoReport;
-	}
+
+        return dtoReport;
+    }
 
     // -------------------------------------------------------------------
     @Override
