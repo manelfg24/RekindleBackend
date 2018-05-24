@@ -32,5 +32,4 @@ public interface ChatRepository extends Repository<Chat, String> {
 
 	public Chat findById(long idChat);
 
-	public Chat findByIdOrderByTimeStampAsc(long idChat);
 }
