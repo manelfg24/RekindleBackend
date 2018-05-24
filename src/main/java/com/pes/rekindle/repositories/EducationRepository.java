@@ -21,4 +21,6 @@ public interface EducationRepository extends Repository<Education, String> {
 
     public Set<Education> findByInscriptions_Mail(String mail);
 
+	public void deleteById(long id);
+
 }

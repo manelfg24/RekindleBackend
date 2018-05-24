@@ -69,4 +69,13 @@ public interface UserService {
 
     void sendMessage(String mail, long idChat, DTOMessage dtoMessage);
 
+    // Se llama desde el ServiceService
+	Boolean userAlreadyEnrolledLodge(String mail, Long id);
+
+	Boolean userAlreadyEnrolledEducation(String mail, Long id);
+
+	Boolean userAlreadyEnrolledDonation(String mail, Long id);
+
+	Boolean userAlreadyEnrolledJob(String mail, Long id);
+
 }

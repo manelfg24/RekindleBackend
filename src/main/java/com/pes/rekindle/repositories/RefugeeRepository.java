@@ -84,4 +84,12 @@ public interface RefugeeRepository extends Repository<Refugee, String> {
 	public boolean existsByEyeColor(String eye);
 	
 	public Set<Refugee> findByEyeColor(String eye);
+
+	public Boolean existsByMailAndLodges_Id(String mail, Long id);
+
+	public Boolean existsByMailAndCourses_Id(String mail, Long id);
+
+	public Boolean existsByMailAndDonations_Id(String mail, Long id);
+
+	public Boolean existsByMailAndJobs_Id(String mail, Long id);	
 }

@@ -529,4 +529,24 @@ public class UserServiceImpl implements UserService {
     public String test() {
         return "Hola";
     }
+
+	@Override
+	public Boolean userAlreadyEnrolledLodge(String mail, Long id) {
+		return refugeeRepository.existsByMailAndLodges_Id(mail, id);
+	}
+
+	@Override
+	public Boolean userAlreadyEnrolledEducation(String mail, Long id) {
+		return refugeeRepository.existsByMailAndCourses_Id(mail, id);
+	}
+
+	@Override
+	public Boolean userAlreadyEnrolledDonation(String mail, Long id) {
+		return refugeeRepository.existsByMailAndDonations_Id(mail, id);
+	}
+
+	@Override
+	public Boolean userAlreadyEnrolledJob(String mail, Long id) {
+		return refugeeRepository.existsByMailAndJobs_Id(mail, id);
+	}
 }

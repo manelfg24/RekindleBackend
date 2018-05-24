@@ -21,10 +21,8 @@ public interface ServiceService {
 
     void createJob(DTOJob job);
 
-    Boolean deleteService(long id, char serviceType);
-
-    void deleteLodge(Long id);
-
+    void deleteService(long id, String serviceType);
+    
     DTOLodge infoLodge(Long id);
 
     DTOEducation infoEducation(Long id);
@@ -40,5 +38,7 @@ public interface ServiceService {
     void modifyEducation(long id, DTOEducation education);
 
     void modifyJob(long id, DTOJob job);
+
+	Boolean userAlreadyEnrolled(String mail, Long id, String serviceType);
 
 }
