@@ -437,11 +437,11 @@ public class UserServiceImpl implements UserService {
         // Set<Message> messages = chatRepository.findByMessages_IdChat(idChat);
         ArrayList<Message> messages = new ArrayList<Message>();
         messages.addAll(chatRepository.findById(idChat).getMessages());
-        /*Collections.sort(messages, new Comparator<Message>() {
+        Collections.sort(messages, new Comparator<Message>() {
             public int compare(Message m1, Message m2) {
                 return m1.getTimestamp().compareTo(m2.getTimestamp());
             }
-        });*/
+        });
         Set<DTOMessage> dtoMessages = new HashSet<DTOMessage>();
         for (Message message : messages) {
             DTOMessage dtoMessage = new DTOMessage(message);
