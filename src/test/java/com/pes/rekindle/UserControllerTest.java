@@ -7,7 +7,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -29,7 +28,8 @@ import com.pes.rekindle.controllers.UserController;
 @SpringBootTest(classes = RekindleApplication.class)
 @ContextConfiguration(classes = {
         ServiceConfig.class,
-        RepositoryConfig.class
+        RepositoryConfig.class,
+        EntityConfig.class
 })
 @DataJpaTest
 @AutoConfigureMockMvc
@@ -39,7 +39,8 @@ public class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @InjectMocks
+    // @InjectMocks
+    @Autowired
     private UserController controller;
 
     @Before
