@@ -21,9 +21,7 @@ import com.pes.rekindle.dto.DTOLogInInfo;
 import com.pes.rekindle.dto.DTOMessage;
 import com.pes.rekindle.dto.DTOReport;
 import com.pes.rekindle.dto.DTOUser;
-import com.pes.rekindle.entities.Refugee;
 import com.pes.rekindle.entities.Volunteer;
-import com.pes.rekindle.entities.Admin;
 import com.pes.rekindle.services.UserService;
 import com.pusher.rest.Pusher;
 
@@ -57,10 +55,13 @@ public class UserController {
     public ResponseEntity<DTOUser> logIn(DTOLogInInfo logInInfo) {
         DTOUser dtoUser = userService.exists(logInInfo.getMail(),
                 logInInfo.getPassword());
-        if (dtoUser.getUserType().equals("Refugee") || dtoUser.getUserType().equals("Volunteer")) {
+        if (dtoUser.getUserType().equals("Refugee") || dtoUser.getUserType().equals("Volunteer")
+                || dtoUser.getUserType().equals("Admin")) {
             return ResponseEntity.status(HttpStatus.OK).body(dtoUser);
-        } else
+        } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+
     }
 
     @RequestMapping(value = "/cambiarPassword/{mail}", method = RequestMethod.PUT)
@@ -124,23 +125,22 @@ public class UserController {
                 country, town, ethnic, blood, eye, mail);
         return ResponseEntity.status(HttpStatus.OK).body(refugees);
     }
- 
+
     @RequestMapping(value = "/usuarios/{mail}/inscripciones/{id}/{tipo}", method = RequestMethod.POST)
     public ResponseEntity enrollUserToService(@PathVariable String mail, @PathVariable Long id,
-    		@PathVariable String tipo) throws Exception{
-    	try {
-    		userService.enrollUserToService(mail, id, tipo);
-    	}
-    	catch (Exception e){
-    		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
-    	}
+            @PathVariable String tipo) throws Exception {
+        try {
+            userService.enrollUserToService(mail, id, tipo);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        }
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
-    
-    @RequestMapping(value = "/usuarios/{mail}/inscripciones/{id}/{tipo}", method = RequestMethod.DELETE)
+
+    @RequestMapping(value = "/refugiados/{mail}/inscripciones/{id}/{tipo}", method = RequestMethod.DELETE)
     public ResponseEntity unenrollUserFromService(@PathVariable String mail, @PathVariable Long id,
-    		@PathVariable String tipo) throws Exception{
-    	userService.unenrollUserFromService(mail, id, tipo);
+            @PathVariable String tipo) throws Exception {
+        userService.unenrollUserFromService(mail, id, tipo);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
@@ -197,22 +197,22 @@ public class UserController {
      * mailUser2) { return ResponseEntity.status(HttpStatus.OK).body(userService.newChat(mailUser1,
      * mailUser2)); }
      */
-    
+
     @RequestMapping(value = "/reportes", method = RequestMethod.POST)
     public ResponseEntity createReport(@RequestBody DTOReport dtoReport) {
-    	userService.createReport(dtoReport);
-    	return ResponseEntity.status(HttpStatus.OK).body(null);
+        userService.createReport(dtoReport);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
-    
+
     @RequestMapping(value = "/reportes", method = RequestMethod.GET)
     public ResponseEntity<Set<DTOReport>> createReport() {
-    	return ResponseEntity.status(HttpStatus.OK).body(userService.listReports());
-    }    
-    
+        return ResponseEntity.status(HttpStatus.OK).body(userService.listReports());
+    }
+
     @RequestMapping(value = "/reportes/{id}", method = RequestMethod.GET)
     public ResponseEntity<DTOReport> getReport(@PathVariable Long id) {
-    	return ResponseEntity.status(HttpStatus.OK).body(userService.getReport(id));
-    }    
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getReport(id));
+    }
 
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     public ResponseEntity<String> test() {
