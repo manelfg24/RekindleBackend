@@ -234,6 +234,7 @@ public class ServiceServiceImpl implements ServiceService {
     @Override
     public void modifyDonation(long id, DTODonation dtoDonation) {
         Donation donation = new Donation();
+        donation.setId(id);
         donation.setName(dtoDonation.getName());
         donation.setVolunteer(dtoDonation.getVolunteer());
         donation.setServiceType("Donation");
@@ -250,6 +251,7 @@ public class ServiceServiceImpl implements ServiceService {
     @Override
     public void modifyLodge(long id, DTOLodge dtoLodge) {
         Lodge lodge = new Lodge();
+        lodge.setId(id);
         lodge.setName(dtoLodge.getName());
         lodge.setVolunteer(dtoLodge.getVolunteer());
         lodge.setServiceType("Lodge");
@@ -271,6 +273,7 @@ public class ServiceServiceImpl implements ServiceService {
     @Override
     public void modifyEducation(long id, DTOEducation dtoEducation) {
         Education education = new Education();
+        education.setId(id);
         education.setName(dtoEducation.getName());
         education.setVolunteer(dtoEducation.getVolunteer());
         education.setServiceType("Education");
@@ -288,6 +291,7 @@ public class ServiceServiceImpl implements ServiceService {
     @Override
     public void modifyJob(long id, DTOJob dtoJob) {
         Job job = new Job();
+        job.setId(id);
         job.setName(dtoJob.getName());
         job.setVolunteer(dtoJob.getVolunteer());
         job.setServiceType("Job");
