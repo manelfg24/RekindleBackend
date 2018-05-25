@@ -2,7 +2,9 @@
 package com.pes.rekindle;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -15,14 +17,17 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import com.google.gson.Gson;
 import com.pes.RekindleApplication;
 import com.pes.rekindle.controllers.UserController;
+import com.pes.rekindle.entities.Volunteer;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = RekindleApplication.class)
@@ -33,7 +38,7 @@ import com.pes.rekindle.controllers.UserController;
 })
 @DataJpaTest
 @AutoConfigureMockMvc
-// @Sql(scripts = "classpath:database-init/inserts.sql")
+@Sql(scripts = "classpath:database-init/inserts.sql")
 public class UserControllerTest {
 
     @Autowired
@@ -97,8 +102,18 @@ public class UserControllerTest {
         System.out.println("-----");
     }
 
-    /*
-     * @Test public void test() throws Exception { this.mockMvc .perform(get("/test/{id}",
-     * "Holaxd")) .andExpect(status().isOk()) .andExpect(content().string("Hola")) ; }
-     */
+    @Test
+    public void createVolunteerTest() throws Exception{
+        Volunteer volunteer = new Volunteer();
+        volunteer.setMail("test@gmail.com");
+        volunteer.setName("Test");
+        volunteer.setPassword("1234");
+        volunteer.setSurname1("Force");
+        Gson gson = new Gson();
+        String json = gson.toJson(volunteer);
+        this.mockMvc
+                .perform(post("/voluntarios").contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content(json))
+                .andExpect(status().isOk());
+    }
 }
