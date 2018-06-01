@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import javax.security.auth.login.LoginException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +23,7 @@ import com.pes.rekindle.dto.DTOLogInInfo;
 import com.pes.rekindle.dto.DTOMessage;
 import com.pes.rekindle.dto.DTOReport;
 import com.pes.rekindle.dto.DTOUser;
-import com.pes.rekindle.entities.Volunteer;
+import com.pes.rekindle.exceptions.UserAlreadyExistsException;
 import com.pes.rekindle.services.UserService;
 import com.pusher.rest.Pusher;
 
@@ -32,20 +34,20 @@ public class UserController {
     private UserService userService;
 
     @RequestMapping(value = "/voluntarios", method = RequestMethod.POST)
-    public ResponseEntity createVolunteer(@RequestBody Volunteer volunteer) {
+    public ResponseEntity<Void> createVolunteer(@RequestBody DTOUser volunteer) {
         try {
             userService.createVolunteer(volunteer);
-        } catch (Exception e) {
+        } catch (UserAlreadyExistsException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         }
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
     @RequestMapping(value = "/refugiados", method = RequestMethod.POST)
-    public ResponseEntity createRefugee(@RequestBody DTOUser refugee) {
+    public ResponseEntity<Void> createRefugee(@RequestBody DTOUser refugee) {
         try {
             userService.createRefugee(refugee);
-        } catch (Exception e) {
+        } catch (UserAlreadyExistsException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         }
         return ResponseEntity.status(HttpStatus.OK).body(null);
@@ -53,29 +55,28 @@ public class UserController {
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<DTOUser> logIn(DTOLogInInfo logInInfo) {
-        DTOUser dtoUser = userService.exists(logInInfo.getMail(),
-                logInInfo.getPassword());
-        if (dtoUser.getUserType().equals("Refugee") || dtoUser.getUserType().equals("Volunteer")
-                || dtoUser.getUserType().equals("Admin")) {
-            return ResponseEntity.status(HttpStatus.OK).body(dtoUser);
-        } else {
+        DTOUser dtoUser;
+        try {
+            dtoUser = userService.getUser(logInInfo);
+        } catch (LoginException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
-
+        return ResponseEntity.status(HttpStatus.OK).body(dtoUser);
     }
 
     @RequestMapping(value = "/cambiarPassword/{mail}", method = RequestMethod.PUT)
-    public ResponseEntity changePassword(@PathVariable String mail, String passwordOld,
+    public ResponseEntity<Void> changePassword(@PathVariable String mail, String passwordOld,
             String passwordNew) {
-        if (userService.changePassword(mail, passwordOld, passwordNew)) {
+        try {
+            userService.changePassword(mail, passwordOld, passwordNew);
             return ResponseEntity.status(HttpStatus.OK).body(null);
-        } else {
+        } catch (LoginException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
 
     @RequestMapping(value = "/recuperarPassword/{mail}", method = RequestMethod.PUT)
-    public ResponseEntity changePassword(@PathVariable String mail, String passwordNew) {
+    public ResponseEntity<Void> changePassword(@PathVariable String mail, String passwordNew) {
         if (userService.recoverPassword(mail, passwordNew)) {
             return ResponseEntity.status(HttpStatus.OK).body(null);
         } else {
@@ -84,14 +85,14 @@ public class UserController {
     }
 
     @RequestMapping(value = "/voluntarios/{mail}", method = RequestMethod.PUT)
-    public ResponseEntity modifyProfileVolunteer(@RequestBody DTOUser dtoUser) {
+    public ResponseEntity<Void> modifyProfileVolunteer(@RequestBody DTOUser dtoUser) {
         // Cuidado tema seguridad
         userService.modifyProfileVolunteer(dtoUser);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
     @RequestMapping(value = "/refugiados/{mail}", method = RequestMethod.PUT)
-    public ResponseEntity modifyProfileRefugee(@RequestBody DTOUser refugee) {
+    public ResponseEntity<Void> modifyProfileRefugee(@RequestBody DTOUser refugee) {
         userService.modifyProfileRefugee(refugee);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
@@ -127,7 +128,8 @@ public class UserController {
     }
 
     @RequestMapping(value = "/usuarios/{mail}/inscripciones/{id}/{tipo}", method = RequestMethod.POST)
-    public ResponseEntity enrollUserToService(@PathVariable String mail, @PathVariable Long id,
+    public ResponseEntity<Void> enrollUserToService(@PathVariable String mail,
+            @PathVariable Long id,
             @PathVariable String tipo) throws Exception {
         try {
             userService.enrollUserToService(mail, id, tipo);
@@ -138,7 +140,8 @@ public class UserController {
     }
 
     @RequestMapping(value = "/refugiados/{mail}/inscripciones/{id}/{tipo}", method = RequestMethod.DELETE)
-    public ResponseEntity unenrollUserFromService(@PathVariable String mail, @PathVariable Long id,
+    public ResponseEntity<Void> unenrollUserFromService(@PathVariable String mail,
+            @PathVariable Long id,
             @PathVariable String tipo) throws Exception {
         userService.unenrollUserFromService(mail, id, tipo);
         return ResponseEntity.status(HttpStatus.OK).body(null);
@@ -179,7 +182,7 @@ public class UserController {
 
     // Enviar mensaje
     @RequestMapping(value = "/usuarios/{mail}/chats/{idChat}/messages", method = RequestMethod.POST)
-    public ResponseEntity sendMessage(@PathVariable String mail,
+    public ResponseEntity<Void> sendMessage(@PathVariable String mail,
             @PathVariable long idChat, @RequestBody DTOMessage dtoMessage) {
 
         userService.sendMessage(mail, idChat, dtoMessage);
@@ -199,7 +202,7 @@ public class UserController {
      */
 
     @RequestMapping(value = "/reportes", method = RequestMethod.POST)
-    public ResponseEntity createReport(@RequestBody DTOReport dtoReport) {
+    public ResponseEntity<Void> createReport(@RequestBody DTOReport dtoReport) {
         userService.createReport(dtoReport);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
@@ -222,7 +225,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/test2", method = RequestMethod.GET)
-    public ResponseEntity test2() {
+    public ResponseEntity<Void> test2() {
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 }

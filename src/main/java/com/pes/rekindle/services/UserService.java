@@ -5,24 +5,27 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import javax.security.auth.login.LoginException;
+
 import com.pes.rekindle.dto.DTOChat;
+import com.pes.rekindle.dto.DTOLogInInfo;
 import com.pes.rekindle.dto.DTOMessage;
 import com.pes.rekindle.dto.DTOReport;
 import com.pes.rekindle.dto.DTOService;
 import com.pes.rekindle.dto.DTOUser;
-import com.pes.rekindle.entities.Volunteer;
+import com.pes.rekindle.exceptions.UserAlreadyExistsException;
 
 public interface UserService {
 
     // boolean logIn(String user, String password);
     Object logIn(String user, String password);
 
-    void createVolunteer(Volunteer volunteer) throws Exception;
+    void createVolunteer(DTOUser volunteer) throws UserAlreadyExistsException;
 
-    void createRefugee(DTOUser refugee) throws Exception;
+    void createRefugee(DTOUser refugee) throws UserAlreadyExistsException;
 
     DTOUser logInVolunteer(String mail, String password);
-    
+
     DTOUser logInAdmin(String mail, String password);
 
     DTOUser logInRefugee(String mail, String password);
@@ -39,21 +42,21 @@ public interface UserService {
 
     DTOUser infoRefugee(String mail);
 
-    DTOUser exists(String mail, String password);
-    
-	void enrollUserToService(String mail, Long id, String userType) throws Exception;
+    DTOUser getUser(DTOLogInInfo dtoLogInInfo) throws LoginException;
+
+    void enrollUserToService(String mail, Long id, String userType) throws Exception;
 
     Set<DTOUser> findRefugee(String name, String surname1, String surname2, Date birthdate,
             String sex, String country,
             String town, String ethnic, String blood, String eye, String mail);
 
-    boolean changePassword(String mail, String passwordOld, String passwordNew);
+    void changePassword(String mail, String passwordOld, String passwordNew) throws LoginException;
 
     boolean recoverPassword(String mail, String passwordNew);
 
     Set<DTOService> obtainOwnServices(String mail, String userType);
-    
-	void unenrollUserFromService(String mail, Long id, String serviceType);
+
+    void unenrollUserFromService(String mail, Long id, String serviceType);
 
     Set<DTOChat> listUserChats(String mail);
 
@@ -68,18 +71,18 @@ public interface UserService {
     void sendMessage(String mail, long idChat, DTOMessage dtoMessage);
 
     // Se llama desde el ServiceService
-	Boolean userAlreadyEnrolledLodge(String mail, Long id);
+    Boolean userAlreadyEnrolledLodge(String mail, Long id);
 
-	Boolean userAlreadyEnrolledEducation(String mail, Long id);
+    Boolean userAlreadyEnrolledEducation(String mail, Long id);
 
-	Boolean userAlreadyEnrolledDonation(String mail, Long id);
+    Boolean userAlreadyEnrolledDonation(String mail, Long id);
 
-	Boolean userAlreadyEnrolledJob(String mail, Long id);
+    Boolean userAlreadyEnrolledJob(String mail, Long id);
 
-	void createReport(DTOReport dtoReport);
+    void createReport(DTOReport dtoReport);
 
-	Set<DTOReport> listReports();
+    Set<DTOReport> listReports();
 
-	DTOReport getReport(Long id);
+    DTOReport getReport(Long id);
 
 }

@@ -3,23 +3,20 @@ package com.pes.rekindle.dto;
 
 import java.util.Date;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
-
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.pes.rekindle.entities.Message;
-import com.pes.rekindle.entities.Refugee;
 
+@JsonInclude(Include.NON_NULL)
 public class DTOMessage {
     private long id;
-    
+
     private long idChat;
-    
+
     private DTOUser owner;
-    
+
     private String content;
-    
+
     private Date timestamp;
 
     public DTOMessage() {
@@ -33,47 +30,45 @@ public class DTOMessage {
         this.content = message.getContent();
         this.timestamp = message.getTimestamp();
     }
-    
-	public long getId() {
-		return id;
-	}
 
-	public void setId(long id) {
-		this.id = id;
-	}
+    public long getId() {
+        return id;
+    }
 
-	public long getIdChat() {
-		return idChat;
-	}
+    public void setId(long id) {
+        this.id = id;
+    }
 
-	public void setIdChat(long idChat) {
-		this.idChat = idChat;
-	}
+    public long getIdChat() {
+        return idChat;
+    }
 
-	public DTOUser getOwner() {
-		return owner;
-	}
+    public void setIdChat(long idChat) {
+        this.idChat = idChat;
+    }
 
-	public void setOwner(DTOUser owner) {
-		this.owner = owner;
-	}
+    public DTOUser getOwner() {
+        return owner;
+    }
 
-	public String getContent() {
-		return content;
-	}
+    public void setOwner(DTOUser owner) {
+        this.owner = owner;
+    }
 
-	public void setContent(String content) {
-		this.content = content;
-	}
+    public String getContent() {
+        return content;
+    }
 
-	public Date getTimestamp() {
-		return timestamp;
-	}
+    public void setContent(String content) {
+        this.content = content;
+    }
 
-	public void setTimestamp(Date timestamp) {
-		this.timestamp = timestamp;
-	}
-    
-    
+    public Date getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
+    }
 
 }
