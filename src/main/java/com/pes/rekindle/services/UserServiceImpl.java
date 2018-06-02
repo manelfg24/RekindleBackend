@@ -12,10 +12,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.security.auth.login.LoginException;
+
+import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.pes.rekindle.dto.DTOChat;
+import com.pes.rekindle.dto.DTOLogInInfo;
 import com.pes.rekindle.dto.DTOMessage;
 import com.pes.rekindle.dto.DTOReport;
 import com.pes.rekindle.dto.DTOService;
@@ -30,6 +34,7 @@ import com.pes.rekindle.entities.Message;
 import com.pes.rekindle.entities.Refugee;
 import com.pes.rekindle.entities.Report;
 import com.pes.rekindle.entities.Volunteer;
+import com.pes.rekindle.exceptions.UserAlreadyExistsException;
 import com.pes.rekindle.repositories.AdminRepository;
 import com.pes.rekindle.repositories.ChatRepository;
 import com.pes.rekindle.repositories.DonationRepository;
@@ -50,7 +55,6 @@ public class UserServiceImpl implements UserService {
     AdminRepository adminRepository;
     @Autowired
     RefugeeRepository refugeeRepository;
-
     @Autowired
     LodgeRepository lodgeRepository;
     @Autowired
@@ -71,26 +75,38 @@ public class UserServiceImpl implements UserService {
     @Autowired
     MessageRepository messageRepository;
 
-    public void createVolunteer(Volunteer volunteer) throws Exception {
-        Optional<Volunteer> oVolunteer = volunteerRepository
-                .findOptionalByMail(volunteer.getMail());
-        Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMail(volunteer.getMail());
-        if (oVolunteer.isPresent() || oRefugee.isPresent()) {
-            throw new Exception();
+    @Autowired
+    DozerBeanMapper mapper;
+
+    private boolean exists(DTOUser dtoUser) {
+        Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMail(dtoUser.getMail());
+        if (oVolunteer.isPresent()) {
+            return true;
         } else {
+            Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMail(dtoUser.getMail());
+            if (oRefugee.isPresent()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void createVolunteer(DTOUser dtoVolunteer) throws UserAlreadyExistsException {
+        if (exists(dtoVolunteer)) {
+            throw new UserAlreadyExistsException();
+        } else {
+            Volunteer volunteer = mapper.map(dtoVolunteer, Volunteer.class);
             volunteerRepository.save(volunteer);
         }
     }
 
     @Override
-    public void createRefugee(DTOUser DTOUser) throws Exception {
-        Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMail(DTOUser.getMail());
-        Optional<Volunteer> oVolunteer = volunteerRepository
-                .findOptionalByMail(DTOUser.getMail());
-        if (oRefugee.isPresent() || oVolunteer.isPresent()) {
-            throw new Exception();
+    public void createRefugee(DTOUser dtoRefugee) throws UserAlreadyExistsException {
+        if (exists(dtoRefugee)) {
+            throw new UserAlreadyExistsException();
         } else {
-            refugeeRepository.save(new Refugee(DTOUser));
+            Refugee refugee = mapper.map(dtoRefugee, Refugee.class);
+            refugeeRepository.save(refugee);
         }
     }
 
@@ -105,7 +121,6 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    // Mirar visibilidad
     public DTOUser logInVolunteer(String mail, String password) {
         Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMailAndPassword(mail,
                 password);
@@ -205,25 +220,32 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public DTOUser exists(String mail, String password) {
-        Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMailAndPassword(mail,
-                password);
+    public DTOUser getUser(DTOLogInInfo dtoLogInInfo) throws LoginException {
+        Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMailAndPassword(
+                dtoLogInInfo.getMail(),
+                dtoLogInInfo.getPassword());
         if (oRefugee.isPresent()) {
-            return new DTOUser(oRefugee.get());
+            DTOUser refugee = mapper.map(oRefugee.get(), DTOUser.class);
+            return refugee;
         }
-        Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMailAndPassword(mail,
-                password);
+
+        Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMailAndPassword(
+                dtoLogInInfo.getMail(),
+                dtoLogInInfo.getPassword());
         if (oVolunteer.isPresent()) {
-            return new DTOUser(oVolunteer.get());
+            DTOUser volunteer = mapper.map(oVolunteer.get(), DTOUser.class);
+            return volunteer;
         }
-        Optional<Admin> oAdmin = adminRepository.findOptionalByMailAndPassword(mail,
-                password);
+
+        Optional<Admin> oAdmin = adminRepository.findOptionalByMailAndPassword(
+                dtoLogInInfo.getMail(),
+                dtoLogInInfo.getPassword());
         if (oAdmin.isPresent()) {
-            return new DTOUser(oAdmin.get());
+            DTOUser admin = mapper.map(oAdmin.get(), DTOUser.class);
+            return admin;
+        } else {
+            throw new LoginException();
         }
-        DTOUser loginFail = new DTOUser();
-        loginFail.setUserType("Error");
-        return loginFail;
     }
 
     @Override
@@ -277,28 +299,34 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean changePassword(String mail, String passwordOld, String passwordNew) {
-        Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMailAndPassword(mail,
-                passwordOld);
-        if (oRefugee.isPresent()) {
-            Refugee refugee = oRefugee.get();
-            if (refugee.getPassword().equals(passwordOld)) {
-                refugee.setPassword(passwordNew);
-                refugeeRepository.save(refugee);
-                return true;
+    public void changePassword(String mail, String passwordOld, String passwordNew)
+            throws LoginException {
+        DTOLogInInfo dtoLogInInfo = new DTOLogInInfo();
+        dtoLogInInfo.setMail(mail);
+        dtoLogInInfo.setPassword(passwordOld);
+        try {
+            DTOUser dtoUser = getUser(dtoLogInInfo);
+            dtoUser.setPassword(passwordNew);
+            switch (dtoUser.getUserType()) {
+                case "Volunteer":
+                    Volunteer volunteer = mapper.map(dtoUser, Volunteer.class);
+                    volunteer.setPassword(passwordNew);
+                    volunteerRepository.save(volunteer);
+                    break;
+                case "Refugee":
+                    Refugee refugee = mapper.map(dtoUser, Refugee.class);
+                    refugee.setPassword(passwordNew);
+                    refugeeRepository.save(refugee);
+                    break;
+                case "Admin":
+                    Admin admin = mapper.map(dtoUser, Admin.class);
+                    admin.setPassword(passwordNew);
+                    adminRepository.save(admin);
+                    break;
             }
+        } catch (LoginException e) {
+            throw new LoginException();
         }
-        Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMailAndPassword(mail,
-                passwordOld);
-        if (oVolunteer.isPresent()) {
-            Volunteer volunteer = oVolunteer.get();
-            if (volunteer.getPassword().equals(passwordOld)) {
-                volunteer.setPassword(passwordNew);
-                volunteerRepository.save(volunteer);
-                return true;
-            }
-        }
-        return false;
     }
 
     @Override
@@ -395,6 +423,7 @@ public class UserServiceImpl implements UserService {
             refugee.setLodges(lodges);
             lodge.setInscriptions(refugees);
 
+            // sobra un save
             refugeeRepository.save(refugee);
             lodgeRepository.save(lodge);
         }
