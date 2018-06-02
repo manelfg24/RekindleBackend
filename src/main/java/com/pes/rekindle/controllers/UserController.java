@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pes.rekindle.dto.DTOChat;
+import com.pes.rekindle.dto.DTOLink;
 import com.pes.rekindle.dto.DTOLogInInfo;
 import com.pes.rekindle.dto.DTOMessage;
 import com.pes.rekindle.dto.DTOReport;
@@ -216,7 +217,30 @@ public class UserController {
     public ResponseEntity<DTOReport> getReport(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getReport(id));
     }
+    
+    @RequestMapping(value = "/links", method = RequestMethod.POST)
+    public ResponseEntity<Void> createLink(@RequestBody DTOLink dtoLink) {
+        userService.createLink(dtoLink);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+    
+    @RequestMapping(value = "/links", method = RequestMethod.GET)
+    public ResponseEntity<Set<DTOLink>> listLinks() {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.listLinks());
+    }
+    
+    @RequestMapping(value = "/links/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<Void> modifyLink(@PathVariable Long id, @RequestBody DTOLink dtoLink) {
+    	userService.modifyLink(dtoLink);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
 
+    @RequestMapping(value = "/links/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<Void> deleteLink(@PathVariable Long id) {
+    	userService.deleteLink(id);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+    
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     public ResponseEntity<String> test() {
 

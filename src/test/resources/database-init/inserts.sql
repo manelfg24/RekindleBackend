@@ -14,3 +14,5 @@ INSERT INTO Education VALUES(1, 'e', 'NombreEdu', 'roger@gmail.com', 93427512, '
 INSERT INTO Education VALUES(2, 'e', 'NombreEdu', 'alex@gmail.com', 93427512, 'adress education two', 'carpinteria', 'requirements for education 2', 'schedule dos' ,32, 50, 'Descripción Education service');
 
 INSERT INTO Job VALUES(1, 'j', 'Nombre Job 1', 'roger@gmail.com', 93427512, 'adress job 1','cargo del job', 'requirements para el job', 5, 25, 12, 5000, 1,'Descripción Job service');
+
+INSERT INTO Link VALUES('0', 'Test', 'www.test.com', 'Link para testear');

@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.security.auth.login.LoginException;
 
 import com.pes.rekindle.dto.DTOChat;
+import com.pes.rekindle.dto.DTOLink;
 import com.pes.rekindle.dto.DTOLogInInfo;
 import com.pes.rekindle.dto.DTOMessage;
 import com.pes.rekindle.dto.DTOReport;
@@ -84,5 +85,13 @@ public interface UserService {
     Set<DTOReport> listReports();
 
     DTOReport getReport(Long id);
+
+	void createLink(DTOLink dtoLink);
+
+	Set<DTOLink> listLinks();
+
+	void modifyLink(DTOLink dtoLink);
+
+	void deleteLink(Long id);
 
 }

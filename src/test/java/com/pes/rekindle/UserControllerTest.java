@@ -3,9 +3,13 @@ package com.pes.rekindle;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.Before;
@@ -28,6 +32,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import com.google.gson.Gson;
 import com.pes.RekindleApplication;
 import com.pes.rekindle.controllers.UserController;
+import com.pes.rekindle.entities.Link;
 import com.pes.rekindle.entities.Refugee;
 import com.pes.rekindle.entities.Volunteer;
 
@@ -136,6 +141,7 @@ public class UserControllerTest {
                 .andExpect(status().isOk());
     }
 
+    @Test
     public void nonExistentUserLoginShouldReturnBadRequestTest() throws Exception {
         this.mockMvc
                 .perform(post("/login")
@@ -144,6 +150,8 @@ public class UserControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
+    /*
+    @Test
     public void changeUserPasswordTest() throws Exception {
         MvcResult result = mockMvc
                 .perform(put("/cambiarPassword/roger@gmail.com")
@@ -165,5 +173,80 @@ public class UserControllerTest {
         System.out.println("--------------------------------------------------------------");
         assertEquals(result.getResponse(), "aleixdios");
     }
-
+    */
+    
+    @Test
+    public void createLinkTest() throws Exception {
+    	Link link = new Link();
+    	link.setType("Test");
+    	link.setUrl("www.test.com");
+    	link.setDescription("Link de prueba");
+    	Gson gson = new Gson();
+    	String json = gson.toJson(link);
+        this.mockMvc
+        	.perform(post("/links").contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(json))
+        	.andExpect(status().isOk());
+    }
+    
+    @Test
+    public void listLinksTest() throws Exception {
+    	this.mockMvc
+	    	.perform(get("/links"))
+	    	.andExpect(status().isOk())
+	    	.andExpect(content().contentType("application/json;charset=UTF-8"))
+            .andExpect(jsonPath("$.[0].id").value(0))
+            .andExpect(jsonPath("$.[0].type").value("Test"))
+            .andExpect(jsonPath("$.[0].url").value("www.test.com"))
+            .andExpect(jsonPath("$.[0].description").value("Link para testear"));    	
+    }
+    
+    @Test
+    public void modifyLinkTest() throws Exception {
+    	Link link = new Link();
+    	link.setId(0);
+    	link.setType("Test");
+    	link.setUrl("www.test.com");
+    	link.setDescription("La descripcion se ha modificado");
+    	Gson gson = new Gson();
+    	String json = gson.toJson(link);
+        this.mockMvc
+        	.perform(put("/links/0").contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(json))
+        	.andExpect(status().isOk())
+        	.andDo(print());
+        
+    	this.mockMvc
+    	.perform(get("/links"))
+    	.andExpect(status().isOk())
+    	.andExpect(content().contentType("application/json;charset=UTF-8"))
+        .andExpect(jsonPath("$.[0].id").value(0))
+        .andExpect(jsonPath("$.[0].type").value("Test"))
+        .andExpect(jsonPath("$.[0].url").value("www.test.com"))
+        .andExpect(jsonPath("$.[0].description").value("La descripcion se ha modificado"));        
+    }   
+    
+    @Test
+    public void deleteLinkTest() throws Exception {
+        this.mockMvc
+        	.perform(delete("/links/0"))
+        	.andExpect(status().isOk());
+    } 
+    
+    /*
+    @Test
+    public void listLinksTest() throws Exception {
+    	
+    	MvcResult result = this.mockMvc
+	    	.perform(get("/links")).andReturn(); 	
+    	
+    	String s = result.getResponse().getContentAsString();
+    	
+    	System.out.println("---------------------------------------------");
+    	System.out.println(s);
+    	System.out.println("---------------------------------------------");
+    	
+    	assertEquals(1, 0);
+    }
+    */
 }

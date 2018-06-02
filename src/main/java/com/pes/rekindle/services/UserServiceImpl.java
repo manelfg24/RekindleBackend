@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.pes.rekindle.dto.DTOChat;
+import com.pes.rekindle.dto.DTOLink;
 import com.pes.rekindle.dto.DTOLogInInfo;
 import com.pes.rekindle.dto.DTOMessage;
 import com.pes.rekindle.dto.DTOReport;
@@ -29,6 +30,7 @@ import com.pes.rekindle.entities.Chat;
 import com.pes.rekindle.entities.Donation;
 import com.pes.rekindle.entities.Education;
 import com.pes.rekindle.entities.Job;
+import com.pes.rekindle.entities.Link;
 import com.pes.rekindle.entities.Lodge;
 import com.pes.rekindle.entities.Message;
 import com.pes.rekindle.entities.Refugee;
@@ -40,6 +42,7 @@ import com.pes.rekindle.repositories.ChatRepository;
 import com.pes.rekindle.repositories.DonationRepository;
 import com.pes.rekindle.repositories.EducationRepository;
 import com.pes.rekindle.repositories.JobRepository;
+import com.pes.rekindle.repositories.LinkRepository;
 import com.pes.rekindle.repositories.LodgeRepository;
 import com.pes.rekindle.repositories.MessageRepository;
 import com.pes.rekindle.repositories.RefugeeRepository;
@@ -74,6 +77,9 @@ public class UserServiceImpl implements UserService {
     ChatRepository chatRepository;
     @Autowired
     MessageRepository messageRepository;
+    
+    @Autowired
+    LinkRepository linkRepository;
 
     @Autowired
     DozerBeanMapper mapper;
@@ -806,6 +812,34 @@ public class UserServiceImpl implements UserService {
 
         return dtoReport;
     }
+    
+	@Override
+	public void createLink(DTOLink dtoLink) {
+		Link link = mapper.map(dtoLink, Link.class);
+		linkRepository.save(link);		
+	}
+	
+	@Override
+	public Set<DTOLink> listLinks() {
+		Set<Link> links = linkRepository.findAll();
+		Set<DTOLink> dtoLinks = new HashSet();
+		for(Link link : links) {
+			DTOLink auxiliarLink = mapper.map(link, DTOLink.class);
+			dtoLinks.add(auxiliarLink);
+		}
+		return dtoLinks;
+ 	}
+	
+	@Override
+	public void modifyLink(DTOLink dtoLink) {
+		Link link = linkRepository.findById(dtoLink.getId());
+		link.updateLink(dtoLink);
+	}
+	
+	@Override
+	public void deleteLink(Long id) {		
+		linkRepository.deleteById(id);
+	}
 
     // -------------------------------------------------------------------
     @Override
