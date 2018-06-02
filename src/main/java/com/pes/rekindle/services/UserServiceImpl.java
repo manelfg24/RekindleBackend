@@ -578,7 +578,10 @@ public class UserServiceImpl implements UserService {
                 } else {
                     Optional<Volunteer> oVolunteer = volunteerRepository
                             .findOptionalByMail(chat.getMailUser1());
-                    DTOUser dtoUser = new DTOUser(oVolunteer.get());
+                    DTOUser dtoUser = null;
+                    if (oVolunteer.isPresent()) {
+                        dtoUser = new DTOUser(oVolunteer.get());
+                    }
                     dtoChat.setUser1(dtoUser);
                 }
 
@@ -589,7 +592,11 @@ public class UserServiceImpl implements UserService {
                 } else {
                     Optional<Volunteer> oVolunteer = volunteerRepository
                             .findOptionalByMail(chat.getMailUser2());
-                    DTOUser dtoUser = new DTOUser(oVolunteer.get());
+                    DTOUser dtoUser = null;
+                    if (oVolunteer.isPresent()) {
+                        dtoUser = new DTOUser(oVolunteer.get());
+                    }
+
                     dtoChat.setUser2(dtoUser);
                 }
                 dtoChats.add(dtoChat);
@@ -634,7 +641,10 @@ public class UserServiceImpl implements UserService {
             } else {
                 Optional<Volunteer> oVolunteer = volunteerRepository
                         .findOptionalByMail(message.getMailSender());
-                DTOUser dtoUser = new DTOUser(oVolunteer.get());
+                DTOUser dtoUser = null;
+                if (oVolunteer.isPresent()) {
+                    dtoUser = new DTOUser(oVolunteer.get());
+                }
                 dtoMessage.setOwner(dtoUser);
             }
             dtoMessages.add(dtoMessage);
@@ -668,7 +678,10 @@ public class UserServiceImpl implements UserService {
         } else {
             Optional<Volunteer> oVolunteer = volunteerRepository
                     .findOptionalByMail(chat.getMailUser1());
-            DTOUser dtoUser = new DTOUser(oVolunteer.get());
+            DTOUser dtoUser = null;
+            if (oVolunteer.isPresent()) {
+                dtoUser = new DTOUser(oVolunteer.get());
+            }
             dtoChat.setUser1(dtoUser);
         }
 
@@ -679,7 +692,10 @@ public class UserServiceImpl implements UserService {
         } else {
             Optional<Volunteer> oVolunteer = volunteerRepository
                     .findOptionalByMail(chat.getMailUser2());
-            DTOUser dtoUser = new DTOUser(oVolunteer.get());
+            DTOUser dtoUser = null;
+            if (oVolunteer.isPresent()) {
+                dtoUser = new DTOUser(oVolunteer.get());
+            }
             dtoChat.setUser2(dtoUser);
         }
         return dtoChat;

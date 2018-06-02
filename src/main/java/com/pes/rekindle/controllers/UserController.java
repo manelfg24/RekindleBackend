@@ -220,4 +220,9 @@ public class UserController {
         String id = userService.test();
         return ResponseEntity.status(HttpStatus.OK).body(id);
     }
+
+    @RequestMapping(value = "/test2", method = RequestMethod.GET)
+    public ResponseEntity test2() {
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
 }
