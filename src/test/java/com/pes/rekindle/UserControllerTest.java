@@ -209,7 +209,8 @@ public class UserControllerTest {
     	link.setUrl("www.test.com");
     	link.setDescription("La descripcion se ha modificado");
     	Gson gson = new Gson();
-    	String json = gson.toJson(link);
+    	String json = gson.toJson(link);    
+    	
         this.mockMvc
         	.perform(put("/links/0").contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(json))
