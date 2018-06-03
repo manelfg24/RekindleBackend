@@ -177,8 +177,17 @@ public class UserController {
 
     // Crea un chat
     @RequestMapping(value = "/usuarios/{mail}/chats", method = RequestMethod.POST)
-    public ResponseEntity<DTOChat> createChat(@RequestBody DTOChat dtoChat) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.createChat(dtoChat));
+    public ResponseEntity<DTOChat> createChat(@RequestBody DTOChat dtoChat) { 
+    	DTOChat createdChat = userService.createChat(dtoChat);
+    	
+        Pusher pusher = new Pusher("525518", "743a4fb4a1370f0ca9a4", "c78f3bfa72330a58ee1f");
+        pusher.setCluster("eu");
+        pusher.setEncrypted(true);
+
+        pusher.trigger(dtoChat.getUser1().getMail(), "my-event", Collections.singletonMap("message", createdChat.getId()));
+        pusher.trigger(dtoChat.getUser2().getMail(), "my-event", Collections.singletonMap("message", createdChat.getId()));
+        
+        return ResponseEntity.status(HttpStatus.OK).body(createdChat);
     }
 
     // Enviar mensaje
