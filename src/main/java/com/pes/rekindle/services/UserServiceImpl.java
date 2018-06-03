@@ -837,6 +837,7 @@ public class UserServiceImpl implements UserService {
     public void modifyLink(DTOLink dtoLink) {
         Link link = linkRepository.findById(dtoLink.getId());
         link.updateLink(dtoLink);
+        linkRepository.save(link);
     }
 
     @Override
