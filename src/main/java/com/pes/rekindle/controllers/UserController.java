@@ -191,7 +191,7 @@ public class UserController {
         pusher.setCluster("eu");
         pusher.setEncrypted(true);
 
-        pusher.trigger("my-channel", "my-event", Collections.singletonMap("message", dtoMessage));
+        pusher.trigger(Long.toString(idChat), "my-event", Collections.singletonMap("message", dtoMessage));
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
