@@ -660,7 +660,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<DTOMessage> listMessagesChat(String mail, long idChat) {
-        // Set<Message> messages = chatRepository.findByMessages_IdChat(idChat);
         ArrayList<Message> messages = new ArrayList<Message>();
         messages.addAll(chatRepository.findById(idChat).getMessages());
         Collections.sort(messages, new Comparator<Message>() {
