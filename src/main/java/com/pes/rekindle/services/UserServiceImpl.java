@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService {
     ChatRepository chatRepository;
     @Autowired
     MessageRepository messageRepository;
-    
+
     @Autowired
     LinkRepository linkRepository;
 
@@ -232,6 +232,7 @@ public class UserServiceImpl implements UserService {
                 dtoLogInInfo.getPassword());
         if (oRefugee.isPresent()) {
             DTOUser refugee = mapper.map(oRefugee.get(), DTOUser.class);
+            refugee.setUserType("Refugee");
             return refugee;
         }
 
@@ -240,6 +241,7 @@ public class UserServiceImpl implements UserService {
                 dtoLogInInfo.getPassword());
         if (oVolunteer.isPresent()) {
             DTOUser volunteer = mapper.map(oVolunteer.get(), DTOUser.class);
+            volunteer.setUserType("Volunteer");
             return volunteer;
         }
 
@@ -248,6 +250,7 @@ public class UserServiceImpl implements UserService {
                 dtoLogInInfo.getPassword());
         if (oAdmin.isPresent()) {
             DTOUser admin = mapper.map(oAdmin.get(), DTOUser.class);
+            admin.setUserType("Admin");
             return admin;
         } else {
             throw new LoginException();
@@ -812,34 +815,34 @@ public class UserServiceImpl implements UserService {
 
         return dtoReport;
     }
-    
-	@Override
-	public void createLink(DTOLink dtoLink) {
-		Link link = mapper.map(dtoLink, Link.class);
-		linkRepository.save(link);		
-	}
-	
-	@Override
-	public Set<DTOLink> listLinks() {
-		Set<Link> links = linkRepository.findAll();
-		Set<DTOLink> dtoLinks = new HashSet();
-		for(Link link : links) {
-			DTOLink auxiliarLink = mapper.map(link, DTOLink.class);
-			dtoLinks.add(auxiliarLink);
-		}
-		return dtoLinks;
- 	}
-	
-	@Override
-	public void modifyLink(DTOLink dtoLink) {
-		Link link = linkRepository.findById(dtoLink.getId());
-		link.updateLink(dtoLink);
-	}
-	
-	@Override
-	public void deleteLink(Long id) {		
-		linkRepository.deleteById(id);
-	}
+
+    @Override
+    public void createLink(DTOLink dtoLink) {
+        Link link = mapper.map(dtoLink, Link.class);
+        linkRepository.save(link);
+    }
+
+    @Override
+    public Set<DTOLink> listLinks() {
+        Set<Link> links = linkRepository.findAll();
+        Set<DTOLink> dtoLinks = new HashSet();
+        for (Link link : links) {
+            DTOLink auxiliarLink = mapper.map(link, DTOLink.class);
+            dtoLinks.add(auxiliarLink);
+        }
+        return dtoLinks;
+    }
+
+    @Override
+    public void modifyLink(DTOLink dtoLink) {
+        Link link = linkRepository.findById(dtoLink.getId());
+        link.updateLink(dtoLink);
+    }
+
+    @Override
+    public void deleteLink(Long id) {
+        linkRepository.deleteById(id);
+    }
 
     // -------------------------------------------------------------------
     @Override
