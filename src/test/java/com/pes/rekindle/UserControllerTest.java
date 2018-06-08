@@ -2,7 +2,6 @@
 package com.pes.rekindle;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -26,7 +25,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.google.gson.Gson;
@@ -150,104 +148,87 @@ public class UserControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
-    /*
     @Test
     public void changeUserPasswordTest() throws Exception {
-        MvcResult result = mockMvc
-                .perform(put("/cambiarPassword/roger@gmail.com")
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .content("passwordOld=1234&passwordNew=12345"))
-                .andReturn();
+        String mail = "roger@gmail.com";
 
-        result = mockMvc
-                .perform(get("/voluntarios/roger@gmail.com"))
-                .andReturn();
-        Volunteer volunteer = new Volunteer();
-        volunteer.setMail("roger@gmail.com");
-        volunteer.setName("Test");
-        volunteer.setPassword("12345");
-        volunteer.setSurname1("Force");
-        Gson gson = new Gson();
-        String json = gson.toJson(volunteer);
-        System.out.println(result.getResponse());
-        System.out.println("--------------------------------------------------------------");
-        assertEquals(result.getResponse(), "aleixdios");
+        this.mockMvc.perform(put("/cambiarPassword/{mail}.com", mail)
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .content("passwordOld=1234&passwordNew=12345")).andExpect(status().isOk())
+                .andDo(print());
+
+        this.mockMvc
+                .perform(post("/login")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .content("mail=roger@gmail.com&password=1234"))
+                .andExpect(status().isOk())
+                .andExpect((jsonPath("$.password").value("12345")));
+
     }
-    */
-    
+
     @Test
     public void createLinkTest() throws Exception {
-    	Link link = new Link();
-    	link.setType("Test");
-    	link.setUrl("www.test.com");
-    	link.setDescription("Link de prueba");
-    	Gson gson = new Gson();
-    	String json = gson.toJson(link);
+        Link link = new Link();
+        link.setType("Test");
+        link.setUrl("www.test.com");
+        link.setDescription("Link de prueba");
+        Gson gson = new Gson();
+        String json = gson.toJson(link);
         this.mockMvc
-        	.perform(post("/links").contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content(json))
-        	.andExpect(status().isOk());
+                .perform(post("/links").contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content(json))
+                .andExpect(status().isOk());
     }
-    
+
     @Test
     public void listLinksTest() throws Exception {
-    	this.mockMvc
-	    	.perform(get("/links"))
-	    	.andExpect(status().isOk())
-	    	.andExpect(content().contentType("application/json;charset=UTF-8"))
-            .andExpect(jsonPath("$.[0].id").value(0))
-            .andExpect(jsonPath("$.[0].type").value("Test"))
-            .andExpect(jsonPath("$.[0].url").value("www.test.com"))
-            .andExpect(jsonPath("$.[0].description").value("Link para testear"));    	
+        this.mockMvc
+                .perform(get("/links"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=UTF-8"))
+                .andExpect(jsonPath("$.[0].id").value(0))
+                .andExpect(jsonPath("$.[0].type").value("Test"))
+                .andExpect(jsonPath("$.[0].url").value("www.test.com"))
+                .andExpect(jsonPath("$.[0].description").value("Link para testear"));
     }
-    
+
     @Test
     public void modifyLinkTest() throws Exception {
-    	Link link = new Link();
-    	link.setId(0);
-    	link.setType("Test");
-    	link.setUrl("www.test.com");
-    	link.setDescription("La descripcion se ha modificado");
-    	Gson gson = new Gson();
-    	String json = gson.toJson(link);    
-    	
+        Link link = new Link();
+        link.setId(0);
+        link.setType("Test");
+        link.setUrl("www.test.com");
+        link.setDescription("La descripcion se ha modificado");
+        Gson gson = new Gson();
+        String json = gson.toJson(link);
+
         this.mockMvc
-        	.perform(put("/links/0").contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content(json))
-        	.andExpect(status().isOk())
-        	.andDo(print());
-        
-    	this.mockMvc
-    	.perform(get("/links"))
-    	.andExpect(status().isOk())
-    	.andExpect(content().contentType("application/json;charset=UTF-8"))
-        .andExpect(jsonPath("$.[0].id").value(0))
-        .andExpect(jsonPath("$.[0].type").value("Test"))
-        .andExpect(jsonPath("$.[0].url").value("www.test.com"))
-        .andExpect(jsonPath("$.[0].description").value("La descripcion se ha modificado"));        
-    }   
-    
+                .perform(put("/links/0").contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content(json))
+                .andExpect(status().isOk())
+                .andDo(print());
+
+        this.mockMvc
+                .perform(get("/links"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=UTF-8"))
+                .andExpect(jsonPath("$.[0].id").value(0))
+                .andExpect(jsonPath("$.[0].type").value("Test"))
+                .andExpect(jsonPath("$.[0].url").value("www.test.com"))
+                .andExpect(jsonPath("$.[0].description").value("La descripcion se ha modificado"));
+    }
+
     @Test
     public void deleteLinkTest() throws Exception {
         this.mockMvc
-        	.perform(delete("/links/0"))
-        	.andExpect(status().isOk());
-    } 
-    
-    /*
-    @Test
-    public void listLinksTest() throws Exception {
-    	
-    	MvcResult result = this.mockMvc
-	    	.perform(get("/links")).andReturn(); 	
-    	
-    	String s = result.getResponse().getContentAsString();
-    	
-    	System.out.println("---------------------------------------------");
-    	System.out.println(s);
-    	System.out.println("---------------------------------------------");
-    	
-    	assertEquals(1, 0);
+                .perform(delete("/links/0"))
+                .andExpect(status().isOk());
     }
-    */
+
+    /*
+     * @Test public void listLinksTest() throws Exception { MvcResult result = this.mockMvc
+     * .perform(get("/links")).andReturn(); String s = result.getResponse().getContentAsString();
+     * System.out.println("---------------------------------------------"); System.out.println(s);
+     * System.out.println("---------------------------------------------"); assertEquals(1, 0); }
+     */
 }
