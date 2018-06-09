@@ -60,10 +60,10 @@ public class UserController {
         DTOUser dtoUser;
         try {
             dtoUser = userService.getUser(logInInfo);
+            return ResponseEntity.status(HttpStatus.OK).body(dtoUser);
         } catch (LoginException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
-        return ResponseEntity.status(HttpStatus.OK).body(dtoUser);
     }
 
     @RequestMapping(value = "/cambiarPassword/{mail}", method = RequestMethod.PUT)

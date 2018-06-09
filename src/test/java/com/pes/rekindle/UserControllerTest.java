@@ -89,7 +89,7 @@ public class UserControllerTest {
     @Test
     public void volunteerAlreadyExistsShouldReturnConflictStatus() throws Exception {
         Volunteer volunteer = new Volunteer();
-        volunteer.setMail("roger@gmail.com");
+        volunteer.setMail("mailRoger");
         volunteer.setName("Test");
         volunteer.setPassword("1234");
         volunteer.setSurname1("Force");
@@ -119,7 +119,7 @@ public class UserControllerTest {
     @Test
     public void refugeeAlreadyExistsShouldReturnConflictStatusTest() throws Exception {
         Refugee refugee = new Refugee();
-        refugee.setMail("felipe@gmail.com");
+        refugee.setMail("mailFelipe");
         refugee.setName("Test");
         refugee.setPassword("1234");
         refugee.setSurname1("Force");
@@ -136,7 +136,7 @@ public class UserControllerTest {
         this.mockMvc
                 .perform(post("/login")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .content("mail=alex@gmail.com&password=1234"))
+                        .content("mail=mailAlex&password=1234"))
                 .andExpect(status().isOk());
     }
 
@@ -145,13 +145,13 @@ public class UserControllerTest {
         this.mockMvc
                 .perform(post("/login")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .content("mail=test@gmail.com&password=1234"))
+                        .content("mail=aleixputoamo&password=1234"))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     public void changeUserPasswordTest() throws Exception {
-        String mail = "roger@gmail.com";
+        String mail = "mailRoger";
 
         this.mockMvc.perform(put("/cambiarPassword/{mail}.com", mail)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -160,7 +160,7 @@ public class UserControllerTest {
 
     @Test
     public void changeUserPasswordWithIncorrectPasswordShouldReturnKOTest() throws Exception {
-        String mail = "roger@gmail.com";
+        String mail = "mailRoger";
 
         this.mockMvc.perform(put("/cambiarPassword/{mail}.com", mail)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -169,7 +169,7 @@ public class UserControllerTest {
 
     @Test
     public void recoverUserPasswordTest() throws Exception {
-        String mail = "roger@gmail.com";
+        String mail = "mailRoger";
 
         this.mockMvc.perform(put("/recuperarPassword/{mail}.com", mail)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -178,43 +178,54 @@ public class UserControllerTest {
 
     @Test
     public void modifyVolunteerTest() throws Exception {
-        String mail = "roger@gmail.com";
+        String mail = "mailRoger";
         DTOUser dtoVolunteer = new DTOUser();
-        dtoVolunteer.setMail("roger@gmail.com");
+        dtoVolunteer.setMail("mailRoger");
         dtoVolunteer.setSurname1("pocho");
         Gson gson = new Gson();
         String json = gson.toJson(dtoVolunteer);
-        this.mockMvc.perform(put("/voluntarios/{mail}.com", mail)
+        this.mockMvc.perform(put("/voluntarios/{mail}", mail)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(json)).andExpect(status().isOk());
     }
 
     @Test
     public void modifyRefugeeTest() throws Exception {
-        String mail = "felipe@gmail.com";
+        String mail = "mailFelipe";
         DTOUser dtoVolunteer = new DTOUser();
-        dtoVolunteer.setMail("felipe@gmail.com");
+        dtoVolunteer.setMail("mailFelipe");
         dtoVolunteer.setEyeColor("blue");
         Gson gson = new Gson();
         String json = gson.toJson(dtoVolunteer);
-        this.mockMvc.perform(put("/refugiados/{mail}.com", mail)
+        this.mockMvc.perform(put("/refugiados/{mail}", mail)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(json)).andExpect(status().isOk());
     }
 
     @Test
     public void getVolunteerTest() throws Exception {
-        String mail = "roger@gmail.com";
+        String mail = "mailRoger";
 
         this.mockMvc
-                .perform(get("/voluntarios/{mail}.com", mail)
+                .perform(get("/voluntarios/{mail}", mail)
                         .accept(MediaType.APPLICATION_JSON_UTF8))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.mail").value("roger@gmail.com"))
-                .andExpect(jsonPath("$.type").value("Volunteer"))
-                .andExpect(jsonPath("$.surname1").value("Poch"))
-                .andExpect(jsonPath("$.surname2").value("Alonso"));
+                .andExpect(jsonPath("$.mail").value("mailRoger"))
+                .andExpect(jsonPath("$.userType").value("Volunteer"))
+                .andExpect(jsonPath("$.surname1").value("poch"))
+                .andExpect(jsonPath("$.surname2").value("alonso"));
+    }
+
+    @Test
+    public void getNotExistentVolunteerShouldReturnNotFound() throws Exception {
+        String mail = "mailNotExistent";
+
+        this.mockMvc
+                .perform(get("/voluntarios/{mail}", mail)
+                        .accept(MediaType.APPLICATION_JSON_UTF8))
+                .andDo(print())
+                .andExpect(status().isNotFound());
     }
 
     @Test
