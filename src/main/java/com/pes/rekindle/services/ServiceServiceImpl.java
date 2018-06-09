@@ -147,7 +147,7 @@ public class ServiceServiceImpl implements ServiceService {
                 pusher.trigger(serviceType + id, "deleted-service",
                         Collections.singletonMap("message", new DTOService(lodge)));
                 for (Refugee refugee : lodge.getInscriptions()) {
-                    pusher.trigger("Refugee" + refugee.getMail(), "unenroll-service",
+                    pusher.trigger(refugee.getMail(), "unenroll-service",
                             Collections.singletonMap("message", id));
                 }
                 break;
