@@ -37,6 +37,7 @@ import com.pes.rekindle.entities.Refugee;
 import com.pes.rekindle.entities.Report;
 import com.pes.rekindle.entities.Volunteer;
 import com.pes.rekindle.exceptions.UserAlreadyExistsException;
+import com.pes.rekindle.exceptions.UserNotExistsException;
 import com.pes.rekindle.repositories.AdminRepository;
 import com.pes.rekindle.repositories.ChatRepository;
 import com.pes.rekindle.repositories.DonationRepository;
@@ -189,7 +190,7 @@ public class UserServiceImpl implements UserService {
         volunteer.setSurname1(dtoUser.getSurname1());
         volunteer.setSurname2(dtoUser.getSurname2());
         volunteer.setPhoto(dtoUser.getPhoto());
-        volunteerRepository.flush();
+        volunteerRepository.save(volunteer);
     }
 
     public void modifyProfileRefugee(DTOUser dtoUser) {
@@ -207,23 +208,27 @@ public class UserServiceImpl implements UserService {
         refugee.setEyeColor(dtoUser.getEyeColor());
         refugee.setBiography(dtoUser.getBiography());
         refugee.setPhoto(dtoUser.getPhoto());
-        refugeeRepository.flush();
+        refugeeRepository.save(refugee);
     }
 
     @Override
-    public DTOUser infoVolunteer(String mail) {
+    public DTOUser getVolunteer(String mail) throws UserNotExistsException {
         Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMail(mail);
-        if (oVolunteer.isPresent())
+        if (oVolunteer.isPresent()) {
             return new DTOUser(oVolunteer.get());
-        return null;
+        } else {
+            throw new UserNotExistsException();
+        }
     }
 
     @Override
-    public DTOUser infoRefugee(String mail) {
+    public DTOUser getRefugee(String mail) throws UserNotExistsException {
         Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMail(mail);
-        if (oRefugee.isPresent())
+        if (oRefugee.isPresent()) {
             return new DTOUser(oRefugee.get());
-        return null;
+        } else {
+            throw new UserNotExistsException();
+        }
     }
 
     @Override
@@ -320,10 +325,6 @@ public class UserServiceImpl implements UserService {
             switch (dtoUser.getUserType()) {
                 case "Volunteer":
                     Volunteer volunteer = mapper.map(dtoUser, Volunteer.class);
-                    System.out.println("------------------------------------");
-                    System.out.println(volunteer.getMail());
-                    System.out.println(volunteer.getPassword());
-                    System.out.println(volunteer.getSurname1());
                     volunteer.setPassword(passwordNew);
                     volunteerRepository.save(volunteer);
                     break;
@@ -338,28 +339,28 @@ public class UserServiceImpl implements UserService {
                     adminRepository.save(admin);
                     break;
             }
-        } catch (LoginException e) {
+        } catch (Exception e) {
             throw new LoginException();
         }
     }
 
     @Override
-    public boolean recoverPassword(String mail, String passwordNew) {
+    public void recoverPassword(String mail, String passwordNew) throws LoginException {
         Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMail(mail);
         if (oRefugee.isPresent()) {
             Refugee refugee = oRefugee.get();
             refugee.setPassword(passwordNew);
             refugeeRepository.save(refugee);
-            return true;
+        } else {
+            Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMail(mail);
+            if (oVolunteer.isPresent()) {
+                Volunteer volunteer = oVolunteer.get();
+                volunteer.setPassword(passwordNew);
+                volunteerRepository.save(volunteer);
+            } else {
+                throw new LoginException();
+            }
         }
-        Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMail(mail);
-        if (oVolunteer.isPresent()) {
-            Volunteer volunteer = oVolunteer.get();
-            volunteer.setPassword(passwordNew);
-            volunteerRepository.save(volunteer);
-            return true;
-        }
-        return false;
     }
 
     @Override

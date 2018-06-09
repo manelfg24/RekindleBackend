@@ -30,6 +30,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import com.google.gson.Gson;
 import com.pes.RekindleApplication;
 import com.pes.rekindle.controllers.UserController;
+import com.pes.rekindle.dto.DTOUser;
 import com.pes.rekindle.entities.Link;
 import com.pes.rekindle.entities.Refugee;
 import com.pes.rekindle.entities.Volunteer;
@@ -154,16 +155,66 @@ public class UserControllerTest {
 
         this.mockMvc.perform(put("/cambiarPassword/{mail}.com", mail)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .content("passwordOld=1234&passwordNew=12345")).andExpect(status().isOk())
-                .andDo(print());
+                .content("passwordOld=1234&passwordNew=12345")).andExpect(status().isOk());
+    }
+
+    @Test
+    public void changeUserPasswordWithIncorrectPasswordShouldReturnKOTest() throws Exception {
+        String mail = "roger@gmail.com";
+
+        this.mockMvc.perform(put("/cambiarPassword/{mail}.com", mail)
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .content("passwordOld=123&passwordNew=12345")).andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void recoverUserPasswordTest() throws Exception {
+        String mail = "roger@gmail.com";
+
+        this.mockMvc.perform(put("/recuperarPassword/{mail}.com", mail)
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .content("passwordNew=12345")).andExpect(status().isOk());
+    }
+
+    @Test
+    public void modifyVolunteerTest() throws Exception {
+        String mail = "roger@gmail.com";
+        DTOUser dtoVolunteer = new DTOUser();
+        dtoVolunteer.setMail("roger@gmail.com");
+        dtoVolunteer.setSurname1("pocho");
+        Gson gson = new Gson();
+        String json = gson.toJson(dtoVolunteer);
+        this.mockMvc.perform(put("/voluntarios/{mail}.com", mail)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(json)).andExpect(status().isOk());
+    }
+
+    @Test
+    public void modifyRefugeeTest() throws Exception {
+        String mail = "felipe@gmail.com";
+        DTOUser dtoVolunteer = new DTOUser();
+        dtoVolunteer.setMail("felipe@gmail.com");
+        dtoVolunteer.setEyeColor("blue");
+        Gson gson = new Gson();
+        String json = gson.toJson(dtoVolunteer);
+        this.mockMvc.perform(put("/refugiados/{mail}.com", mail)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(json)).andExpect(status().isOk());
+    }
+
+    @Test
+    public void getVolunteerTest() throws Exception {
+        String mail = "roger@gmail.com";
 
         this.mockMvc
-                .perform(post("/login")
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .content("mail=roger@gmail.com&password=1234"))
+                .perform(get("/voluntarios/{mail}.com", mail)
+                        .accept(MediaType.APPLICATION_JSON_UTF8))
+                .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect((jsonPath("$.password").value("12345")));
-
+                .andExpect(jsonPath("$.mail").value("roger@gmail.com"))
+                .andExpect(jsonPath("$.type").value("Volunteer"))
+                .andExpect(jsonPath("$.surname1").value("Poch"))
+                .andExpect(jsonPath("$.surname2").value("Alonso"));
     }
 
     @Test
