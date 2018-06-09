@@ -404,7 +404,7 @@ public class UserServiceImpl implements UserService {
 
                 Lodge lodge = lodgeRepository.findById(id);
 
-                pusher.trigger("Refugee" + mail, "enroll-service",
+                pusher.trigger(mail, "enroll-service",
                         Collections.singletonMap("message", new DTOService(lodge)));
                 break;
             case "Education":
@@ -537,7 +537,7 @@ public class UserServiceImpl implements UserService {
 
                 Lodge lodge = lodgeRepository.findById(id);
 
-                pusher.trigger("Refugee" + mail, "unenroll-service",
+                pusher.trigger(mail, "unenroll-service",
                         Collections.singletonMap("message", new DTOService(lodge)));
                 break;
             case "Education":
