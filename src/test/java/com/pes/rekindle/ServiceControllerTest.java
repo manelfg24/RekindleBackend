@@ -170,5 +170,20 @@ public class ServiceControllerTest {
         				.content(json))
         		.andExpect(status().isOk());   
     }
+    
+    @Test
+    public void listServicesTest() throws Exception {
+        this.mockMvc
+                .perform(get("/servicios"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=UTF-8"))
+                .andExpect(jsonPath("$.[0].id").value(0))
+                .andExpect(jsonPath("$.[1].id").value(0))
+                .andExpect(jsonPath("$.[0].serviceType").value("e"))
+                .andExpect(jsonPath("$.[1].serviceType").value("d"))
+                .andExpect(jsonPath("$.[0].name").value("NombreEdu"))
+                .andExpect(jsonPath("$.[0].volunteer").value("roger@gmail.com"));
+    }
 
 }
