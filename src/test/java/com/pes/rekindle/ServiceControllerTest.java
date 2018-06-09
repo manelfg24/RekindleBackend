@@ -11,6 +11,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.sql.Time;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,9 +34,12 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import com.google.gson.Gson;
 import com.pes.RekindleApplication;
 import com.pes.rekindle.controllers.ServiceController;
+import com.pes.rekindle.dto.DTODonation;
+import com.pes.rekindle.dto.DTOEducation;
+import com.pes.rekindle.dto.DTOJob;
+import com.pes.rekindle.dto.DTOLodge;
 import com.pes.rekindle.entities.Link;
-import com.pes.rekindle.entities.Refugee;
-import com.pes.rekindle.entities.Volunteer;
+import com.pes.rekindle.entities.Lodge;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = RekindleApplication.class)
@@ -69,166 +76,99 @@ public class ServiceControllerTest {
     public void contextLoads() throws Exception {
         assertThat(controller).isNotNull();
     }
+    
+    @Test 
+    public void createLodgeTest() throws Exception {
+    	DTOLodge dtoLodge = new DTOLodge();
+    	dtoLodge.setServiceType("Lodge");
+    	dtoLodge.setName("Casa Pepe");
+    	dtoLodge.setVolunteer("roger@gmail.com");
+    	dtoLodge.setPhoneNumber(936666666);
+    	dtoLodge.setAdress("Balmes");  
+    	dtoLodge.setPlaces(2);
+    	SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date dateLimit = formatter.parse("2018-07-23");
+            dtoLodge.setDateLimit(dateLimit);
+        } catch (Exception e) {
 
-   /* @Test
-    public void createVolunteerTest() throws Exception {
-        Volunteer volunteer = new Volunteer();
-        volunteer.setMail("test@gmail.com");
-        volunteer.setName("Test");
-        volunteer.setPassword("1234");
-        volunteer.setSurname1("Force");
+        }
+        dtoLodge.setDescription("Alojamiento para dos personas");
         Gson gson = new Gson();
-        String json = gson.toJson(volunteer);
+        String json = gson.toJson(dtoLodge);
         this.mockMvc
-                .perform(post("/voluntarios").contentType(MediaType.APPLICATION_JSON_UTF8)
-                        .content(json))
-                .andExpect(status().isOk());
+        		.perform(post("/alojamientos").contentType(MediaType.APPLICATION_JSON_UTF8)
+        				.content(json))
+        		.andExpect(status().isOk());   
     }
-
-    @Test
-    public void volunteerAlreadyExistsShouldReturnConflictStatus() throws Exception {
-        Volunteer volunteer = new Volunteer();
-        volunteer.setMail("roger@gmail.com");
-        volunteer.setName("Test");
-        volunteer.setPassword("1234");
-        volunteer.setSurname1("Force");
+    
+   /* @Test 
+    public void createDonationTest() throws Exception {
+    	DTODonation dtoDonation = new DTODonation();
+    	dtoDonation.setServiceType("Donation");
+    	dtoDonation.setName("Donación de ropa");
+    	dtoDonation.setVolunteer("roger@gmail.com");
+    	dtoDonation.setPhoneNumber(936666666);
+    	dtoDonation.setAdress("Balmes");
+    	dtoDonation.setPlaces(2);
+    	dtoDonation.setDescription("Donación de ropa");
+    	Time t = new Time(10, 0, 0);
+    	Time t2 = new Time(11, 0, 0);
+    	dtoDonation.setStartTime(t);
+    	dtoDonation.setEndTime(t2);
         Gson gson = new Gson();
-        String json = gson.toJson(volunteer);
+        String json = gson.toJson(dtoDonation);
         this.mockMvc
-                .perform(post("/voluntarios").contentType(MediaType.APPLICATION_JSON_UTF8)
-                        .content(json))
-                .andExpect(status().isConflict());
-    }
-
+        		.perform(post("/donaciones").contentType(MediaType.APPLICATION_JSON_UTF8)
+        				.content(json))
+        		.andExpect(status().isOk());   
+    }*/
+    
+    
     @Test
-    public void createRefugeeTest() throws Exception {
-        Refugee refugee = new Refugee();
-        refugee.setMail("test@gmail.com");
-        refugee.setName("Test");
-        refugee.setPassword("1234");
-        refugee.setSurname1("Force");
-        Gson gson = new Gson();
-        String json = gson.toJson(refugee);
+    public void createEducationTest() throws Exception {
+    	DTOEducation dtoEdu = new DTOEducation();
+    	dtoEdu.setServiceType("Education");
+    	dtoEdu.setName("Clases de Español de España");
+    	dtoEdu.setVolunteer("roger@gmail.com");
+    	dtoEdu.setPhoneNumber(936666666);
+    	dtoEdu.setAdress("Balmes");
+    	dtoEdu.setAmbit("Idioma");
+       	dtoEdu.setRequirements("Nada");
+    	dtoEdu.setSchedule("Tardes");
+    	dtoEdu.setPlaces(2);
+    	dtoEdu.setPrice(0);
+    	dtoEdu.setDescription("Clases de español basico por M.Rjoy");
+    	Gson gson = new Gson();
+        String json = gson.toJson(dtoEdu);
         this.mockMvc
-                .perform(post("/refugiados").contentType(MediaType.APPLICATION_JSON_UTF8)
-                        .content(json))
-                .andExpect(status().isOk());
+        		.perform(post("/cursos").contentType(MediaType.APPLICATION_JSON_UTF8)
+        				.content(json))
+        		.andExpect(status().isOk());   
     }
-
+    
     @Test
-    public void refugeeAlreadyExistsShouldReturnConflictStatusTest() throws Exception {
-        Refugee refugee = new Refugee();
-        refugee.setMail("felipe@gmail.com");
-        refugee.setName("Test");
-        refugee.setPassword("1234");
-        refugee.setSurname1("Force");
-        Gson gson = new Gson();
-        String json = gson.toJson(refugee);
+    public void createJobTest() throws Exception {
+    	DTOJob dtoJob = new DTOJob();
+    	dtoJob.setServiceType("Job");
+    	dtoJob.setName("Carpintero");
+    	dtoJob.setVolunteer("roger@gmail.com");
+    	dtoJob.setPhoneNumber(936666666);
+    	dtoJob.setAdress("Balmes");
+    	dtoJob.setCharge("Becario");
+    	dtoJob.setRequirements("Nada");
+    	dtoJob.setHoursDay(4);
+    	dtoJob.setHoursWeek(20);
+    	dtoJob.setContractDuration(5);
+    	dtoJob.setSalary(400);
+    	dtoJob.setPlaces(2);
+    	dtoJob.setDescription("Trabajo de aprendiz de carpintero");
+    	Gson gson = new Gson();
+        String json = gson.toJson(dtoJob);
         this.mockMvc
-                .perform(post("/refugiados").contentType(MediaType.APPLICATION_JSON_UTF8)
-                        .content(json))
-                .andExpect(status().isConflict());
+        		.perform(post("/empleos").contentType(MediaType.APPLICATION_JSON_UTF8)
+        				.content(json))
+        		.andExpect(status().isOk());   
     }
 
-    @Test
-    public void userLogInTest() throws Exception {
-        this.mockMvc
-                .perform(post("/login")
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .content("mail=alex@gmail.com&password=1234"))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    public void nonExistentUserLoginShouldReturnBadRequestTest() throws Exception {
-        this.mockMvc
-                .perform(post("/login")
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .content("mail=test@gmail.com&password=1234"))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    public void changeUserPasswordTest() throws Exception {
-        String mail = "roger@gmail.com";
-
-        this.mockMvc.perform(put("/cambiarPassword/{mail}.com", mail)
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .content("passwordOld=1234&passwordNew=12345")).andExpect(status().isOk())
-                .andDo(print());
-
-        this.mockMvc
-                .perform(post("/login")
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .content("mail=roger@gmail.com&password=1234"))
-                .andExpect(status().isOk())
-                .andExpect((jsonPath("$.password").value("12345")));
-
-    }
-
-    @Test
-    public void createLinkTest() throws Exception {
-        Link link = new Link();
-        link.setType("Test");
-        link.setUrl("www.test.com");
-        link.setDescription("Link de prueba");
-        Gson gson = new Gson();
-        String json = gson.toJson(link);
-        this.mockMvc
-                .perform(post("/links").contentType(MediaType.APPLICATION_JSON_UTF8)
-                        .content(json))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    public void listLinksTest() throws Exception {
-        this.mockMvc
-                .perform(get("/links"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json;charset=UTF-8"))
-                .andExpect(jsonPath("$.[0].id").value(0))
-                .andExpect(jsonPath("$.[0].type").value("Test"))
-                .andExpect(jsonPath("$.[0].url").value("www.test.com"))
-                .andExpect(jsonPath("$.[0].description").value("Link para testear"));
-    }
-
-    @Test
-    public void modifyLinkTest() throws Exception {
-        Link link = new Link();
-        link.setId(0);
-        link.setType("Test");
-        link.setUrl("www.test.com");
-        link.setDescription("La descripcion se ha modificado");
-        Gson gson = new Gson();
-        String json = gson.toJson(link);
-
-        this.mockMvc
-                .perform(put("/links/0").contentType(MediaType.APPLICATION_JSON_UTF8)
-                        .content(json))
-                .andExpect(status().isOk())
-                .andDo(print());
-
-        this.mockMvc
-                .perform(get("/links"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json;charset=UTF-8"))
-                .andExpect(jsonPath("$.[0].id").value(0))
-                .andExpect(jsonPath("$.[0].type").value("Test"))
-                .andExpect(jsonPath("$.[0].url").value("www.test.com"))
-                .andExpect(jsonPath("$.[0].description").value("La descripcion se ha modificado"));
-    }
-
-    @Test
-    public void deleteLinkTest() throws Exception {
-        this.mockMvc
-                .perform(delete("/links/0"))
-                .andExpect(status().isOk());
-    }
-
-    /*
-     * @Test public void listLinksTest() throws Exception { MvcResult result = this.mockMvc
-     * .perform(get("/links")).andReturn(); String s = result.getResponse().getContentAsString();
-     * System.out.println("---------------------------------------------"); System.out.println(s);
-     * System.out.println("---------------------------------------------"); assertEquals(1, 0); }
-     */
 }
