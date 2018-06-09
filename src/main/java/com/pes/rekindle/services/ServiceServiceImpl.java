@@ -264,8 +264,7 @@ public class ServiceServiceImpl implements ServiceService {
 
     @Override
     public void modifyLodge(long id, DTOLodge dtoLodge) {
-        Lodge lodge = new Lodge();
-        lodge.setId(id);
+        Lodge lodge = lodgeRepository.findById(id);
         lodge.setName(dtoLodge.getName());
         lodge.setVolunteer(dtoLodge.getVolunteer());
         lodge.setServiceType("Lodge");
@@ -287,7 +286,6 @@ public class ServiceServiceImpl implements ServiceService {
         pusher.setEncrypted(true);
         pusher.trigger(lodge.getServiceType() + lodge.getId(), "updated-service",
                 Collections.singletonMap("message", new DTOService(lodge)));
-
     }
 
     @Override
