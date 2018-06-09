@@ -25,6 +25,7 @@ import com.pes.rekindle.dto.DTOMessage;
 import com.pes.rekindle.dto.DTOReport;
 import com.pes.rekindle.dto.DTOUser;
 import com.pes.rekindle.exceptions.UserAlreadyExistsException;
+import com.pes.rekindle.exceptions.UserNotExistsException;
 import com.pes.rekindle.services.UserService;
 import com.pusher.rest.Pusher;
 
@@ -87,31 +88,36 @@ public class UserController {
     }
 
     @RequestMapping(value = "/voluntarios/{mail}", method = RequestMethod.PUT)
-    public ResponseEntity<Void> modifyProfileVolunteer(@RequestBody DTOUser dtoUser) {
+    public ResponseEntity<Void> modifyVolunteer(@RequestBody DTOUser dtoUser) {
         // Cuidado tema seguridad
         userService.modifyProfileVolunteer(dtoUser);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
     @RequestMapping(value = "/refugiados/{mail}", method = RequestMethod.PUT)
-    public ResponseEntity<Void> modifyProfileRefugee(@RequestBody DTOUser refugee) {
+    public ResponseEntity<Void> modifyRefugee(@RequestBody DTOUser refugee) {
         userService.modifyProfileRefugee(refugee);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
     @RequestMapping(value = "/voluntarios/{mail}", method = RequestMethod.GET)
-    public ResponseEntity<DTOUser> infoVolunteer(@PathVariable String mail) {
-        DTOUser dtoUser = userService.infoVolunteer(mail);
-        return ResponseEntity.status(HttpStatus.OK).body(dtoUser);
+    public ResponseEntity<DTOUser> getVolunteer(@PathVariable String mail) {
+        try {
+            DTOUser volunteer = userService.getVolunteer(mail);
+            return ResponseEntity.status(HttpStatus.OK).body(volunteer);
+        } catch (UserNotExistsException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
 
     @RequestMapping(value = "/refugiados/{mail}", method = RequestMethod.GET)
-    public ResponseEntity<DTOUser> infoRefugee(@PathVariable String mail) {
-        DTOUser refugee = userService.infoRefugee(mail);
-        if (!(refugee == null))
+    public ResponseEntity<DTOUser> getRefugee(@PathVariable String mail) {
+        try {
+            DTOUser refugee = userService.getRefugee(mail);
             return ResponseEntity.status(HttpStatus.OK).body(refugee);
-        else
+        } catch (UserNotExistsException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
 
     // Busqueda de refugiados

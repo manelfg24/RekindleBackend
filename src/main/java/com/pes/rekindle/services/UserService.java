@@ -15,6 +15,7 @@ import com.pes.rekindle.dto.DTOReport;
 import com.pes.rekindle.dto.DTOService;
 import com.pes.rekindle.dto.DTOUser;
 import com.pes.rekindle.exceptions.UserAlreadyExistsException;
+import com.pes.rekindle.exceptions.UserNotExistsException;
 
 public interface UserService {
 
@@ -39,9 +40,9 @@ public interface UserService {
 
     void modifyProfileRefugee(DTOUser refugee);
 
-    DTOUser infoVolunteer(String mail);
+    DTOUser getVolunteer(String mail) throws UserNotExistsException;
 
-    DTOUser infoRefugee(String mail);
+    DTOUser getRefugee(String mail) throws UserNotExistsException;
 
     DTOUser getUser(DTOLogInInfo dtoLogInInfo) throws LoginException;
 
@@ -53,7 +54,7 @@ public interface UserService {
 
     void changePassword(String mail, String passwordOld, String passwordNew) throws LoginException;
 
-    boolean recoverPassword(String mail, String passwordNew) throws LoginException;
+    void recoverPassword(String mail, String passwordNew) throws LoginException;
 
     Set<DTOService> obtainOwnServices(String mail, String userType);
 
