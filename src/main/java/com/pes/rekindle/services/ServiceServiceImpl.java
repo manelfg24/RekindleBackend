@@ -2,9 +2,12 @@
 package com.pes.rekindle.services;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +22,7 @@ import com.pes.rekindle.entities.Donation;
 import com.pes.rekindle.entities.Education;
 import com.pes.rekindle.entities.Job;
 import com.pes.rekindle.entities.Lodge;
+import com.pes.rekindle.entities.Message;
 import com.pes.rekindle.entities.Refugee;
 import com.pes.rekindle.repositories.DonationRepository;
 import com.pes.rekindle.repositories.EducationRepository;
@@ -108,29 +112,52 @@ public class ServiceServiceImpl implements ServiceService {
         jobRepository.save(job);
     }
 
-    public Set<DTOService> listServices() {
-        Set<DTOService> dtosService = new HashSet<DTOService>();
+    public List<DTOService> listServices() {
+        ArrayList<DTOService> dtosService = new ArrayList<DTOService>();
         Set<Lodge> lodges = lodgeRepository.findAll();
         for (Lodge lodge : lodges) {
             DTOService dtoLodge = new DTOService(lodge);
             dtosService.add(dtoLodge);
+            dtosService.sort( new Comparator<DTOService>() {
+                @Override
+                public int compare(final DTOService object1, final DTOService object2) {
+                    return (int) (object1.getId()-object2.getId());
+                }
+            });
         }
         Set<Donation> donations = donationRepository.findAll();
         for (Donation donation : donations) {
             DTOService dtoDonation = new DTOService(donation);
             dtosService.add(dtoDonation);
+            dtosService.sort( new Comparator<DTOService>() {
+                @Override
+                public int compare(final DTOService object1, final DTOService object2) {
+                    return (int) (object1.getId()-object2.getId());
+                }
+            });
         }
         Set<Education> courses = educationRepository.findAll();
         for (Education education : courses) {
             DTOService dtoEducation = new DTOService(education);
             dtosService.add(dtoEducation);
+            dtosService.sort( new Comparator<DTOService>() {
+                @Override
+                public int compare(final DTOService object1, final DTOService object2) {
+                    return (int) (object1.getId()-object2.getId());
+                }
+            });
         }
         Set<Job> jobs = jobRepository.findAll();
         for (Job job : jobs) {
             DTOService dtoJob = new DTOService(job);
             dtosService.add(dtoJob);
+            dtosService.sort( new Comparator<DTOService>() {
+                @Override
+                public int compare(final DTOService object1, final DTOService object2) {
+                    return (int) (object1.getId()-object2.getId());
+                }
+            });
         }
-
         return dtosService;
     }
 
