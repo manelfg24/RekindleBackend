@@ -1,6 +1,7 @@
 
 package com.pes.rekindle.services;
 
+import java.util.List;
 import java.util.Set;
 
 import com.pes.rekindle.dto.DTODonation;
@@ -17,7 +18,7 @@ public interface ServiceService {
 
     void createLodge(DTOLodge lodge);
 
-    Set<DTOService> listServices();
+    List<DTOService> listServices();
 
     void createDonation(DTODonation donation);
 
