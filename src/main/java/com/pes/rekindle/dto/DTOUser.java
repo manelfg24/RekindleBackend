@@ -3,10 +3,13 @@ package com.pes.rekindle.dto;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.pes.rekindle.entities.Admin;
 import com.pes.rekindle.entities.Refugee;
 import com.pes.rekindle.entities.Volunteer;
 
+@JsonInclude(Include.NON_NULL)
 public class DTOUser {
     private String mail;
     private String password;
@@ -48,9 +51,9 @@ public class DTOUser {
         this.biography = refugee.getBiography();
         this.photo = refugee.getPhoto();
     }
-    
+
     public DTOUser(Volunteer volunteer) {
-    	super();
+        super();
         this.mail = volunteer.getMail();
         this.password = volunteer.getPassword();
         this.userType = "Volunteer";
@@ -59,9 +62,9 @@ public class DTOUser {
         this.surname2 = volunteer.getSurname2();
         this.photo = volunteer.getPhoto();
     }
-    
+
     public DTOUser(Admin admin) {
-    	super();
+        super();
         this.mail = admin.getMail();
         this.password = admin.getPassword();
         this.userType = "Admin";
@@ -184,14 +187,14 @@ public class DTOUser {
     }
 
     public String getPhoto() {
-		return photo;
-	}
+        return photo;
+    }
 
-	public void setPhoto(String photo) {
-		this.photo = photo;
-	}
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
 
-	public String getUserType() {
+    public String getUserType() {
         return userType;
     }
 

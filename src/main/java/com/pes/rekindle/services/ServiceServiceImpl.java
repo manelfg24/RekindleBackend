@@ -2,8 +2,12 @@
 package com.pes.rekindle.services;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +22,13 @@ import com.pes.rekindle.entities.Donation;
 import com.pes.rekindle.entities.Education;
 import com.pes.rekindle.entities.Job;
 import com.pes.rekindle.entities.Lodge;
+import com.pes.rekindle.entities.Message;
+import com.pes.rekindle.entities.Refugee;
 import com.pes.rekindle.repositories.DonationRepository;
 import com.pes.rekindle.repositories.EducationRepository;
 import com.pes.rekindle.repositories.JobRepository;
 import com.pes.rekindle.repositories.LodgeRepository;
+import com.pusher.rest.Pusher;
 
 @Service
 public class ServiceServiceImpl implements ServiceService {
@@ -105,37 +112,71 @@ public class ServiceServiceImpl implements ServiceService {
         jobRepository.save(job);
     }
 
-    public Set<DTOService> listServices() {
-        Set<DTOService> dtosService = new HashSet<DTOService>();
+    public List<DTOService> listServices() {
+        ArrayList<DTOService> dtosService = new ArrayList<DTOService>();
         Set<Lodge> lodges = lodgeRepository.findAll();
         for (Lodge lodge : lodges) {
             DTOService dtoLodge = new DTOService(lodge);
             dtosService.add(dtoLodge);
+            dtosService.sort( new Comparator<DTOService>() {
+                @Override
+                public int compare(final DTOService object1, final DTOService object2) {
+                    return (int) (object1.getId()-object2.getId());
+                }
+            });
         }
         Set<Donation> donations = donationRepository.findAll();
         for (Donation donation : donations) {
             DTOService dtoDonation = new DTOService(donation);
             dtosService.add(dtoDonation);
+            dtosService.sort( new Comparator<DTOService>() {
+                @Override
+                public int compare(final DTOService object1, final DTOService object2) {
+                    return (int) (object1.getId()-object2.getId());
+                }
+            });
         }
         Set<Education> courses = educationRepository.findAll();
         for (Education education : courses) {
             DTOService dtoEducation = new DTOService(education);
             dtosService.add(dtoEducation);
+            dtosService.sort( new Comparator<DTOService>() {
+                @Override
+                public int compare(final DTOService object1, final DTOService object2) {
+                    return (int) (object1.getId()-object2.getId());
+                }
+            });
         }
         Set<Job> jobs = jobRepository.findAll();
         for (Job job : jobs) {
             DTOService dtoJob = new DTOService(job);
             dtosService.add(dtoJob);
+            dtosService.sort( new Comparator<DTOService>() {
+                @Override
+                public int compare(final DTOService object1, final DTOService object2) {
+                    return (int) (object1.getId()-object2.getId());
+                }
+            });
         }
-
         return dtosService;
     }
 
     @Override
     public void deleteService(long id, String serviceType) {
+        Pusher pusher = new Pusher("525518", "743a4fb4a1370f0ca9a4", "c78f3bfa72330a58ee1f");
+        pusher.setCluster("eu");
+        pusher.setEncrypted(true);
+
         switch (serviceType) {
             case "Lodge":
+                Lodge lodge = lodgeRepository.findById(id);
                 lodgeRepository.deleteById(id);
+                pusher.trigger(serviceType + id, "deleted-service",
+                        Collections.singletonMap("message", new DTOService(lodge)));
+                for (Refugee refugee : lodge.getInscriptions()) {
+                    pusher.trigger(refugee.getMail(), "unenroll-service",
+                            Collections.singletonMap("message", id));
+                }
                 break;
             case "Education":
                 educationRepository.deleteById(id);
@@ -250,8 +291,7 @@ public class ServiceServiceImpl implements ServiceService {
 
     @Override
     public void modifyLodge(long id, DTOLodge dtoLodge) {
-        Lodge lodge = new Lodge();
-        lodge.setId(id);
+        Lodge lodge = lodgeRepository.findById(id);
         lodge.setName(dtoLodge.getName());
         lodge.setVolunteer(dtoLodge.getVolunteer());
         lodge.setServiceType("Lodge");
@@ -268,6 +308,11 @@ public class ServiceServiceImpl implements ServiceService {
         lodge.setDescription(dtoLodge.getDescription());
         lodgeRepository.save(lodge);
 
+        Pusher pusher = new Pusher("525518", "743a4fb4a1370f0ca9a4", "c78f3bfa72330a58ee1f");
+        pusher.setCluster("eu");
+        pusher.setEncrypted(true);
+        pusher.trigger(lodge.getServiceType() + lodge.getId(), "updated-service",
+                Collections.singletonMap("message", new DTOService(lodge)));
     }
 
     @Override

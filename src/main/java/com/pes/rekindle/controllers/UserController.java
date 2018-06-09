@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import javax.security.auth.login.LoginException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +19,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pes.rekindle.dto.DTOChat;
+import com.pes.rekindle.dto.DTOLink;
 import com.pes.rekindle.dto.DTOLogInInfo;
 import com.pes.rekindle.dto.DTOMessage;
 import com.pes.rekindle.dto.DTOReport;
 import com.pes.rekindle.dto.DTOUser;
-import com.pes.rekindle.entities.Volunteer;
+import com.pes.rekindle.exceptions.UserAlreadyExistsException;
+import com.pes.rekindle.exceptions.UserNotExistsException;
 import com.pes.rekindle.services.UserService;
 import com.pusher.rest.Pusher;
 
@@ -32,20 +36,20 @@ public class UserController {
     private UserService userService;
 
     @RequestMapping(value = "/voluntarios", method = RequestMethod.POST)
-    public ResponseEntity createVolunteer(@RequestBody Volunteer volunteer) {
+    public ResponseEntity<Void> createVolunteer(@RequestBody DTOUser volunteer) {
         try {
             userService.createVolunteer(volunteer);
-        } catch (Exception e) {
+        } catch (UserAlreadyExistsException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         }
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
     @RequestMapping(value = "/refugiados", method = RequestMethod.POST)
-    public ResponseEntity createRefugee(@RequestBody DTOUser refugee) {
+    public ResponseEntity<Void> createRefugee(@RequestBody DTOUser refugee) {
         try {
             userService.createRefugee(refugee);
-        } catch (Exception e) {
+        } catch (UserAlreadyExistsException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         }
         return ResponseEntity.status(HttpStatus.OK).body(null);
@@ -53,62 +57,67 @@ public class UserController {
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<DTOUser> logIn(DTOLogInInfo logInInfo) {
-        DTOUser dtoUser = userService.exists(logInInfo.getMail(),
-                logInInfo.getPassword());
-        if (dtoUser.getUserType().equals("Refugee") || dtoUser.getUserType().equals("Volunteer")
-                || dtoUser.getUserType().equals("Admin")) {
+        DTOUser dtoUser;
+        try {
+            dtoUser = userService.getUser(logInInfo);
             return ResponseEntity.status(HttpStatus.OK).body(dtoUser);
-        } else {
+        } catch (LoginException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
-
     }
 
     @RequestMapping(value = "/cambiarPassword/{mail}", method = RequestMethod.PUT)
-    public ResponseEntity changePassword(@PathVariable String mail, String passwordOld,
+    public ResponseEntity<Void> changePassword(@PathVariable String mail, String passwordOld,
             String passwordNew) {
-        if (userService.changePassword(mail, passwordOld, passwordNew)) {
+        try {
+            userService.changePassword(mail, passwordOld, passwordNew);
             return ResponseEntity.status(HttpStatus.OK).body(null);
-        } else {
+        } catch (LoginException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
 
     @RequestMapping(value = "/recuperarPassword/{mail}", method = RequestMethod.PUT)
-    public ResponseEntity changePassword(@PathVariable String mail, String passwordNew) {
-        if (userService.recoverPassword(mail, passwordNew)) {
+    public ResponseEntity<Void> recoverPassword(@PathVariable String mail, String passwordNew) {
+        try {
+            userService.recoverPassword(mail, passwordNew);
             return ResponseEntity.status(HttpStatus.OK).body(null);
-        } else {
+        } catch (LoginException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
 
     @RequestMapping(value = "/voluntarios/{mail}", method = RequestMethod.PUT)
-    public ResponseEntity modifyProfileVolunteer(@RequestBody DTOUser dtoUser) {
+    public ResponseEntity<Void> modifyVolunteer(@RequestBody DTOUser dtoUser) {
         // Cuidado tema seguridad
         userService.modifyProfileVolunteer(dtoUser);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
     @RequestMapping(value = "/refugiados/{mail}", method = RequestMethod.PUT)
-    public ResponseEntity modifyProfileRefugee(@RequestBody DTOUser refugee) {
+    public ResponseEntity<Void> modifyRefugee(@RequestBody DTOUser refugee) {
         userService.modifyProfileRefugee(refugee);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
     @RequestMapping(value = "/voluntarios/{mail}", method = RequestMethod.GET)
-    public ResponseEntity<DTOUser> infoVolunteer(@PathVariable String mail) {
-        DTOUser dtoUser = userService.infoVolunteer(mail);
-        return ResponseEntity.status(HttpStatus.OK).body(dtoUser);
+    public ResponseEntity<DTOUser> getVolunteer(@PathVariable String mail) {
+        try {
+            DTOUser volunteer = userService.getVolunteer(mail);
+            return ResponseEntity.status(HttpStatus.OK).body(volunteer);
+        } catch (UserNotExistsException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
 
     @RequestMapping(value = "/refugiados/{mail}", method = RequestMethod.GET)
-    public ResponseEntity<DTOUser> infoRefugee(@PathVariable String mail) {
-        DTOUser refugee = userService.infoRefugee(mail);
-        if (!(refugee == null))
+    public ResponseEntity<DTOUser> getRefugee(@PathVariable String mail) {
+        try {
+            DTOUser refugee = userService.getRefugee(mail);
             return ResponseEntity.status(HttpStatus.OK).body(refugee);
-        else
+        } catch (UserNotExistsException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
 
     // Busqueda de refugiados
@@ -127,10 +136,12 @@ public class UserController {
     }
 
     @RequestMapping(value = "/usuarios/{mail}/inscripciones/{id}/{tipo}", method = RequestMethod.POST)
-    public ResponseEntity enrollUserToService(@PathVariable String mail, @PathVariable Long id,
+    public ResponseEntity<Void> enrollUserToService(@PathVariable String mail,
+            @PathVariable Long id,
             @PathVariable String tipo) throws Exception {
         try {
             userService.enrollUserToService(mail, id, tipo);
+
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         }
@@ -138,9 +149,18 @@ public class UserController {
     }
 
     @RequestMapping(value = "/refugiados/{mail}/inscripciones/{id}/{tipo}", method = RequestMethod.DELETE)
-    public ResponseEntity unenrollUserFromService(@PathVariable String mail, @PathVariable Long id,
+    public ResponseEntity<Void> unenrollUserFromService(@PathVariable String mail,
+            @PathVariable Long id,
             @PathVariable String tipo) throws Exception {
         userService.unenrollUserFromService(mail, id, tipo);
+
+        Pusher pusher = new Pusher("525518", "743a4fb4a1370f0ca9a4", "c78f3bfa72330a58ee1f");
+        pusher.setCluster("eu");
+        pusher.setEncrypted(true);
+
+        pusher.trigger(tipo + mail, "unenroll-service",
+                Collections.singletonMap("message", id));
+
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
@@ -174,12 +194,21 @@ public class UserController {
     // Crea un chat
     @RequestMapping(value = "/usuarios/{mail}/chats", method = RequestMethod.POST)
     public ResponseEntity<DTOChat> createChat(@RequestBody DTOChat dtoChat) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.createChat(dtoChat));
+        DTOChat createdChat = userService.createChat(dtoChat);
+
+        Pusher pusher = new Pusher("525518", "743a4fb4a1370f0ca9a4", "c78f3bfa72330a58ee1f");
+        pusher.setCluster("eu");
+        pusher.setEncrypted(true);
+
+        pusher.trigger(dtoChat.getUser2().getMail(), "new-chat",
+                Collections.singletonMap("message", createdChat.getId()));
+
+        return ResponseEntity.status(HttpStatus.OK).body(createdChat);
     }
 
     // Enviar mensaje
     @RequestMapping(value = "/usuarios/{mail}/chats/{idChat}/messages", method = RequestMethod.POST)
-    public ResponseEntity sendMessage(@PathVariable String mail,
+    public ResponseEntity<Void> sendMessage(@PathVariable String mail,
             @PathVariable long idChat, @RequestBody DTOMessage dtoMessage) {
 
         userService.sendMessage(mail, idChat, dtoMessage);
@@ -187,7 +216,8 @@ public class UserController {
         pusher.setCluster("eu");
         pusher.setEncrypted(true);
 
-        pusher.trigger("my-channel", "my-event", Collections.singletonMap("message", dtoMessage));
+        pusher.trigger(Long.toString(idChat), "new-message",
+                Collections.singletonMap("message", dtoMessage));
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
@@ -199,7 +229,7 @@ public class UserController {
      */
 
     @RequestMapping(value = "/reportes", method = RequestMethod.POST)
-    public ResponseEntity createReport(@RequestBody DTOReport dtoReport) {
+    public ResponseEntity<Void> createReport(@RequestBody DTOReport dtoReport) {
         userService.createReport(dtoReport);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
@@ -214,6 +244,29 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getReport(id));
     }
 
+    @RequestMapping(value = "/links", method = RequestMethod.POST)
+    public ResponseEntity<Void> createLink(@RequestBody DTOLink dtoLink) {
+        userService.createLink(dtoLink);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+
+    @RequestMapping(value = "/links", method = RequestMethod.GET)
+    public ResponseEntity<Set<DTOLink>> listLinks() {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.listLinks());
+    }
+
+    @RequestMapping(value = "/links/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<Void> modifyLink(@PathVariable Long id, @RequestBody DTOLink dtoLink) {
+        userService.modifyLink(dtoLink);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+
+    @RequestMapping(value = "/links/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<Void> deleteLink(@PathVariable Long id) {
+        userService.deleteLink(id);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     public ResponseEntity<String> test() {
 
@@ -222,7 +275,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/test2", method = RequestMethod.GET)
-    public ResponseEntity test2() {
+    public ResponseEntity<Void> test2() {
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 }

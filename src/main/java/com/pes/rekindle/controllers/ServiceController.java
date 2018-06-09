@@ -1,12 +1,10 @@
 
 package com.pes.rekindle.controllers;
 
-import java.awt.List;
-import java.util.Map;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -61,7 +59,7 @@ public class ServiceController {
     }
 
     @RequestMapping(value = "/servicios", method = RequestMethod.GET)
-    public ResponseEntity<Set<DTOService>> listServices() {
+    public ResponseEntity<List<DTOService>> listServices() {
         return ResponseEntity.status(HttpStatus.OK).body(serviceService.listServices());
     }
 
@@ -95,19 +93,22 @@ public class ServiceController {
             @PathVariable("mail") String mail,
             @PathVariable("tipo") String userType) {
         Set<DTOService> result = userService.obtainOwnServices(mail, userType);
-        
+
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @RequestMapping(value = "/refugiados/{mail}/inscripciones/{id}/{tipo}", method = RequestMethod.GET)
-    public ResponseEntity<Boolean> userAlreadyEnrolled(@PathVariable String mail, @PathVariable Long id,
-    		@PathVariable String tipo) {
-        return ResponseEntity.status(HttpStatus.OK).body(serviceService.userAlreadyEnrolled(mail, id, tipo));
+    public ResponseEntity<Boolean> userAlreadyEnrolled(@PathVariable String mail,
+            @PathVariable Long id,
+            @PathVariable String tipo) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(serviceService.userAlreadyEnrolled(mail, id, tipo));
     }
-    
+
     @RequestMapping(value = "/servicios/{id}/{tipo}", method = RequestMethod.DELETE)
     public ResponseEntity<String> deleteService(@PathVariable Long id, @PathVariable String tipo) {
         serviceService.deleteService(id, tipo);
+
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
