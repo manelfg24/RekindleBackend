@@ -229,6 +229,41 @@ public class UserControllerTest {
     }
 
     @Test
+    public void getRefugeeTest() throws Exception {
+        String mail = "mailFelipe";
+
+        this.mockMvc
+                .perform(get("/refugiados/{mail}", mail)
+                        .accept(MediaType.APPLICATION_JSON_UTF8))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.mail").value("mailFelipe"))
+                .andExpect(jsonPath("$.userType").value("Refugee"))
+                .andExpect(jsonPath("$.surname1").value("betancourt"))
+                .andExpect(jsonPath("$.surname2").value("rodriguez"))
+                .andExpect(jsonPath("$.phoneNumber").value(942342312))
+                .andExpect(jsonPath("$.sex").value("Masculino"))
+                .andExpect(jsonPath("$.country").value("Cuba"))
+                .andExpect(jsonPath("$.town").value("La Havana"))
+                .andExpect(jsonPath("$.ethnic").value("hispano"))
+                .andExpect(jsonPath("$.bloodType").value("AB+"))
+                .andExpect(jsonPath("$.eyeColor").value("Castaño"))
+                .andExpect(jsonPath("$.biography").value("La biografia de Felipe"))
+                .andExpect(jsonPath("$.photo").value("photo Felipe"));
+    }
+
+    @Test
+    public void getNotExistentRefugeeShouldReturnNotFound() throws Exception {
+        String mail = "mailNotExistent";
+
+        this.mockMvc
+                .perform(get("/refugiados/{mail}", mail)
+                        .accept(MediaType.APPLICATION_JSON_UTF8))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
     public void createLinkTest() throws Exception {
         Link link = new Link();
         link.setType("Test");
