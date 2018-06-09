@@ -1,5 +1,6 @@
 INSERT INTO Volunteer VALUES('roger@gmail.com', '1234', 'roger', 'poch', 'alonso', 'photo Roger');
 INSERT INTO Volunteer VALUES('alex@gmail.com', '1234', 'alex', 'sanchez', 'gil', 'photo Alex');
+INSERT INTO Volunteer VALUES('aleix@gmail', '1234', 'alex', 'sanchez', 'gil', 'photo Alex');
 
 INSERT INTO Refugee VALUES('felipe@gmail.com', '1234', 'felipe', 'betancourt', 'rodriguez', 942342312, null, 'Masculino', 'Cuba', 'La Havana', 'hispano', 'AB+', 'Castaño', 'La biografia de Felipe', 'photo Felipe');
 INSERT INTO Refugee VALUES('rafael@gmail.com', '1234', 'rafael', 'ramirez', 'pozo', 942342442, null, 'Masculino', 'España', 'Barcelona', 'hispano', 'A+', 'Castaño', 'La biografia de Rafael', 'photo Rafael');

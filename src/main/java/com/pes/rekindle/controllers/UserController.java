@@ -134,6 +134,7 @@ public class UserController {
             @PathVariable String tipo) throws Exception {
         try {
             userService.enrollUserToService(mail, id, tipo);
+
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         }
@@ -145,6 +146,14 @@ public class UserController {
             @PathVariable Long id,
             @PathVariable String tipo) throws Exception {
         userService.unenrollUserFromService(mail, id, tipo);
+
+        Pusher pusher = new Pusher("525518", "743a4fb4a1370f0ca9a4", "c78f3bfa72330a58ee1f");
+        pusher.setCluster("eu");
+        pusher.setEncrypted(true);
+
+        pusher.trigger(tipo + mail, "unenroll-service",
+                Collections.singletonMap("message", id));
+
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
@@ -177,16 +186,16 @@ public class UserController {
 
     // Crea un chat
     @RequestMapping(value = "/usuarios/{mail}/chats", method = RequestMethod.POST)
-    public ResponseEntity<DTOChat> createChat(@RequestBody DTOChat dtoChat) { 
-    	DTOChat createdChat = userService.createChat(dtoChat);
-    	
+    public ResponseEntity<DTOChat> createChat(@RequestBody DTOChat dtoChat) {
+        DTOChat createdChat = userService.createChat(dtoChat);
+
         Pusher pusher = new Pusher("525518", "743a4fb4a1370f0ca9a4", "c78f3bfa72330a58ee1f");
         pusher.setCluster("eu");
         pusher.setEncrypted(true);
 
-        pusher.trigger(dtoChat.getUser1().getMail(), "my-event", Collections.singletonMap("message", createdChat.getId()));
-        pusher.trigger(dtoChat.getUser2().getMail(), "my-event", Collections.singletonMap("message", createdChat.getId()));
-        
+        pusher.trigger(dtoChat.getUser2().getMail(), "new-chat",
+                Collections.singletonMap("message", createdChat.getId()));
+
         return ResponseEntity.status(HttpStatus.OK).body(createdChat);
     }
 
@@ -200,7 +209,8 @@ public class UserController {
         pusher.setCluster("eu");
         pusher.setEncrypted(true);
 
-        pusher.trigger(Long.toString(idChat), "my-event", Collections.singletonMap("message", dtoMessage));
+        pusher.trigger(Long.toString(idChat), "new-message",
+                Collections.singletonMap("message", dtoMessage));
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
@@ -226,30 +236,30 @@ public class UserController {
     public ResponseEntity<DTOReport> getReport(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getReport(id));
     }
-    
+
     @RequestMapping(value = "/links", method = RequestMethod.POST)
     public ResponseEntity<Void> createLink(@RequestBody DTOLink dtoLink) {
         userService.createLink(dtoLink);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
-    
+
     @RequestMapping(value = "/links", method = RequestMethod.GET)
     public ResponseEntity<Set<DTOLink>> listLinks() {
         return ResponseEntity.status(HttpStatus.OK).body(userService.listLinks());
     }
-    
+
     @RequestMapping(value = "/links/{id}", method = RequestMethod.PUT)
     public ResponseEntity<Void> modifyLink(@PathVariable Long id, @RequestBody DTOLink dtoLink) {
-    	userService.modifyLink(dtoLink);
+        userService.modifyLink(dtoLink);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
     @RequestMapping(value = "/links/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<Void> deleteLink(@PathVariable Long id) {
-    	userService.deleteLink(id);
+        userService.deleteLink(id);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
-    
+
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     public ResponseEntity<String> test() {
 

@@ -48,6 +48,7 @@ import com.pes.rekindle.repositories.MessageRepository;
 import com.pes.rekindle.repositories.RefugeeRepository;
 import com.pes.rekindle.repositories.ReportRepository;
 import com.pes.rekindle.repositories.VolunteerRepository;
+import com.pusher.rest.Pusher;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -319,6 +320,10 @@ public class UserServiceImpl implements UserService {
             switch (dtoUser.getUserType()) {
                 case "Volunteer":
                     Volunteer volunteer = mapper.map(dtoUser, Volunteer.class);
+                    System.out.println("------------------------------------");
+                    System.out.println(volunteer.getMail());
+                    System.out.println(volunteer.getPassword());
+                    System.out.println(volunteer.getSurname1());
                     volunteer.setPassword(passwordNew);
                     volunteerRepository.save(volunteer);
                     break;
@@ -388,9 +393,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void enrollUserToService(String mail, Long id, String serviceType) throws Exception {
+        Pusher pusher = new Pusher("525518", "743a4fb4a1370f0ca9a4",
+                "c78f3bfa72330a58ee1f");
+        pusher.setCluster("eu");
+        pusher.setEncrypted(true);
         switch (serviceType) {
             case "Lodge":
                 enrollUserToLodge(mail, id);
+
+                Lodge lodge = lodgeRepository.findById(id);
+
+                pusher.trigger("Refugee" + mail, "enroll-service",
+                        Collections.singletonMap("message", new DTOService(lodge)));
                 break;
             case "Education":
                 enrollUserToEducation(mail, id);
@@ -512,9 +526,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void unenrollUserFromService(String mail, Long id, String serviceType) {
+        Pusher pusher = new Pusher("525518", "743a4fb4a1370f0ca9a4",
+                "c78f3bfa72330a58ee1f");
+        pusher.setCluster("eu");
+        pusher.setEncrypted(true);
         switch (serviceType) {
             case "Lodge":
                 unenrollUserFromLodge(mail, id);
+
+                Lodge lodge = lodgeRepository.findById(id);
+
+                pusher.trigger("Refugee" + mail, "unenroll-service",
+                        Collections.singletonMap("message", new DTOService(lodge)));
                 break;
             case "Education":
                 unenrollUserFromEducation(mail, id);

@@ -2,6 +2,7 @@
 package com.pes.rekindle.services;
 
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -18,10 +19,12 @@ import com.pes.rekindle.entities.Donation;
 import com.pes.rekindle.entities.Education;
 import com.pes.rekindle.entities.Job;
 import com.pes.rekindle.entities.Lodge;
+import com.pes.rekindle.entities.Refugee;
 import com.pes.rekindle.repositories.DonationRepository;
 import com.pes.rekindle.repositories.EducationRepository;
 import com.pes.rekindle.repositories.JobRepository;
 import com.pes.rekindle.repositories.LodgeRepository;
+import com.pusher.rest.Pusher;
 
 @Service
 public class ServiceServiceImpl implements ServiceService {
@@ -133,9 +136,20 @@ public class ServiceServiceImpl implements ServiceService {
 
     @Override
     public void deleteService(long id, String serviceType) {
+        Pusher pusher = new Pusher("525518", "743a4fb4a1370f0ca9a4", "c78f3bfa72330a58ee1f");
+        pusher.setCluster("eu");
+        pusher.setEncrypted(true);
+
         switch (serviceType) {
             case "Lodge":
+                Lodge lodge = lodgeRepository.findById(id);
                 lodgeRepository.deleteById(id);
+                pusher.trigger(serviceType + id, "deleted-service",
+                        Collections.singletonMap("message", new DTOService(lodge)));
+                for (Refugee refugee : lodge.getInscriptions()) {
+                    pusher.trigger("Refugee" + refugee.getMail(), "unenroll-service",
+                            Collections.singletonMap("message", id));
+                }
                 break;
             case "Education":
                 educationRepository.deleteById(id);
@@ -267,6 +281,12 @@ public class ServiceServiceImpl implements ServiceService {
         }
         lodge.setDescription(dtoLodge.getDescription());
         lodgeRepository.save(lodge);
+
+        Pusher pusher = new Pusher("525518", "743a4fb4a1370f0ca9a4", "c78f3bfa72330a58ee1f");
+        pusher.setCluster("eu");
+        pusher.setEncrypted(true);
+        pusher.trigger(lodge.getServiceType() + lodge.getId(), "updated-service",
+                Collections.singletonMap("message", new DTOService(lodge)));
 
     }
 
