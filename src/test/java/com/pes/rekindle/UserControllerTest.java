@@ -154,16 +154,7 @@ public class UserControllerTest {
 
         this.mockMvc.perform(put("/cambiarPassword/{mail}.com", mail)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .content("passwordOld=1234&passwordNew=12345")).andExpect(status().isOk())
-                .andDo(print());
-
-        this.mockMvc
-                .perform(post("/login")
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .content("mail=roger@gmail.com&password=1234"))
-                .andExpect(status().isOk())
-                .andExpect((jsonPath("$.password").value("12345")));
-
+                .content("passwordOld=1234&passwordNew=12345")).andExpect(status().isOk());
     }
 
     @Test

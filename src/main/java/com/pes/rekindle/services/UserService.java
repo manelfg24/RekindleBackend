@@ -53,7 +53,7 @@ public interface UserService {
 
     void changePassword(String mail, String passwordOld, String passwordNew) throws LoginException;
 
-    boolean recoverPassword(String mail, String passwordNew);
+    boolean recoverPassword(String mail, String passwordNew) throws LoginException;
 
     Set<DTOService> obtainOwnServices(String mail, String userType);
 
@@ -86,12 +86,12 @@ public interface UserService {
 
     DTOReport getReport(Long id);
 
-	void createLink(DTOLink dtoLink);
+    void createLink(DTOLink dtoLink);
 
-	Set<DTOLink> listLinks();
+    Set<DTOLink> listLinks();
 
-	void modifyLink(DTOLink dtoLink);
+    void modifyLink(DTOLink dtoLink);
 
-	void deleteLink(Long id);
+    void deleteLink(Long id);
 
 }

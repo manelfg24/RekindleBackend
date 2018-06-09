@@ -320,10 +320,6 @@ public class UserServiceImpl implements UserService {
             switch (dtoUser.getUserType()) {
                 case "Volunteer":
                     Volunteer volunteer = mapper.map(dtoUser, Volunteer.class);
-                    System.out.println("------------------------------------");
-                    System.out.println(volunteer.getMail());
-                    System.out.println(volunteer.getPassword());
-                    System.out.println(volunteer.getSurname1());
                     volunteer.setPassword(passwordNew);
                     volunteerRepository.save(volunteer);
                     break;
@@ -338,28 +334,26 @@ public class UserServiceImpl implements UserService {
                     adminRepository.save(admin);
                     break;
             }
-        } catch (LoginException e) {
+        } catch (Exception e) {
             throw new LoginException();
         }
     }
 
     @Override
-    public boolean recoverPassword(String mail, String passwordNew) {
+    public boolean recoverPassword(String mail, String passwordNew) throws LoginException {
         Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMail(mail);
         if (oRefugee.isPresent()) {
             Refugee refugee = oRefugee.get();
             refugee.setPassword(passwordNew);
             refugeeRepository.save(refugee);
-            return true;
         }
         Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMail(mail);
         if (oVolunteer.isPresent()) {
             Volunteer volunteer = oVolunteer.get();
             volunteer.setPassword(passwordNew);
             volunteerRepository.save(volunteer);
-            return true;
         }
-        return false;
+        throw new LoginException();
     }
 
     @Override

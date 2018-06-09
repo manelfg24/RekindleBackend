@@ -77,10 +77,11 @@ public class UserController {
     }
 
     @RequestMapping(value = "/recuperarPassword/{mail}", method = RequestMethod.PUT)
-    public ResponseEntity<Void> changePassword(@PathVariable String mail, String passwordNew) {
-        if (userService.recoverPassword(mail, passwordNew)) {
+    public ResponseEntity<Void> recoverPassword(@PathVariable String mail, String passwordNew) {
+        try {
+            userService.recoverPassword(mail, passwordNew);
             return ResponseEntity.status(HttpStatus.OK).body(null);
-        } else {
+        } catch (LoginException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
