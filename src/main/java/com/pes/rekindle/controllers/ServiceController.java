@@ -1,6 +1,7 @@
 
 package com.pes.rekindle.controllers;
 
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +59,7 @@ public class ServiceController {
     }
 
     @RequestMapping(value = "/servicios", method = RequestMethod.GET)
-    public ResponseEntity<Set<DTOService>> listServices() {
+    public ResponseEntity<List<DTOService>> listServices() {
         return ResponseEntity.status(HttpStatus.OK).body(serviceService.listServices());
     }
 
