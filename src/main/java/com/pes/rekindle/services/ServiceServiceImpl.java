@@ -113,51 +113,33 @@ public class ServiceServiceImpl implements ServiceService {
     }
 
     public List<DTOService> listServices() {
-        ArrayList<DTOService> dtosService = new ArrayList<DTOService>();
-        Set<Lodge> lodges = lodgeRepository.findAll();
-        for (Lodge lodge : lodges) {
-            DTOService dtoLodge = new DTOService(lodge);
-            dtosService.add(dtoLodge);
-            dtosService.sort( new Comparator<DTOService>() {
-                @Override
-                public int compare(final DTOService object1, final DTOService object2) {
-                    return (int) (object1.getId()-object2.getId());
-                }
-            });
-        }
+        ArrayList<DTOService> dtosService = new ArrayList<DTOService>();        
         Set<Donation> donations = donationRepository.findAll();
         for (Donation donation : donations) {
             DTOService dtoDonation = new DTOService(donation);
             dtosService.add(dtoDonation);
-            dtosService.sort( new Comparator<DTOService>() {
-                @Override
-                public int compare(final DTOService object1, final DTOService object2) {
-                    return (int) (object1.getId()-object2.getId());
-                }
-            });
         }
         Set<Education> courses = educationRepository.findAll();
         for (Education education : courses) {
             DTOService dtoEducation = new DTOService(education);
             dtosService.add(dtoEducation);
-            dtosService.sort( new Comparator<DTOService>() {
-                @Override
-                public int compare(final DTOService object1, final DTOService object2) {
-                    return (int) (object1.getId()-object2.getId());
-                }
-            });
         }
         Set<Job> jobs = jobRepository.findAll();
         for (Job job : jobs) {
             DTOService dtoJob = new DTOService(job);
             dtosService.add(dtoJob);
-            dtosService.sort( new Comparator<DTOService>() {
-                @Override
-                public int compare(final DTOService object1, final DTOService object2) {
-                    return (int) (object1.getId()-object2.getId());
-                }
-            });
         }
+        Set<Lodge> lodges = lodgeRepository.findAll();
+        for (Lodge lodge : lodges) {
+            DTOService dtoLodge = new DTOService(lodge);
+            dtosService.add(dtoLodge);            
+        }
+        /*dtosService.sort( new Comparator<DTOService>() {
+            @Override
+            public int compare(final DTOService object1, final DTOService object2) {
+                return (int) (object1.getId()-object2.getId());
+            }
+        });*/
         return dtosService;
     }
 
