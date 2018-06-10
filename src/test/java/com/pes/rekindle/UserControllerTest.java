@@ -207,8 +207,7 @@ public class UserControllerTest {
         String mail = "mailRoger";
 
         this.mockMvc
-                .perform(get("/voluntarios/{mail}", mail)
-                        .accept(MediaType.APPLICATION_JSON_UTF8))
+                .perform(get("/voluntarios/{mail}", mail))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.mail").value("mailRoger"))
@@ -222,8 +221,7 @@ public class UserControllerTest {
         String mail = "mailNotExistent";
 
         this.mockMvc
-                .perform(get("/voluntarios/{mail}", mail)
-                        .accept(MediaType.APPLICATION_JSON_UTF8))
+                .perform(get("/voluntarios/{mail}", mail))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
@@ -233,8 +231,7 @@ public class UserControllerTest {
         String mail = "mailFelipe";
 
         this.mockMvc
-                .perform(get("/refugiados/{mail}", mail)
-                        .accept(MediaType.APPLICATION_JSON_UTF8))
+                .perform(get("/refugiados/{mail}", mail))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.mail").value("mailFelipe"))
@@ -257,10 +254,29 @@ public class UserControllerTest {
         String mail = "mailNotExistent";
 
         this.mockMvc
-                .perform(get("/refugiados/{mail}", mail)
-                        .accept(MediaType.APPLICATION_JSON_UTF8))
+                .perform(get("/refugiados/{mail}", mail))
                 .andDo(print())
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void findRefugeeTest() throws Exception {
+
+        this.mockMvc
+                .perform(get("/refugiados")
+                        .param("name", "")
+                        .param("surname1", "")
+                        .param("surname2", "")
+                        .param("sex", "")
+                        .param("country", "")
+                        .param("ethnic", "")
+                        .param("bloodType", "")
+                        .param("mail", "")
+                        .param("birthdate", "")
+                        .param("town", "")
+                        .param("eyeColor", "Oscuro"))
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 
     @Test

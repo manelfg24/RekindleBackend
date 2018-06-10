@@ -264,44 +264,46 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Set<DTOUser> findRefugee(DTOUser dtoRefugee) {
+    public Set<DTOUser> findRefugee(String name, String surname1, String surname2, Date birthdate,
+            String sex, String country,
+            String town, String ethnic, String blood, String eye, String mail) {
         Set<Refugee> result = new HashSet<Refugee>();
         result = refugeeRepository.findAll();
-        if (!dtoRefugee.getName().equals("")) {
-            result.retainAll(refugeeRepository.findByName(dtoRefugee.getName()));
+        if (!name.equals("")) {
+            result.retainAll(refugeeRepository.findByName(name));
         }
-        if (!dtoRefugee.getSurname1().equals("")) {
-            result.retainAll(refugeeRepository.findBySurname1(dtoRefugee.getSurname1()));
+        if (!surname1.equals("")) {
+            result.retainAll(refugeeRepository.findBySurname1(surname1));
         }
-        if (!dtoRefugee.getSurname2().equals("")) {
-            result.retainAll(refugeeRepository.findBySurname2(dtoRefugee.getSurname2()));
+        if (!surname2.equals("")) {
+            result.retainAll(refugeeRepository.findBySurname2(surname2));
         }
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        String birthdateString = formatter.format(dtoRefugee.getBirthdate());
+        String birthdateString = formatter.format(birthdate);
         if (!birthdateString.equals("1890-01-01")) {
-            result.retainAll(refugeeRepository.findByBirthdate(dtoRefugee.getBirthdate()));
+            result.retainAll(refugeeRepository.findByBirthdate(birthdate));
         }
-        if (!dtoRefugee.getSex().equals("-"))
-            result.retainAll(refugeeRepository.findBySex(dtoRefugee.getSex()));
+        if (!sex.equals("-"))
+            result.retainAll(refugeeRepository.findBySex(sex));
 
-        if (!dtoRefugee.getCountry().equals("")) {
-            result.retainAll(refugeeRepository.findByCountry(dtoRefugee.getCountry()));
+        if (!country.equals("")) {
+            result.retainAll(refugeeRepository.findByCountry(country));
         }
-        if (!dtoRefugee.getTown().equals("")) {
-            result.retainAll(refugeeRepository.findByTown(dtoRefugee.getTown()));
+        if (!town.equals("")) {
+            result.retainAll(refugeeRepository.findByTown(town));
         }
-        if (!dtoRefugee.getEthnic().equals("")) {
-            result.retainAll(refugeeRepository.findByEthnic(dtoRefugee.getEthnic()));
+        if (!ethnic.equals("")) {
+            result.retainAll(refugeeRepository.findByEthnic(ethnic));
         }
-        if (!dtoRefugee.getBloodType().equals("-")) {
-            result.retainAll(refugeeRepository.findByBloodType(dtoRefugee.getBloodType()));
+        if (!blood.equals("-")) {
+            result.retainAll(refugeeRepository.findByBloodType(blood));
         }
-        if (!dtoRefugee.getEyeColor().equals("-")) {
-            result.retainAll(refugeeRepository.findByEyeColor(dtoRefugee.getEyeColor()));
+        if (!eye.equals("-")) {
+            result.retainAll(refugeeRepository.findByEyeColor(eye));
         }
         Set<DTOUser> dtosRefugee = new HashSet<DTOUser>();
         for (Refugee refugee : result) {
-            if (!refugee.getMail().equals(dtoRefugee.getMail())) {
+            if (!refugee.getMail().equals(mail)) {
                 DTOUser dtoUser = new DTOUser(refugee);
                 dtoUser.setUserType("Refugee");
                 dtosRefugee.add(dtoUser);
