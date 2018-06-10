@@ -77,10 +77,10 @@ public class ServiceControllerTest {
     public void contextLoads() throws Exception {
         assertThat(controller).isNotNull();
     }
-  @Before
+  /*@Before
     public void ini() throws Exception {
 	  
-	      /*Crera servicios de ALOJAMIENTO*/
+	      /*Crera servicios de ALOJAMIENTO
     	DTOLodge dtoLodge = new DTOLodge();
     	dtoLodge.setServiceType("Lodge");
     	dtoLodge.setName("Casa Pepe");
@@ -124,7 +124,7 @@ public class ServiceControllerTest {
         		.perform(post("/alojamientos").contentType(MediaType.APPLICATION_JSON_UTF8)
         				.content(json2));
         
-        /*Crear servicios de EDUCATION*/
+        /*Crear servicios de EDUCATION
         DTOEducation dtoEdu = new DTOEducation();
     	dtoEdu.setServiceType("Education");
     	dtoEdu.setName("Clases de Español de España");
@@ -144,7 +144,7 @@ public class ServiceControllerTest {
         				.content(jsonE));        
     }
         
-    
+    */
     @Test 
     public void createLodgeTest() throws Exception {
     	DTOLodge dtoLodge = new DTOLodge();
@@ -248,21 +248,21 @@ public class ServiceControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
-                .andExpect(jsonPath("$.[1].id").value(4))
-                .andExpect(jsonPath("$.[2].id").value(5))
-                .andExpect(jsonPath("$.[1].serviceType").value("Lodge"))
-                .andExpect(jsonPath("$.[2].serviceType").value("Lodge"))
-                .andExpect(jsonPath("$.[1].name").value("Casa Pepe"))
-                .andExpect(jsonPath("$.[2].name").value("Casa Pepe2"))
-                .andExpect(jsonPath("$.[1].volunteer").value("mailRoger"));
+                .andExpect(jsonPath("$.[0].id").value(1))
+                .andExpect(jsonPath("$.[1].id").value(2))
+                .andExpect(jsonPath("$.[0].serviceType").value("Donation"))
+                .andExpect(jsonPath("$.[1].serviceType").value("Donation"))
+                .andExpect(jsonPath("$.[0].name").value("Donation numero cero"))
+                .andExpect(jsonPath("$.[1].name").value("Donation numero uno"))
+                .andExpect(jsonPath("$.[0].volunteer").value("mailAlex"));
     }
     
     @Test
     public void infoLodgeTest() throws Exception {
         this.mockMvc
-                .perform(get("/alojamientos/{id}", 10))
+                .perform(get("/alojamientos/{id}", 1))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(10))
+                .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.serviceType").value("Lodge"))
                 .andExpect(jsonPath("$.name").value("Casa Pepe10"))
                 .andExpect(jsonPath("$.volunteer").value("mailRoger"));
@@ -272,13 +272,53 @@ public class ServiceControllerTest {
     @Test
     public void infoEducationTest() throws Exception {
         this.mockMvc
-                .perform(get("/cursos/{id}", 4))
+                .perform(get("/cursos/{id}", 1))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(4))
+                .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.serviceType").value("Education"))
-                .andExpect(jsonPath("$.name").value("Clases de Español de España"))
+                .andExpect(jsonPath("$.name").value("NombreEdu cero"))
+                .andExpect(jsonPath("$.volunteer").value("mailAlex"));
+    }
+    
+    @Test
+    public void infoDonationTest() throws Exception {
+        this.mockMvc
+                .perform(get("/donaciones/{id}", 1))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.serviceType").value("Donation"))
+                .andExpect(jsonPath("$.name").value("Donation numero cero"))
+                .andExpect(jsonPath("$.volunteer").value("mailAlex"));
+    }
+    
+    @Test
+    public void infoJobTest() throws Exception {
+        this.mockMvc
+                .perform(get("/empleos/{id}", 1))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.serviceType").value("Job"))
+                .andExpect(jsonPath("$.name").value("Nombre Job cero"))
                 .andExpect(jsonPath("$.volunteer").value("mailRoger"));
+    }
+    
+    @Test
+    public void obtainOwnServicesTest() throws Exception {
+        this.mockMvc
+                .perform(get("/servicios/{mail}/{tipo}", "mailRoger" , "Donation"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.[0].id").value(2))
+                .andExpect(jsonPath("$.[1].id").value(3))
+                .andExpect(jsonPath("$.[0].serviceType").value("Donation"))
+                .andExpect(jsonPath("$.[1].serviceType").value("Donation"))
+                .andExpect(jsonPath("$.[0].name").value("Donation numero uno"))
+                .andExpect(jsonPath("$.[1].name").value("Donation numero dos"))
+                .andExpect(jsonPath("$.[0].volunteer").value("mailRoger"))
+        		.andExpect(jsonPath("$.[1].volunteer").value("mailRoger"));
     }
 
 }
