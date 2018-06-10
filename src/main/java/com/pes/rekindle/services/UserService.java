@@ -1,6 +1,7 @@
 
 package com.pes.rekindle.services;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -47,7 +48,9 @@ public interface UserService {
 
     void enrollUserToService(String mail, Long id, String userType) throws Exception;
 
-    Set<DTOUser> findRefugee(DTOUser dtoRefugee);
+    Set<DTOUser> findRefugee(String name, String surname1, String surname2, Date birthdate,
+            String sex, String country,
+            String town, String ethnic, String blood, String eye, String mail);
 
     void changePassword(String mail, String passwordOld, String passwordNew) throws LoginException;
 
