@@ -260,26 +260,6 @@ public class UserControllerTest {
     }
 
     @Test
-    public void findRefugeeTest() throws Exception {
-
-        this.mockMvc
-                .perform(get("/refugiados")
-                        .param("name", "")
-                        .param("surname1", "")
-                        .param("surname2", "")
-                        .param("sex", "")
-                        .param("country", "")
-                        .param("ethnic", "")
-                        .param("bloodType", "")
-                        .param("mail", "")
-                        .param("birthdate", "")
-                        .param("town", "")
-                        .param("eyeColor", "Oscuro"))
-                .andDo(print())
-                .andExpect(status().isOk());
-    }
-
-    @Test
     public void createLinkTest() throws Exception {
         Link link = new Link();
         link.setType("Test");

@@ -267,44 +267,15 @@ public class UserServiceImpl implements UserService {
     public Set<DTOUser> findRefugee(String name, String surname1, String surname2, Date birthdate,
             String sex, String country,
             String town, String ethnic, String blood, String eye, String mail) {
-        Set<Refugee> result = new HashSet<Refugee>();
-        result = refugeeRepository.findAll();
-        if (!name.equals("")) {
-            result.retainAll(refugeeRepository.findByName(name));
-        }
-        if (!surname1.equals("")) {
-            result.retainAll(refugeeRepository.findBySurname1(surname1));
-        }
-        if (!surname2.equals("")) {
-            result.retainAll(refugeeRepository.findBySurname2(surname2));
-        }
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         String birthdateString = formatter.format(birthdate);
-        if (!birthdateString.equals("1890-01-01")) {
-            result.retainAll(refugeeRepository.findByBirthdate(birthdate));
-        }
-        if (!sex.equals("-"))
-            result.retainAll(refugeeRepository.findBySex(sex));
+        Set<Refugee> refugees = refugeeRepository.findRefugeeByParams(name, surname1, surname2,
+                birthdateString, sex, country, town, ethnic, blood, eye);
 
-        if (!country.equals("")) {
-            result.retainAll(refugeeRepository.findByCountry(country));
-        }
-        if (!town.equals("")) {
-            result.retainAll(refugeeRepository.findByTown(town));
-        }
-        if (!ethnic.equals("")) {
-            result.retainAll(refugeeRepository.findByEthnic(ethnic));
-        }
-        if (!blood.equals("-")) {
-            result.retainAll(refugeeRepository.findByBloodType(blood));
-        }
-        if (!eye.equals("-")) {
-            result.retainAll(refugeeRepository.findByEyeColor(eye));
-        }
         Set<DTOUser> dtosRefugee = new HashSet<DTOUser>();
-        for (Refugee refugee : result) {
+        for (Refugee refugee : refugees) {
             if (!refugee.getMail().equals(mail)) {
-                DTOUser dtoUser = new DTOUser(refugee);
+                DTOUser dtoUser = mapper.map(refugee, DTOUser.class);
                 dtoUser.setUserType("Refugee");
                 dtosRefugee.add(dtoUser);
             }
