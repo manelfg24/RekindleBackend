@@ -141,8 +141,7 @@ public class ServiceControllerTest {
         String jsonE = gsonE.toJson(dtoEdu);
         this.mockMvc
         		.perform(post("/cursos").contentType(MediaType.APPLICATION_JSON_UTF8)
-        				.content(jsonE));
-        
+        				.content(jsonE));        
     }
         
     
@@ -249,34 +248,31 @@ public class ServiceControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
-                .andExpect(jsonPath("$.[0].id").value(4))
-                .andExpect(jsonPath("$.[1].id").value(5))
-                .andExpect(jsonPath("$.[0].serviceType").value("Lodge"))
+                .andExpect(jsonPath("$.[1].id").value(4))
+                .andExpect(jsonPath("$.[2].id").value(5))
                 .andExpect(jsonPath("$.[1].serviceType").value("Lodge"))
-                .andExpect(jsonPath("$.[0].name").value("Casa Pepe"))
-                .andExpect(jsonPath("$.[1].name").value("Casa Pepe2"))
-                .andExpect(jsonPath("$.[0].volunteer").value("mailRoger"));
+                .andExpect(jsonPath("$.[2].serviceType").value("Lodge"))
+                .andExpect(jsonPath("$.[1].name").value("Casa Pepe"))
+                .andExpect(jsonPath("$.[2].name").value("Casa Pepe2"))
+                .andExpect(jsonPath("$.[1].volunteer").value("mailRoger"));
     }
     
     @Test
     public void infoLodgeTest() throws Exception {
-        long id = 4;
         this.mockMvc
-                .perform(get("/alojamientos/{id}", id))
-                .andDo(print())
+                .perform(get("/alojamientos/{id}", 10))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(4))
+                .andExpect(jsonPath("$.id").value(10))
                 .andExpect(jsonPath("$.serviceType").value("Lodge"))
-                .andExpect(jsonPath("$.name").value("Casa Pepe"))
+                .andExpect(jsonPath("$.name").value("Casa Pepe10"))
                 .andExpect(jsonPath("$.volunteer").value("mailRoger"));
     }
 
     
     @Test
     public void infoEducationTest() throws Exception {
-        long id = 0;
         this.mockMvc
-                .perform(get("/cursos/{id}", id))
+                .perform(get("/cursos/{id}", 4))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(4))
