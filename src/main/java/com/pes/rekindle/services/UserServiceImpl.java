@@ -37,6 +37,7 @@ import com.pes.rekindle.entities.Refugee;
 import com.pes.rekindle.entities.Report;
 import com.pes.rekindle.entities.Volunteer;
 import com.pes.rekindle.exceptions.UserAlreadyExistsException;
+import com.pes.rekindle.exceptions.UserNotExistsException;
 import com.pes.rekindle.repositories.AdminRepository;
 import com.pes.rekindle.repositories.ChatRepository;
 import com.pes.rekindle.repositories.DonationRepository;
@@ -189,7 +190,7 @@ public class UserServiceImpl implements UserService {
         volunteer.setSurname1(dtoUser.getSurname1());
         volunteer.setSurname2(dtoUser.getSurname2());
         volunteer.setPhoto(dtoUser.getPhoto());
-        volunteerRepository.flush();
+        volunteerRepository.save(volunteer);
     }
 
     public void modifyProfileRefugee(DTOUser dtoUser) {
@@ -207,23 +208,27 @@ public class UserServiceImpl implements UserService {
         refugee.setEyeColor(dtoUser.getEyeColor());
         refugee.setBiography(dtoUser.getBiography());
         refugee.setPhoto(dtoUser.getPhoto());
-        refugeeRepository.flush();
+        refugeeRepository.save(refugee);
     }
 
     @Override
-    public DTOUser infoVolunteer(String mail) {
+    public DTOUser getVolunteer(String mail) throws UserNotExistsException {
         Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMail(mail);
-        if (oVolunteer.isPresent())
+        if (oVolunteer.isPresent()) {
             return new DTOUser(oVolunteer.get());
-        return null;
+        } else {
+            throw new UserNotExistsException();
+        }
     }
 
     @Override
-    public DTOUser infoRefugee(String mail) {
+    public DTOUser getRefugee(String mail) throws UserNotExistsException {
         Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMail(mail);
-        if (oRefugee.isPresent())
+        if (oRefugee.isPresent()) {
             return new DTOUser(oRefugee.get());
-        return null;
+        } else {
+            throw new UserNotExistsException();
+        }
     }
 
     @Override
@@ -259,47 +264,44 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Set<DTOUser> findRefugee(String name, String surname1, String surname2,
-            Date birthdate,
-            String sex,
-            String country, String town, String ethnic, String blood, String eye, String mail) {
+    public Set<DTOUser> findRefugee(DTOUser dtoRefugee) {
         Set<Refugee> result = new HashSet<Refugee>();
         result = refugeeRepository.findAll();
-        if (!name.equals("")) {
-            result.retainAll(refugeeRepository.findByName(name));
+        if (!dtoRefugee.getName().equals("")) {
+            result.retainAll(refugeeRepository.findByName(dtoRefugee.getName()));
         }
-        if (!surname1.equals("")) {
-            result.retainAll(refugeeRepository.findBySurname1(surname1));
+        if (!dtoRefugee.getSurname1().equals("")) {
+            result.retainAll(refugeeRepository.findBySurname1(dtoRefugee.getSurname1()));
         }
-        if (!surname2.equals("")) {
-            result.retainAll(refugeeRepository.findBySurname2(surname2));
+        if (!dtoRefugee.getSurname2().equals("")) {
+            result.retainAll(refugeeRepository.findBySurname2(dtoRefugee.getSurname2()));
         }
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        String birthdateString = formatter.format(birthdate);
+        String birthdateString = formatter.format(dtoRefugee.getBirthdate());
         if (!birthdateString.equals("1890-01-01")) {
-            result.retainAll(refugeeRepository.findByBirthdate(birthdate));
+            result.retainAll(refugeeRepository.findByBirthdate(dtoRefugee.getBirthdate()));
         }
-        if (!sex.equals("-"))
-            result.retainAll(refugeeRepository.findBySex(sex));
+        if (!dtoRefugee.getSex().equals("-"))
+            result.retainAll(refugeeRepository.findBySex(dtoRefugee.getSex()));
 
-        if (!country.equals("")) {
-            result.retainAll(refugeeRepository.findByCountry(country));
+        if (!dtoRefugee.getCountry().equals("")) {
+            result.retainAll(refugeeRepository.findByCountry(dtoRefugee.getCountry()));
         }
-        if (!town.equals("")) {
-            result.retainAll(refugeeRepository.findByTown(town));
+        if (!dtoRefugee.getTown().equals("")) {
+            result.retainAll(refugeeRepository.findByTown(dtoRefugee.getTown()));
         }
-        if (!ethnic.equals("")) {
-            result.retainAll(refugeeRepository.findByEthnic(ethnic));
+        if (!dtoRefugee.getEthnic().equals("")) {
+            result.retainAll(refugeeRepository.findByEthnic(dtoRefugee.getEthnic()));
         }
-        if (!blood.equals("-")) {
-            result.retainAll(refugeeRepository.findByBloodType(blood));
+        if (!dtoRefugee.getBloodType().equals("-")) {
+            result.retainAll(refugeeRepository.findByBloodType(dtoRefugee.getBloodType()));
         }
-        if (!eye.equals("-")) {
-            result.retainAll(refugeeRepository.findByEyeColor(eye));
+        if (!dtoRefugee.getEyeColor().equals("-")) {
+            result.retainAll(refugeeRepository.findByEyeColor(dtoRefugee.getEyeColor()));
         }
         Set<DTOUser> dtosRefugee = new HashSet<DTOUser>();
         for (Refugee refugee : result) {
-            if (!refugee.getMail().equals(mail)) {
+            if (!refugee.getMail().equals(dtoRefugee.getMail())) {
                 DTOUser dtoUser = new DTOUser(refugee);
                 dtoUser.setUserType("Refugee");
                 dtosRefugee.add(dtoUser);
@@ -340,20 +342,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean recoverPassword(String mail, String passwordNew) throws LoginException {
+    public void recoverPassword(String mail, String passwordNew) throws LoginException {
         Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMail(mail);
         if (oRefugee.isPresent()) {
             Refugee refugee = oRefugee.get();
             refugee.setPassword(passwordNew);
             refugeeRepository.save(refugee);
+        } else {
+            Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMail(mail);
+            if (oVolunteer.isPresent()) {
+                Volunteer volunteer = oVolunteer.get();
+                volunteer.setPassword(passwordNew);
+                volunteerRepository.save(volunteer);
+            } else {
+                throw new LoginException();
+            }
         }
-        Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMail(mail);
-        if (oVolunteer.isPresent()) {
-            Volunteer volunteer = oVolunteer.get();
-            volunteer.setPassword(passwordNew);
-            volunteerRepository.save(volunteer);
-        }
-        throw new LoginException();
     }
 
     @Override
@@ -397,7 +401,7 @@ public class UserServiceImpl implements UserService {
 
                 Lodge lodge = lodgeRepository.findById(id);
 
-                pusher.trigger("Refugee" + mail, "enroll-service",
+                pusher.trigger(mail, "enroll-service",
                         Collections.singletonMap("message", new DTOService(lodge)));
                 break;
             case "Education":
@@ -530,7 +534,7 @@ public class UserServiceImpl implements UserService {
 
                 Lodge lodge = lodgeRepository.findById(id);
 
-                pusher.trigger("Refugee" + mail, "unenroll-service",
+                pusher.trigger(mail, "unenroll-service",
                         Collections.singletonMap("message", new DTOService(lodge)));
                 break;
             case "Education":

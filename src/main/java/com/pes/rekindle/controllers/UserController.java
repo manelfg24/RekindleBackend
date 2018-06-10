@@ -1,7 +1,6 @@
 
 package com.pes.rekindle.controllers;
 
-import java.sql.Date;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -25,6 +24,7 @@ import com.pes.rekindle.dto.DTOMessage;
 import com.pes.rekindle.dto.DTOReport;
 import com.pes.rekindle.dto.DTOUser;
 import com.pes.rekindle.exceptions.UserAlreadyExistsException;
+import com.pes.rekindle.exceptions.UserNotExistsException;
 import com.pes.rekindle.services.UserService;
 import com.pusher.rest.Pusher;
 
@@ -59,10 +59,10 @@ public class UserController {
         DTOUser dtoUser;
         try {
             dtoUser = userService.getUser(logInInfo);
+            return ResponseEntity.status(HttpStatus.OK).body(dtoUser);
         } catch (LoginException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
-        return ResponseEntity.status(HttpStatus.OK).body(dtoUser);
     }
 
     @RequestMapping(value = "/cambiarPassword/{mail}", method = RequestMethod.PUT)
@@ -87,45 +87,41 @@ public class UserController {
     }
 
     @RequestMapping(value = "/voluntarios/{mail}", method = RequestMethod.PUT)
-    public ResponseEntity<Void> modifyProfileVolunteer(@RequestBody DTOUser dtoUser) {
+    public ResponseEntity<Void> modifyVolunteer(@RequestBody DTOUser dtoUser) {
         // Cuidado tema seguridad
         userService.modifyProfileVolunteer(dtoUser);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
     @RequestMapping(value = "/refugiados/{mail}", method = RequestMethod.PUT)
-    public ResponseEntity<Void> modifyProfileRefugee(@RequestBody DTOUser refugee) {
+    public ResponseEntity<Void> modifyRefugee(@RequestBody DTOUser refugee) {
         userService.modifyProfileRefugee(refugee);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
     @RequestMapping(value = "/voluntarios/{mail}", method = RequestMethod.GET)
-    public ResponseEntity<DTOUser> infoVolunteer(@PathVariable String mail) {
-        DTOUser dtoUser = userService.infoVolunteer(mail);
-        return ResponseEntity.status(HttpStatus.OK).body(dtoUser);
+    public ResponseEntity<DTOUser> getVolunteer(@PathVariable String mail) {
+        try {
+            DTOUser volunteer = userService.getVolunteer(mail);
+            return ResponseEntity.status(HttpStatus.OK).body(volunteer);
+        } catch (UserNotExistsException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
 
     @RequestMapping(value = "/refugiados/{mail}", method = RequestMethod.GET)
-    public ResponseEntity<DTOUser> infoRefugee(@PathVariable String mail) {
-        DTOUser refugee = userService.infoRefugee(mail);
-        if (!(refugee == null))
+    public ResponseEntity<DTOUser> getRefugee(@PathVariable String mail) {
+        try {
+            DTOUser refugee = userService.getRefugee(mail);
             return ResponseEntity.status(HttpStatus.OK).body(refugee);
-        else
+        } catch (UserNotExistsException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
 
-    // Busqueda de refugiados
     @RequestMapping(value = "/refugiados", method = RequestMethod.GET)
-    public ResponseEntity<Set<DTOUser>> findRefugee(@RequestParam("name") String name,
-            @RequestParam("surname1") String surname1,
-            @RequestParam("surname2") String surname2, @RequestParam("birthdate") Date birthdate,
-            @RequestParam("sex") String sex,
-            @RequestParam("country") String country, @RequestParam("town") String town,
-            @RequestParam("ethnic") String ethnic,
-            @RequestParam("blood") String blood, @RequestParam("eye") String eye,
-            @RequestParam("mail") String mail) {
-        Set<DTOUser> refugees = userService.findRefugee(name, surname1, surname2, birthdate, sex,
-                country, town, ethnic, blood, eye, mail);
+    public ResponseEntity<Set<DTOUser>> findRefugee(@RequestParam DTOUser dtoRefugee) {
+        Set<DTOUser> refugees = userService.findRefugee(dtoRefugee);
         return ResponseEntity.status(HttpStatus.OK).body(refugees);
     }
 

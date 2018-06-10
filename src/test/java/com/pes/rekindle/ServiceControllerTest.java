@@ -76,13 +76,63 @@ public class ServiceControllerTest {
     public void contextLoads() throws Exception {
         assertThat(controller).isNotNull();
     }
+  @Before 
+    public void ini() throws Exception {	 
+	      /*Crera servicios de ALOJAMIENTO*/
+    	DTOLodge dtoLodge = new DTOLodge();
+    	dtoLodge.setServiceType("Lodge");
+    	dtoLodge.setName("Casa Pepe");
+    	dtoLodge.setVolunteer("mailRoger");
+    	dtoLodge.setPhoneNumber(936666666);
+    	dtoLodge.setAdress("Balmes");  
+    	dtoLodge.setPlaces(2);
+    	SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date dateLimit = formatter.parse("2018-07-23");
+            dtoLodge.setDateLimit(dateLimit);
+        } catch (Exception e) {
+
+        }
+        dtoLodge.setDescription("Alojamiento para dos personas");
+        Gson gson = new Gson();
+        String json = gson.toJson(dtoLodge);
+        this.mockMvc
+        		.perform(post("/alojamientos").contentType(MediaType.APPLICATION_JSON_UTF8)
+        				.content(json))
+        		.andExpect(status().isOk());  
+        
+        
+        DTOLodge dtoLodge1 = new DTOLodge();
+    	dtoLodge1.setServiceType("Lodge");
+    	dtoLodge1.setName("Casa Pepe2");
+    	dtoLodge1.setVolunteer("mailAlex");
+    	dtoLodge1.setPhoneNumber(936666666);
+    	dtoLodge1.setAdress("Balmes");  
+    	dtoLodge1.setPlaces(2);
+    	SimpleDateFormat formatter1 = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date dateLimit = formatter1.parse("2018-07-23");
+            dtoLodge1.setDateLimit(dateLimit);
+        } catch (Exception e) {
+
+        }
+        dtoLodge1.setDescription("Alojamiento para dos personas");
+        Gson gson2 = new Gson();
+        String json2 = gson2.toJson(dtoLodge1);
+        this.mockMvc
+        		.perform(post("/alojamientos").contentType(MediaType.APPLICATION_JSON_UTF8)
+        				.content(json2))
+        		.andExpect(status().isOk());
+        
+    }
+        
     
     @Test 
     public void createLodgeTest() throws Exception {
     	DTOLodge dtoLodge = new DTOLodge();
     	dtoLodge.setServiceType("Lodge");
     	dtoLodge.setName("Casa Pepe");
-    	dtoLodge.setVolunteer("roger@gmail.com");
+    	dtoLodge.setVolunteer("mailRoger");
     	dtoLodge.setPhoneNumber(936666666);
     	dtoLodge.setAdress("Balmes");  
     	dtoLodge.setPlaces(2);
@@ -107,7 +157,7 @@ public class ServiceControllerTest {
     	DTODonation dtoDonation = new DTODonation();
     	dtoDonation.setServiceType("Donation");
     	dtoDonation.setName("Donación de ropa");
-    	dtoDonation.setVolunteer("roger@gmail.com");
+    	dtoDonation.setVolunteer("mailRoger");
     	dtoDonation.setPhoneNumber(936666666);
     	dtoDonation.setAdress("Balmes");
     	dtoDonation.setPlaces(2);
@@ -130,7 +180,7 @@ public class ServiceControllerTest {
     	DTOEducation dtoEdu = new DTOEducation();
     	dtoEdu.setServiceType("Education");
     	dtoEdu.setName("Clases de Español de España");
-    	dtoEdu.setVolunteer("roger@gmail.com");
+    	dtoEdu.setVolunteer("mailRoger");
     	dtoEdu.setPhoneNumber(936666666);
     	dtoEdu.setAdress("Balmes");
     	dtoEdu.setAmbit("Idioma");
@@ -139,11 +189,11 @@ public class ServiceControllerTest {
     	dtoEdu.setPlaces(2);
     	dtoEdu.setPrice(0);
     	dtoEdu.setDescription("Clases de español basico por M.Rjoy");
-    	Gson gson = new Gson();
-        String json = gson.toJson(dtoEdu);
+    	Gson gsonE = new Gson();
+        String jsonE = gsonE.toJson(dtoEdu);
         this.mockMvc
         		.perform(post("/cursos").contentType(MediaType.APPLICATION_JSON_UTF8)
-        				.content(json))
+        				.content(jsonE))
         		.andExpect(status().isOk());   
     }
     
@@ -152,7 +202,7 @@ public class ServiceControllerTest {
     	DTOJob dtoJob = new DTOJob();
     	dtoJob.setServiceType("Job");
     	dtoJob.setName("Carpintero");
-    	dtoJob.setVolunteer("roger@gmail.com");
+    	dtoJob.setVolunteer("mailRoger");
     	dtoJob.setPhoneNumber(936666666);
     	dtoJob.setAdress("Balmes");
     	dtoJob.setCharge("Becario");
@@ -178,12 +228,13 @@ public class ServiceControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
-                .andExpect(jsonPath("$.[0].id").value(0))
-                .andExpect(jsonPath("$.[1].id").value(0))
-                .andExpect(jsonPath("$.[0].serviceType").value("e"))
-                .andExpect(jsonPath("$.[1].serviceType").value("d"))
-                .andExpect(jsonPath("$.[0].name").value("NombreEdu"))
-                .andExpect(jsonPath("$.[0].volunteer").value("roger@gmail.com"));
+                .andExpect(jsonPath("$.[0].id").value(4))
+                .andExpect(jsonPath("$.[1].id").value(5))
+                .andExpect(jsonPath("$.[0].serviceType").value("Lodge"))
+                .andExpect(jsonPath("$.[1].serviceType").value("Lodge"))
+                .andExpect(jsonPath("$.[0].name").value("Casa Pepe"))
+                .andExpect(jsonPath("$.[1].name").value("Casa Pepe2"))
+                .andExpect(jsonPath("$.[0].volunteer").value("mailRoger"));
     }
 
 }

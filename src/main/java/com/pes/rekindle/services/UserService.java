@@ -1,7 +1,6 @@
 
 package com.pes.rekindle.services;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -15,6 +14,7 @@ import com.pes.rekindle.dto.DTOReport;
 import com.pes.rekindle.dto.DTOService;
 import com.pes.rekindle.dto.DTOUser;
 import com.pes.rekindle.exceptions.UserAlreadyExistsException;
+import com.pes.rekindle.exceptions.UserNotExistsException;
 
 public interface UserService {
 
@@ -39,21 +39,19 @@ public interface UserService {
 
     void modifyProfileRefugee(DTOUser refugee);
 
-    DTOUser infoVolunteer(String mail);
+    DTOUser getVolunteer(String mail) throws UserNotExistsException;
 
-    DTOUser infoRefugee(String mail);
+    DTOUser getRefugee(String mail) throws UserNotExistsException;
 
     DTOUser getUser(DTOLogInInfo dtoLogInInfo) throws LoginException;
 
     void enrollUserToService(String mail, Long id, String userType) throws Exception;
 
-    Set<DTOUser> findRefugee(String name, String surname1, String surname2, Date birthdate,
-            String sex, String country,
-            String town, String ethnic, String blood, String eye, String mail);
+    Set<DTOUser> findRefugee(DTOUser dtoRefugee);
 
     void changePassword(String mail, String passwordOld, String passwordNew) throws LoginException;
 
-    boolean recoverPassword(String mail, String passwordNew) throws LoginException;
+    void recoverPassword(String mail, String passwordNew) throws LoginException;
 
     Set<DTOService> obtainOwnServices(String mail, String userType);
 
