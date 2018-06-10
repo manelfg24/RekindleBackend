@@ -124,7 +124,7 @@ public class ServiceControllerTest {
         		.perform(post("/alojamientos").contentType(MediaType.APPLICATION_JSON_UTF8)
         				.content(json2));
         
-        /*Crear servicios de EDUCATION
+        /*Crear servicios de EDUCATION*/
         DTOEducation dtoEdu = new DTOEducation();
     	dtoEdu.setServiceType("Education");
     	dtoEdu.setName("Clases de Español de España");
@@ -142,7 +142,7 @@ public class ServiceControllerTest {
         this.mockMvc
         		.perform(post("/cursos").contentType(MediaType.APPLICATION_JSON_UTF8)
         				.content(jsonE));
-        */
+        
     }
         
     
@@ -271,5 +271,18 @@ public class ServiceControllerTest {
                 .andExpect(jsonPath("$.volunteer").value("mailRoger"));
     }
 
+    
+    @Test
+    public void infoEducationTest() throws Exception {
+        long id = 0;
+        this.mockMvc
+                .perform(get("/cursos/{id}", id))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(4))
+                .andExpect(jsonPath("$.serviceType").value("Education"))
+                .andExpect(jsonPath("$.name").value("Clases de Español de España"))
+                .andExpect(jsonPath("$.volunteer").value("mailRoger"));
+    }
 
 }
