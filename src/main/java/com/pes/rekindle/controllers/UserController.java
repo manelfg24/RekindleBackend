@@ -2,7 +2,6 @@
 package com.pes.rekindle.controllers;
 
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -123,12 +122,13 @@ public class UserController {
     @RequestMapping(value = "/refugiados", method = RequestMethod.GET)
     public ResponseEntity<Set<DTOUser>> findRefugee(@RequestParam("name") String name,
             @RequestParam("surname1") String surname1,
-            @RequestParam("surname2") String surname2, @RequestParam("birthdate") Date birthdate,
+            @RequestParam("surname2") String surname2, @RequestParam("birthdate") String birthdate,
             @RequestParam("sex") String sex,
             @RequestParam("country") String country, @RequestParam("town") String town,
             @RequestParam("ethnic") String ethnic,
             @RequestParam("blood") String blood, @RequestParam("eye") String eye,
             @RequestParam("mail") String mail) {
+
         Set<DTOUser> refugees = userService.findRefugee(name, surname1, surname2, birthdate, sex,
                 country, town, ethnic, blood, eye, mail);
         return ResponseEntity.status(HttpStatus.OK).body(refugees);

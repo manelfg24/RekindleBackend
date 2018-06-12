@@ -1,6 +1,7 @@
 
 package com.pes.rekindle.dto;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -18,7 +19,7 @@ public class DTOUser {
     private String surname1;
     private String surname2;
     private Integer phoneNumber;
-    private Date birthdate;
+    private String birthdate;
     private String sex;
     private String country;
     private String town;
@@ -41,7 +42,10 @@ public class DTOUser {
         this.surname1 = refugee.getSurname1();
         this.surname2 = refugee.getSurname2();
         this.phoneNumber = refugee.getPhoneNumber();
-        this.birthdate = refugee.getBirthdate();
+        if (refugee.getBirthdate() != null) {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            this.birthdate = formatter.format(refugee.getBirthdate());
+        }
         this.sex = refugee.getSex();
         this.country = refugee.getCountry();
         this.town = refugee.getTown();
@@ -122,12 +126,13 @@ public class DTOUser {
         this.phoneNumber = phoneNumber;
     }
 
-    public Date getBirthdate() {
+    public String getBirthdate() {
         return birthdate;
     }
 
     public void setBirthdate(Date birthdate) {
-        this.birthdate = birthdate;
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        this.birthdate = formatter.format(birthdate);
     }
 
     public String getSex() {

@@ -199,7 +199,12 @@ public class UserServiceImpl implements UserService {
         refugee.setSurname1(dtoUser.getSurname1());
         refugee.setSurname2(dtoUser.getSurname2());
         refugee.setPhoneNumber(dtoUser.getPhoneNumber());
-        refugee.setBirthdate(dtoUser.getBirthdate());
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date birthdate = formatter.parse(dtoUser.getBirthdate());
+            refugee.setBirthdate(birthdate);
+        } catch (Exception e) {
+        }
         refugee.setSex(dtoUser.getSex());
         refugee.setCountry(dtoUser.getCountry());
         refugee.setTown(dtoUser.getTown());
@@ -264,13 +269,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Set<DTOUser> findRefugee(String name, String surname1, String surname2, Date birthdate,
+    public Set<DTOUser> findRefugee(String name, String surname1, String surname2, String birthdate,
             String sex, String country,
             String town, String ethnic, String blood, String eye, String mail) {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        String birthdateString = formatter.format(birthdate);
         Set<Refugee> refugees = refugeeRepository.findRefugeeByParams(name, surname1, surname2,
-                birthdateString, sex, country, town, ethnic, blood, eye);
+                birthdate, sex, country, town, ethnic, blood, eye);
 
         Set<DTOUser> dtosRefugee = new HashSet<DTOUser>();
         for (Refugee refugee : refugees) {
