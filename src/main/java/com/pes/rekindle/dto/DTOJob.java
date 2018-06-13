@@ -18,6 +18,8 @@ public class DTOJob {
     private Integer places;
     private double salary;
     private String description;
+    private double positionLat;
+    private double positionLng;
 
     public DTOJob() {
         super();
@@ -39,6 +41,8 @@ public class DTOJob {
         this.places = job.getPlaces();
         this.salary = job.getSalary();
         this.description = job.getDescription();
+        this.positionLat = job.getPositionLat();
+        this.positionLng = job.getPositionLng();
     }
 
     public long getId() {
@@ -152,4 +156,20 @@ public class DTOJob {
     public void setDescription(String description) {
         this.description = description;
     }
+
+	public double getPositionLat() {
+		return positionLat;
+	}
+
+	public void setPositionLat(double positionLat) {
+		this.positionLat = positionLat;
+	}
+
+	public double getPositionLng() {
+		return positionLng;
+	}
+
+	public void setPositionLng(double positionLng) {
+		this.positionLng = positionLng;
+	}
 }

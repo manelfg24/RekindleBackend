@@ -16,6 +16,8 @@ public class DTOLodge {
     private Integer places;
     private String dateLimit;
     private String description;
+    private double positionLat;
+    private double positionLng;
 
     public DTOLodge() {
         super();
@@ -33,6 +35,8 @@ public class DTOLodge {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         this.dateLimit = formatter.format(lodge.getDateLimit());
         this.description = lodge.getDescription();
+        this.positionLat = lodge.getPositionLat();
+        this.positionLng = lodge.getPositionLng();
     }
 
     public long getId() {
@@ -107,4 +111,20 @@ public class DTOLodge {
     public void setDescription(String description) {
         this.description = description;
     }
+
+	public double getPositionLat() {
+		return positionLat;
+	}
+
+	public void setPositionLat(double positionLat) {
+		this.positionLat = positionLat;
+	}
+
+	public double getPositionLng() {
+		return positionLng;
+	}
+
+	public void setPositionLng(double positionLng) {
+		this.positionLng = positionLng;
+	}
 }

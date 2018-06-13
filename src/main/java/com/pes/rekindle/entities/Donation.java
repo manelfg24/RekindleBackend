@@ -39,6 +39,8 @@ public class Donation {
     private Time endTime;
     @NotNull
     private String description;
+    private double positionLat;
+    private double positionLng;
 
     @ManyToMany(cascade = {
             CascadeType.PERSIST,
@@ -135,4 +137,19 @@ public class Donation {
         this.inscriptions = inscriptions;
     }
 
+	public double getPositionLat() {
+		return positionLat;
+	}
+
+	public void setPositionLat(double positionLat) {
+		this.positionLat = positionLat;
+	}
+
+	public double getPositionLng() {
+		return positionLng;
+	}
+
+	public void setPositionLng(double positionLng) {
+		this.positionLng = positionLng;
+	}
 }

@@ -69,4 +69,7 @@ public interface ServiceService {
 
 	void valorateService(DTOValoration dtoValoration);
 
+	ArrayList<DTOService> filterServices(String fromDate, String toDate, double minimumRating,
+			double positionLat, double positionLng, double distance);
+
 }

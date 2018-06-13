@@ -177,4 +177,14 @@ public class ServiceController {
     	serviceService.valorateService(dtoValoration);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
+    
+    @RequestMapping(value = "/servicios/filtrar", method = RequestMethod.GET)
+    public ResponseEntity<ArrayList<DTOService>> filterServices(@RequestParam String fromDate, @RequestParam String toDate,
+    		@RequestParam double minimumRating, @RequestParam double positionLat,
+    		@RequestParam double positionLng, @RequestParam double distance) {
+    	ArrayList<DTOService> filteredServices = serviceService.filterServices(fromDate, toDate, minimumRating, positionLat,
+    			positionLng, distance);
+    	return ResponseEntity.status(HttpStatus.OK).body(filteredServices);
+    }
+
 }

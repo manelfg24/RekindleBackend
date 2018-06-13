@@ -37,6 +37,8 @@ public class Lodge {
     private Date dateLimit;
     @NotNull
     private String description;
+    private double positionLat;
+    private double positionLng;
 
     @ManyToMany(cascade = {
             CascadeType.PERSIST,
@@ -125,4 +127,19 @@ public class Lodge {
         this.inscriptions = inscriptions;
     }
 
+	public double getPositionLat() {
+		return positionLat;
+	}
+
+	public void setPositionLat(double positionLat) {
+		this.positionLat = positionLat;
+	}
+
+	public double getPositionLng() {
+		return positionLng;
+	}
+
+	public void setPositionLng(double positionLng) {
+		this.positionLng = positionLng;
+	}
 }

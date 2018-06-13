@@ -19,6 +19,8 @@ public class DTODonation {
     private Time startTime;
     private Time endTime;
     private String description;
+    private double positionLat;
+    private double positionLng;
 
     public DTODonation() {
         super();
@@ -36,6 +38,8 @@ public class DTODonation {
         this.startTime = donation.getStartTime();
         this.endTime = donation.getEndTime();
         this.description = donation.getDescription();
+        this.positionLat = donation.getPositionLat();
+        this.positionLng = donation.getPositionLng();
     }
 
     public long getId() {
@@ -117,4 +121,20 @@ public class DTODonation {
     public void setDescription(String description) {
         this.description = description;
     }
+
+	public double getPositionLat() {
+		return positionLat;
+	}
+
+	public void setPositionLat(double positionLat) {
+		this.positionLat = positionLat;
+	}
+
+	public double getPositionLng() {
+		return positionLng;
+	}
+
+	public void setPositionLng(double positionLng) {
+		this.positionLng = positionLng;
+	}
 }

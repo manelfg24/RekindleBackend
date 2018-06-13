@@ -16,6 +16,8 @@ public class DTOService {
     private Integer phoneNumber;
     private String adress;
     private String description;
+    private double positionLat;
+    private double positionLng;
 
 	public DTOService() {
         super();
@@ -30,6 +32,8 @@ public class DTOService {
         this.phoneNumber = lodge.getPhoneNumber();
         this.adress = lodge.getAdress();
         this.description = lodge.getDescription();
+        this.positionLat = lodge.getPositionLat();
+        this.positionLng = lodge.getPositionLng();
     }
     
     public DTOService(Donation donation) {
@@ -41,6 +45,8 @@ public class DTOService {
         this.phoneNumber = donation.getPhoneNumber();
         this.adress = donation.getAdress();
         this.description = donation.getDescription();
+        this.positionLat = donation.getPositionLat();
+        this.positionLng = donation.getPositionLng();
     }
     
     public DTOService(Education education) {
@@ -52,6 +58,8 @@ public class DTOService {
         this.phoneNumber = education.getPhoneNumber();
         this.adress = education.getAdress();
         this.description = education.getDescription();
+        this.positionLat = education.getPositionLat();
+        this.positionLng = education.getPositionLng();
     }
   
     public DTOService(Job job) {
@@ -63,6 +71,8 @@ public class DTOService {
         this.phoneNumber = job.getPhoneNumber();
         this.adress = job.getAdress();
         this.description = job.getDescription();
+        this.positionLat = job.getPositionLat();
+        this.positionLng = job.getPositionLng();
     }
     
     public long getId() {
@@ -120,4 +130,20 @@ public class DTOService {
     public void setDescription(String description) {
         this.description = description;
     }
+
+	public double getPositionLat() {
+		return positionLat;
+	}
+
+	public void setPositionLat(double positionLat) {
+		this.positionLat = positionLat;
+	}
+
+	public double getPositionLng() {
+		return positionLng;
+	}
+
+	public void setPositionLng(double positionLng) {
+		this.positionLng = positionLng;
+	}
 }

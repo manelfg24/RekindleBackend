@@ -16,6 +16,8 @@ public class DTOEducation {
     private Integer places;
     private Integer price;
     private String description;
+    private double positionLat;
+    private double positionLng;
 
     public DTOEducation() {
         super();
@@ -43,6 +45,8 @@ public class DTOEducation {
         this.places = education.getPlaces();
         this.price = education.getPrice();
         this.description = education.getDescription();
+        this.positionLat = education.getPositionLat();
+        this.positionLng = education.getPositionLng();
     }
 
     public String getServiceType() {
@@ -132,4 +136,20 @@ public class DTOEducation {
     public void setDescription(String description) {
         this.description = description;
     }
+
+	public double getPositionLat() {
+		return positionLat;
+	}
+
+	public void setPositionLat(double positionLat) {
+		this.positionLat = positionLat;
+	}
+
+	public double getPositionLng() {
+		return positionLng;
+	}
+
+	public void setPositionLng(double positionLng) {
+		this.positionLng = positionLng;
+	}
 }

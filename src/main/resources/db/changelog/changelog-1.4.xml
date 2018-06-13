@@ -91,4 +91,39 @@
 	       <column name="banned" type="bit(1)" defaultValue="0"/>
 	    </addColumn>
 	</changeSet>
+	
+	<changeSet id="filters" author="bob">
+		<addColumn tableName="Donation">
+			<column name="positionLat" type="double">
+				<constraints nullable="false"/>
+			</column>
+			<column name="positionLng" type="double">
+				<constraints nullable="false"/>
+			</column>
+	    </addColumn>
+	    <addColumn tableName="Lodge">
+			<column name="positionLat" type="double">
+				<constraints nullable="false"/>
+			</column>
+			<column name="positionLng" type="double">
+				<constraints nullable="false"/>
+			</column>
+	    </addColumn>
+		<addColumn tableName="Education">
+			<column name="positionLat" type="double">
+				<constraints nullable="false"/>
+			</column>
+			<column name="positionLng" type="double">
+				<constraints nullable="false"/>
+			</column>
+	    </addColumn>
+		<addColumn tableName="Job">
+			<column name="positionLat" type="double">
+				<constraints nullable="false"/>
+			</column>
+			<column name="positionLng" type="double">
+				<constraints nullable="false"/>
+			</column>
+	    </addColumn>
+	</changeSet>	
 </databaseChangeLog>

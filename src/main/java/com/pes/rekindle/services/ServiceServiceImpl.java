@@ -512,4 +512,10 @@ public class ServiceServiceImpl implements ServiceService {
 			System.out.println("El refugiado no esta enrolado");
 		}
 	}
+
+	@Override
+	public ArrayList<DTOService> filterServices(String fromDate, String toDate, double minimumRating,
+			double positionLat, double positionLng, double distance) {
+		return null;
+	}
 }
