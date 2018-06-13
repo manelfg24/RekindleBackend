@@ -29,7 +29,7 @@ public class DTOUser {
     private String biography;
     private String photo;
     private float averageValoration;
-    private Boolean banned;
+    private int banned;
 
     public DTOUser() {
         super();
@@ -227,11 +227,11 @@ public class DTOUser {
 		this.averageValoration = averageValoration;
 	}
 
-	public Boolean getBanned() {
+	public int getBanned() {
 		return banned;
 	}
 
-	public void setBanned(Boolean banned) {
+	public void setBanned(int banned) {
 		this.banned = banned;
 	}
 
