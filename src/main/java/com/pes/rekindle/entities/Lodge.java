@@ -37,6 +37,8 @@ public class Lodge {
     private Date dateLimit;
     @NotNull
     private String description;
+    @NotNull
+    private Boolean ended;
 
     @ManyToMany(cascade = {
             CascadeType.PERSIST,
@@ -124,5 +126,12 @@ public class Lodge {
     public void setInscriptions(Set<Refugee> inscriptions) {
         this.inscriptions = inscriptions;
     }
+    public Boolean getEnded() {
+		return ended;
+	}
+
+	public void setEnded(Boolean ended) {
+		this.ended = ended;
+	}
 
 }

@@ -1,6 +1,7 @@
 
 package com.pes.rekindle.dto;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -18,7 +19,7 @@ public class DTOUser {
     private String surname1;
     private String surname2;
     private Integer phoneNumber;
-    private Date birthdate;
+    private String birthdate;
     private String sex;
     private String country;
     private String town;
@@ -27,6 +28,8 @@ public class DTOUser {
     private String eyeColor;
     private String biography;
     private String photo;
+    private float averageValoration;
+    private Boolean banned;
 
     public DTOUser() {
         super();
@@ -41,7 +44,10 @@ public class DTOUser {
         this.surname1 = refugee.getSurname1();
         this.surname2 = refugee.getSurname2();
         this.phoneNumber = refugee.getPhoneNumber();
-        this.birthdate = refugee.getBirthdate();
+        if (refugee.getBirthdate() != null) {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            this.birthdate = formatter.format(refugee.getBirthdate());
+        }
         this.sex = refugee.getSex();
         this.country = refugee.getCountry();
         this.town = refugee.getTown();
@@ -50,6 +56,7 @@ public class DTOUser {
         this.eyeColor = refugee.getEyeColor();
         this.biography = refugee.getBiography();
         this.photo = refugee.getPhoto();
+        this.banned = refugee.getBanned();
     }
 
     public DTOUser(Volunteer volunteer) {
@@ -61,6 +68,14 @@ public class DTOUser {
         this.surname1 = volunteer.getSurname1();
         this.surname2 = volunteer.getSurname2();
         this.photo = volunteer.getPhoto();
+        this.banned = volunteer.getBanned();
+        if (volunteer.getNumberOfValorations()==0) {
+        	this.averageValoration = 0;
+        }
+        else {
+        	this.averageValoration = volunteer.getAverageValoration()/volunteer.getNumberOfValorations();
+        }
+        	
     }
 
     public DTOUser(Admin admin) {
@@ -72,6 +87,7 @@ public class DTOUser {
         this.surname1 = admin.getSurname1();
         this.surname2 = admin.getSurname2();
         this.photo = admin.getPhoto();
+        this.banned = admin.getBanned();
     }
 
     public String getMail() {
@@ -122,12 +138,13 @@ public class DTOUser {
         this.phoneNumber = phoneNumber;
     }
 
-    public Date getBirthdate() {
+    public String getBirthdate() {
         return birthdate;
     }
 
     public void setBirthdate(Date birthdate) {
-        this.birthdate = birthdate;
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        this.birthdate = formatter.format(birthdate);
     }
 
     public String getSex() {
@@ -201,4 +218,25 @@ public class DTOUser {
     public void setUserType(String userType) {
         this.userType = userType;
     }
+
+	public float getAverageValoration() {
+		return averageValoration;
+	}
+
+	public void setAverageValoration(float averageValoration) {
+		this.averageValoration = averageValoration;
+	}
+
+	public Boolean getBanned() {
+		return banned;
+	}
+
+	public void setBanned(Boolean banned) {
+		this.banned = banned;
+	}
+
+	public void setBirthdate(String birthdate) {
+		this.birthdate = birthdate;
+	}
+    
 }

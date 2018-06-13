@@ -33,4 +33,6 @@ public interface VolunteerRepository extends Repository<Volunteer, String> {
             @Param("surname1") String surname1, @Param("surname2") String surname2);
 
     public void flush();
+
+	public Volunteer findByMail(Volunteer volunteer);
 }

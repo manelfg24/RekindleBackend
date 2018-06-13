@@ -2,22 +2,17 @@
 package com.pes.rekindle.entities;
 
 import java.util.Date;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.pes.rekindle.dto.DTOUser;
 
 @Entity
 @Table(name = "Refugee")
@@ -41,67 +36,41 @@ public class Refugee {
     private String bloodType;
     private String eyeColor;
     private String biography;
-    private String photo; 
+    private String photo;
+    @NotNull
+    private Boolean banned;
 
-    
-    @ManyToMany(mappedBy="inscriptions",
-    		cascade = {
-    		CascadeType.PERSIST, 
-    		CascadeType.MERGE
+    @ManyToMany(mappedBy = "inscriptions", cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
     })
     private Set<Lodge> lodges = new HashSet<Lodge>();
 
-    
-    @ManyToMany(mappedBy="inscriptions",
-    		cascade = {
-    		CascadeType.PERSIST, 
-    		CascadeType.MERGE,
+    @ManyToMany(mappedBy = "inscriptions", cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE,
     })
     @JsonBackReference
     private Set<Donation> donations = new HashSet<Donation>();
 
-    
-    @ManyToMany(mappedBy="inscriptions",
-    		cascade = {
-    		CascadeType.PERSIST, 
-    		CascadeType.MERGE
+    @ManyToMany(mappedBy = "inscriptions", cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
     })
     @JsonBackReference
     private Set<Job> jobs = new HashSet<Job>();
 
-    
-    @ManyToMany(mappedBy="inscriptions",
-    		cascade = {
-    		CascadeType.PERSIST, 
-    		CascadeType.MERGE
+    @ManyToMany(mappedBy = "inscriptions", cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
     })
     @JsonBackReference
     private Set<Education> courses = new HashSet<Education>();
-    
+
     public Refugee() {
         super();
     }
 
-    public Refugee(DTOUser refugee) {
-        super();
-        this.mail = refugee.getMail();
-        this.password = refugee.getPassword();
-        this.name = refugee.getName();
-        this.surname1 = refugee.getSurname1();
-        this.surname2 = refugee.getSurname2();
-        this.phoneNumber = refugee.getPhoneNumber();
-        this.birthdate = refugee.getBirthdate();
-        this.sex = refugee.getSex();
-        this.country = refugee.getCountry();
-        this.town = refugee.getTown();
-        this.ethnic = refugee.getEthnic();
-        this.bloodType = refugee.getBloodType();
-        this.eyeColor = refugee.getEyeColor();
-        this.biography = refugee.getBiography();
-        this.photo = refugee.getPhoto();
-    }
-
-    
     public String getMail() {
         return mail;
     }
@@ -206,51 +175,59 @@ public class Refugee {
         this.eyeColor = eyeColor;
     }
 
-	public String getBiography() {
-		return biography;
+    public String getBiography() {
+        return biography;
+    }
+
+    public void setBiography(String biography) {
+        this.biography = biography;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+
+    public Boolean getBanned() {
+		return banned;
 	}
 
-	public void setBiography(String biography) {
-		this.biography = biography;
-	}
-
-	public String getPhoto() {
-		return photo;
-	}
-
-	public void setPhoto(String photo) {
-		this.photo = photo;
+	public void setBanned(Boolean banned) {
+		this.banned = banned;
 	}
 
 	public Set<Lodge> getLodges() {
-		return lodges;
-	}
+        return lodges;
+    }
 
-	public void setLodges(Set<Lodge> lodges) {
-		this.lodges = lodges;
-	}
+    public void setLodges(Set<Lodge> lodges) {
+        this.lodges = lodges;
+    }
 
-	public Set<Donation> getDonations() {
-		return donations;
-	}
+    public Set<Donation> getDonations() {
+        return donations;
+    }
 
-	public void setDonations(Set<Donation> donations) {
-		this.donations = donations;
-	}
+    public void setDonations(Set<Donation> donations) {
+        this.donations = donations;
+    }
 
-	public Set<Job> getJobs() {
-		return jobs;
-	}
+    public Set<Job> getJobs() {
+        return jobs;
+    }
 
-	public void setJobs(Set<Job> jobs) {
-		this.jobs = jobs;
-	}
+    public void setJobs(Set<Job> jobs) {
+        this.jobs = jobs;
+    }
 
-	public Set<Education> getCourses() {
-		return courses;
-	}
+    public Set<Education> getCourses() {
+        return courses;
+    }
 
-	public void setCourses(Set<Education> courses) {
-		this.courses = courses;
-	}
+    public void setCourses(Set<Education> courses) {
+        this.courses = courses;
+    }
 }

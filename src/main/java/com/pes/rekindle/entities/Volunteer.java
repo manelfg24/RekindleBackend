@@ -20,6 +20,10 @@ public class Volunteer {
     private String surname1;
     private String surname2;
     private String photo;
+    private float averageValoration;
+    private int numberOfValorations;
+    @NotNull
+    private Boolean banned;
 
     public String getMail() {
         return mail;
@@ -67,5 +71,29 @@ public class Volunteer {
 
 	public void setPhoto(String photo) {
 		this.photo = photo;
+	}
+
+	public float getAverageValoration() {
+		return averageValoration;
+	}
+
+	public void setAverageValoration(float averageValoration) {
+		this.averageValoration = averageValoration;
+	}
+
+	public int getNumberOfValorations() {
+		return numberOfValorations;
+	}
+
+	public void setNumberOfValorations(int numberOfValorations) {
+		this.numberOfValorations = numberOfValorations;
+	}
+
+	public Boolean getBanned() {
+		return banned;
+	}
+
+	public void setBanned(Boolean banned) {
+		this.banned = banned;
 	}
 }

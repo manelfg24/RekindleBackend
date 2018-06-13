@@ -1,14 +1,17 @@
 
 package com.pes.rekindle.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import com.pes.rekindle.dto.DTODonation;
+import com.pes.rekindle.dto.DTODonationEnrollment;
 import com.pes.rekindle.dto.DTOEducation;
 import com.pes.rekindle.dto.DTOJob;
 import com.pes.rekindle.dto.DTOLodge;
 import com.pes.rekindle.dto.DTOService;
+import com.pes.rekindle.dto.DTOValoration;
 import com.pes.rekindle.entities.Donation;
 import com.pes.rekindle.entities.Education;
 import com.pes.rekindle.entities.Job;
@@ -53,5 +56,17 @@ public interface ServiceService {
 	Education getEducation(Long id);
 	
 	Job getJob(Long id);
+
+	void createDonationRequest(DTODonationEnrollment dtoDonationEnrollment);
+
+	ArrayList<DTODonationEnrollment> listDonationRequests();
+
+	Boolean donationIsRequested(Long donationId, String refugeeMail);
+
+	void acceptDonationRequest(Long donationId, String refugeeMail);
+
+	void rejectDonationRequest(Long donationId, String refugeeMail);
+
+	void valorateService(DTOValoration dtoValoration);
 
 }

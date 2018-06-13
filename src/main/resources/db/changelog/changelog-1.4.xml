@@ -21,4 +21,94 @@
 		</createTable>
 	</changeSet>
 	
+	<changeSet id="donation" author="bob">
+		<addColumn tableName="DonationEnrollment">
+	        <column name="motive" type="varchar(500)">
+	        	<constraints nullable="false"/>
+	        </column>
+	    </addColumn>
+	    <addColumn tableName="DonationEnrollment">
+	    	<column name="requestStatus" type="varchar(20)" defaultValue="Pendent"/>
+	    </addColumn>
+	</changeSet>
+	
+	<changeSet id="valoration" author="bob">
+		<addColumn tableName="Volunteer">
+	        <column name="averageValoration" type="float" defaultValue="0"/>
+	    </addColumn>
+	    <addColumn tableName="Volunteer">
+	        <column name="numberOfValorations" type="int" defaultValue="0"/>
+	    </addColumn>
+	    <addColumn tableName="DonationEnrollment">
+	        <column name="valoration" type="float" defaultValue="-1"/>
+	    </addColumn>
+	    <addColumn tableName="LodgeEnrollment">
+	        <column name="valoration" type="float" defaultValue="-1"/>
+	    </addColumn>
+		<addColumn tableName="EducationEnrollment">
+	        <column name="valoration" type="float" defaultValue="-1"/>
+	    </addColumn>
+		<addColumn tableName="JobEnrollment">
+	        <column name="valoration" type="float" defaultValue="-1"/>
+	    </addColumn>
+	</changeSet>
+	
+	<changeSet id="endedService" author="bob">
+		<addColumn tableName="Donation">
+	       <column name="ended" type="bit(1)" defaultValue="0">
+	        <constraints nullable="false"/>
+	       </column>
+	    </addColumn>
+	    <addColumn tableName="Lodge">
+	       <column name="ended" type="bit(1)" defaultValue="0">
+	        <constraints nullable="false"/>
+	       </column>
+	    </addColumn>
+		<addColumn tableName="Education">
+	       <column name="ended" type="bit(1)" defaultValue="0">
+	        <constraints nullable="false"/>
+	       </column>
+	    </addColumn>
+		<addColumn tableName="Job">
+	       <column name="ended" type="bit(1)" defaultValue="0">
+	        <constraints nullable="false"/>
+	       </column>
+	    </addColumn>
+	</changeSet>
+	
+	<changeSet id="apiKeyUsers" author="bob">
+		<addColumn tableName="Refugee">
+	       <column name="apiKey" type="varchar(100)">
+	        <constraints nullable="false"/>
+	       </column>
+	    </addColumn>
+	    <addColumn tableName="Admin">
+	       <column name="apiKey" type="varchar(100)">
+       		<constraints nullable="false"/>
+	       </column>
+	    </addColumn>
+		<addColumn tableName="Volunteer">
+	       <column name="apiKey" type="varchar(100)">
+       		<constraints nullable="false"/>
+	       </column>
+	    </addColumn>
+	</changeSet>
+	
+	<changeSet id="bannedUser" author="bob">
+		<addColumn tableName="Refugee">
+	       <column name="banned" type="bit(1)" defaultValue="0">
+	        <constraints nullable="false"/>
+	       </column>
+	    </addColumn>
+	    <addColumn tableName="Admin">
+	       <column name="banned" type="bit(1)" defaultValue="0">
+	       	<constraints nullable="false"/>
+	       </column>
+	    </addColumn>
+		<addColumn tableName="Volunteer">
+	       <column name="banned" type="bit(1)" defaultValue="0">
+	       	<constraints nullable="false"/>
+	       </column>
+	    </addColumn>
+	</changeSet>
 </databaseChangeLog>

@@ -16,6 +16,7 @@ public class DTOService {
     private Integer phoneNumber;
     private String adress;
     private String description;
+    private Boolean ended;
 
 	public DTOService() {
         super();
@@ -30,36 +31,43 @@ public class DTOService {
         this.phoneNumber = lodge.getPhoneNumber();
         this.adress = lodge.getAdress();
         this.description = lodge.getDescription();
+        this.ended = lodge.getEnded();
     }
     
     public DTOService(Donation donation) {
         super();
+        this.id = donation.getId();
         this.serviceType = donation.getServiceType();
         this.name = donation.getName();
         this.volunteer = donation.getVolunteer();
         this.phoneNumber = donation.getPhoneNumber();
         this.adress = donation.getAdress();
         this.description = donation.getDescription();
+        this.ended = donation.getEnded();
     }
     
     public DTOService(Education education) {
         super();
+        this.id = education.getId();
         this.serviceType = education.getServiceType();
         this.name = education.getName();
         this.volunteer = education.getVolunteer();
         this.phoneNumber = education.getPhoneNumber();
         this.adress = education.getAdress();
         this.description = education.getDescription();
+        this.ended =education.getEnded();
     }
   
     public DTOService(Job job) {
         super();
+        this.id = job.getId();
         this.serviceType = job.getServiceType();
         this.name = job.getName();
         this.volunteer = job.getVolunteer();
         this.phoneNumber = job.getPhoneNumber();
         this.adress = job.getAdress();
         this.description = job.getDescription();
+        this.ended = job.getEnded();
     }
     
     public long getId() {
@@ -117,4 +125,12 @@ public class DTOService {
     public void setDescription(String description) {
         this.description = description;
     }
+
+	public Boolean getEnded() {
+		return ended;
+	}
+
+	public void setEnded(Boolean ended) {
+		this.ended = ended;
+	}
 }

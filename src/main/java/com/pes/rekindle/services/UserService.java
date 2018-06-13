@@ -1,7 +1,6 @@
 
 package com.pes.rekindle.services;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -48,7 +47,7 @@ public interface UserService {
 
     void enrollUserToService(String mail, Long id, String userType) throws Exception;
 
-    Set<DTOUser> findRefugee(String name, String surname1, String surname2, Date birthdate,
+    Set<DTOUser> findRefugee(String name, String surname1, String surname2, String birthdate,
             String sex, String country,
             String town, String ethnic, String blood, String eye, String mail);
 
@@ -56,7 +55,7 @@ public interface UserService {
 
     void recoverPassword(String mail, String passwordNew) throws LoginException;
 
-    Set<DTOService> obtainOwnServices(String mail, String userType);
+    Set<DTOService> obtainOwnServices(String mail, String userType, Boolean ended);
 
     void unenrollUserFromService(String mail, Long id, String serviceType);
 
@@ -95,4 +94,5 @@ public interface UserService {
 
     void deleteLink(Long id);
 
+	void valorateVolunteer(String volunteer, float newValoration, float oldValoration);
 }

@@ -190,6 +190,7 @@ public class UserServiceImpl implements UserService {
         volunteer.setSurname1(dtoUser.getSurname1());
         volunteer.setSurname2(dtoUser.getSurname2());
         volunteer.setPhoto(dtoUser.getPhoto());
+        volunteer.setBanned(dtoUser.getBanned());
         volunteerRepository.save(volunteer);
     }
 
@@ -199,7 +200,12 @@ public class UserServiceImpl implements UserService {
         refugee.setSurname1(dtoUser.getSurname1());
         refugee.setSurname2(dtoUser.getSurname2());
         refugee.setPhoneNumber(dtoUser.getPhoneNumber());
-        refugee.setBirthdate(dtoUser.getBirthdate());
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date birthdate = formatter.parse(dtoUser.getBirthdate());
+            refugee.setBirthdate(birthdate);
+        } catch (Exception e) {
+        }
         refugee.setSex(dtoUser.getSex());
         refugee.setCountry(dtoUser.getCountry());
         refugee.setTown(dtoUser.getTown());
@@ -208,6 +214,7 @@ public class UserServiceImpl implements UserService {
         refugee.setEyeColor(dtoUser.getEyeColor());
         refugee.setBiography(dtoUser.getBiography());
         refugee.setPhoto(dtoUser.getPhoto());
+        refugee.setBanned(dtoUser.getBanned());
         refugeeRepository.save(refugee);
     }
 
@@ -264,48 +271,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Set<DTOUser> findRefugee(String name, String surname1, String surname2,
-            Date birthdate,
-            String sex,
-            String country, String town, String ethnic, String blood, String eye, String mail) {
-        Set<Refugee> result = new HashSet<Refugee>();
-        result = refugeeRepository.findAll();
-        if (!name.equals("")) {
-            result.retainAll(refugeeRepository.findByName(name));
-        }
-        if (!surname1.equals("")) {
-            result.retainAll(refugeeRepository.findBySurname1(surname1));
-        }
-        if (!surname2.equals("")) {
-            result.retainAll(refugeeRepository.findBySurname2(surname2));
-        }
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        String birthdateString = formatter.format(birthdate);
-        if (!birthdateString.equals("1890-01-01")) {
-            result.retainAll(refugeeRepository.findByBirthdate(birthdate));
-        }
-        if (!sex.equals("-"))
-            result.retainAll(refugeeRepository.findBySex(sex));
+    public Set<DTOUser> findRefugee(String name, String surname1, String surname2, String birthdate,
+            String sex, String country,
+            String town, String ethnic, String blood, String eye, String mail) {
+        Set<Refugee> refugees = refugeeRepository.findRefugeeByParams(name, surname1, surname2,
+                birthdate, sex, country, town, ethnic, blood, eye);
 
-        if (!country.equals("")) {
-            result.retainAll(refugeeRepository.findByCountry(country));
-        }
-        if (!town.equals("")) {
-            result.retainAll(refugeeRepository.findByTown(town));
-        }
-        if (!ethnic.equals("")) {
-            result.retainAll(refugeeRepository.findByEthnic(ethnic));
-        }
-        if (!blood.equals("-")) {
-            result.retainAll(refugeeRepository.findByBloodType(blood));
-        }
-        if (!eye.equals("-")) {
-            result.retainAll(refugeeRepository.findByEyeColor(eye));
-        }
         Set<DTOUser> dtosRefugee = new HashSet<DTOUser>();
-        for (Refugee refugee : result) {
+        for (Refugee refugee : refugees) {
             if (!refugee.getMail().equals(mail)) {
-                DTOUser dtoUser = new DTOUser(refugee);
+                DTOUser dtoUser = mapper.map(refugee, DTOUser.class);
                 dtoUser.setUserType("Refugee");
                 dtosRefugee.add(dtoUser);
             }
@@ -364,7 +339,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Set<DTOService> obtainOwnServices(String mail, String userType) {
+    public Set<DTOService> obtainOwnServices(String mail, String userType, Boolean ended) {
         Set<DTOService> result = new HashSet<DTOService>();
         Set<Lodge> lodges;
         Set<Donation> donations;
@@ -381,14 +356,26 @@ public class UserServiceImpl implements UserService {
             courses = educationRepository.findByVolunteer(mail);
             jobs = jobRepository.findByVolunteer(mail);
         }
-        for (Lodge lodge : lodges)
-            result.add(new DTOService(lodge));
-        for (Education education : courses)
-            result.add(new DTOService(education));
-        for (Donation donation : donations)
-            result.add(new DTOService(donation));
-        for (Job job : jobs)
-            result.add(new DTOService(job));
+        for (Lodge lodge : lodges) {
+        	if(lodge.getEnded() == ended) {
+            	result.add(new DTOService(lodge));
+        	}
+        }
+        for (Education education : courses) {
+        	if(education.getEnded() == ended) {
+        		result.add(new DTOService(education));
+        	}
+        }
+        for (Donation donation : donations) {
+        	if(donation.getEnded() == ended) {
+            	result.add(new DTOService(donation));
+        	}
+        }
+        for (Job job : jobs) {
+        	if(job.getEnded() == ended) {
+        		result.add(new DTOService(job));
+        	}
+        }
         return result;
     }
 
@@ -893,4 +880,18 @@ public class UserServiceImpl implements UserService {
     public Boolean userAlreadyEnrolledJob(String mail, Long id) {
         return refugeeRepository.existsByMailAndJobs_Id(mail, id);
     }
+
+	@Override
+	public void valorateVolunteer(String volunteer, float newValoration, float oldValoration) {
+		Volunteer modifiedVolunteer = volunteerRepository.findByMail(volunteer);
+		if (oldValoration==-1) {
+			modifiedVolunteer.setAverageValoration(modifiedVolunteer.getAverageValoration()+newValoration);
+			modifiedVolunteer.setNumberOfValorations(modifiedVolunteer.getNumberOfValorations()+1);
+		}
+		else {
+			modifiedVolunteer.setAverageValoration(modifiedVolunteer.getAverageValoration()+newValoration-oldValoration);
+		}
+		volunteerRepository.save(modifiedVolunteer);
+		
+	}
 }

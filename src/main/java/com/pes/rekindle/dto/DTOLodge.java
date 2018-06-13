@@ -16,6 +16,7 @@ public class DTOLodge {
     private Integer places;
     private String dateLimit;
     private String description;
+    private Boolean ended;
 
     public DTOLodge() {
         super();
@@ -107,4 +108,12 @@ public class DTOLodge {
     public void setDescription(String description) {
         this.description = description;
     }
+
+	public Boolean getEnded() {
+		return ended;
+	}
+
+	public void setEnded(Boolean ended) {
+		this.ended = ended;
+	}
 }
