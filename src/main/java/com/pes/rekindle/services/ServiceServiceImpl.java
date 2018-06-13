@@ -142,50 +142,25 @@ public class ServiceServiceImpl implements ServiceService {
 
     public List<DTOService> listServices() {
         ArrayList<DTOService> dtosService = new ArrayList<DTOService>();      
-    	System.out.println("--------------------------------------------------------");
-    	System.out.println("Dentro funcion");
-    	System.out.println("--------------------------------------------------------");
         Set<Donation> donations = donationRepository.findAll();
-    	System.out.println("--------------------------------------------------------");
-    	System.out.println("Donaciones: " + donations.size());
-    	System.out.println("--------------------------------------------------------");
         for (Donation donation : donations) {
-        	if(!donation.getEnded()) {
-            	System.out.println("--------------------------------------------------------");
-            	System.out.println("Entra condicion: " + donation.getEnded());
-            	System.out.println("--------------------------------------------------------");
-	            DTOService dtoDonation = new DTOService(donation);
-	            dtosService.add(dtoDonation);
-        	}
-        	else {
-            	System.out.println("--------------------------------------------------------");
-            	System.out.println("Fuera del if: " + donation.getEnded());
-            	System.out.println("--------------------------------------------------------");
-        	}
+            DTOService dtoDonation = new DTOService(donation);
+            dtosService.add(dtoDonation);
         }
-    	System.out.println("--------------------------------------------------------");
-    	System.out.println("Despues donaciones: " + dtosService.size());
-    	System.out.println("--------------------------------------------------------");
         Set<Education> courses = educationRepository.findAll();
         for (Education education : courses) {
-        	if(!education.getEnded()) {
-	            DTOService dtoEducation = new DTOService(education);
-	            dtosService.add(dtoEducation);
-        	}
+            DTOService dtoEducation = new DTOService(education);
+            dtosService.add(dtoEducation);
         }
         Set<Job> jobs = jobRepository.findAll();
         for (Job job : jobs) {
-        	if(!job.getEnded()) {
-	            DTOService dtoJob = new DTOService(job);
-	            dtosService.add(dtoJob);
-        	}
+            DTOService dtoJob = new DTOService(job);
+            dtosService.add(dtoJob);
         }
         Set<Lodge> lodges = lodgeRepository.findAll();
         for (Lodge lodge : lodges) {
-        	if(!lodge.getEnded()) {
-	            DTOService dtoLodge = new DTOService(lodge);
-	            dtosService.add(dtoLodge);     
-        	}
+            DTOService dtoLodge = new DTOService(lodge);
+            dtosService.add(dtoLodge);     
         }
         /*dtosService.sort( new Comparator<DTOService>() {
             @Override
@@ -193,9 +168,6 @@ public class ServiceServiceImpl implements ServiceService {
                 return (int) (object1.getId()-object2.getId());
             }
         });*/
-    	System.out.println("--------------------------------------------------------");
-    	System.out.println("Final: " + dtosService.size() + dtosService.get(0).getName());
-    	System.out.println("--------------------------------------------------------");
         return dtosService;
     }
 
