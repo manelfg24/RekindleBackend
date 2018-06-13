@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -66,43 +67,63 @@ public class UserController {
     }
 
     @RequestMapping(value = "/cambiarPassword/{mail}", method = RequestMethod.PUT)
-    public ResponseEntity<Void> changePassword(@PathVariable String mail, String passwordOld,
+    public ResponseEntity<Void> changePassword(@RequestHeader("apiKey") String apiKey,
+            @PathVariable String mail, String passwordOld,
             String passwordNew) {
-        try {
-            userService.changePassword(mail, passwordOld, passwordNew);
-            return ResponseEntity.status(HttpStatus.OK).body(null);
-        } catch (LoginException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        if (userService.authenticate(mail, apiKey)) {
+            try {
+                userService.changePassword(mail, passwordOld, passwordNew);
+                return ResponseEntity.status(HttpStatus.OK).body(null);
+            } catch (LoginException e) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
     }
 
     @RequestMapping(value = "/recuperarPassword/{mail}", method = RequestMethod.PUT)
-    public ResponseEntity<Void> recoverPassword(@PathVariable String mail, String passwordNew) {
-        try {
-            userService.recoverPassword(mail, passwordNew);
-            return ResponseEntity.status(HttpStatus.OK).body(null);
-        } catch (LoginException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    public ResponseEntity<Void> recoverPassword(@RequestHeader("apiKey") String apiKey,
+            @PathVariable String mail, String passwordNew) {
+        if (userService.authenticate(mail, apiKey)) {
+            try {
+                userService.recoverPassword(mail, passwordNew);
+                return ResponseEntity.status(HttpStatus.OK).body(null);
+            } catch (LoginException e) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
     }
 
     @RequestMapping(value = "/voluntarios/{mail}", method = RequestMethod.PUT)
-    public ResponseEntity<Void> modifyVolunteer(@RequestBody DTOUser dtoUser) {
-        // Cuidado tema seguridad
-        userService.modifyProfileVolunteer(dtoUser);
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+    public ResponseEntity<Void> modifyVolunteer(@RequestHeader("apiKey") String apiKey,
+            @RequestBody DTOUser dtoUser) {
+        if (userService.authenticate(dtoUser.getMail(), apiKey)) {
+            userService.modifyProfileVolunteer(dtoUser);
+            return ResponseEntity.status(HttpStatus.OK).body(null);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
     }
 
     @RequestMapping(value = "/refugiados/{mail}", method = RequestMethod.PUT)
-    public ResponseEntity<Void> modifyRefugee(@RequestBody DTOUser refugee) {
-        userService.modifyProfileRefugee(refugee);
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+    public ResponseEntity<Void> modifyRefugee(@RequestHeader("apiKey") String apiKey,
+            @RequestBody DTOUser refugee) {
+        if (userService.authenticate(refugee.getMail(), apiKey)) {
+            userService.modifyProfileRefugee(refugee);
+            return ResponseEntity.status(HttpStatus.OK).body(null);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
     }
 
     @RequestMapping(value = "/voluntarios/{mail}", method = RequestMethod.GET)
     public ResponseEntity<DTOUser> getVolunteer(@PathVariable String mail) {
         try {
             DTOUser volunteer = userService.getVolunteer(mail);
+            volunteer = userService.hideCredentials(volunteer);
             return ResponseEntity.status(HttpStatus.OK).body(volunteer);
         } catch (UserNotExistsException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -135,32 +156,43 @@ public class UserController {
     }
 
     @RequestMapping(value = "/usuarios/{mail}/inscripciones/{id}/{tipo}", method = RequestMethod.POST)
-    public ResponseEntity<Void> enrollUserToService(@PathVariable String mail,
+    public ResponseEntity<Void> enrollUserToService(@RequestHeader("apiKey") String apiKey,
+            @PathVariable String mail,
             @PathVariable Long id,
             @PathVariable String tipo) throws Exception {
-        try {
-            userService.enrollUserToService(mail, id, tipo);
+        if (userService.authenticate(mail, apiKey)) {
+            try {
+                userService.enrollUserToService(mail, id, tipo);
 
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+            }
+            return ResponseEntity.status(HttpStatus.OK).body(null);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
-        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
     @RequestMapping(value = "/refugiados/{mail}/inscripciones/{id}/{tipo}", method = RequestMethod.DELETE)
-    public ResponseEntity<Void> unenrollUserFromService(@PathVariable String mail,
+    public ResponseEntity<Void> unenrollUserFromService(@RequestHeader("apiKey") String apiKey,
+            @PathVariable String mail,
             @PathVariable Long id,
             @PathVariable String tipo) throws Exception {
-        userService.unenrollUserFromService(mail, id, tipo);
+        if (userService.authenticate(mail, apiKey)) {
+            userService.unenrollUserFromService(mail, id, tipo);
 
-        Pusher pusher = new Pusher("525518", "743a4fb4a1370f0ca9a4", "c78f3bfa72330a58ee1f");
-        pusher.setCluster("eu");
-        pusher.setEncrypted(true);
+            Pusher pusher = new Pusher("525518", "743a4fb4a1370f0ca9a4", "c78f3bfa72330a58ee1f");
+            pusher.setCluster("eu");
+            pusher.setEncrypted(true);
 
-        pusher.trigger(tipo + mail, "unenroll-service",
-                Collections.singletonMap("message", id));
+            pusher.trigger(tipo + mail, "unenroll-service",
+                    Collections.singletonMap("message", id));
 
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+            return ResponseEntity.status(HttpStatus.OK).body(null);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+
     }
 
     // Todos chats del mail
@@ -192,40 +224,44 @@ public class UserController {
 
     // Crea un chat
     @RequestMapping(value = "/usuarios/{mail}/chats", method = RequestMethod.POST)
-    public ResponseEntity<DTOChat> createChat(@RequestBody DTOChat dtoChat) {
-        DTOChat createdChat = userService.createChat(dtoChat);
+    public ResponseEntity<DTOChat> createChat(@RequestHeader("apiKey") String apiKey,
+            @RequestBody DTOChat dtoChat) {
+        if (userService.authenticate(dtoChat.getUser1().getMail(), apiKey)) {
+            DTOChat createdChat = userService.createChat(dtoChat);
 
-        Pusher pusher = new Pusher("525518", "743a4fb4a1370f0ca9a4", "c78f3bfa72330a58ee1f");
-        pusher.setCluster("eu");
-        pusher.setEncrypted(true);
+            Pusher pusher = new Pusher("525518", "743a4fb4a1370f0ca9a4", "c78f3bfa72330a58ee1f");
+            pusher.setCluster("eu");
+            pusher.setEncrypted(true);
 
-        pusher.trigger(dtoChat.getUser2().getMail(), "new-chat",
-                Collections.singletonMap("message", createdChat.getId()));
+            pusher.trigger(dtoChat.getUser2().getMail(), "new-chat",
+                    Collections.singletonMap("message", createdChat.getId()));
 
-        return ResponseEntity.status(HttpStatus.OK).body(createdChat);
+            return ResponseEntity.status(HttpStatus.OK).body(createdChat);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+
     }
 
     // Enviar mensaje
     @RequestMapping(value = "/usuarios/{mail}/chats/{idChat}/messages", method = RequestMethod.POST)
-    public ResponseEntity<Void> sendMessage(@PathVariable String mail,
+    public ResponseEntity<Void> sendMessage(@RequestHeader("apiKey") String apiKey,
+            @PathVariable String mail,
             @PathVariable long idChat, @RequestBody DTOMessage dtoMessage) {
+        if (userService.authenticate(mail, apiKey)) {
+            userService.sendMessage(mail, idChat, dtoMessage);
+            Pusher pusher = new Pusher("525518", "743a4fb4a1370f0ca9a4", "c78f3bfa72330a58ee1f");
+            pusher.setCluster("eu");
+            pusher.setEncrypted(true);
 
-        userService.sendMessage(mail, idChat, dtoMessage);
-        Pusher pusher = new Pusher("525518", "743a4fb4a1370f0ca9a4", "c78f3bfa72330a58ee1f");
-        pusher.setCluster("eu");
-        pusher.setEncrypted(true);
+            pusher.trigger(Long.toString(idChat), "new-message",
+                    Collections.singletonMap("message", dtoMessage));
+            return ResponseEntity.status(HttpStatus.OK).body(null);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
 
-        pusher.trigger(Long.toString(idChat), "new-message",
-                Collections.singletonMap("message", dtoMessage));
-        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
-
-    /*
-     * @RequestMapping(value = "/usuarios/{mail}/chats", method = RequestMethod.GET) public
-     * ResponseEntity<Set<DTOUser>> newChat(@PathVariable String mailUser1, @RequestBody String
-     * mailUser2) { return ResponseEntity.status(HttpStatus.OK).body(userService.newChat(mailUser1,
-     * mailUser2)); }
-     */
 
     @RequestMapping(value = "/reportes", method = RequestMethod.POST)
     public ResponseEntity<Void> createReport(@RequestBody DTOReport dtoReport) {

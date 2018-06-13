@@ -29,6 +29,7 @@ public class DTOUser {
     private String biography;
     private String photo;
     private float averageValoration;
+    private String apiKey;
 
     public DTOUser() {
         super();
@@ -66,13 +67,13 @@ public class DTOUser {
         this.surname1 = volunteer.getSurname1();
         this.surname2 = volunteer.getSurname2();
         this.photo = volunteer.getPhoto();
-        if (volunteer.getNumberOfValorations()==0) {
-        	this.averageValoration = 0;
+        if (volunteer.getNumberOfValorations() == 0) {
+            this.averageValoration = 0;
+        } else {
+            this.averageValoration = volunteer.getAverageValoration()
+                    / volunteer.getNumberOfValorations();
         }
-        else {
-        	this.averageValoration = volunteer.getAverageValoration()/volunteer.getNumberOfValorations();
-        }
-        	
+
     }
 
     public DTOUser(Admin admin) {
@@ -215,16 +216,24 @@ public class DTOUser {
         this.userType = userType;
     }
 
-	public float getAverageValoration() {
-		return averageValoration;
-	}
+    public float getAverageValoration() {
+        return averageValoration;
+    }
 
-	public void setAverageValoration(float averageValoration) {
-		this.averageValoration = averageValoration;
-	}
+    public void setAverageValoration(float averageValoration) {
+        this.averageValoration = averageValoration;
+    }
 
-	public void setBirthdate(String birthdate) {
-		this.birthdate = birthdate;
-	}
-    
+    public void setBirthdate(String birthdate) {
+        this.birthdate = birthdate;
+    }
+
+    public String getApiKey() {
+        return apiKey;
+    }
+
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
+    }
+
 }

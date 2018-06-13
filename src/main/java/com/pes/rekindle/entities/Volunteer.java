@@ -22,6 +22,7 @@ public class Volunteer {
     private String photo;
     private float averageValoration;
     private int numberOfValorations;
+    private String apiKey;
 
     public String getMail() {
         return mail;
@@ -63,27 +64,35 @@ public class Volunteer {
         this.surname2 = surname2;
     }
 
-	public String getPhoto() {
-		return photo;
-	}
+    public String getPhoto() {
+        return photo;
+    }
 
-	public void setPhoto(String photo) {
-		this.photo = photo;
-	}
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
 
-	public float getAverageValoration() {
-		return averageValoration;
-	}
+    public float getAverageValoration() {
+        return averageValoration;
+    }
 
-	public void setAverageValoration(float averageValoration) {
-		this.averageValoration = averageValoration;
-	}
+    public void setAverageValoration(float averageValoration) {
+        this.averageValoration = averageValoration;
+    }
 
-	public int getNumberOfValorations() {
-		return numberOfValorations;
-	}
+    public int getNumberOfValorations() {
+        return numberOfValorations;
+    }
 
-	public void setNumberOfValorations(int numberOfValorations) {
-		this.numberOfValorations = numberOfValorations;
-	}
+    public void setNumberOfValorations(int numberOfValorations) {
+        this.numberOfValorations = numberOfValorations;
+    }
+
+    public String getApiKey() {
+        return apiKey;
+    }
+
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
+    }
 }

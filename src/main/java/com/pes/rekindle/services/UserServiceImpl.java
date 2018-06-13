@@ -1,6 +1,8 @@
 
 package com.pes.rekindle.services;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -99,11 +101,54 @@ public class UserServiceImpl implements UserService {
         return false;
     }
 
+    private String md5(String mail) {
+        MessageDigest md = null;
+        try {
+            md = MessageDigest.getInstance("MD5");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        md.update(mail.getBytes());
+
+        byte byteData[] = md.digest();
+
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < byteData.length; i++) {
+            sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
+        }
+        return sb.toString();
+
+    }
+
+    @Override
+    public boolean authenticate(String mail, String apiKey) {
+        Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMail(mail);
+        if (oRefugee.isPresent()) {
+            Refugee refugee = oRefugee.get();
+            return (refugee.getApiKey() == apiKey);
+        } else {
+            Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMail(mail);
+            if (oVolunteer.isPresent()) {
+                Volunteer volunteer = oVolunteer.get();
+                return (volunteer.getApiKey() == apiKey);
+            }
+            return false;
+        }
+    }
+
+    @Override
+    public DTOUser hideCredentials(DTOUser dtoUser) {
+        dtoUser.setApiKey("");
+        dtoUser.setPassword("");
+        return dtoUser;
+    }
+
     public void createVolunteer(DTOUser dtoVolunteer) throws UserAlreadyExistsException {
         if (exists(dtoVolunteer)) {
             throw new UserAlreadyExistsException();
         } else {
             Volunteer volunteer = mapper.map(dtoVolunteer, Volunteer.class);
+            volunteer.setApiKey(md5(dtoVolunteer.getMail()));
             volunteerRepository.save(volunteer);
         }
     }
@@ -114,6 +159,7 @@ public class UserServiceImpl implements UserService {
             throw new UserAlreadyExistsException();
         } else {
             Refugee refugee = mapper.map(dtoRefugee, Refugee.class);
+            refugee.setApiKey(md5(dtoRefugee.getMail()));
             refugeeRepository.save(refugee);
         }
     }
@@ -280,6 +326,7 @@ public class UserServiceImpl implements UserService {
             if (!refugee.getMail().equals(mail)) {
                 DTOUser dtoUser = mapper.map(refugee, DTOUser.class);
                 dtoUser.setUserType("Refugee");
+                dtoUser = hideCredentials(dtoUser);
                 dtosRefugee.add(dtoUser);
             }
         }
@@ -609,6 +656,7 @@ public class UserServiceImpl implements UserService {
                         .findOptionalByMail(chat.getMailUser1());
                 if (oRefugee.isPresent()) {
                     DTOUser dtoUser = new DTOUser(oRefugee.get());
+                    dtoUser = hideCredentials(dtoUser);
                     dtoChat.setUser1(dtoUser);
                 } else {
                     Optional<Volunteer> oVolunteer = volunteerRepository
@@ -616,6 +664,7 @@ public class UserServiceImpl implements UserService {
                     DTOUser dtoUser = null;
                     if (oVolunteer.isPresent()) {
                         dtoUser = new DTOUser(oVolunteer.get());
+                        dtoUser = hideCredentials(dtoUser);
                     }
                     dtoChat.setUser1(dtoUser);
                 }
@@ -671,6 +720,7 @@ public class UserServiceImpl implements UserService {
                     .findOptionalByMail(message.getMailSender());
             if (oRefugee.isPresent()) {
                 DTOUser dtoUser = new DTOUser(oRefugee.get());
+                dtoUser = hideCredentials(dtoUser);
                 dtoMessage.setOwner(dtoUser);
             } else {
                 Optional<Volunteer> oVolunteer = volunteerRepository
@@ -678,6 +728,7 @@ public class UserServiceImpl implements UserService {
                 DTOUser dtoUser = null;
                 if (oVolunteer.isPresent()) {
                     dtoUser = new DTOUser(oVolunteer.get());
+                    dtoUser = hideCredentials(dtoUser);
                 }
                 dtoMessage.setOwner(dtoUser);
             }
@@ -708,6 +759,7 @@ public class UserServiceImpl implements UserService {
                 .findOptionalByMail(chat.getMailUser1());
         if (oRefugee.isPresent()) {
             DTOUser dtoUser = new DTOUser(oRefugee.get());
+            dtoUser = hideCredentials(dtoUser);
             dtoChat.setUser1(dtoUser);
         } else {
             Optional<Volunteer> oVolunteer = volunteerRepository
@@ -715,6 +767,7 @@ public class UserServiceImpl implements UserService {
             DTOUser dtoUser = null;
             if (oVolunteer.isPresent()) {
                 dtoUser = new DTOUser(oVolunteer.get());
+                dtoUser = hideCredentials(dtoUser);
             }
             dtoChat.setUser1(dtoUser);
         }
@@ -867,17 +920,19 @@ public class UserServiceImpl implements UserService {
         return refugeeRepository.existsByMailAndJobs_Id(mail, id);
     }
 
-	@Override
-	public void valorateVolunteer(String volunteer, float newValoration, float oldValoration) {
-		Volunteer modifiedVolunteer = volunteerRepository.findByMail(volunteer);
-		if (oldValoration==-1) {
-			modifiedVolunteer.setAverageValoration(modifiedVolunteer.getAverageValoration()+newValoration);
-			modifiedVolunteer.setNumberOfValorations(modifiedVolunteer.getNumberOfValorations()+1);
-		}
-		else {
-			modifiedVolunteer.setAverageValoration(modifiedVolunteer.getAverageValoration()+newValoration-oldValoration);
-		}
-		volunteerRepository.save(modifiedVolunteer);
-		
-	}
+    @Override
+    public void valorateVolunteer(String volunteer, float newValoration, float oldValoration) {
+        Volunteer modifiedVolunteer = volunteerRepository.findByMail(volunteer);
+        if (oldValoration == -1) {
+            modifiedVolunteer
+                    .setAverageValoration(modifiedVolunteer.getAverageValoration() + newValoration);
+            modifiedVolunteer
+                    .setNumberOfValorations(modifiedVolunteer.getNumberOfValorations() + 1);
+        } else {
+            modifiedVolunteer.setAverageValoration(
+                    modifiedVolunteer.getAverageValoration() + newValoration - oldValoration);
+        }
+        volunteerRepository.save(modifiedVolunteer);
+
+    }
 }

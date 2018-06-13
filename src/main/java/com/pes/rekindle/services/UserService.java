@@ -18,6 +18,10 @@ import com.pes.rekindle.exceptions.UserNotExistsException;
 
 public interface UserService {
 
+    public boolean authenticate(String mail, String apiKey);
+
+    public DTOUser hideCredentials(DTOUser dtoUser);
+
     // boolean logIn(String user, String password);
     Object logIn(String user, String password);
 
@@ -94,5 +98,5 @@ public interface UserService {
 
     void deleteLink(Long id);
 
-	void valorateVolunteer(String volunteer, float newValoration, float oldValoration);
+    void valorateVolunteer(String volunteer, float newValoration, float oldValoration);
 }

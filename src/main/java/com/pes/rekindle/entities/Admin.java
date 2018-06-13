@@ -20,6 +20,7 @@ public class Admin {
     private String surname1;
     private String surname2;
     private String photo;
+    private String apiKey;
 
     public String getMail() {
         return mail;
@@ -61,11 +62,19 @@ public class Admin {
         this.surname2 = surname2;
     }
 
-	public String getPhoto() {
-		return photo;
-	}
+    public String getPhoto() {
+        return photo;
+    }
 
-	public void setPhoto(String photo) {
-		this.photo = photo;
-	}
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+
+    public String getApiKey() {
+        return apiKey;
+    }
+
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
+    }
 }
