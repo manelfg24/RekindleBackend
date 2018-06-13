@@ -31,4 +31,25 @@
 	    	<column name="requestStatus" type="varchar(20)" defaultValue="Pendent"/>
 	    </addColumn>
 	</changeSet>
+	
+	<changeSet id="valoration" author="bob">
+		<addColumn tableName="Volunteer">
+	        <column name="averageValoration" type="float" defaultValue="0"/>
+	    </addColumn>
+	    <addColumn tableName="Volunteer">
+	        <column name="numberOfValorations" type="int" defaultValue="0"/>
+	    </addColumn>
+	    <addColumn tableName="DonationEnrollment">
+	        <column name="valoration" type="float" defaultValue="-1"/>
+	    </addColumn>
+	    <addColumn tableName="LodgeEnrollment">
+	        <column name="valoration" type="float" defaultValue="-1"/>
+	    </addColumn>
+		<addColumn tableName="EducationEnrollment">
+	        <column name="valoration" type="float" defaultValue="-1"/>
+	    </addColumn>
+		<addColumn tableName="JobEnrollment">
+	        <column name="valoration" type="float" defaultValue="-1"/>
+	    </addColumn>
+	</changeSet>
 </databaseChangeLog>

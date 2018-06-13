@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 import com.pes.rekindle.dto.DTODonationEnrollment;
 
 @Entity
-@IdClass(DonationEnrollmentKey.class)
+@IdClass(ServiceEnrollmentKey.class)
 @Table(name = "DonationEnrollment")
 public class DonationEnrollment {
 
@@ -21,6 +21,7 @@ public class DonationEnrollment {
     @NotNull
     private String motive;
     private String requestStatus;
+    private float valoration;
     
     public DonationEnrollment() {
     	super();
@@ -33,6 +34,7 @@ public class DonationEnrollment {
 		this.motive = dtoDonationEnrollment.getMotive();
 		//Hardcodeado a falso porque solo lo usaremos cuando se crea un servicio
 		this.requestStatus = "Not Resolved";
+		this.valoration = 0;
 	}
 	public String getRefugeeMail() {
 		return refugeeMail;
@@ -60,4 +62,13 @@ public class DonationEnrollment {
 	public void setRequestStatus(String requestStatus) {
 		this.requestStatus = requestStatus;
 	}
+
+	public float getValoration() {
+		return valoration;
+	}
+
+	public void setValoration(float valoration) {
+		this.valoration = valoration;
+	}
+	
 }

@@ -24,4 +24,6 @@ public interface DonationEnrollmentRepository extends Repository<DonationEnrollm
 	Optional<DonationEnrollment> findOptionalByRefugeeMailAndDonationId(String refugeeMail, Long donationId);
 
 	DonationEnrollment findByRefugeeMailAndDonationId(String refugeeMail, Long donationId);
+
+	Optional<DonationEnrollment> findOptionalByDonationIdAndRefugeeMail(long idService, String refugeeMail);
 }

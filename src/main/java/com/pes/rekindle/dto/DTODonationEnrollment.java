@@ -7,6 +7,7 @@ public class DTODonationEnrollment {
 	private String refugeeMail;
 	private DTOService donation;
 	private String motive;
+	private float valoration;
 	
 	public DTODonationEnrollment() {
 		super();
@@ -17,6 +18,7 @@ public class DTODonationEnrollment {
 		this.refugeeMail = donationEnrollment.getRefugeeMail();
 		this.donation = dtoDonation;
 		this.motive = donationEnrollment.getMotive();
+		this.valoration = donationEnrollment.getValoration();
 	}
 	
 	public String getRefugeeMail() {
@@ -36,5 +38,11 @@ public class DTODonationEnrollment {
 	}
 	public void setMotive(String motive) {
 		this.motive = motive;
+	}
+	public float getValoration() {
+		return valoration;
+	}
+	public void setValoration(float valoration) {
+		this.valoration = valoration;
 	}
 }

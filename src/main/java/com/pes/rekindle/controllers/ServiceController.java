@@ -21,6 +21,7 @@ import com.pes.rekindle.dto.DTOEducation;
 import com.pes.rekindle.dto.DTOJob;
 import com.pes.rekindle.dto.DTOLodge;
 import com.pes.rekindle.dto.DTOService;
+import com.pes.rekindle.dto.DTOValoration;
 import com.pes.rekindle.entities.Donation;
 import com.pes.rekindle.entities.Education;
 import com.pes.rekindle.entities.Job;
@@ -168,6 +169,12 @@ public class ServiceController {
     @RequestMapping(value = "/solicituddonacion/reject/{idDonation}", method = RequestMethod.GET)
     public ResponseEntity<Void> rejectDonationRequest(@PathVariable Long donationId, @RequestParam String refugeeMail) {
     	serviceService.rejectDonationRequest(donationId, refugeeMail);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+    
+    @RequestMapping(value = "/servicios/{id}/{tipo}/valoraciones", method = RequestMethod.POST)
+    public ResponseEntity<Void> valorateService(@RequestBody DTOValoration dtoValoration) {
+    	serviceService.valorateService(dtoValoration);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 }

@@ -21,17 +21,24 @@ import com.pes.rekindle.dto.DTOEducation;
 import com.pes.rekindle.dto.DTOJob;
 import com.pes.rekindle.dto.DTOLodge;
 import com.pes.rekindle.dto.DTOService;
+import com.pes.rekindle.dto.DTOValoration;
 import com.pes.rekindle.entities.Donation;
 import com.pes.rekindle.entities.DonationEnrollment;
 import com.pes.rekindle.entities.Education;
+import com.pes.rekindle.entities.EducationEnrollment;
 import com.pes.rekindle.entities.Job;
+import com.pes.rekindle.entities.JobEnrollment;
 import com.pes.rekindle.entities.Lodge;
+import com.pes.rekindle.entities.LodgeEnrollment;
 import com.pes.rekindle.entities.Message;
 import com.pes.rekindle.entities.Refugee;
 import com.pes.rekindle.repositories.DonationEnrollmentRepository;
 import com.pes.rekindle.repositories.DonationRepository;
+import com.pes.rekindle.repositories.EducationEnrollmentRepository;
 import com.pes.rekindle.repositories.EducationRepository;
+import com.pes.rekindle.repositories.JobEnrollmentRepository;
 import com.pes.rekindle.repositories.JobRepository;
+import com.pes.rekindle.repositories.LodgeEnrollmentRepository;
 import com.pes.rekindle.repositories.LodgeRepository;
 import com.pusher.rest.Pusher;
 
@@ -52,6 +59,12 @@ public class ServiceServiceImpl implements ServiceService {
     
     @Autowired
     DonationEnrollmentRepository donationEnrollmentRepository;
+    @Autowired 
+    JobEnrollmentRepository jobEnrollmentRepository;
+    @Autowired 
+    LodgeEnrollmentRepository lodgeEnrollmentRepository;
+    @Autowired 
+    EducationEnrollmentRepository educationEnrollmentRepository;
     
     @Autowired
     DozerBeanMapper mapper;
@@ -429,6 +442,92 @@ public class ServiceServiceImpl implements ServiceService {
 		if (!donationEnrollment.getRequestStatus().equals("Rejected")) {
 			donationEnrollment.setRequestStatus("Rejected");
 			donationEnrollmentRepository.save(donationEnrollment);
+		}
+	}
+
+	@Override
+	public void valorateService(DTOValoration dtoValoration) {
+		switch (dtoValoration.getServiceType()) {
+			case "Lodge":
+				valorateLodge(dtoValoration);
+				break;
+			case "Donation":
+				valorateDonation(dtoValoration);
+				break;
+			case "Job":
+				valorateJob(dtoValoration);
+				break;
+			case "Education":
+				valorateEducation(dtoValoration);
+				break;
+		}	
+	}
+	
+	public void valorateLodge(DTOValoration dtoValoration) {
+		Optional<LodgeEnrollment> oLodgeEnrollment = lodgeEnrollmentRepository.findOptionalByLodgeIdAndRefugeeMail(dtoValoration.getIdService(),
+				dtoValoration.getRefugeeMail());
+		if (oLodgeEnrollment.isPresent()) {
+			LodgeEnrollment lodgeEnrollment = oLodgeEnrollment.get();
+			Lodge lodge = lodgeRepository.findById(dtoValoration.getIdService());
+			
+			userService.valorateVolunteer(lodge.getVolunteer(), dtoValoration.getPoints(), lodgeEnrollment.getValoration());
+			
+			lodgeEnrollment.setValoration(dtoValoration.getPoints());
+			lodgeEnrollmentRepository.save(lodgeEnrollment);
+		}
+		else {
+			System.out.println("El refugiado no esta enrolado");
+		}
+	}
+	
+	public void valorateDonation(DTOValoration dtoValoration) {
+		Optional<DonationEnrollment> oDonationEnrollment = donationEnrollmentRepository.findOptionalByDonationIdAndRefugeeMail(dtoValoration.getIdService(),
+				dtoValoration.getRefugeeMail());
+		if (oDonationEnrollment.isPresent()) {
+			DonationEnrollment donationEnrollment = oDonationEnrollment.get();
+			Donation donation = donationRepository.findById(dtoValoration.getIdService());
+			
+			userService.valorateVolunteer(donation.getVolunteer(), dtoValoration.getPoints(), donationEnrollment.getValoration());
+			
+			donationEnrollment.setValoration(dtoValoration.getPoints());
+			donationEnrollmentRepository.save(donationEnrollment);
+		}
+		else {
+			System.out.println("El refugiado no esta enrolado");
+		}
+	}
+	
+	public void valorateJob(DTOValoration dtoValoration) {
+		Optional<JobEnrollment> oJobEnrollment = jobEnrollmentRepository.findOptionalByJobIdAndRefugeeMail(dtoValoration.getIdService(),
+				dtoValoration.getRefugeeMail());
+		if (oJobEnrollment.isPresent()) {
+			JobEnrollment jobEnrollment = oJobEnrollment.get();
+			Job job = jobRepository.findById(dtoValoration.getIdService());
+			
+			userService.valorateVolunteer(job.getVolunteer(), dtoValoration.getPoints(), jobEnrollment.getValoration());
+			
+			jobEnrollment.setValoration(dtoValoration.getPoints());
+			jobEnrollmentRepository.save(jobEnrollment);
+		}
+		else {
+			System.out.println("El refugiado no esta enrolado");
+		}
+	}
+	
+	public void valorateEducation(DTOValoration dtoValoration) {
+		Optional<EducationEnrollment> oEducationEnrollment = educationEnrollmentRepository.findOptionalByEducationIdAndRefugeeMail(dtoValoration.getIdService(),
+				dtoValoration.getRefugeeMail());
+		if (oEducationEnrollment.isPresent()) {
+			EducationEnrollment educationEnrollment = oEducationEnrollment.get();
+			Education education = educationRepository.findById(dtoValoration.getIdService());
+			
+			userService.valorateVolunteer(education.getVolunteer(), dtoValoration.getPoints(), educationEnrollment.getValoration());
+			
+			educationEnrollment.setValoration(dtoValoration.getPoints());
+			educationEnrollmentRepository.save(educationEnrollment);
+		}
+		else {
+			System.out.println("El refugiado no esta enrolado");
 		}
 	}
 }

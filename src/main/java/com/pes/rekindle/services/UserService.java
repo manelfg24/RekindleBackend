@@ -94,4 +94,5 @@ public interface UserService {
 
     void deleteLink(Long id);
 
+	void valorateVolunteer(String volunteer, float newValoration, float oldValoration);
 }

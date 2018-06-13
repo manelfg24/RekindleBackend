@@ -866,4 +866,18 @@ public class UserServiceImpl implements UserService {
     public Boolean userAlreadyEnrolledJob(String mail, Long id) {
         return refugeeRepository.existsByMailAndJobs_Id(mail, id);
     }
+
+	@Override
+	public void valorateVolunteer(String volunteer, float newValoration, float oldValoration) {
+		Volunteer modifiedVolunteer = volunteerRepository.findByMail(volunteer);
+		if (oldValoration==-1) {
+			modifiedVolunteer.setAverageValoration(modifiedVolunteer.getAverageValoration()+newValoration);
+			modifiedVolunteer.setNumberOfValorations(modifiedVolunteer.getNumberOfValorations()+1);
+		}
+		else {
+			modifiedVolunteer.setAverageValoration(modifiedVolunteer.getAverageValoration()+newValoration-oldValoration);
+		}
+		volunteerRepository.save(modifiedVolunteer);
+		
+	}
 }

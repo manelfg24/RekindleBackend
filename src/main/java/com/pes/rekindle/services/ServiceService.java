@@ -11,6 +11,7 @@ import com.pes.rekindle.dto.DTOEducation;
 import com.pes.rekindle.dto.DTOJob;
 import com.pes.rekindle.dto.DTOLodge;
 import com.pes.rekindle.dto.DTOService;
+import com.pes.rekindle.dto.DTOValoration;
 import com.pes.rekindle.entities.Donation;
 import com.pes.rekindle.entities.Education;
 import com.pes.rekindle.entities.Job;
@@ -65,5 +66,7 @@ public interface ServiceService {
 	void acceptDonationRequest(Long donationId, String refugeeMail);
 
 	void rejectDonationRequest(Long donationId, String refugeeMail);
+
+	void valorateService(DTOValoration dtoValoration);
 
 }

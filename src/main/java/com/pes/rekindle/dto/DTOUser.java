@@ -28,6 +28,7 @@ public class DTOUser {
     private String eyeColor;
     private String biography;
     private String photo;
+    private float averageValoration;
 
     public DTOUser() {
         super();
@@ -65,6 +66,13 @@ public class DTOUser {
         this.surname1 = volunteer.getSurname1();
         this.surname2 = volunteer.getSurname2();
         this.photo = volunteer.getPhoto();
+        if (volunteer.getNumberOfValorations()==0) {
+        	this.averageValoration = 0;
+        }
+        else {
+        	this.averageValoration = volunteer.getAverageValoration()/volunteer.getNumberOfValorations();
+        }
+        	
     }
 
     public DTOUser(Admin admin) {
@@ -206,4 +214,17 @@ public class DTOUser {
     public void setUserType(String userType) {
         this.userType = userType;
     }
+
+	public float getAverageValoration() {
+		return averageValoration;
+	}
+
+	public void setAverageValoration(float averageValoration) {
+		this.averageValoration = averageValoration;
+	}
+
+	public void setBirthdate(String birthdate) {
+		this.birthdate = birthdate;
+	}
+    
 }
