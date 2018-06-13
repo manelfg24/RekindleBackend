@@ -141,7 +141,8 @@ public class ServiceServiceImpl implements ServiceService {
     }
 
     public List<DTOService> listServices() {
-        ArrayList<DTOService> dtosService = new ArrayList<DTOService>();      
+        ArrayList<DTOService> dtosService = new ArrayList<DTOService>();  
+        /*
         Set<Donation> donations = donationRepository.findAll();
         for (Donation donation : donations) {
             DTOService dtoDonation = new DTOService(donation);
