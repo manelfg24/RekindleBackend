@@ -52,4 +52,20 @@
 	        <column name="valoration" type="float" defaultValue="-1"/>
 	    </addColumn>
 	</changeSet>
+	
+	<changeSet id="endedService" author="bob">
+		<addColumn tableName="Donation">
+	        <column name="ended" type="bit(1)" defaultValue="0"/>
+	    </addColumn>
+	    <addColumn tableName="Lodge">
+	        <column name="ended" type="bit(1)" defaultValue="0"/>
+	    </addColumn>
+		<addColumn tableName="Education">
+	        <column name="ended" type="bit(1)" defaultValue="0"/>
+	    </addColumn>
+		<addColumn tableName="Job">
+	        <column name="ended" type="bit(1)" defaultValue="0"/>
+	    </addColumn>
+	</changeSet>
+	
 </databaseChangeLog>
