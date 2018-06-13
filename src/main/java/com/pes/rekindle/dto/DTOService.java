@@ -34,6 +34,7 @@ public class DTOService {
     
     public DTOService(Donation donation) {
         super();
+        this.id = donation.getId();
         this.serviceType = donation.getServiceType();
         this.name = donation.getName();
         this.volunteer = donation.getVolunteer();
@@ -44,6 +45,7 @@ public class DTOService {
     
     public DTOService(Education education) {
         super();
+        this.id = education.getId();
         this.serviceType = education.getServiceType();
         this.name = education.getName();
         this.volunteer = education.getVolunteer();
@@ -54,6 +56,7 @@ public class DTOService {
   
     public DTOService(Job job) {
         super();
+        this.id = job.getId();
         this.serviceType = job.getServiceType();
         this.name = job.getName();
         this.volunteer = job.getVolunteer();
