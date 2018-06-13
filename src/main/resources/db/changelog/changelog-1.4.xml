@@ -55,22 +55,22 @@
 	
 	<changeSet id="endedService" author="bob">
 		<addColumn tableName="Donation">
-	       <column name="ended" type="bit(1)" defaultValue="0">
+	       <column name="ended" type="bit(1)" defaultValueBoolean="false">
 	        <constraints nullable="false"/>
 	       </column>
 	    </addColumn>
 	    <addColumn tableName="Lodge">
-	       <column name="ended" type="bit(1)" defaultValue="0">
+	       <column name="ended" type="bit(1)" defaultValueBoolean="false">
 	        <constraints nullable="false"/>
 	       </column>
 	    </addColumn>
 		<addColumn tableName="Education">
-	       <column name="ended" type="bit(1)" defaultValue="0">
+	       <column name="ended" type="bit(1)" defaultValueBoolean="false">
 	        <constraints nullable="false"/>
 	       </column>
 	    </addColumn>
 		<addColumn tableName="Job">
-	       <column name="ended" type="bit(1)" defaultValue="0">
+	       <column name="ended" type="bit(1)" defaultValueBoolean="false">
 	        <constraints nullable="false"/>
 	       </column>
 	    </addColumn>
