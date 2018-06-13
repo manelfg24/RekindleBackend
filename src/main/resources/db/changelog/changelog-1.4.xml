@@ -68,4 +68,27 @@
 	    </addColumn>
 	</changeSet>
 	
+	<changeSet id="apiKeyUsers" author="bob">
+		<addColumn tableName="Refugee">
+	        <column name="apiKey" type="varchar(100)"/>
+	    </addColumn>
+	    <addColumn tableName="Admin">
+	        <column name="apiKey" type="varchar(100)"/>
+	    </addColumn>
+		<addColumn tableName="Volunteer">
+	       <column name="apiKey" type="varchar(100)"/>
+	    </addColumn>
+	</changeSet>
+	
+	<changeSet id="bannedUser" author="bob">
+		<addColumn tableName="Refugee">
+	        <column name="banned" type="bit(1)" defaultValue="0"/>
+	    </addColumn>
+	    <addColumn tableName="Admin">
+	       <column name="banned" type="bit(1)" defaultValue="0"/>
+	    </addColumn>
+		<addColumn tableName="Volunteer">
+	       <column name="banned" type="bit(1)" defaultValue="0"/>
+	    </addColumn>
+	</changeSet>
 </databaseChangeLog>
