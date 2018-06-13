@@ -237,7 +237,6 @@ public class ServiceControllerTest {
         this.mockMvc
         		.perform(post("/empleos").contentType(MediaType.APPLICATION_JSON_UTF8)
         				.content(jsonJ))
-        		//.andDo(print())
         		.andExpect(status().isOk());   
     }
     
@@ -245,7 +244,6 @@ public class ServiceControllerTest {
     public void listServicesTest() throws Exception {
         this.mockMvc
                 .perform(get("/servicios"))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$.[0].id").value(1))
@@ -267,13 +265,11 @@ public class ServiceControllerTest {
                 .andExpect(jsonPath("$.name").value("Casa Pepe10"))
                 .andExpect(jsonPath("$.volunteer").value("mailRoger"));
     }
-
-    
+   
     @Test
     public void infoEducationTest() throws Exception {
         this.mockMvc
                 .perform(get("/cursos/{id}", 1))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.serviceType").value("Education"))
@@ -285,7 +281,6 @@ public class ServiceControllerTest {
     public void infoDonationTest() throws Exception {
         this.mockMvc
                 .perform(get("/donaciones/{id}", 1))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.serviceType").value("Donation"))
@@ -297,7 +292,6 @@ public class ServiceControllerTest {
     public void infoJobTest() throws Exception {
         this.mockMvc
                 .perform(get("/empleos/{id}", 1))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.serviceType").value("Job"))
@@ -308,17 +302,26 @@ public class ServiceControllerTest {
     @Test
     public void obtainOwnServicesTest() throws Exception {
         this.mockMvc
-                .perform(get("/servicios/{mail}/{tipo}", "mailRoger" , "Donation"))
-                .andDo(print())
+                .perform(get("/servicios/{mail}/{tipo}", "mailRoger" , "Volunteer"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.[0].id").value(2))
-                .andExpect(jsonPath("$.[1].id").value(3))
-                .andExpect(jsonPath("$.[0].serviceType").value("Donation"))
-                .andExpect(jsonPath("$.[1].serviceType").value("Donation"))
-                .andExpect(jsonPath("$.[0].name").value("Donation numero uno"))
-                .andExpect(jsonPath("$.[1].name").value("Donation numero dos"))
                 .andExpect(jsonPath("$.[0].volunteer").value("mailRoger"))
-        		.andExpect(jsonPath("$.[1].volunteer").value("mailRoger"));
+        		.andExpect(jsonPath("$.[1].volunteer").value("mailRoger"))
+        		.andExpect(jsonPath("$.[2].volunteer").value("mailRoger"))
+        		.andExpect(jsonPath("$.[3].volunteer").value("mailRoger"))
+        		.andExpect(jsonPath("$.[4].volunteer").value("mailRoger"));
     }
 
+    @Test
+    public void userAlreadyEnrolledTest() throws Exception {
+        this.mockMvc
+                .perform(get("/refugiados/{mail}/inscripciones/{id}/{tipo}", "mailRafael" , "1","Donation"))
+                .andExpect(status().isOk());                
+    }
+    
+    @Test
+    public void deleteServiceTest() throws Exception {
+        this.mockMvc
+                .perform(delete("/servicios/{id}/{tipo}", "1","Donation"))
+                .andExpect(status().isOk());                
+    }
 }
