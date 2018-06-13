@@ -30,6 +30,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultHandler;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.google.gson.Gson;
@@ -324,4 +325,32 @@ public class ServiceControllerTest {
                 .perform(delete("/servicios/{id}/{tipo}", "1","Donation"))
                 .andExpect(status().isOk());                
     }
+    
+    @Test 
+    public void modifyLodgeTest() throws Exception {
+    	DTOLodge dtoLodge = new DTOLodge();
+    	dtoLodge.setServiceType("Lodge");
+    	dtoLodge.setName("Casa Pepe");
+    	dtoLodge.setVolunteer("mailRoger");
+    	dtoLodge.setPhoneNumber(931111333);
+    	dtoLodge.setAdress("Balmes");  
+    	dtoLodge.setPlaces(4);
+    	SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date dateLimit = formatter.parse("2018-07-23");
+            dtoLodge.setDateLimit(dateLimit);
+        } catch (Exception e) {
+
+        }
+        dtoLodge.setDescription("Alojamiento para dos personas");
+        Gson gson = new Gson();
+        String json = gson.toJson(dtoLodge);
+        this.mockMvc
+        		.perform(put("/alojamientos/{id}", 1).contentType(MediaType.APPLICATION_JSON_UTF8)
+        				.content(json))
+        		.andDo(print())
+        		.andDo((ResultHandler)jsonPath("$.phoneNumber").value(931111333))
+        		.andExpect(status().isOk());   
+    }
+    
 }
