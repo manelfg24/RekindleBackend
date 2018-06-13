@@ -23,7 +23,7 @@ public class Volunteer {
     private float averageValoration;
     private int numberOfValorations;
     @NotNull
-    private Boolean banned;
+    private int banned;
 
     public String getMail() {
         return mail;
@@ -89,11 +89,11 @@ public class Volunteer {
 		this.numberOfValorations = numberOfValorations;
 	}
 
-	public Boolean getBanned() {
+	public int getBanned() {
 		return banned;
 	}
 
-	public void setBanned(Boolean banned) {
+	public void setBanned(int banned) {
 		this.banned = banned;
 	}
 }
