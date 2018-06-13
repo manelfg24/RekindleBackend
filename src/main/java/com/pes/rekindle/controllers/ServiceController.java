@@ -181,6 +181,4 @@ public class ServiceController {
     	serviceService.valorateService(dtoValoration);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
-    
-    /* Rafa culiao*/
 }

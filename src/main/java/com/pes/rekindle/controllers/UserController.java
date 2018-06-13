@@ -23,6 +23,7 @@ import com.pes.rekindle.dto.DTOLogInInfo;
 import com.pes.rekindle.dto.DTOMessage;
 import com.pes.rekindle.dto.DTOReport;
 import com.pes.rekindle.dto.DTOUser;
+import com.pes.rekindle.dto.DTOValoration;
 import com.pes.rekindle.exceptions.UserAlreadyExistsException;
 import com.pes.rekindle.exceptions.UserNotExistsException;
 import com.pes.rekindle.services.UserService;
@@ -117,6 +118,11 @@ public class UserController {
         } catch (UserNotExistsException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
+    }
+    
+    @RequestMapping(value = "/usuarios", method = RequestMethod.GET)
+    public ResponseEntity<Set<DTOUser>> getAllUsers() {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getAllUsers());
     }
 
     @RequestMapping(value = "/refugiados", method = RequestMethod.GET)

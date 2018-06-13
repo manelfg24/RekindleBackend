@@ -894,4 +894,21 @@ public class UserServiceImpl implements UserService {
 		volunteerRepository.save(modifiedVolunteer);
 		
 	}
+
+	@Override
+	public Set<DTOUser> getAllUsers() {
+		Set<Refugee> refugees = refugeeRepository.findAll();
+		Set<Volunteer> volunteers = volunteerRepository.findAll();
+		Set<DTOUser> dtoUsers = new HashSet<DTOUser>();
+		
+		for (Refugee refugee : refugees) {
+			dtoUsers.add(new DTOUser(refugee));
+		}
+		
+		for (Volunteer volunteer : volunteers) {
+			dtoUsers.add(new DTOUser(volunteer));
+		}
+		
+		return dtoUsers;
+	}
 }
