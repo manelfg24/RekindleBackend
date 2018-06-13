@@ -95,8 +95,9 @@ public class ServiceController {
     @RequestMapping(value = "/servicios/{mail}/{tipo}", method = RequestMethod.GET)
     public ResponseEntity<Set<DTOService>> obtainOwnServices(
             @PathVariable("mail") String mail,
-            @PathVariable("tipo") String userType) {
-        Set<DTOService> result = userService.obtainOwnServices(mail, userType);
+            @PathVariable("tipo") String userType,
+            @RequestParam ("ended")Boolean ended) {
+        Set<DTOService> result = userService.obtainOwnServices(mail, userType, ended);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }

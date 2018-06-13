@@ -20,6 +20,8 @@ public class Admin {
     private String surname1;
     private String surname2;
     private String photo;
+    @NotNull
+    private Boolean banned;
 
     public String getMail() {
         return mail;
@@ -67,5 +69,13 @@ public class Admin {
 
 	public void setPhoto(String photo) {
 		this.photo = photo;
+	}
+
+	public Boolean getBanned() {
+		return banned;
+	}
+
+	public void setBanned(Boolean banned) {
+		this.banned = banned;
 	}
 }

@@ -18,6 +18,7 @@ public class DTOJob {
     private Integer places;
     private double salary;
     private String description;
+    private Boolean ended;
 
     public DTOJob() {
         super();
@@ -152,4 +153,12 @@ public class DTOJob {
     public void setDescription(String description) {
         this.description = description;
     }
+
+	public Boolean getEnded() {
+		return ended;
+	}
+
+	public void setEnded(Boolean ended) {
+		this.ended = ended;
+	}
 }

@@ -22,6 +22,8 @@ public class Volunteer {
     private String photo;
     private float averageValoration;
     private int numberOfValorations;
+    @NotNull
+    private Boolean banned;
 
     public String getMail() {
         return mail;
@@ -85,5 +87,13 @@ public class Volunteer {
 
 	public void setNumberOfValorations(int numberOfValorations) {
 		this.numberOfValorations = numberOfValorations;
+	}
+
+	public Boolean getBanned() {
+		return banned;
+	}
+
+	public void setBanned(Boolean banned) {
+		this.banned = banned;
 	}
 }

@@ -86,6 +86,7 @@ public class ServiceServiceImpl implements ServiceService {
 
         }
         lodge.setDescription(dtoLodge.getDescription());
+        lodge.setEnded(dtoLodge.getEnded());
         lodgeRepository.save(lodge);
     }
 
@@ -100,6 +101,7 @@ public class ServiceServiceImpl implements ServiceService {
         donation.setStartTime(dtoDonation.getStartTime());
         donation.setEndTime(dtoDonation.getEndTime());
         donation.setDescription(dtoDonation.getDescription());
+        donation.setEnded(dtoDonation.getEnded());
         donationRepository.save(donation);
     }
 
@@ -115,6 +117,7 @@ public class ServiceServiceImpl implements ServiceService {
         education.setSchedule(dtoEducation.getSchedule());
         education.setPlaces(dtoEducation.getPlaces());
         education.setDescription(dtoEducation.getDescription());
+        education.setEnded(dtoEducation.getEnded());
         educationRepository.save(education);
     }
 
@@ -133,6 +136,7 @@ public class ServiceServiceImpl implements ServiceService {
         job.setPlaces(dtoJob.getPlaces());
         job.setSalary(dtoJob.getSalary());
         job.setDescription(dtoJob.getDescription());
+        job.setEnded(dtoJob.getEnded());
         jobRepository.save(job);
     }
 
@@ -140,23 +144,31 @@ public class ServiceServiceImpl implements ServiceService {
         ArrayList<DTOService> dtosService = new ArrayList<DTOService>();        
         Set<Donation> donations = donationRepository.findAll();
         for (Donation donation : donations) {
-            DTOService dtoDonation = new DTOService(donation);
-            dtosService.add(dtoDonation);
+        	if(!donation.getEnded()) {
+	            DTOService dtoDonation = new DTOService(donation);
+	            dtosService.add(dtoDonation);
+        	}
         }
         Set<Education> courses = educationRepository.findAll();
         for (Education education : courses) {
-            DTOService dtoEducation = new DTOService(education);
-            dtosService.add(dtoEducation);
+        	if(!education.getEnded()) {
+	            DTOService dtoEducation = new DTOService(education);
+	            dtosService.add(dtoEducation);
+        	}
         }
         Set<Job> jobs = jobRepository.findAll();
         for (Job job : jobs) {
-            DTOService dtoJob = new DTOService(job);
-            dtosService.add(dtoJob);
+        	if(!job.getEnded()) {
+	            DTOService dtoJob = new DTOService(job);
+	            dtosService.add(dtoJob);
+        	}
         }
         Set<Lodge> lodges = lodgeRepository.findAll();
         for (Lodge lodge : lodges) {
-            DTOService dtoLodge = new DTOService(lodge);
-            dtosService.add(dtoLodge);            
+        	if(!lodge.getEnded()) {
+	            DTOService dtoLodge = new DTOService(lodge);
+	            dtosService.add(dtoLodge);     
+        	}
         }
         /*dtosService.sort( new Comparator<DTOService>() {
             @Override
@@ -291,6 +303,7 @@ public class ServiceServiceImpl implements ServiceService {
         donation.setStartTime(dtoDonation.getStartTime());
         donation.setEndTime(dtoDonation.getEndTime());
         donation.setDescription(dtoDonation.getDescription());
+        donation.setEnded(dtoDonation.getEnded());
         donationRepository.save(donation);
 
     }
@@ -312,6 +325,7 @@ public class ServiceServiceImpl implements ServiceService {
 
         }
         lodge.setDescription(dtoLodge.getDescription());
+        lodge.setEnded(dtoLodge.getEnded());
         lodgeRepository.save(lodge);
 
         Pusher pusher = new Pusher("525518", "743a4fb4a1370f0ca9a4", "c78f3bfa72330a58ee1f");
@@ -335,6 +349,7 @@ public class ServiceServiceImpl implements ServiceService {
         education.setSchedule(dtoEducation.getSchedule());
         education.setPlaces(dtoEducation.getPlaces());
         education.setDescription(dtoEducation.getDescription());
+        education.setEnded(dtoEducation.getEnded());
         educationRepository.save(education);
 
     }
@@ -356,6 +371,7 @@ public class ServiceServiceImpl implements ServiceService {
         job.setPlaces(dtoJob.getPlaces());
         job.setSalary(dtoJob.getSalary());
         job.setDescription(dtoJob.getDescription());
+        job.setEnded(dtoJob.getEnded());
         jobRepository.save(job);
 
     }

@@ -37,6 +37,8 @@ public class Refugee {
     private String eyeColor;
     private String biography;
     private String photo;
+    @NotNull
+    private Boolean banned;
 
     @ManyToMany(mappedBy = "inscriptions", cascade = {
             CascadeType.PERSIST,
@@ -189,7 +191,15 @@ public class Refugee {
         this.photo = photo;
     }
 
-    public Set<Lodge> getLodges() {
+    public Boolean getBanned() {
+		return banned;
+	}
+
+	public void setBanned(Boolean banned) {
+		this.banned = banned;
+	}
+
+	public Set<Lodge> getLodges() {
         return lodges;
     }
 

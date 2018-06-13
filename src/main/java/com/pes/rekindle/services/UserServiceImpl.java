@@ -190,6 +190,7 @@ public class UserServiceImpl implements UserService {
         volunteer.setSurname1(dtoUser.getSurname1());
         volunteer.setSurname2(dtoUser.getSurname2());
         volunteer.setPhoto(dtoUser.getPhoto());
+        volunteer.setBanned(dtoUser.getBanned());
         volunteerRepository.save(volunteer);
     }
 
@@ -213,6 +214,7 @@ public class UserServiceImpl implements UserService {
         refugee.setEyeColor(dtoUser.getEyeColor());
         refugee.setBiography(dtoUser.getBiography());
         refugee.setPhoto(dtoUser.getPhoto());
+        refugee.setBanned(dtoUser.getBanned());
         refugeeRepository.save(refugee);
     }
 
@@ -337,7 +339,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Set<DTOService> obtainOwnServices(String mail, String userType) {
+    public Set<DTOService> obtainOwnServices(String mail, String userType, Boolean ended) {
         Set<DTOService> result = new HashSet<DTOService>();
         Set<Lodge> lodges;
         Set<Donation> donations;
@@ -354,14 +356,26 @@ public class UserServiceImpl implements UserService {
             courses = educationRepository.findByVolunteer(mail);
             jobs = jobRepository.findByVolunteer(mail);
         }
-        for (Lodge lodge : lodges)
-            result.add(new DTOService(lodge));
-        for (Education education : courses)
-            result.add(new DTOService(education));
-        for (Donation donation : donations)
-            result.add(new DTOService(donation));
-        for (Job job : jobs)
-            result.add(new DTOService(job));
+        for (Lodge lodge : lodges) {
+        	if(lodge.getEnded() == ended) {
+            	result.add(new DTOService(lodge));
+        	}
+        }
+        for (Education education : courses) {
+        	if(education.getEnded() == ended) {
+        		result.add(new DTOService(education));
+        	}
+        }
+        for (Donation donation : donations) {
+        	if(donation.getEnded() == ended) {
+            	result.add(new DTOService(donation));
+        	}
+        }
+        for (Job job : jobs) {
+        	if(job.getEnded() == ended) {
+        		result.add(new DTOService(job));
+        	}
+        }
         return result;
     }
 

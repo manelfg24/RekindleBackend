@@ -55,40 +55,60 @@
 	
 	<changeSet id="endedService" author="bob">
 		<addColumn tableName="Donation">
-	        <column name="ended" type="bit(1)" defaultValue="0"/>
+	       <column name="ended" type="bit(1)" defaultValue="0">
+	        <constraints nullable="false"/>
+	       </column>
 	    </addColumn>
 	    <addColumn tableName="Lodge">
-	        <column name="ended" type="bit(1)" defaultValue="0"/>
+	       <column name="ended" type="bit(1)" defaultValue="0">
+	        <constraints nullable="false"/>
+	       </column>
 	    </addColumn>
 		<addColumn tableName="Education">
-	        <column name="ended" type="bit(1)" defaultValue="0"/>
+	       <column name="ended" type="bit(1)" defaultValue="0">
+	        <constraints nullable="false"/>
+	       </column>
 	    </addColumn>
 		<addColumn tableName="Job">
-	        <column name="ended" type="bit(1)" defaultValue="0"/>
+	       <column name="ended" type="bit(1)" defaultValue="0">
+	        <constraints nullable="false"/>
+	       </column>
 	    </addColumn>
 	</changeSet>
 	
 	<changeSet id="apiKeyUsers" author="bob">
 		<addColumn tableName="Refugee">
-	        <column name="apiKey" type="varchar(100)"/>
+	       <column name="apiKey" type="varchar(100)">
+	        <constraints nullable="false"/>
+	       </column>
 	    </addColumn>
 	    <addColumn tableName="Admin">
-	        <column name="apiKey" type="varchar(100)"/>
+	       <column name="apiKey" type="varchar(100)">
+       		<constraints nullable="false"/>
+	       </column>
 	    </addColumn>
 		<addColumn tableName="Volunteer">
-	       <column name="apiKey" type="varchar(100)"/>
+	       <column name="apiKey" type="varchar(100)">
+       		<constraints nullable="false"/>
+	       </column>
 	    </addColumn>
 	</changeSet>
 	
 	<changeSet id="bannedUser" author="bob">
 		<addColumn tableName="Refugee">
-	        <column name="banned" type="bit(1)" defaultValue="0"/>
+	       <column name="banned" type="bit(1)" defaultValue="0">
+	        <constraints nullable="false"/>
+	       </column>
 	    </addColumn>
 	    <addColumn tableName="Admin">
-	       <column name="banned" type="bit(1)" defaultValue="0"/>
+	       <column name="banned" type="bit(1)" defaultValue="0">
+	       	<constraints nullable="false"/>
+	       </column>
 	    </addColumn>
 		<addColumn tableName="Volunteer">
-	       <column name="banned" type="bit(1)" defaultValue="0"/>
+	       <column name="banned" type="bit(1)" defaultValue="0">
+	       	<constraints nullable="false"/>
+	       </column>
 	    </addColumn>
 	</changeSet>
 </databaseChangeLog>

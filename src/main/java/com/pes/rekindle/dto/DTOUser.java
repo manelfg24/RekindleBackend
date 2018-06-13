@@ -29,6 +29,7 @@ public class DTOUser {
     private String biography;
     private String photo;
     private float averageValoration;
+    private Boolean banned;
 
     public DTOUser() {
         super();
@@ -55,6 +56,7 @@ public class DTOUser {
         this.eyeColor = refugee.getEyeColor();
         this.biography = refugee.getBiography();
         this.photo = refugee.getPhoto();
+        this.banned = refugee.getBanned();
     }
 
     public DTOUser(Volunteer volunteer) {
@@ -66,6 +68,7 @@ public class DTOUser {
         this.surname1 = volunteer.getSurname1();
         this.surname2 = volunteer.getSurname2();
         this.photo = volunteer.getPhoto();
+        this.banned = volunteer.getBanned();
         if (volunteer.getNumberOfValorations()==0) {
         	this.averageValoration = 0;
         }
@@ -84,6 +87,7 @@ public class DTOUser {
         this.surname1 = admin.getSurname1();
         this.surname2 = admin.getSurname2();
         this.photo = admin.getPhoto();
+        this.banned = admin.getBanned();
     }
 
     public String getMail() {
@@ -221,6 +225,14 @@ public class DTOUser {
 
 	public void setAverageValoration(float averageValoration) {
 		this.averageValoration = averageValoration;
+	}
+
+	public Boolean getBanned() {
+		return banned;
+	}
+
+	public void setBanned(Boolean banned) {
+		this.banned = banned;
 	}
 
 	public void setBirthdate(String birthdate) {

@@ -39,6 +39,8 @@ public class Education {
     private Integer price;
     @NotNull
     private String description;
+    @NotNull
+    private Boolean ended;
 
     @ManyToMany(cascade = {
             CascadeType.PERSIST,
@@ -150,5 +152,12 @@ public class Education {
     public void setInscriptions(Set<Refugee> inscriptions) {
         this.inscriptions = inscriptions;
     }
+    public Boolean getEnded() {
+		return ended;
+	}
+
+	public void setEnded(Boolean ended) {
+		this.ended = ended;
+	}
 
 }

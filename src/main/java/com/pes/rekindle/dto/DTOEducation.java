@@ -16,6 +16,7 @@ public class DTOEducation {
     private Integer places;
     private Integer price;
     private String description;
+    private Boolean ended;
 
     public DTOEducation() {
         super();
@@ -132,4 +133,12 @@ public class DTOEducation {
     public void setDescription(String description) {
         this.description = description;
     }
+
+	public Boolean getEnded() {
+		return ended;
+	}
+
+	public void setEnded(Boolean ended) {
+		this.ended = ended;
+	}
 }

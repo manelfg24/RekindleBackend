@@ -55,7 +55,7 @@ public interface UserService {
 
     void recoverPassword(String mail, String passwordNew) throws LoginException;
 
-    Set<DTOService> obtainOwnServices(String mail, String userType);
+    Set<DTOService> obtainOwnServices(String mail, String userType, Boolean ended);
 
     void unenrollUserFromService(String mail, Long id, String serviceType);
 
