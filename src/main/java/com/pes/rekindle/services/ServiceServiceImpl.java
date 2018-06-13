@@ -8,22 +8,27 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
+import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.pes.rekindle.dto.DTODonation;
+import com.pes.rekindle.dto.DTODonationEnrollment;
 import com.pes.rekindle.dto.DTOEducation;
 import com.pes.rekindle.dto.DTOJob;
 import com.pes.rekindle.dto.DTOLodge;
 import com.pes.rekindle.dto.DTOService;
 import com.pes.rekindle.entities.Donation;
+import com.pes.rekindle.entities.DonationEnrollment;
 import com.pes.rekindle.entities.Education;
 import com.pes.rekindle.entities.Job;
 import com.pes.rekindle.entities.Lodge;
 import com.pes.rekindle.entities.Message;
 import com.pes.rekindle.entities.Refugee;
+import com.pes.rekindle.repositories.DonationEnrollmentRepository;
 import com.pes.rekindle.repositories.DonationRepository;
 import com.pes.rekindle.repositories.EducationRepository;
 import com.pes.rekindle.repositories.JobRepository;
@@ -44,6 +49,12 @@ public class ServiceServiceImpl implements ServiceService {
 
     @Autowired
     UserService userService;
+    
+    @Autowired
+    DonationEnrollmentRepository donationEnrollmentRepository;
+    
+    @Autowired
+    DozerBeanMapper mapper;
 
     @Override
     public void createLodge(DTOLodge dtoLodge) {
@@ -373,4 +384,51 @@ public class ServiceServiceImpl implements ServiceService {
     public Job getJob(Long id) {
         return jobRepository.findById(id);
     }
+
+	@Override
+	public void createDonationRequest(DTODonationEnrollment dtoDonationEnrollment) {
+		DonationEnrollment donationEnrollment = new DonationEnrollment(dtoDonationEnrollment);
+		donationEnrollmentRepository.save(donationEnrollment);
+	}
+
+	@Override
+	public ArrayList<DTODonationEnrollment> listDonationRequests() {
+		ArrayList<DonationEnrollment> enrollmentList = donationEnrollmentRepository.findByRequestStatus("Not Resolved");
+		ArrayList<DTODonationEnrollment> dtoEnrollmentList = new ArrayList();
+		
+		//mirar como se guarda la PK en bd para no hacer llamadas inecesarias
+		for(DonationEnrollment donationEnrollment : enrollmentList) {
+			DTOService dtoDonation = new DTOService(donationRepository.findById(donationEnrollment.getDonationId()));
+
+			dtoEnrollmentList.add(new DTODonationEnrollment(donationEnrollment, dtoDonation));
+		}
+		return dtoEnrollmentList;
+	}
+
+	@Override
+	public Boolean donationIsRequested(Long donationId, String refugeeMail) {
+		Optional<DonationEnrollment> oDonationEnrollment = donationEnrollmentRepository.findOptionalByRefugeeMailAndDonationId(refugeeMail, donationId);
+		if (oDonationEnrollment.isPresent()) {
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public void acceptDonationRequest(Long donationId, String refugeeMail) {
+		DonationEnrollment donationEnrollment = donationEnrollmentRepository.findByRefugeeMailAndDonationId(refugeeMail, donationId);
+		if (!donationEnrollment.getRequestStatus().equals("Accepted")) {
+			donationEnrollment.setRequestStatus("Accepted");
+			donationEnrollmentRepository.save(donationEnrollment);
+		}
+	}
+
+	@Override
+	public void rejectDonationRequest(Long donationId, String refugeeMail) {
+		DonationEnrollment donationEnrollment = donationEnrollmentRepository.findByRefugeeMailAndDonationId(refugeeMail, donationId);
+		if (!donationEnrollment.getRequestStatus().equals("Rejected")) {
+			donationEnrollment.setRequestStatus("Rejected");
+			donationEnrollmentRepository.save(donationEnrollment);
+		}
+	}
 }

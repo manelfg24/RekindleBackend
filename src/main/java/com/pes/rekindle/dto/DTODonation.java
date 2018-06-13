@@ -3,8 +3,11 @@ package com.pes.rekindle.dto;
 
 import java.sql.Time;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.pes.rekindle.entities.Donation;
 
+@JsonInclude(Include.NON_NULL)
 public class DTODonation {
     private long id;
     private String serviceType;

@@ -1,6 +1,7 @@
 
 package com.pes.rekindle.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -11,9 +12,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pes.rekindle.dto.DTODonation;
+import com.pes.rekindle.dto.DTODonationEnrollment;
 import com.pes.rekindle.dto.DTOEducation;
 import com.pes.rekindle.dto.DTOJob;
 import com.pes.rekindle.dto.DTOLodge;
@@ -138,5 +141,33 @@ public class ServiceController {
         serviceService.modifyJob(id, job);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
+    
+    @RequestMapping(value = "/solicituddonacion", method = RequestMethod.POST)
+    public ResponseEntity<Void> createDonationRequest(@RequestBody DTODonationEnrollment dtoDonationEnrollment) {
+    	System.out.println("Incide --------------------------------------------------------------");
+    	serviceService.createDonationRequest(dtoDonationEnrollment);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
 
+    @RequestMapping(value = "/solicituddonacion", method = RequestMethod.GET)
+    public ResponseEntity<ArrayList<DTODonationEnrollment>> listDonationRequests() {
+        return ResponseEntity.status(HttpStatus.OK).body(serviceService.listDonationRequests());
+    }
+    
+    @RequestMapping(value = "/solicituddonacion/{donationId}", method = RequestMethod.GET)
+    public ResponseEntity<Boolean> donationIsRequested(@PathVariable Long donationId, @RequestParam String refugeeMail) {
+        return ResponseEntity.status(HttpStatus.OK).body(serviceService.donationIsRequested(donationId, refugeeMail));
+    }
+    
+    @RequestMapping(value = "/solicituddonacion/accept/{idDonation}", method = RequestMethod.GET)
+    public ResponseEntity<Void> acceptDonationRequest(@PathVariable Long donationId, @RequestParam String refugeeMail) {
+    	serviceService.acceptDonationRequest(donationId, refugeeMail);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+    
+    @RequestMapping(value = "/solicituddonacion/reject/{idDonation}", method = RequestMethod.GET)
+    public ResponseEntity<Void> rejectDonationRequest(@PathVariable Long donationId, @RequestParam String refugeeMail) {
+    	serviceService.rejectDonationRequest(donationId, refugeeMail);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
 }

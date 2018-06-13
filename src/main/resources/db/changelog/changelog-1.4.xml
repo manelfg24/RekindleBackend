@@ -21,4 +21,14 @@
 		</createTable>
 	</changeSet>
 	
+	<changeSet id="donation" author="bob">
+		<addColumn tableName="DonationEnrollment">
+	        <column name="motive" type="varchar(500)">
+	        	<constraints nullable="false"/>
+	        </column>
+	    </addColumn>
+	    <addColumn tableName="DonationEnrollment">
+	    	<column name="requestStatus" type="varchar(20)" defaultValue="Pendent"/>
+	    </addColumn>
+	</changeSet>
 </databaseChangeLog>
