@@ -3,9 +3,9 @@ package com.pes.rekindle.entities;
 import java.io.Serializable;
 
 
-public class ServiceEnrollmentKey implements Serializable{
+public class JobEnrollmentKey implements Serializable{
 	private String refugeeMail;
-    private Long lodgeId;
+    private Long jobId;
     
 	public String getRefugeeMail() {
 		return refugeeMail;
@@ -13,11 +13,12 @@ public class ServiceEnrollmentKey implements Serializable{
 	public void setRefugeeMail(String refugeeMail) {
 		this.refugeeMail = refugeeMail;
 	}
-	public Long getLodgeId() {
-		return lodgeId;
+	public Long getJobId() {
+		return jobId;
 	}
-	public void setLodgeId(Long lodgeId) {
-		this.lodgeId = lodgeId;
+	public void setJobId(Long jobId) {
+		this.jobId = jobId;
 	}
-   
+
+    
 }

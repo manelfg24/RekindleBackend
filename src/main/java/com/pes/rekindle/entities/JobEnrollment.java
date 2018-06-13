@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 import com.pes.rekindle.dto.DTODonationEnrollment;
 
 @Entity
-@IdClass(ServiceEnrollmentKey.class)
+@IdClass(JobEnrollmentKey.class)
 @Table(name = "JobEnrollment")
 public class JobEnrollment {
 

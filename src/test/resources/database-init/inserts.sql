@@ -18,9 +18,10 @@ INSERT INTO Education VALUES(1, 'Education', 'NombreEdu cero', 'mailAlex', 93427
 INSERT INTO Education VALUES(2, 'Education', 'NombreEdu uno', 'mailRoger', 93427512, 'adress education one', 'jardineria', 'requirements for education 1', 'schedule uno' ,32, 50, 'Descripción education service uno');
 
 INSERT INTO Job VALUES(1, 'Job', 'Nombre Job cero', 'mailRoger', 93427512, 'adress job 0','cargo del job', 'requirements para el job', 5, 25, 12, 5000, 1,'Descripción Job service cero');
-
+/*
 INSERT INTO donationenrollment VALUES ('mailRafael', 1);
 INSERT INTO donationenrollment VALUES ('mailFelipe', 1);
 INSERT INTO donationenrollment VALUES ('mailFelipe', 2);
+*/
 
 INSERT INTO Link VALUES(0, 'Test', 'www.test.com', 'Link para testear');

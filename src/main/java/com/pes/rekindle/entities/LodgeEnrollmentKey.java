@@ -3,7 +3,7 @@ package com.pes.rekindle.entities;
 import java.io.Serializable;
 
 
-public class ServiceEnrollmentKey implements Serializable{
+public class LodgeEnrollmentKey implements Serializable{
 	private String refugeeMail;
     private Long lodgeId;
     
