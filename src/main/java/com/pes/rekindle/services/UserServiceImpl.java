@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.persistence.EntityNotFoundException;
 import javax.security.auth.login.LoginException;
 
 import org.dozer.DozerBeanMapper;
@@ -36,6 +37,7 @@ import com.pes.rekindle.entities.Message;
 import com.pes.rekindle.entities.Refugee;
 import com.pes.rekindle.entities.Report;
 import com.pes.rekindle.entities.Volunteer;
+import com.pes.rekindle.exceptions.ReportNotExistsException;
 import com.pes.rekindle.exceptions.UserAlreadyExistsException;
 import com.pes.rekindle.exceptions.UserNotExistsException;
 import com.pes.rekindle.exceptions.UserStateAlreadyUpdatedException;
@@ -967,6 +969,18 @@ public class UserServiceImpl implements UserService {
 			else {
 				throw new UserNotExistsException();
 			}
+		}
+	}
+
+	@Override
+	public void deleteReport(Long id) throws ReportNotExistsException {
+		Optional<Report> oReport = reportRepository.findOptionalById(id);
+		if (oReport.isPresent()) {
+			//mirar apikey
+			reportRepository.deleteById(id);
+		}
+		else {
+			throw new ReportNotExistsException();
 		}
 	}
 }

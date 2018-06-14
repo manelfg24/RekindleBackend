@@ -24,6 +24,7 @@ import com.pes.rekindle.dto.DTOMessage;
 import com.pes.rekindle.dto.DTOReport;
 import com.pes.rekindle.dto.DTOUser;
 import com.pes.rekindle.dto.DTOValoration;
+import com.pes.rekindle.exceptions.ReportNotExistsException;
 import com.pes.rekindle.exceptions.UserAlreadyExistsException;
 import com.pes.rekindle.exceptions.UserNotExistsException;
 import com.pes.rekindle.exceptions.UserStateAlreadyUpdatedException;
@@ -292,6 +293,16 @@ public class UserController {
     @RequestMapping(value = "/reportes/{id}", method = RequestMethod.GET)
     public ResponseEntity<DTOReport> getReport(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getReport(id));
+    }
+    
+    @RequestMapping(value = "/reportes/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<Void> deleteReport(@PathVariable Long id) {
+    	try {
+			userService.deleteReport(id);
+		} catch (ReportNotExistsException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
     @RequestMapping(value = "/links", method = RequestMethod.POST)

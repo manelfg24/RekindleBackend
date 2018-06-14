@@ -13,6 +13,7 @@ import com.pes.rekindle.dto.DTOMessage;
 import com.pes.rekindle.dto.DTOReport;
 import com.pes.rekindle.dto.DTOService;
 import com.pes.rekindle.dto.DTOUser;
+import com.pes.rekindle.exceptions.ReportNotExistsException;
 import com.pes.rekindle.exceptions.UserAlreadyExistsException;
 import com.pes.rekindle.exceptions.UserNotExistsException;
 import com.pes.rekindle.exceptions.UserStateAlreadyUpdatedException;
@@ -102,4 +103,6 @@ public interface UserService {
 	Integer isUserEnabled(String mail) throws UserNotExistsException ;
 
 	void modifyBannedStatus(String mail, int userDesiredState) throws UserNotExistsException, UserStateAlreadyUpdatedException;
+
+	void deleteReport(Long id) throws ReportNotExistsException;
 }
