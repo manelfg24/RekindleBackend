@@ -42,17 +42,17 @@
 	
 	<changeSet author="bob" id="changePhotoType">
 		<modifyDataType columnName="photo"
-            newDataType="text"
+            newDataType="varchar(45000)"
             tableName="Refugee"/>
             
         <modifyDataType columnName="photo"
-            newDataType="text"
+            newDataType="varchar(45000)"
             tableName="Volunteer"/>
             
 	</changeSet>
 	<changeSet author="bob" id="addAdminPhoto">
 		<addColumn tableName="Admin">
-	        <column name="photo" type="text"/>
+	        <column name="photo" type="varchar(45000)"/>
 	    </addColumn>
 	</changeSet>
 </databaseChangeLog>
