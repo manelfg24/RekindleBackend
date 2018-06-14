@@ -20,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.pes.rekindle.dao.DAOService;
 import com.pes.rekindle.dto.DTODonation;
 import com.pes.rekindle.dto.DTODonationEnrollment;
 import com.pes.rekindle.dto.DTOEducation;
@@ -581,124 +582,31 @@ public class ServiceServiceImpl implements ServiceService {
 				") AS d\r\n" + 
 				"WHERE distance <= radius\r\n" + 
 				"ORDER BY distance;");
+		
+		q.setParameter(1, positionLat);
+		q.setParameter(2, positionLng);
+		q.setParameter(3, distance);
+		
+		System.out.println(q.getResultList().size());
+		
+		List<Object> daoServices = q.getResultList();
+		for (Object ds : daoServices) {
+			System.out.println(ds.toString());
+			DAOService daoService = mapper.map(ds, DAOService.class);
+			System.out.println("ID: " + daoService.getId());
+			System.out.println("Distancia: " + daoService.getDistance());
+			System.out.println("----------------------------------");
+		}
+		
+		/*
+		for (Object ds : daoService) {
+			ds[0]
+			System.out.println("ID: " + ds.getId());
+			System.out.println("Distancia: " + ds.getDistance());
+			System.out.println("----------------------------------");
+		}
+		*/
 		return null;
 	}
 
-    /*
-    @Override
-    public ArrayList<DTOService> filterServices(String fromDate, String toDate,
-            double minimumRating,
-            double positionLat, double positionLng, double distance) {
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-
-        Query q = em.createNativeQuery("SELECT *" +
-                "FROM (\r\n" +
-                "    SELECT l.*," +
-                "        p.radius," +
-                "        p.distance_unit" +
-                "                 * DEGREES(ACOS(COS(RADIANS(p.latpoint))" +
-                "                 * COS(RADIANS(l.positionLat))\r\n" +
-                "                 * COS(RADIANS(p.longpoint - l.positionLng))" +
-                "                 + SIN(RADIANS(p.latpoint))" +
-                "                 * SIN(RADIANS(l.positionLat)))) AS distance" +
-                "    FROM Lodge AS l" +
-                "    JOIN (SELECT  @positionLat  AS latpoint,  @positionLng AS longpoint," +
-                "                @distance AS radius,      111.045 AS distance_unit" +
-                "    ) AS p ON 1=1" +
-                "    WHERE l.positionLat" +
-                "     BETWEEN p.latpoint  - (p.radius / p.distance_unit)" +
-                "         AND p.latpoint  + (p.radius / p.distance_unit)" +
-                "    AND l.positionLng" +
-                "     BETWEEN p.longpoint - (p.radius / (p.distance_unit * COS(RADIANS(p.latpoint))))"
-                +
-                "         AND p.longpoint + (p.radius / (p.distance_unit * COS(RADIANS(p.latpoint))))"
-                +
-                ") AS d, Lodge l join Volunteer v on l.volunteer = v.mail" +
-                "WHERE distance <= radius and dateLimit between @fromDate and @toDate" +
-                "    and ( (v.averageValoration/v.numberOfValorations) >= @minimumRating" +
-                "        or @minimumRating is null)" +
-                "UNION" +
-                "SELECT *" +
-                "FROM (SELECT l.*," +
-                "        p.radius," +
-                "        p.distance_unit" +
-                "                 * DEGREES(ACOS(COS(RADIANS(p.latpoint))" +
-                "                 * COS(RADIANS(l.positionLat))" +
-                "                 * COS(RADIANS(p.longpoint - l.positionLng))" +
-                "                 + SIN(RADIANS(p.latpoint))" +
-                "                 * SIN(RADIANS(l.positionLat)))) AS distance" +
-                "    FROM Education AS l" +
-                "    JOIN (SELECT  @positionLat  AS latpoint,  @positionLng AS longpoint," +
-                "                @distance AS radius,      111.045 AS distance_unit\r\n" +
-                "    ) AS p ON 1=1" +
-                "    WHERE l.positionLat" +
-                "     BETWEEN p.latpoint  - (p.radius / p.distance_unit)" +
-                "         AND p.latpoint  + (p.radius / p.distance_unit)" +
-                "    AND l.positionLng" +
-                "     BETWEEN p.longpoint - (p.radius / (p.distance_unit * COS(RADIANS(p.latpoint))))"
-                +
-                "         AND p.longpoint + (p.radius / (p.distance_unit * COS(RADIANS(p.latpoint))))"
-                +
-                ") AS d, Education l join Volunteer v on l.volunteer = v.mail" +
-                "WHERE distance <= radius and ((v.averageValoration/v.numberOfValorations) >= @minimumRating"
-                +
-                "        or @minimumRating is null)" +
-                "UNION" +
-                "SELECT *" +
-                "FROM (SELECT l.*," +
-                "        p.radius," +
-                "        p.distance_unit" +
-                "                 * DEGREES(ACOS(COS(RADIANS(p.latpoint))" +
-                "                 * COS(RADIANS(l.positionLat))" +
-                "                 * COS(RADIANS(p.longpoint - l.positionLng))" +
-                "                 + SIN(RADIANS(p.latpoint))" +
-                "                 * SIN(RADIANS(l.positionLat)))) AS distance" +
-                "    FROM Job AS l" +
-                "    JOIN (SELECT  @positionLat  AS latpoint,  @positionLng AS longpoint," +
-                "                @distance AS radius,      111.045 AS distance_unit\r\n" +
-                "    ) AS p ON 1=1" +
-                "    WHERE l.positionLat" +
-                "     BETWEEN p.latpoint  - (p.radius / p.distance_unit)" +
-                "         AND p.latpoint  + (p.radius / p.distance_unit)" +
-                "    AND l.positionLng" +
-                "     BETWEEN p.longpoint - (p.radius / (p.distance_unit * COS(RADIANS(p.latpoint))))"
-                +
-                "         AND p.longpoint + (p.radius / (p.distance_unit * COS(RADIANS(p.latpoint))))"
-                +
-                ") AS d, Job l join Volunteer v on l.volunteer = v.mail" +
-                "WHERE distance <= radius and ((v.averageValoration/v.numberOfValorations) >= @minimumRating"
-                +
-                "        or @minimumRating is null)" +
-                "UNION" +
-                "SELECT *" +
-                "FROM (SELECT l.*," +
-                "        p.radius," +
-                "        p.distance_unit" +
-                "                 * DEGREES(ACOS(COS(RADIANS(p.latpoint))" +
-                "                 * COS(RADIANS(l.positionLat))" +
-                "                 * COS(RADIANS(p.longpoint - l.positionLng))" +
-                "                 + SIN(RADIANS(p.latpoint))" +
-                "                 * SIN(RADIANS(l.positionLat)))) AS distance" +
-                "    FROM Donation AS l" +
-                "    JOIN (SELECT  @positionLat  AS latpoint,  @positionLng AS longpoint," +
-                "                @distance AS radius,      111.045 AS distance_unit\r\n" +
-                "    ) AS p ON 1=1" +
-                "    WHERE l.positionLat" +
-                "     BETWEEN p.latpoint  - (p.radius / p.distance_unit)" +
-                "         AND p.latpoint  + (p.radius / p.distance_unit)" +
-                "    AND l.positionLng" +
-                "     BETWEEN p.longpoint - (p.radius / (p.distance_unit * COS(RADIANS(p.latpoint))))"
-                +
-                "         AND p.longpoint + (p.radius / (p.distance_unit * COS(RADIANS(p.latpoint))))"
-                +
-                ") AS d, Donation l join Volunteer v on l.volunteer = v.mail" +
-                "WHERE distance <= radius and ((v.averageValoration/v.numberOfValorations) >= @minimumRating"
-                +
-                "        or @minimumRating is null)" +
-                "ORDER BY distance");
-
-        return null;
-    }
-    */
 }
