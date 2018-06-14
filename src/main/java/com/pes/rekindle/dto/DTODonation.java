@@ -41,11 +41,7 @@ public class DTODonation {
         
         DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_TIME;
         this.startTime = formatter.format(donation.getStartTime());
-        System.out.println("StartTime:  --------------------------------");
-        System.out.println(this.startTime);
         DateTimeFormatter formatter1 = DateTimeFormatter.ISO_LOCAL_TIME;
-        System.out.println("EndTime:  --------------------------------");
-        System.out.println(formatter1.format(donation.getEndTime()));
         this.endTime = formatter1.format(donation.getEndTime());
         this.description = donation.getDescription();
         this.ended = donation.getEnded();
