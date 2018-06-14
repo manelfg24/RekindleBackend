@@ -2,6 +2,8 @@
 package com.pes.rekindle.dto;
 
 import java.sql.Time;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -21,6 +23,7 @@ public class DTODonation {
     private String description;
     private double positionLat;
     private double positionLng;
+	private String expiresOn;
 
     public DTODonation() {
         super();
@@ -40,6 +43,8 @@ public class DTODonation {
         this.description = donation.getDescription();
         this.positionLat = donation.getPositionLat();
         this.positionLng = donation.getPositionLng();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        this.expiresOn = formatter.format(donation.getExpiresOn());
     }
 
     public long getId() {
@@ -136,5 +141,18 @@ public class DTODonation {
 
 	public void setPositionLng(double positionLng) {
 		this.positionLng = positionLng;
+	}
+	
+    public void setExpiresOn(Date expiresOn) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        this.expiresOn = formatter.format(expiresOn);
+    }
+
+	public String getExpiresOn() {
+		return expiresOn;
+	}
+
+	public void setExpiresOn(String expiresOn) {
+		this.expiresOn = expiresOn;
 	}
 }

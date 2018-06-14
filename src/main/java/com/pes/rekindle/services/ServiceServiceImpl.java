@@ -1,6 +1,7 @@
 
 package com.pes.rekindle.services;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,6 +16,8 @@ import javax.persistence.Query;
 
 import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.pes.rekindle.dto.DTODonation;
@@ -74,7 +77,7 @@ public class ServiceServiceImpl implements ServiceService {
     DozerBeanMapper mapper;
 
     @Override
-    public void createLodge(DTOLodge dtoLodge) {
+    public void createLodge(DTOLodge dtoLodge) throws ParseException {
         Lodge lodge = new Lodge();
         lodge.setName(dtoLodge.getName());
         lodge.setVolunteer(dtoLodge.getVolunteer());
@@ -83,17 +86,15 @@ public class ServiceServiceImpl implements ServiceService {
         lodge.setAdress(dtoLodge.getAdress());
         lodge.setPlaces(dtoLodge.getPlaces());
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            Date dateLimit = formatter.parse(dtoLodge.getDateLimit());
-            lodge.setDateLimit(dateLimit);
-        } catch (Exception e) {
-
-        }
+        Date dateLimit = formatter.parse(dtoLodge.getDateLimit());
+        lodge.setDateLimit(dateLimit);
+        Date expiresOn = formatter.parse(dtoLodge.getExpiresOn());
+        lodge.setExpiresOn(expiresOn);
         lodge.setDescription(dtoLodge.getDescription());
         lodgeRepository.save(lodge);
     }
 
-    public void createDonation(DTODonation dtoDonation) {
+    public void createDonation(DTODonation dtoDonation) throws ParseException {
         Donation donation = new Donation();
         donation.setName(dtoDonation.getName());
         donation.setVolunteer(dtoDonation.getVolunteer());
@@ -104,10 +105,13 @@ public class ServiceServiceImpl implements ServiceService {
         donation.setStartTime(dtoDonation.getStartTime());
         donation.setEndTime(dtoDonation.getEndTime());
         donation.setDescription(dtoDonation.getDescription());
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date expiresOn = formatter.parse(dtoDonation.getExpiresOn());
+        donation.setExpiresOn(expiresOn);
         donationRepository.save(donation);
     }
 
-    public void createEducation(DTOEducation dtoEducation) {
+    public void createEducation(DTOEducation dtoEducation) throws ParseException {
         Education education = new Education();
         education.setName(dtoEducation.getName());
         education.setVolunteer(dtoEducation.getVolunteer());
@@ -119,10 +123,13 @@ public class ServiceServiceImpl implements ServiceService {
         education.setSchedule(dtoEducation.getSchedule());
         education.setPlaces(dtoEducation.getPlaces());
         education.setDescription(dtoEducation.getDescription());
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date expiresOn = formatter.parse(dtoEducation.getExpiresOn());
+        education.setExpiresOn(expiresOn);
         educationRepository.save(education);
     }
 
-    public void createJob(DTOJob dtoJob) {
+    public void createJob(DTOJob dtoJob) throws ParseException {
         Job job = new Job();
         job.setName(dtoJob.getName());
         job.setVolunteer(dtoJob.getVolunteer());
@@ -137,6 +144,9 @@ public class ServiceServiceImpl implements ServiceService {
         job.setPlaces(dtoJob.getPlaces());
         job.setSalary(dtoJob.getSalary());
         job.setDescription(dtoJob.getDescription());
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date expiresOn = formatter.parse(dtoJob.getExpiresOn());
+        job.setExpiresOn(expiresOn);
         jobRepository.save(job);
     }
 
@@ -525,6 +535,56 @@ public class ServiceServiceImpl implements ServiceService {
         }
     }
 
+	@Override
+	public ArrayList<DTOService> filterServices(String fromDateString, String toDateString, double minimumRating,
+			double positionLat, double positionLng, double distance) {
+		/*
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date fromDate = formatter.parse("1900-01-01");
+        Date toDate = formatter.parse("2100-01-01");
+		if (!fromDate.equals("")) {
+			fromDate = formatter.parse(fromDateString);
+		}
+		if (!toDate.equals("")) {
+			toDate = formatter.parse(toDateString);
+		}
+		if (minimumRating) {
+			
+		}
+		*/
+		
+		EntityManager em = emf.createEntityManager();
+		em.getTransaction().begin();
+		
+		Query q = em.createNativeQuery("SELECT id,  serviceType, name, volunteer, phoneNumber, adress, description, positionLat, positionLng, distance\r\n" + 
+				"FROM (\r\n" + 
+				"	SELECT l.*,\r\n" + 
+				"		p.radius,\r\n" + 
+				"		p.distance_unit\r\n" + 
+				"				 * DEGREES(ACOS(COS(RADIANS(p.latpoint))\r\n" + 
+				"				 * COS(RADIANS(l.positionLat))\r\n" + 
+				"				 * COS(RADIANS(p.longpoint - l.positionLng))\r\n" + 
+				"				 + SIN(RADIANS(p.latpoint))\r\n" + 
+				"				 * SIN(RADIANS(l.positionLat)))) AS distance\r\n" + 
+				"	FROM Lodge AS l\r\n" + 
+				"	JOIN (   /* these are the query parameters */\r\n" + 
+				"		SELECT  ?1  AS latpoint,  ?2 AS longpoint,\r\n" + 
+				"				?3 AS radius,      111.045 AS distance_unit\r\n" + 
+				"	) AS p ON 1=1\r\n" + 
+				"	WHERE not l.ended and\r\n" + 
+				"		l.positionLat\r\n" + 
+				"	 BETWEEN p.latpoint  - (p.radius / p.distance_unit)\r\n" + 
+				"		 AND p.latpoint  + (p.radius / p.distance_unit)\r\n" + 
+				"	AND l.positionLng\r\n" + 
+				"	 BETWEEN p.longpoint - (p.radius / (p.distance_unit * COS(RADIANS(p.latpoint))))\r\n" + 
+				"		 AND p.longpoint + (p.radius / (p.distance_unit * COS(RADIANS(p.latpoint))))\r\n" +  
+				") AS d\r\n" + 
+				"WHERE distance <= radius\r\n" + 
+				"ORDER BY distance;");
+		return null;
+	}
+
+    /*
     @Override
     public ArrayList<DTOService> filterServices(String fromDate, String toDate,
             double minimumRating,
@@ -639,4 +699,5 @@ public class ServiceServiceImpl implements ServiceService {
                 "ORDER BY distance");
         return null;
     }
+    */
 }

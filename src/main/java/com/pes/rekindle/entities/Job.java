@@ -1,6 +1,7 @@
 
 package com.pes.rekindle.entities;
 
+import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -45,8 +46,12 @@ public class Job {
     private double salary;
     @NotNull
     private String description;
+    @NotNull
     private double positionLat;
+    @NotNull
     private double positionLng;
+    @NotNull
+    private Date expiresOn;
 
     @ManyToMany(cascade = {
             CascadeType.PERSIST,
@@ -190,5 +195,12 @@ public class Job {
 	public void setPositionLng(double positionLng) {
 		this.positionLng = positionLng;
 	}
-    
+
+	public Date getExpiresOn() {
+		return expiresOn;
+	}
+
+	public void setExpiresOn(Date expiresOn) {
+		this.expiresOn = expiresOn;
+	}
 }

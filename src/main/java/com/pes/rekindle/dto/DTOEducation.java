@@ -1,6 +1,9 @@
 
 package com.pes.rekindle.dto;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import com.pes.rekindle.entities.Education;
 
 public class DTOEducation {
@@ -18,6 +21,7 @@ public class DTOEducation {
     private String description;
     private double positionLat;
     private double positionLng;
+	private String expiresOn;
 
     public DTOEducation() {
         super();
@@ -47,6 +51,8 @@ public class DTOEducation {
         this.description = education.getDescription();
         this.positionLat = education.getPositionLat();
         this.positionLng = education.getPositionLng();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        this.expiresOn = formatter.format(education.getExpiresOn());
     }
 
     public String getServiceType() {
@@ -151,5 +157,18 @@ public class DTOEducation {
 
 	public void setPositionLng(double positionLng) {
 		this.positionLng = positionLng;
+	}
+	
+    public void setExpiresOn(Date expiresOn) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        this.expiresOn = formatter.format(expiresOn);
+    }
+
+	public String getExpiresOn() {
+		return expiresOn;
+	}
+
+	public void setExpiresOn(String expiresOn) {
+		this.expiresOn = expiresOn;
 	}
 }

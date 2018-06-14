@@ -1,6 +1,7 @@
 
 package com.pes.rekindle.services;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -19,15 +20,15 @@ import com.pes.rekindle.entities.Lodge;
 
 public interface ServiceService {
 
-    void createLodge(DTOLodge lodge);
+    void createLodge(DTOLodge lodge) throws ParseException;
 
     List<DTOService> listServices();
 
-    void createDonation(DTODonation donation);
+    void createDonation(DTODonation donation) throws ParseException;
 
-    void createEducation(DTOEducation education);
+    void createEducation(DTOEducation education) throws ParseException;
 
-    void createJob(DTOJob job);
+    void createJob(DTOJob job) throws ParseException;
 
     void deleteService(long id, String serviceType);
     
@@ -69,7 +70,7 @@ public interface ServiceService {
 
 	void valorateService(DTOValoration dtoValoration);
 
-	ArrayList<DTOService> filterServices(String fromDate, String toDate, double minimumRating,
+	ArrayList<DTOService> filterServices(String fromDateString, String toDateString, double minimumRating,
 			double positionLat, double positionLng, double distance);
 
 }

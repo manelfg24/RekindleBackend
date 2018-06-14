@@ -18,6 +18,7 @@ public class DTOLodge {
     private String description;
     private double positionLat;
     private double positionLng;
+    private String expiresOn;
 
     public DTOLodge() {
         super();
@@ -37,6 +38,7 @@ public class DTOLodge {
         this.description = lodge.getDescription();
         this.positionLat = lodge.getPositionLat();
         this.positionLng = lodge.getPositionLng();
+        this.expiresOn = formatter.format(lodge.getExpiresOn());
     }
 
     public long getId() {
@@ -127,4 +129,21 @@ public class DTOLodge {
 	public void setPositionLng(double positionLng) {
 		this.positionLng = positionLng;
 	}
+
+	public String getExpiresOn() {
+		return expiresOn;
+	}
+
+	public void setExpiresOn(String expiresOn) {
+		this.expiresOn = expiresOn;
+	}
+
+	public void setDateLimit(String dateLimit) {
+		this.dateLimit = dateLimit;
+	}
+	
+    public void setExpiresOn(Date expiresOn) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        this.expiresOn = formatter.format(expiresOn);
+    }
 }

@@ -37,8 +37,12 @@ public class Lodge {
     private Date dateLimit;
     @NotNull
     private String description;
+    @NotNull
     private double positionLat;
+    @NotNull
     private double positionLng;
+    @NotNull
+    private Date expiresOn;
 
     @ManyToMany(cascade = {
             CascadeType.PERSIST,
@@ -142,4 +146,13 @@ public class Lodge {
 	public void setPositionLng(double positionLng) {
 		this.positionLng = positionLng;
 	}
+
+	public Date getExpiresOn() {
+		return expiresOn;
+	}
+
+	public void setExpiresOn(Date expiresOn) {
+		this.expiresOn = expiresOn;
+	}
+   
 }

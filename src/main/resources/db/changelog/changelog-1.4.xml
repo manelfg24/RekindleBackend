@@ -126,4 +126,27 @@
 			</column>
 	    </addColumn>
 	</changeSet>	
+	
+	<changeSet id="expires" author="bob">
+		<addColumn tableName="Lodge">
+			<column name="expiresOn" type="date">
+				<constraints nullable="false"/>
+			</column>
+	    </addColumn>
+	    <addColumn tableName="Donation">
+			<column name="expiresOn" type="date">
+				<constraints nullable="false"/>
+			</column>
+	    </addColumn>
+		<addColumn tableName="Education">
+			<column name="expiresOn" type="date">
+				<constraints nullable="false"/>
+			</column>
+	    </addColumn>
+	    <addColumn tableName="Job">
+			<column name="expiresOn" type="date">
+				<constraints nullable="false"/>
+			</column>
+	    </addColumn>
+	</changeSet>	
 </databaseChangeLog>

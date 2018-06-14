@@ -1,6 +1,9 @@
 
 package com.pes.rekindle.dto;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import com.pes.rekindle.entities.Job;
 
 public class DTOJob {
@@ -20,6 +23,7 @@ public class DTOJob {
     private String description;
     private double positionLat;
     private double positionLng;
+    private String expiresOn;
 
     public DTOJob() {
         super();
@@ -43,6 +47,8 @@ public class DTOJob {
         this.description = job.getDescription();
         this.positionLat = job.getPositionLat();
         this.positionLng = job.getPositionLng();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        this.expiresOn = formatter.format(job.getExpiresOn());
     }
 
     public long getId() {
@@ -172,4 +178,19 @@ public class DTOJob {
 	public void setPositionLng(double positionLng) {
 		this.positionLng = positionLng;
 	}
+
+	public String getExpiresOn() {
+		return expiresOn;
+	}
+
+    public void setExpiresOn(Date expiresOn) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        this.expiresOn = formatter.format(expiresOn);
+    }
+
+	public void setExpiresOn(String expiresOn) {
+		this.expiresOn = expiresOn;
+	}
+    
+    
 }
