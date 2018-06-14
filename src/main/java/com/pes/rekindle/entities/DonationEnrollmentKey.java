@@ -3,6 +3,7 @@ package com.pes.rekindle.entities;
 import java.io.Serializable;
 
 
+@SuppressWarnings("serial")
 public class DonationEnrollmentKey implements Serializable{
 	private String refugeeMail;
     private Long donationId;
@@ -18,6 +19,4 @@ public class DonationEnrollmentKey implements Serializable{
 	public void setDonationId(Long donationId) {
 		this.donationId = donationId;
 	}
-    
-
 }

@@ -3,6 +3,7 @@ package com.pes.rekindle.entities;
 import java.io.Serializable;
 
 
+@SuppressWarnings("serial")
 public class EducationEnrollmentKey implements Serializable{
 	private String refugeeMail;
     private Long educationId;
