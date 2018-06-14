@@ -41,7 +41,12 @@ public class DTODonation {
         
         DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_TIME;
         this.startTime = formatter.format(donation.getStartTime());
-        this.endTime = formatter.format(donation.getEndTime());
+        System.out.println("StartTime:  --------------------------------");
+        System.out.println(this.startTime);
+        DateTimeFormatter formatter1 = DateTimeFormatter.ISO_LOCAL_TIME;
+        System.out.println("EndTime:  --------------------------------");
+        System.out.println(formatter1.format(donation.getEndTime()));
+        this.endTime = formatter1.format(donation.getEndTime());
         this.description = donation.getDescription();
     }
 
@@ -106,7 +111,7 @@ public class DTODonation {
     }
 
     public void setStartTime(LocalTime startTime) {
-    	DateTimeFormatter formatter = DateTimeFormatter.ISO_TIME;
+    	DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_TIME;
         this.startTime = formatter.format(startTime);
     }
 
@@ -115,8 +120,8 @@ public class DTODonation {
     }
 
     public void setEndTime(LocalTime endTime) {
-    	DateTimeFormatter formatter = DateTimeFormatter.ISO_TIME;
-        this.startTime = formatter.format(endTime);
+    	DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_TIME;
+        this.endTime = formatter.format(endTime);
     }
 
     public String getDescription() {

@@ -102,13 +102,13 @@ public class ServiceServiceImpl implements ServiceService {
         donation.setPlaces(dtoDonation.getPlaces());
         //DateTimeFormatter formatter = DateTimeFormatter.ISO_TIME;
         try {
-        	LocalTime startTime = LocalTime.parse(dtoDonation.getStartTime(), DateTimeFormatter.ofPattern("H:mm:ss"));
+        	LocalTime startTime = LocalTime.parse(dtoDonation.getStartTime(), DateTimeFormatter.ofPattern("HH:mm:ss"));
             donation.setStartTime(startTime);
         } catch (Exception e) {
 
         }
         try {
-        	LocalTime endTime = LocalTime.parse(dtoDonation.getEndTime(), DateTimeFormatter.ofPattern("H:mm:ss"));
+        	LocalTime endTime = LocalTime.parse(dtoDonation.getEndTime(), DateTimeFormatter.ofPattern("HH:mm:ss"));
             donation.setEndTime(endTime);
         } catch (Exception e) {
 
@@ -315,15 +315,15 @@ public class ServiceServiceImpl implements ServiceService {
         donation.setPhoneNumber(dtoDonation.getPhoneNumber());
         donation.setAdress(dtoDonation.getAdress());
         donation.setPlaces(dtoDonation.getPlaces());
-        DateTimeFormatter formatter = DateTimeFormatter.ISO_TIME;
+        //DateTimeFormatter formatter = DateTimeFormatter.ISO_TIME;
         try {
-        	LocalTime startTime = LocalTime.parse(dtoDonation.getStartTime(), DateTimeFormatter.ofPattern("H:mm:ss"));            
+        	LocalTime startTime = LocalTime.parse(dtoDonation.getStartTime(), DateTimeFormatter.ofPattern("HH:mm:ss"));            
             donation.setStartTime(startTime);;
         } catch (Exception e) {
 
         }
         try {
-        	LocalTime endTime = LocalTime.parse(dtoDonation.getEndTime(), DateTimeFormatter.ofPattern("H:mm:ss"));
+        	LocalTime endTime = LocalTime.parse(dtoDonation.getEndTime(), DateTimeFormatter.ofPattern("HH:mm:ss"));
             donation.setEndTime(endTime);;
         } catch (Exception e) {
 

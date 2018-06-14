@@ -13,6 +13,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.sql.Time;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 import org.junit.Before;
@@ -172,7 +174,7 @@ public class ServiceControllerTest {
         		.andExpect(status().isOk());   
     }
     
-   /* @Test 
+    @Test 
     public void createDonationTest() throws Exception {
     	DTODonation dtoDonation = new DTODonation();
     	dtoDonation.setServiceType("Donation");
@@ -182,17 +184,19 @@ public class ServiceControllerTest {
     	dtoDonation.setAdress("Balmes");
     	dtoDonation.setPlaces(2);
     	dtoDonation.setDescription("Donación de ropa");
-    	Time t = new Time(10, 0, 0);
-    	Time t2 = new Time(11, 0, 0);
-    	dtoDonation.setStartTime(t);
-    	dtoDonation.setEndTime(t2);
+    	LocalTime starTime = LocalTime.parse("10:22:11", DateTimeFormatter.ofPattern("HH:mm:ss"));
+    	LocalTime endTime = LocalTime.parse("11:22:11", DateTimeFormatter.ofPattern("HH:mm:ss"));
+    	dtoDonation.setStartTime(starTime);
+    	dtoDonation.setEndTime(endTime);
+    	dtoDonation.setEnded(true);
         Gson gson = new Gson();
         String json = gson.toJson(dtoDonation);
         this.mockMvc
         		.perform(post("/donaciones").contentType(MediaType.APPLICATION_JSON_UTF8)
         				.content(json))
+        		.andDo(print())
         		.andExpect(status().isOk());   
-    }*/
+    }
     
     
     @Test
