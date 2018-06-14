@@ -103,13 +103,13 @@ public class ServiceServiceImpl implements ServiceService {
         DateTimeFormatter formatter = DateTimeFormatter.ISO_TIME;
         try {
             LocalTime startTime = (LocalTime) formatter.parse(dtoDonation.getStartTime());
-            donation.setStartTime(startTime);;
+            donation.setStartTime(startTime);
         } catch (Exception e) {
 
         }
         try {
             LocalTime endTime = (LocalTime) formatter.parse(dtoDonation.getEndTime());
-            donation.setEndTime(endTime);;
+            donation.setEndTime(endTime);
         } catch (Exception e) {
 
         }
