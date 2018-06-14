@@ -156,3 +156,56 @@ CREATE TABLE Message (
     
 	FOREIGN KEY (idChat) REFERENCES Chat(id)
 );
+
+
+INSERT INTO Volunteer VALUES('mailRoger', '1234', 'roger', 'poch', 'alonso', 'photo Roger',7,2,1,0);
+INSERT INTO Volunteer VALUES('mailAlex', '1234', 'alex', 'sanchez', 'gil', 'photo Alex', 5, 2, 1,0);
+INSERT INTO Volunteer VALUES('mailJose', '1234', 'jose', 'ramon', 'perez', 'photo Jose', 1, 1, 1,1);
+
+INSERT INTO Lodge VALUES(1, 'Lodge', 'Casa Pepe10', 'mailRoger', 936666666, 'Balmes', '2019-06-06', 2,'Alojamiento cercania 1', FALSE, 41.390205, 2.154007);
+
+INSERT INTO Lodge VALUES(2, 'Lodge', 'Casa Pepe10', 'mailAlex', 936666666, 'Balmes', '2032-06-06', 2,'Alojamiento cercania 2', FALSE, 41.617592, 0.620015);
+
+INSERT INTO Lodge VALUES(3, 'Lodge', 'Casa Pepe10', 'mailRoger', 936666666, 'Balmes', '2054-06-06', 2,'Alojamiento cercania 3', FALSE, 40.416775, -3.703790);
+
+INSERT INTO Lodge VALUES(4, 'Lodge', 'Casa Pepe10', 'mailJose', 936666666, 'Balmes', '2010-06-06', 2,'Alojamiento cercania 4', FALSE, 38.736946, -9.142685);
+
+SET @fromDate='2005-06-06';
+SET @toDate='2040-06-06';
+SET @minimumRating=4;
+SET @positionLat=41.390205;
+SET @positionLng=2.154007;
+SET @distance=500;
+
+SELECT *
+FROM (
+	SELECT l.*,
+		p.radius,
+		p.distance_unit
+				 * DEGREES(ACOS(COS(RADIANS(p.latpoint))
+				 * COS(RADIANS(l.positionLat))
+				 * COS(RADIANS(p.longpoint - l.positionLng))
+				 + SIN(RADIANS(p.latpoint))
+				 * SIN(RADIANS(l.positionLat)))) AS distance
+	FROM Lodge AS l
+	JOIN (   /* these are the query parameters */
+		SELECT  @positionLat  AS latpoint,  @positionLng AS longpoint,
+				@distance AS radius,      111.045 AS distance_unit
+	) AS p ON 1=1
+	WHERE l.positionLat
+	 BETWEEN p.latpoint  - (p.radius / p.distance_unit)
+		 AND p.latpoint  + (p.radius / p.distance_unit)
+	AND l.positionLng
+	 BETWEEN p.longpoint - (p.radius / (p.distance_unit * COS(RADIANS(p.latpoint))))
+		 AND p.longpoint + (p.radius / (p.distance_unit * COS(RADIANS(p.latpoint))))
+) AS d, Lodge l join Volunteer v on l.volunteer = v.mail
+WHERE distance <= radius and dateLimit between @fromDate and @toDate
+	and ( (v.averageValoration/v.numberOfValorations) >= @minimumRating
+		or @minimumRating is null)
+ORDER BY distance;
+
+SELECT *
+FROM Lodge l join Volunteer v on l.volunteer = v.mail
+WHERE l.dateLimit between @fromDate and @toDate
+	and ( (v.averageValoration/v.numberOfValorations) >= @minimumRating
+		or @minimumRating is null);
