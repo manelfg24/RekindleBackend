@@ -95,13 +95,16 @@
 	</changeSet>
 	
 	<changeSet id="enabledUser" author="bob">
-		<renameColumn newColumnName="enabled"
+		<renameColumn columnDataType="int"
+				newColumnName="enabled"
                 oldColumnName="banned"
                 tableName="Refugee"/>
-		<renameColumn newColumnName="enabled"
+		<renameColumn columnDataType="int"
+				newColumnName="enabled"
                 oldColumnName="banned"
                 tableName="Volunteer"/>
-		<renameColumn newColumnName="enabled"
+		<renameColumn columnDataType="int"
+				newColumnName="enabled"
                 oldColumnName="banned"
                 tableName="Admin"/>
 	</changeSet>
