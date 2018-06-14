@@ -161,7 +161,7 @@ public class UserController {
         pusher.setCluster("eu");
         pusher.setEncrypted(true);
 
-        pusher.trigger(mail, "banned",
+        pusher.trigger(mail, "ban",
                 Collections.singletonMap("message", motive));
     	
 		return ResponseEntity.status(HttpStatus.OK).body(null);
