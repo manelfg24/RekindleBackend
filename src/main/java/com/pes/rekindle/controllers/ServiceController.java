@@ -67,7 +67,7 @@ public class ServiceController {
     	System.out.println("--------------------------------------------------------");
     	System.out.println("Entrada al controlador");
     	System.out.println("--------------------------------------------------------");
-        return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).body(serviceService.listServices());
+        return ResponseEntity.status(HttpStatus.OK).body(serviceService.listServices());
     }
 
     @RequestMapping(value = "/alojamientos/{id}", method = RequestMethod.GET)

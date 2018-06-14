@@ -303,7 +303,7 @@ public class ServiceControllerTest {
     @Test
     public void obtainOwnServicesTest() throws Exception {
         this.mockMvc
-                .perform(get("/servicios/{mail}/{tipo}", "mailRoger" , "Volunteer"))
+                .perform(get("/servicios/{mail}/{tipo}", "mailRoger" , "Volunteer").param("ended", "1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.[0].volunteer").value("mailRoger"))
         		.andExpect(jsonPath("$.[1].volunteer").value("mailRoger"))
@@ -348,8 +348,6 @@ public class ServiceControllerTest {
         this.mockMvc
         		.perform(put("/alojamientos/{id}", 1).contentType(MediaType.APPLICATION_JSON_UTF8)
         				.content(json))
-        		.andDo(print())
-        		.andDo((ResultHandler)jsonPath("$.phoneNumber").value(931111333))
         		.andExpect(status().isOk());   
     }
     
