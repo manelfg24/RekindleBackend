@@ -61,6 +61,9 @@ public class UserController {
         DTOUser dtoUser;
         try {
             dtoUser = userService.getUser(logInInfo);
+            if (dtoUser.getBanned()==1) {
+            	 return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+            }
             return ResponseEntity.status(HttpStatus.OK).body(dtoUser);
         } catch (LoginException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
@@ -131,7 +134,7 @@ public class UserController {
     	try {
 			return ResponseEntity.status(HttpStatus.OK).body(userService.isUserEnabled(mail));
 		} catch (UserNotExistsException e) {
-			return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).body(null);
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
     }
     
