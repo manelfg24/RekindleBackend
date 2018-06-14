@@ -172,7 +172,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/refugiados", method = RequestMethod.GET)
-    public ResponseEntity<Set<DTOUser>> findRefugee(@RequestParam("name") String name,
+    public ResponseEntity<Set<DTOUser>> findRefugees(@RequestParam("name") String name,
             @RequestParam("surname1") String surname1,
             @RequestParam("surname2") String surname2, @RequestParam("birthdate") String birthdate,
             @RequestParam("sex") String sex,

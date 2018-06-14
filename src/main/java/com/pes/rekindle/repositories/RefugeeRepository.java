@@ -45,10 +45,10 @@ public interface RefugeeRepository extends Repository<Refugee, String> {
     @Transactional
     @Query(value = "select * from Refugee where (name = :name or :name = '')"
             + "and (surname1 = :surname1 or :surname1 = '') and (surname2 = :surname2 or :surname2 = '')"
-            + "and (birthdate = :birthdate or :birthdate = '1890-01-01') and (sex = :sex or :sex = '')"
+            + "and (birthdate = :birthdate or :birthdate = '1890-01-01') and (sex = :sex or :sex = '-')"
             + "and (town = :town or :town = '') and (country = :country or :country = '')"
-            + "and (bloodType = :bloodType or :bloodType = '') and (ethnic = :ethnic or :ethnic = '')"
-            + "and (eyeColor = :eyeColor or :eyeColor = '')", nativeQuery = true)
+            + "and (bloodType = :bloodType or :bloodType = '-') and (ethnic = :ethnic or :ethnic = '')"
+            + "and (eyeColor = :eyeColor or :eyeColor = '-')", nativeQuery = true)
     public Set<Refugee> findRefugeeByParams(@Param("name") String name,
             @Param("surname1") String surname1, @Param("surname2") String surname2,
             @Param("birthdate") String birthdate, @Param("sex") String sex,

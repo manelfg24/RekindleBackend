@@ -16,6 +16,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.security.auth.login.LoginException;
 
 import org.dozer.DozerBeanMapper;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -280,6 +280,29 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.[0].biography").value("La biografia de Felipe"))
                 .andExpect(jsonPath("$.[0].photo").value("photo Felipe"));
     }
+    
+    @Test
+    public void findRefugeeTest2() throws Exception {
+        this.mockMvc
+                .perform(get("/refugiados")
+                		.param("name", "felipe")
+                		.param("surname1", ""))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.[0].mail").value("mailFelipe"))
+                .andExpect(jsonPath("$.[0].userType").value("Refugee"))
+                .andExpect(jsonPath("$.[0].surname1").value("betancourt"))
+                .andExpect(jsonPath("$.[0].surname2").value("rodriguez"))
+                .andExpect(jsonPath("$.[0].phoneNumber").value(942342312))
+                .andExpect(jsonPath("$.[0].sex").value("Masculino"))
+                .andExpect(jsonPath("$.[0].country").value("Cuba"))
+                .andExpect(jsonPath("$.[0].town").value("La Havana"))
+                .andExpect(jsonPath("$.[0].ethnic").value("hispano"))
+                .andExpect(jsonPath("$.[0].bloodType").value("AB+"))
+                .andExpect(jsonPath("$.[0].eyeColor").value("Castaño"))
+                .andExpect(jsonPath("$.[0].biography").value("La biografia de Felipe"))
+                .andExpect(jsonPath("$.[0].photo").value("photo Felipe"));
+    }
 
     @Test
     public void getNotExistentRefugeeShouldReturnNotFound() throws Exception {
