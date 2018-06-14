@@ -131,6 +131,7 @@ public class ServiceServiceImpl implements ServiceService {
         education.setRequirements(dtoEducation.getRequirements());
         education.setSchedule(dtoEducation.getSchedule());
         education.setPlaces(dtoEducation.getPlaces());
+        education.setPrice(dtoEducation.getPrice());
         education.setDescription(dtoEducation.getDescription());
         education.setEnded(dtoEducation.getEnded());
         educationRepository.save(education);
