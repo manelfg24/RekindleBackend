@@ -637,6 +637,7 @@ public class ServiceServiceImpl implements ServiceService {
                 +
                 "        or @minimumRating is null)" +
                 "ORDER BY distance");
+
         return null;
     }
 }
