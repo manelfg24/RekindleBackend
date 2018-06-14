@@ -1,6 +1,22 @@
 
 package com.pes.rekindle.dao;
 
+import javax.persistence.EntityResult;
+import javax.persistence.FieldResult;
+import javax.persistence.SqlResultSetMapping;
+
+import com.pes.rekindle.entities.Lodge;
+
+@SqlResultSetMapping(name = "DAOService", entities = @EntityResult(entityClass = Lodge.class, fields = {
+        @FieldResult(name = "id", column = "id"),
+        @FieldResult(name = "serviceType", column = "serviceType"),
+        @FieldResult(name = "phoneNumber", column = "phoneNumber"),
+        @FieldResult(name = "adress", column = "adress"),
+        @FieldResult(name = "description", column = "description"),
+        @FieldResult(name = "positionLat", column = "positionLat"),
+        @FieldResult(name = "positionLng", column = "positionLng"),
+        @FieldResult(name = "distance", column = "distance")
+}))
 public class DAOService {
     private long id;
     private String serviceType;
