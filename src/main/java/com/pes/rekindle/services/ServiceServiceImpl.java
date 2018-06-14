@@ -4,12 +4,14 @@ package com.pes.rekindle.services;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
 
 import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +32,6 @@ import com.pes.rekindle.entities.Job;
 import com.pes.rekindle.entities.JobEnrollment;
 import com.pes.rekindle.entities.Lodge;
 import com.pes.rekindle.entities.LodgeEnrollment;
-import com.pes.rekindle.entities.Message;
 import com.pes.rekindle.entities.Refugee;
 import com.pes.rekindle.repositories.DonationEnrollmentRepository;
 import com.pes.rekindle.repositories.DonationRepository;
@@ -56,16 +57,19 @@ public class ServiceServiceImpl implements ServiceService {
 
     @Autowired
     UserService userService;
-    
+
+    @Autowired
+    EntityManagerFactory emf;
+
     @Autowired
     DonationEnrollmentRepository donationEnrollmentRepository;
-    @Autowired 
+    @Autowired
     JobEnrollmentRepository jobEnrollmentRepository;
-    @Autowired 
+    @Autowired
     LodgeEnrollmentRepository lodgeEnrollmentRepository;
-    @Autowired 
+    @Autowired
     EducationEnrollmentRepository educationEnrollmentRepository;
-    
+
     @Autowired
     DozerBeanMapper mapper;
 
@@ -137,7 +141,7 @@ public class ServiceServiceImpl implements ServiceService {
     }
 
     public List<DTOService> listServices() {
-        ArrayList<DTOService> dtosService = new ArrayList<DTOService>();        
+        ArrayList<DTOService> dtosService = new ArrayList<DTOService>();
         Set<Donation> donations = donationRepository.findAll();
         for (Donation donation : donations) {
             DTOService dtoDonation = new DTOService(donation);
@@ -156,14 +160,13 @@ public class ServiceServiceImpl implements ServiceService {
         Set<Lodge> lodges = lodgeRepository.findAll();
         for (Lodge lodge : lodges) {
             DTOService dtoLodge = new DTOService(lodge);
-            dtosService.add(dtoLodge);            
+            dtosService.add(dtoLodge);
         }
-        /*dtosService.sort( new Comparator<DTOService>() {
-            @Override
-            public int compare(final DTOService object1, final DTOService object2) {
-                return (int) (object1.getId()-object2.getId());
-            }
-        });*/
+        /*
+         * dtosService.sort( new Comparator<DTOService>() {
+         * @Override public int compare(final DTOService object1, final DTOService object2) { return
+         * (int) (object1.getId()-object2.getId()); } });
+         */
         return dtosService;
     }
 
@@ -380,142 +383,260 @@ public class ServiceServiceImpl implements ServiceService {
         return jobRepository.findById(id);
     }
 
-	@Override
-	public void createDonationRequest(DTODonationEnrollment dtoDonationEnrollment) {
-		DonationEnrollment donationEnrollment = new DonationEnrollment(dtoDonationEnrollment);
-		donationEnrollmentRepository.save(donationEnrollment);
-	}
+    @Override
+    public void createDonationRequest(DTODonationEnrollment dtoDonationEnrollment) {
+        DonationEnrollment donationEnrollment = new DonationEnrollment(dtoDonationEnrollment);
+        donationEnrollmentRepository.save(donationEnrollment);
+    }
 
-	@Override
-	public ArrayList<DTODonationEnrollment> listDonationRequests() {
-		ArrayList<DonationEnrollment> enrollmentList = donationEnrollmentRepository.findByRequestStatus("Not Resolved");
-		ArrayList<DTODonationEnrollment> dtoEnrollmentList = new ArrayList();
-		
-		//mirar como se guarda la PK en bd para no hacer llamadas inecesarias
-		for(DonationEnrollment donationEnrollment : enrollmentList) {
-			DTOService dtoDonation = new DTOService(donationRepository.findById(donationEnrollment.getDonationId()));
+    @Override
+    public ArrayList<DTODonationEnrollment> listDonationRequests() {
+        ArrayList<DonationEnrollment> enrollmentList = donationEnrollmentRepository
+                .findByRequestStatus("Not Resolved");
+        ArrayList<DTODonationEnrollment> dtoEnrollmentList = new ArrayList();
 
-			dtoEnrollmentList.add(new DTODonationEnrollment(donationEnrollment, dtoDonation));
-		}
-		return dtoEnrollmentList;
-	}
+        // mirar como se guarda la PK en bd para no hacer llamadas inecesarias
+        for (DonationEnrollment donationEnrollment : enrollmentList) {
+            DTOService dtoDonation = new DTOService(
+                    donationRepository.findById(donationEnrollment.getDonationId()));
 
-	@Override
-	public Boolean donationIsRequested(Long donationId, String refugeeMail) {
-		Optional<DonationEnrollment> oDonationEnrollment = donationEnrollmentRepository.findOptionalByRefugeeMailAndDonationId(refugeeMail, donationId);
-		if (oDonationEnrollment.isPresent()) {
-			return true;
-		}
-		return false;
-	}
+            dtoEnrollmentList.add(new DTODonationEnrollment(donationEnrollment, dtoDonation));
+        }
+        return dtoEnrollmentList;
+    }
 
-	@Override
-	public void acceptDonationRequest(Long donationId, String refugeeMail) {
-		DonationEnrollment donationEnrollment = donationEnrollmentRepository.findByRefugeeMailAndDonationId(refugeeMail, donationId);
-		if (!donationEnrollment.getRequestStatus().equals("Accepted")) {
-			donationEnrollment.setRequestStatus("Accepted");
-			donationEnrollmentRepository.save(donationEnrollment);
-		}
-	}
+    @Override
+    public Boolean donationIsRequested(Long donationId, String refugeeMail) {
+        Optional<DonationEnrollment> oDonationEnrollment = donationEnrollmentRepository
+                .findOptionalByRefugeeMailAndDonationId(refugeeMail, donationId);
+        if (oDonationEnrollment.isPresent()) {
+            return true;
+        }
+        return false;
+    }
 
-	@Override
-	public void rejectDonationRequest(Long donationId, String refugeeMail) {
-		DonationEnrollment donationEnrollment = donationEnrollmentRepository.findByRefugeeMailAndDonationId(refugeeMail, donationId);
-		if (!donationEnrollment.getRequestStatus().equals("Rejected")) {
-			donationEnrollment.setRequestStatus("Rejected");
-			donationEnrollmentRepository.save(donationEnrollment);
-		}
-	}
+    @Override
+    public void acceptDonationRequest(Long donationId, String refugeeMail) {
+        DonationEnrollment donationEnrollment = donationEnrollmentRepository
+                .findByRefugeeMailAndDonationId(refugeeMail, donationId);
+        if (!donationEnrollment.getRequestStatus().equals("Accepted")) {
+            donationEnrollment.setRequestStatus("Accepted");
+            donationEnrollmentRepository.save(donationEnrollment);
+        }
+    }
 
-	@Override
-	public void valorateService(DTOValoration dtoValoration) {
-		switch (dtoValoration.getServiceType()) {
-			case "Lodge":
-				valorateLodge(dtoValoration);
-				break;
-			case "Donation":
-				valorateDonation(dtoValoration);
-				break;
-			case "Job":
-				valorateJob(dtoValoration);
-				break;
-			case "Education":
-				valorateEducation(dtoValoration);
-				break;
-		}	
-	}
-	
-	public void valorateLodge(DTOValoration dtoValoration) {
-		Optional<LodgeEnrollment> oLodgeEnrollment = lodgeEnrollmentRepository.findOptionalByLodgeIdAndRefugeeMail(dtoValoration.getIdService(),
-				dtoValoration.getRefugeeMail());
-		if (oLodgeEnrollment.isPresent()) {
-			LodgeEnrollment lodgeEnrollment = oLodgeEnrollment.get();
-			Lodge lodge = lodgeRepository.findById(dtoValoration.getIdService());
-			
-			userService.valorateVolunteer(lodge.getVolunteer(), dtoValoration.getPoints(), lodgeEnrollment.getValoration());
-			
-			lodgeEnrollment.setValoration(dtoValoration.getPoints());
-			lodgeEnrollmentRepository.save(lodgeEnrollment);
-		}
-		else {
-			System.out.println("El refugiado no esta enrolado");
-		}
-	}
-	
-	public void valorateDonation(DTOValoration dtoValoration) {
-		Optional<DonationEnrollment> oDonationEnrollment = donationEnrollmentRepository.findOptionalByDonationIdAndRefugeeMail(dtoValoration.getIdService(),
-				dtoValoration.getRefugeeMail());
-		if (oDonationEnrollment.isPresent()) {
-			DonationEnrollment donationEnrollment = oDonationEnrollment.get();
-			Donation donation = donationRepository.findById(dtoValoration.getIdService());
-			
-			userService.valorateVolunteer(donation.getVolunteer(), dtoValoration.getPoints(), donationEnrollment.getValoration());
-			
-			donationEnrollment.setValoration(dtoValoration.getPoints());
-			donationEnrollmentRepository.save(donationEnrollment);
-		}
-		else {
-			System.out.println("El refugiado no esta enrolado");
-		}
-	}
-	
-	public void valorateJob(DTOValoration dtoValoration) {
-		Optional<JobEnrollment> oJobEnrollment = jobEnrollmentRepository.findOptionalByJobIdAndRefugeeMail(dtoValoration.getIdService(),
-				dtoValoration.getRefugeeMail());
-		if (oJobEnrollment.isPresent()) {
-			JobEnrollment jobEnrollment = oJobEnrollment.get();
-			Job job = jobRepository.findById(dtoValoration.getIdService());
-			
-			userService.valorateVolunteer(job.getVolunteer(), dtoValoration.getPoints(), jobEnrollment.getValoration());
-			
-			jobEnrollment.setValoration(dtoValoration.getPoints());
-			jobEnrollmentRepository.save(jobEnrollment);
-		}
-		else {
-			System.out.println("El refugiado no esta enrolado");
-		}
-	}
-	
-	public void valorateEducation(DTOValoration dtoValoration) {
-		Optional<EducationEnrollment> oEducationEnrollment = educationEnrollmentRepository.findOptionalByEducationIdAndRefugeeMail(dtoValoration.getIdService(),
-				dtoValoration.getRefugeeMail());
-		if (oEducationEnrollment.isPresent()) {
-			EducationEnrollment educationEnrollment = oEducationEnrollment.get();
-			Education education = educationRepository.findById(dtoValoration.getIdService());
-			
-			userService.valorateVolunteer(education.getVolunteer(), dtoValoration.getPoints(), educationEnrollment.getValoration());
-			
-			educationEnrollment.setValoration(dtoValoration.getPoints());
-			educationEnrollmentRepository.save(educationEnrollment);
-		}
-		else {
-			System.out.println("El refugiado no esta enrolado");
-		}
-	}
+    @Override
+    public void rejectDonationRequest(Long donationId, String refugeeMail) {
+        DonationEnrollment donationEnrollment = donationEnrollmentRepository
+                .findByRefugeeMailAndDonationId(refugeeMail, donationId);
+        if (!donationEnrollment.getRequestStatus().equals("Rejected")) {
+            donationEnrollment.setRequestStatus("Rejected");
+            donationEnrollmentRepository.save(donationEnrollment);
+        }
+    }
 
-	@Override
-	public ArrayList<DTOService> filterServices(String fromDate, String toDate, double minimumRating,
-			double positionLat, double positionLng, double distance) {
-		return null;
-	}
+    @Override
+    public void valorateService(DTOValoration dtoValoration) {
+        switch (dtoValoration.getServiceType()) {
+            case "Lodge":
+                valorateLodge(dtoValoration);
+                break;
+            case "Donation":
+                valorateDonation(dtoValoration);
+                break;
+            case "Job":
+                valorateJob(dtoValoration);
+                break;
+            case "Education":
+                valorateEducation(dtoValoration);
+                break;
+        }
+    }
+
+    public void valorateLodge(DTOValoration dtoValoration) {
+        Optional<LodgeEnrollment> oLodgeEnrollment = lodgeEnrollmentRepository
+                .findOptionalByLodgeIdAndRefugeeMail(dtoValoration.getIdService(),
+                        dtoValoration.getRefugeeMail());
+        if (oLodgeEnrollment.isPresent()) {
+            LodgeEnrollment lodgeEnrollment = oLodgeEnrollment.get();
+            Lodge lodge = lodgeRepository.findById(dtoValoration.getIdService());
+
+            userService.valorateVolunteer(lodge.getVolunteer(), dtoValoration.getPoints(),
+                    lodgeEnrollment.getValoration());
+
+            lodgeEnrollment.setValoration(dtoValoration.getPoints());
+            lodgeEnrollmentRepository.save(lodgeEnrollment);
+        } else {
+            System.out.println("El refugiado no esta enrolado");
+        }
+    }
+
+    public void valorateDonation(DTOValoration dtoValoration) {
+        Optional<DonationEnrollment> oDonationEnrollment = donationEnrollmentRepository
+                .findOptionalByDonationIdAndRefugeeMail(dtoValoration.getIdService(),
+                        dtoValoration.getRefugeeMail());
+        if (oDonationEnrollment.isPresent()) {
+            DonationEnrollment donationEnrollment = oDonationEnrollment.get();
+            Donation donation = donationRepository.findById(dtoValoration.getIdService());
+
+            userService.valorateVolunteer(donation.getVolunteer(), dtoValoration.getPoints(),
+                    donationEnrollment.getValoration());
+
+            donationEnrollment.setValoration(dtoValoration.getPoints());
+            donationEnrollmentRepository.save(donationEnrollment);
+        } else {
+            System.out.println("El refugiado no esta enrolado");
+        }
+    }
+
+    public void valorateJob(DTOValoration dtoValoration) {
+        Optional<JobEnrollment> oJobEnrollment = jobEnrollmentRepository
+                .findOptionalByJobIdAndRefugeeMail(dtoValoration.getIdService(),
+                        dtoValoration.getRefugeeMail());
+        if (oJobEnrollment.isPresent()) {
+            JobEnrollment jobEnrollment = oJobEnrollment.get();
+            Job job = jobRepository.findById(dtoValoration.getIdService());
+
+            userService.valorateVolunteer(job.getVolunteer(), dtoValoration.getPoints(),
+                    jobEnrollment.getValoration());
+
+            jobEnrollment.setValoration(dtoValoration.getPoints());
+            jobEnrollmentRepository.save(jobEnrollment);
+        } else {
+            System.out.println("El refugiado no esta enrolado");
+        }
+    }
+
+    public void valorateEducation(DTOValoration dtoValoration) {
+        Optional<EducationEnrollment> oEducationEnrollment = educationEnrollmentRepository
+                .findOptionalByEducationIdAndRefugeeMail(dtoValoration.getIdService(),
+                        dtoValoration.getRefugeeMail());
+        if (oEducationEnrollment.isPresent()) {
+            EducationEnrollment educationEnrollment = oEducationEnrollment.get();
+            Education education = educationRepository.findById(dtoValoration.getIdService());
+
+            userService.valorateVolunteer(education.getVolunteer(), dtoValoration.getPoints(),
+                    educationEnrollment.getValoration());
+
+            educationEnrollment.setValoration(dtoValoration.getPoints());
+            educationEnrollmentRepository.save(educationEnrollment);
+        } else {
+            System.out.println("El refugiado no esta enrolado");
+        }
+    }
+
+    @Override
+    public ArrayList<DTOService> filterServices(String fromDate, String toDate,
+            double minimumRating,
+            double positionLat, double positionLng, double distance) {
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+
+        Query q = em.createNativeQuery("SELECT *" +
+                "FROM (\r\n" +
+                "    SELECT l.*," +
+                "        p.radius," +
+                "        p.distance_unit" +
+                "                 * DEGREES(ACOS(COS(RADIANS(p.latpoint))" +
+                "                 * COS(RADIANS(l.positionLat))\r\n" +
+                "                 * COS(RADIANS(p.longpoint - l.positionLng))" +
+                "                 + SIN(RADIANS(p.latpoint))" +
+                "                 * SIN(RADIANS(l.positionLat)))) AS distance" +
+                "    FROM Lodge AS l" +
+                "    JOIN (SELECT  @positionLat  AS latpoint,  @positionLng AS longpoint," +
+                "                @distance AS radius,      111.045 AS distance_unit" +
+                "    ) AS p ON 1=1" +
+                "    WHERE l.positionLat" +
+                "     BETWEEN p.latpoint  - (p.radius / p.distance_unit)" +
+                "         AND p.latpoint  + (p.radius / p.distance_unit)" +
+                "    AND l.positionLng" +
+                "     BETWEEN p.longpoint - (p.radius / (p.distance_unit * COS(RADIANS(p.latpoint))))"
+                +
+                "         AND p.longpoint + (p.radius / (p.distance_unit * COS(RADIANS(p.latpoint))))"
+                +
+                ") AS d, Lodge l join Volunteer v on l.volunteer = v.mail" +
+                "WHERE distance <= radius and dateLimit between @fromDate and @toDate" +
+                "    and ( (v.averageValoration/v.numberOfValorations) >= @minimumRating" +
+                "        or @minimumRating is null)" +
+                "UNION" +
+                "SELECT *" +
+                "FROM (SELECT l.*," +
+                "        p.radius," +
+                "        p.distance_unit" +
+                "                 * DEGREES(ACOS(COS(RADIANS(p.latpoint))" +
+                "                 * COS(RADIANS(l.positionLat))" +
+                "                 * COS(RADIANS(p.longpoint - l.positionLng))" +
+                "                 + SIN(RADIANS(p.latpoint))" +
+                "                 * SIN(RADIANS(l.positionLat)))) AS distance" +
+                "    FROM Education AS l" +
+                "    JOIN (SELECT  @positionLat  AS latpoint,  @positionLng AS longpoint," +
+                "                @distance AS radius,      111.045 AS distance_unit\r\n" +
+                "    ) AS p ON 1=1" +
+                "    WHERE l.positionLat" +
+                "     BETWEEN p.latpoint  - (p.radius / p.distance_unit)" +
+                "         AND p.latpoint  + (p.radius / p.distance_unit)" +
+                "    AND l.positionLng" +
+                "     BETWEEN p.longpoint - (p.radius / (p.distance_unit * COS(RADIANS(p.latpoint))))"
+                +
+                "         AND p.longpoint + (p.radius / (p.distance_unit * COS(RADIANS(p.latpoint))))"
+                +
+                ") AS d, Education l join Volunteer v on l.volunteer = v.mail" +
+                "WHERE distance <= radius and ((v.averageValoration/v.numberOfValorations) >= @minimumRating"
+                +
+                "        or @minimumRating is null)" +
+                "UNION" +
+                "SELECT *" +
+                "FROM (SELECT l.*," +
+                "        p.radius," +
+                "        p.distance_unit" +
+                "                 * DEGREES(ACOS(COS(RADIANS(p.latpoint))" +
+                "                 * COS(RADIANS(l.positionLat))" +
+                "                 * COS(RADIANS(p.longpoint - l.positionLng))" +
+                "                 + SIN(RADIANS(p.latpoint))" +
+                "                 * SIN(RADIANS(l.positionLat)))) AS distance" +
+                "    FROM Job AS l" +
+                "    JOIN (SELECT  @positionLat  AS latpoint,  @positionLng AS longpoint," +
+                "                @distance AS radius,      111.045 AS distance_unit\r\n" +
+                "    ) AS p ON 1=1" +
+                "    WHERE l.positionLat" +
+                "     BETWEEN p.latpoint  - (p.radius / p.distance_unit)" +
+                "         AND p.latpoint  + (p.radius / p.distance_unit)" +
+                "    AND l.positionLng" +
+                "     BETWEEN p.longpoint - (p.radius / (p.distance_unit * COS(RADIANS(p.latpoint))))"
+                +
+                "         AND p.longpoint + (p.radius / (p.distance_unit * COS(RADIANS(p.latpoint))))"
+                +
+                ") AS d, Job l join Volunteer v on l.volunteer = v.mail" +
+                "WHERE distance <= radius and ((v.averageValoration/v.numberOfValorations) >= @minimumRating"
+                +
+                "        or @minimumRating is null)" +
+                "UNION" +
+                "SELECT *" +
+                "FROM (SELECT l.*," +
+                "        p.radius," +
+                "        p.distance_unit" +
+                "                 * DEGREES(ACOS(COS(RADIANS(p.latpoint))" +
+                "                 * COS(RADIANS(l.positionLat))" +
+                "                 * COS(RADIANS(p.longpoint - l.positionLng))" +
+                "                 + SIN(RADIANS(p.latpoint))" +
+                "                 * SIN(RADIANS(l.positionLat)))) AS distance" +
+                "    FROM Donation AS l" +
+                "    JOIN (SELECT  @positionLat  AS latpoint,  @positionLng AS longpoint," +
+                "                @distance AS radius,      111.045 AS distance_unit\r\n" +
+                "    ) AS p ON 1=1" +
+                "    WHERE l.positionLat" +
+                "     BETWEEN p.latpoint  - (p.radius / p.distance_unit)" +
+                "         AND p.latpoint  + (p.radius / p.distance_unit)" +
+                "    AND l.positionLng" +
+                "     BETWEEN p.longpoint - (p.radius / (p.distance_unit * COS(RADIANS(p.latpoint))))"
+                +
+                "         AND p.longpoint + (p.radius / (p.distance_unit * COS(RADIANS(p.latpoint))))"
+                +
+                ") AS d, Donation l join Volunteer v on l.volunteer = v.mail" +
+                "WHERE distance <= radius and ((v.averageValoration/v.numberOfValorations) >= @minimumRating"
+                +
+                "        or @minimumRating is null)" +
+                "ORDER BY distance");
+        return null;
+    }
 }

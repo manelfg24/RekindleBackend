@@ -45,8 +45,8 @@ liquibase {
   activities {
     main {
       changeLogFile 'src/main/resources/db/changelog/db.changelog-master.xml'
-      url 'jdbc:mysql://10.4.41.149:3306/PES'
-	  username 'aplicacion'
+      url 'jdbc:mysql://localhost:3306/local_rekindle'
+	  username 'alumne'
 	  password 'rekindle'
     }
   }
