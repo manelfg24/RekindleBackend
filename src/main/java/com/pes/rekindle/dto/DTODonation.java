@@ -1,7 +1,9 @@
 
 package com.pes.rekindle.dto;
 
-import java.sql.Time;
+//import java.sql.Time;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -16,8 +18,8 @@ public class DTODonation {
     private Integer phoneNumber;
     private String adress;
     private Integer places;
-    private Time startTime;
-    private Time endTime;
+    private String startTime;
+    private String endTime;
     private String description;
     private Boolean ended;
 
@@ -34,8 +36,9 @@ public class DTODonation {
         this.phoneNumber = donation.getPhoneNumber();
         this.adress = donation.getAdress();
         this.places = donation.getPlaces();
-        this.startTime = donation.getStartTime();
-        this.endTime = donation.getEndTime();
+        DateTimeFormatter formatter = DateTimeFormatter.ISO_TIME;
+        this.startTime = formatter.format(donation.getStartTime());
+        this.endTime = formatter.format(donation.getEndTime());
         this.description = donation.getDescription();
     }
 
@@ -95,20 +98,22 @@ public class DTODonation {
         this.places = places;
     }
 
-    public Time getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Time startTime) {
-        this.startTime = startTime;
+    public void setStartTime(LocalTime startTime) {
+    	DateTimeFormatter formatter = DateTimeFormatter.ISO_TIME;
+        this.startTime = formatter.format(startTime);
     }
 
-    public Time getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Time endTime) {
-        this.endTime = endTime;
+    public void setEndTime(LocalTime endTime) {
+    	DateTimeFormatter formatter = DateTimeFormatter.ISO_TIME;
+        this.startTime = formatter.format(endTime);
     }
 
     public String getDescription() {

@@ -2,6 +2,8 @@
 package com.pes.rekindle.services;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -98,8 +100,21 @@ public class ServiceServiceImpl implements ServiceService {
         donation.setPhoneNumber(dtoDonation.getPhoneNumber());
         donation.setAdress(dtoDonation.getAdress());
         donation.setPlaces(dtoDonation.getPlaces());
-        donation.setStartTime(dtoDonation.getStartTime());
-        donation.setEndTime(dtoDonation.getEndTime());
+        DateTimeFormatter formatter = DateTimeFormatter.ISO_TIME;
+        try {
+            LocalTime startTime = (LocalTime) formatter.parse(dtoDonation.getStartTime());
+            donation.setStartTime(startTime);;
+        } catch (Exception e) {
+
+        }
+        try {
+            LocalTime endTime = (LocalTime) formatter.parse(dtoDonation.getEndTime());
+            donation.setEndTime(endTime);;
+        } catch (Exception e) {
+
+        }
+        //donation.setStartTime(dtoDonation.getStartTime());
+        //donation.setEndTime(dtoDonation.getEndTime());
         donation.setDescription(dtoDonation.getDescription());
         donation.setEnded(dtoDonation.getEnded());
         donationRepository.save(donation);
@@ -320,8 +335,21 @@ public class ServiceServiceImpl implements ServiceService {
         donation.setPhoneNumber(dtoDonation.getPhoneNumber());
         donation.setAdress(dtoDonation.getAdress());
         donation.setPlaces(dtoDonation.getPlaces());
-        donation.setStartTime(dtoDonation.getStartTime());
-        donation.setEndTime(dtoDonation.getEndTime());
+        DateTimeFormatter formatter = DateTimeFormatter.ISO_TIME;
+        try {
+            LocalTime startTime = (LocalTime) formatter.parse(dtoDonation.getStartTime());
+            donation.setStartTime(startTime);;
+        } catch (Exception e) {
+
+        }
+        try {
+            LocalTime endTime = (LocalTime) formatter.parse(dtoDonation.getEndTime());
+            donation.setEndTime(endTime);;
+        } catch (Exception e) {
+
+        }
+        //donation.setStartTime(dtoDonation.getStartTime());
+        //donation.setEndTime(dtoDonation.getEndTime());
         donation.setDescription(dtoDonation.getDescription());
         donation.setEnded(dtoDonation.getEnded());
         donationRepository.save(donation);

@@ -1,7 +1,8 @@
 
 package com.pes.rekindle.entities;
 
-import java.sql.Time;
+//import java.sql.Time;
+import java.time.LocalTime;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -34,9 +35,9 @@ public class Donation {
     private String adress;
     private Integer places;
     @NotNull
-    private Time startTime;
+    private LocalTime startTime;
     @NotNull
-    private Time endTime;
+    private LocalTime endTime;
     @NotNull
     private String description;
     @NotNull
@@ -105,19 +106,19 @@ public class Donation {
         this.places = places;
     }
 
-    public Time getStartTime() {
+    public LocalTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Time startTime) {
+    public void setStartTime(LocalTime startTime) {
         this.startTime = startTime;
     }
 
-    public Time getEndTime() {
+    public LocalTime getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Time endTime) {
+    public void setEndTime(LocalTime endTime) {
         this.endTime = endTime;
     }
 
