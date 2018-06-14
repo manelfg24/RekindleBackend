@@ -26,6 +26,7 @@ import com.pes.rekindle.dto.DTOUser;
 import com.pes.rekindle.dto.DTOValoration;
 import com.pes.rekindle.exceptions.UserAlreadyExistsException;
 import com.pes.rekindle.exceptions.UserNotExistsException;
+import com.pes.rekindle.exceptions.UserStateAlreadyUpdatedException;
 import com.pes.rekindle.services.UserService;
 import com.pusher.rest.Pusher;
 
@@ -123,6 +124,47 @@ public class UserController {
     @RequestMapping(value = "/usuarios", method = RequestMethod.GET)
     public ResponseEntity<Set<DTOUser>> getAllUsers() {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getAllUsers());
+    }
+    
+    @RequestMapping(value = "/usuarios/{mail}/enabled", method = RequestMethod.GET)
+    public ResponseEntity<Integer> isUserEnabled(@PathVariable String mail) {
+    	try {
+			return ResponseEntity.status(HttpStatus.OK).body(userService.isUserEnabled(mail));
+		} catch (UserNotExistsException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
+    }
+    
+    @RequestMapping(value = "/usuarios/{mail}/enable", method = RequestMethod.PUT)
+    public ResponseEntity<Void> enableUser(@PathVariable String mail) {
+    	try {
+			userService.modifyBannedStatus(mail, 0);
+		} catch (UserNotExistsException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		} catch (UserStateAlreadyUpdatedException e) {
+			return ResponseEntity.status(HttpStatus.NOT_MODIFIED).body(null);
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+    
+    @RequestMapping(value = "/usuarios/{mail}/disable", method = RequestMethod.PUT)
+    public ResponseEntity<Void> disableUser(@PathVariable String mail, @RequestParam String motive) {
+    	try {
+			userService.modifyBannedStatus(mail, 1);
+		} catch (UserNotExistsException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		} catch (UserStateAlreadyUpdatedException e) {
+			return ResponseEntity.status(HttpStatus.NOT_MODIFIED).body(null);
+		}
+    	
+        Pusher pusher = new Pusher("525518", "743a4fb4a1370f0ca9a4", "c78f3bfa72330a58ee1f");
+        pusher.setCluster("eu");
+        pusher.setEncrypted(true);
+
+        pusher.trigger(mail, "banned",
+                Collections.singletonMap("message", motive));
+    	
+		return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
     @RequestMapping(value = "/refugiados", method = RequestMethod.GET)

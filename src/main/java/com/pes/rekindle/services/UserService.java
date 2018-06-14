@@ -15,6 +15,7 @@ import com.pes.rekindle.dto.DTOService;
 import com.pes.rekindle.dto.DTOUser;
 import com.pes.rekindle.exceptions.UserAlreadyExistsException;
 import com.pes.rekindle.exceptions.UserNotExistsException;
+import com.pes.rekindle.exceptions.UserStateAlreadyUpdatedException;
 
 public interface UserService {
 
@@ -97,4 +98,8 @@ public interface UserService {
 	void valorateVolunteer(String volunteer, float newValoration, float oldValoration);
 
 	Set<DTOUser> getAllUsers();
+
+	Integer isUserEnabled(String mail) throws UserNotExistsException ;
+
+	void modifyBannedStatus(String mail, int userDesiredState) throws UserNotExistsException, UserStateAlreadyUpdatedException;
 }

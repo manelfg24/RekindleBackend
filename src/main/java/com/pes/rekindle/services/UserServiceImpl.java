@@ -38,6 +38,7 @@ import com.pes.rekindle.entities.Report;
 import com.pes.rekindle.entities.Volunteer;
 import com.pes.rekindle.exceptions.UserAlreadyExistsException;
 import com.pes.rekindle.exceptions.UserNotExistsException;
+import com.pes.rekindle.exceptions.UserStateAlreadyUpdatedException;
 import com.pes.rekindle.repositories.AdminRepository;
 import com.pes.rekindle.repositories.ChatRepository;
 import com.pes.rekindle.repositories.DonationRepository;
@@ -910,5 +911,67 @@ public class UserServiceImpl implements UserService {
 		}
 		
 		return dtoUsers;
+	}
+
+	@Override
+	public Integer isUserEnabled(String mail) throws UserNotExistsException {
+		DTOUser dtoUser = getDTOUser(mail);
+		if (dtoUser.getBanned()==0) {
+			return 1;
+		}
+		else { 
+			return 0;
+		}
+	}
+	
+	private DTOUser getDTOUser(String mail) throws UserNotExistsException {
+		Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMail(mail);
+		if (oVolunteer.isPresent()) {
+			return new DTOUser(oVolunteer.get());
+		}
+		else {
+			Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMail(mail);
+			if (oRefugee.isPresent()) {
+				return new DTOUser(oRefugee.get());
+			}
+			else {
+				throw new UserNotExistsException();
+			}
+		}
+	}
+	
+	@Override
+	public void modifyBannedStatus(String mail, int userFinalState) throws UserNotExistsException, UserStateAlreadyUpdatedException {
+		changeBanStatus(mail, userFinalState);								
+	}
+	
+	private void changeBanStatus(String mail, int userFinalState) throws UserNotExistsException, UserStateAlreadyUpdatedException {
+		Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMail(mail);
+		if (oVolunteer.isPresent()) {
+			Volunteer volunteer = oVolunteer.get();
+			if (userFinalState == volunteer.getBanned()) { //El estado del usuario es el mismo que el que nos pasan
+				throw new UserStateAlreadyUpdatedException();
+			}
+			else {
+				volunteer.setBanned(userFinalState);
+				volunteerRepository.save(volunteer);
+			}
+		}
+		else {
+			Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMail(mail);
+			if (oRefugee.isPresent()) {
+				Refugee refugee = oRefugee.get();
+				if (userFinalState == refugee.getBanned()) {
+					throw new UserStateAlreadyUpdatedException();
+				}
+				else {
+					refugee.setBanned(userFinalState);
+					refugeeRepository.save(refugee);
+				}
+			}
+			else {
+				throw new UserNotExistsException();
+			}
+		}
 	}
 }
