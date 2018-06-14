@@ -36,7 +36,10 @@ public class DTODonation {
         this.phoneNumber = donation.getPhoneNumber();
         this.adress = donation.getAdress();
         this.places = donation.getPlaces();
-        DateTimeFormatter formatter = DateTimeFormatter.ISO_TIME;
+        
+       // LocalTime endTime = LocalTime.parse(dtoDonation.getEndTime(), DateTimeFormatter.ofPattern("H:mm:ss"));
+        
+        DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_TIME;
         this.startTime = formatter.format(donation.getStartTime());
         this.endTime = formatter.format(donation.getEndTime());
         this.description = donation.getDescription();
