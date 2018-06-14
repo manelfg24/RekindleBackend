@@ -179,7 +179,7 @@ SET @distance=500;
 
 SELECT *
 FROM (
-	SELECT l.*,
+	SELECT l.id, l.serviceType, l.name, l.volunteer, l.phoneNumber, l.adress, l.description, l.positionLat, l.positionLng,
 		p.radius,
 		p.distance_unit
 				 * DEGREES(ACOS(COS(RADIANS(p.latpoint))
@@ -202,10 +202,79 @@ FROM (
 WHERE distance <= radius and dateLimit between @fromDate and @toDate
 	and ( (v.averageValoration/v.numberOfValorations) >= @minimumRating
 		or @minimumRating is null)
-ORDER BY distance;
-
+UNION
 SELECT *
-FROM Lodge l join Volunteer v on l.volunteer = v.mail
-WHERE l.dateLimit between @fromDate and @toDate
-	and ( (v.averageValoration/v.numberOfValorations) >= @minimumRating
-		or @minimumRating is null);
+FROM (
+	SELECT l.id, l.serviceType, l.name, l.volunteer, l.phoneNumber, l.adress, l.description, l.positionLat, l.positionLng,
+		p.radius,
+		p.distance_unit
+				 * DEGREES(ACOS(COS(RADIANS(p.latpoint))
+				 * COS(RADIANS(l.positionLat))
+				 * COS(RADIANS(p.longpoint - l.positionLng))
+				 + SIN(RADIANS(p.latpoint))
+				 * SIN(RADIANS(l.positionLat)))) AS distance
+	FROM Education AS l
+	JOIN (   /* these are the query parameters */
+		SELECT  @positionLat  AS latpoint,  @positionLng AS longpoint,
+				@distance AS radius,      111.045 AS distance_unit
+	) AS p ON 1=1
+	WHERE l.positionLat
+	 BETWEEN p.latpoint  - (p.radius / p.distance_unit)
+		 AND p.latpoint  + (p.radius / p.distance_unit)
+	AND l.positionLng
+	 BETWEEN p.longpoint - (p.radius / (p.distance_unit * COS(RADIANS(p.latpoint))))
+		 AND p.longpoint + (p.radius / (p.distance_unit * COS(RADIANS(p.latpoint))))
+) AS d, Education l join Volunteer v on l.volunteer = v.mail
+WHERE distance <= radius and ((v.averageValoration/v.numberOfValorations) >= @minimumRating
+		or @minimumRating is null)
+UNION
+SELECT *
+FROM (
+	SELECT l.id, l.serviceType, l.name, l.volunteer, l.phoneNumber, l.adress, l.description, l.positionLat, l.positionLng,
+		p.radius,
+		p.distance_unit
+				 * DEGREES(ACOS(COS(RADIANS(p.latpoint))
+				 * COS(RADIANS(l.positionLat))
+				 * COS(RADIANS(p.longpoint - l.positionLng))
+				 + SIN(RADIANS(p.latpoint))
+				 * SIN(RADIANS(l.positionLat)))) AS distance
+	FROM Job AS l
+	JOIN (   /* these are the query parameters */
+		SELECT  @positionLat  AS latpoint,  @positionLng AS longpoint,
+				@distance AS radius,      111.045 AS distance_unit
+	) AS p ON 1=1
+	WHERE l.positionLat
+	 BETWEEN p.latpoint  - (p.radius / p.distance_unit)
+		 AND p.latpoint  + (p.radius / p.distance_unit)
+	AND l.positionLng
+	 BETWEEN p.longpoint - (p.radius / (p.distance_unit * COS(RADIANS(p.latpoint))))
+		 AND p.longpoint + (p.radius / (p.distance_unit * COS(RADIANS(p.latpoint))))
+) AS d, Job l join Volunteer v on l.volunteer = v.mail
+WHERE distance <= radius and ((v.averageValoration/v.numberOfValorations) >= @minimumRating
+		or @minimumRating is null)
+UNION
+SELECT *
+FROM (
+	SELECT l.id, l.serviceType, l.name, l.volunteer, l.phoneNumber, l.adress, l.description, l.positionLat, l.positionLng,
+		p.radius,
+		p.distance_unit
+				 * DEGREES(ACOS(COS(RADIANS(p.latpoint))
+				 * COS(RADIANS(l.positionLat))
+				 * COS(RADIANS(p.longpoint - l.positionLng))
+				 + SIN(RADIANS(p.latpoint))
+				 * SIN(RADIANS(l.positionLat)))) AS distance
+	FROM Donation AS l
+	JOIN (   /* these are the query parameters */
+		SELECT  @positionLat  AS latpoint,  @positionLng AS longpoint,
+				@distance AS radius,      111.045 AS distance_unit
+	) AS p ON 1=1
+	WHERE l.positionLat
+	 BETWEEN p.latpoint  - (p.radius / p.distance_unit)
+		 AND p.latpoint  + (p.radius / p.distance_unit)
+	AND l.positionLng
+	 BETWEEN p.longpoint - (p.radius / (p.distance_unit * COS(RADIANS(p.latpoint))))
+		 AND p.longpoint + (p.radius / (p.distance_unit * COS(RADIANS(p.latpoint))))
+) AS d, Donation l join Volunteer v on l.volunteer = v.mail
+WHERE distance <= radius and ((v.averageValoration/v.numberOfValorations) >= @minimumRating
+		or @minimumRating is null)
+ORDER BY distance
