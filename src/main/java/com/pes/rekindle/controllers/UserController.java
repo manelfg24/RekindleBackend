@@ -131,7 +131,7 @@ public class UserController {
     	try {
 			return ResponseEntity.status(HttpStatus.OK).body(userService.isUserEnabled(mail));
 		} catch (UserNotExistsException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+			return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).body(null);
 		}
     }
     
