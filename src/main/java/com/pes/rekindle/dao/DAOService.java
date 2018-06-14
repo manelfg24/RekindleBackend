@@ -1,22 +1,6 @@
 
 package com.pes.rekindle.dao;
 
-import javax.persistence.EntityResult;
-import javax.persistence.FieldResult;
-import javax.persistence.SqlResultSetMapping;
-
-import com.pes.rekindle.entities.Lodge;
-
-@SqlResultSetMapping(name = "DAOService", entities = @EntityResult(entityClass = Lodge.class, fields = {
-        @FieldResult(name = "id", column = "id"),
-        @FieldResult(name = "serviceType", column = "serviceType"),
-        @FieldResult(name = "phoneNumber", column = "phoneNumber"),
-        @FieldResult(name = "adress", column = "adress"),
-        @FieldResult(name = "description", column = "description"),
-        @FieldResult(name = "positionLat", column = "positionLat"),
-        @FieldResult(name = "positionLng", column = "positionLng"),
-        @FieldResult(name = "distance", column = "distance")
-}))
 public class DAOService {
     private long id;
     private String serviceType;
@@ -28,8 +12,26 @@ public class DAOService {
     private double positionLat;
     private double positionLng;
     private double distance;
+    
+    public DAOService() {
+    	super();
+	}
 
-    public long getId() {
+    public DAOService(Object[] dao) {
+    	super();
+    	this.id = Long.parseLong(dao[0].toString());
+    	this.serviceType = (String) dao[1];
+    	this.name = (String) dao[2];
+    	this.volunteer = (String) dao[3];
+    	this.phoneNumber = (Integer) dao[4];
+    	this.adress = (String) dao[5];
+    	this.description = (String) dao[6];
+    	this.positionLat = (double) dao[7];
+    	this.positionLng = (double) dao[8];
+    	this.distance = (double) dao[9];
+	}
+
+	public long getId() {
         return id;
     }
 
