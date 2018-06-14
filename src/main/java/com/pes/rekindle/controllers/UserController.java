@@ -61,7 +61,7 @@ public class UserController {
         DTOUser dtoUser;
         try {
             dtoUser = userService.getUser(logInInfo);
-            if (dtoUser.getBanned()==1) {
+            if (dtoUser.getEnabled()==0) {
             	 return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
             }
             return ResponseEntity.status(HttpStatus.OK).body(dtoUser);
@@ -141,7 +141,7 @@ public class UserController {
     @RequestMapping(value = "/usuarios/{mail}/enable", method = RequestMethod.PUT)
     public ResponseEntity<Void> enableUser(@PathVariable String mail) {
     	try {
-			userService.modifyBannedStatus(mail, 0);
+			userService.modifyBannedStatus(mail, 1);
 		} catch (UserNotExistsException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		} catch (UserStateAlreadyUpdatedException e) {
@@ -153,7 +153,7 @@ public class UserController {
     @RequestMapping(value = "/usuarios/{mail}/disable", method = RequestMethod.PUT)
     public ResponseEntity<Void> disableUser(@PathVariable String mail, @RequestParam String motive) {
     	try {
-			userService.modifyBannedStatus(mail, 1);
+			userService.modifyBannedStatus(mail, 0);
 		} catch (UserNotExistsException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		} catch (UserStateAlreadyUpdatedException e) {

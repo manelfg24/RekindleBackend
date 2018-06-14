@@ -191,7 +191,7 @@ public class UserServiceImpl implements UserService {
         volunteer.setSurname1(dtoUser.getSurname1());
         volunteer.setSurname2(dtoUser.getSurname2());
         volunteer.setPhoto(dtoUser.getPhoto());
-        volunteer.setBanned(dtoUser.getBanned());
+        volunteer.setEnabled(dtoUser.getEnabled());
         volunteerRepository.save(volunteer);
     }
 
@@ -215,7 +215,7 @@ public class UserServiceImpl implements UserService {
         refugee.setEyeColor(dtoUser.getEyeColor());
         refugee.setBiography(dtoUser.getBiography());
         refugee.setPhoto(dtoUser.getPhoto());
-        refugee.setBanned(dtoUser.getBanned());
+        refugee.setEnabled(dtoUser.getEnabled());
         refugeeRepository.save(refugee);
     }
 
@@ -916,12 +916,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Integer isUserEnabled(String mail) throws UserNotExistsException {
 		DTOUser dtoUser = getDTOUser(mail);
-		if (dtoUser.getBanned()==0) {
-			return 1;
-		}
-		else { 
-			return 0;
-		}
+		return dtoUser.getEnabled();
 	}
 	
 	private DTOUser getDTOUser(String mail) throws UserNotExistsException {
@@ -949,11 +944,11 @@ public class UserServiceImpl implements UserService {
 		Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMail(mail);
 		if (oVolunteer.isPresent()) {
 			Volunteer volunteer = oVolunteer.get();
-			if (userFinalState == volunteer.getBanned()) { //El estado del usuario es el mismo que el que nos pasan
+			if (userFinalState == volunteer.getEnabled()) { //El estado del usuario es el mismo que el que nos pasan
 				throw new UserStateAlreadyUpdatedException();
 			}
 			else {
-				volunteer.setBanned(userFinalState);
+				volunteer.setEnabled(userFinalState);
 				volunteerRepository.save(volunteer);
 			}
 		}
@@ -961,11 +956,11 @@ public class UserServiceImpl implements UserService {
 			Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMail(mail);
 			if (oRefugee.isPresent()) {
 				Refugee refugee = oRefugee.get();
-				if (userFinalState == refugee.getBanned()) {
+				if (userFinalState == refugee.getEnabled()) {
 					throw new UserStateAlreadyUpdatedException();
 				}
 				else {
-					refugee.setBanned(userFinalState);
+					refugee.setEnabled(userFinalState);
 					refugeeRepository.save(refugee);
 				}
 			}

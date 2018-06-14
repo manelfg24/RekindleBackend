@@ -29,7 +29,7 @@ public class DTOUser {
     private String biography;
     private String photo;
     private float averageValoration;
-    private int banned;
+    private int enabled;
 
     public DTOUser() {
         super();
@@ -56,7 +56,7 @@ public class DTOUser {
         this.eyeColor = refugee.getEyeColor();
         this.biography = refugee.getBiography();
         this.photo = refugee.getPhoto();
-        this.banned = refugee.getBanned();
+        this.enabled = refugee.getEnabled();
     }
 
     public DTOUser(Volunteer volunteer) {
@@ -68,7 +68,7 @@ public class DTOUser {
         this.surname1 = volunteer.getSurname1();
         this.surname2 = volunteer.getSurname2();
         this.photo = volunteer.getPhoto();
-        this.banned = volunteer.getBanned();
+        this.enabled = volunteer.getEnabled();
         if (volunteer.getNumberOfValorations()==0) {
         	this.averageValoration = 0;
         }
@@ -87,137 +87,136 @@ public class DTOUser {
         this.surname1 = admin.getSurname1();
         this.surname2 = admin.getSurname2();
         this.photo = admin.getPhoto();
-        this.banned = admin.getBanned();
+        this.enabled = admin.getEnabled();
     }
 
-    public String getMail() {
-        return mail;
-    }
+	public String getMail() {
+		return mail;
+	}
 
-    public void setMail(String mail) {
-        this.mail = mail;
-    }
+	public void setMail(String mail) {
+		this.mail = mail;
+	}
 
-    public String getPassword() {
-        return password;
-    }
+	public String getPassword() {
+		return password;
+	}
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getUserType() {
+		return userType;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setUserType(String userType) {
+		this.userType = userType;
+	}
 
-    public String getSurname1() {
-        return surname1;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setSurname1(String surname1) {
-        this.surname1 = surname1;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public String getSurname2() {
-        return surname2;
-    }
+	public String getSurname1() {
+		return surname1;
+	}
 
-    public void setSurname2(String surname2) {
-        this.surname2 = surname2;
-    }
+	public void setSurname1(String surname1) {
+		this.surname1 = surname1;
+	}
 
-    public Integer getPhoneNumber() {
-        return phoneNumber;
-    }
+	public String getSurname2() {
+		return surname2;
+	}
 
-    public void setPhoneNumber(Integer phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
+	public void setSurname2(String surname2) {
+		this.surname2 = surname2;
+	}
 
-    public String getBirthdate() {
-        return birthdate;
-    }
+	public Integer getPhoneNumber() {
+		return phoneNumber;
+	}
 
-    public void setBirthdate(Date birthdate) {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        this.birthdate = formatter.format(birthdate);
-    }
+	public void setPhoneNumber(Integer phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
 
-    public String getSex() {
-        return sex;
-    }
+	public String getBirthdate() {
+		return birthdate;
+	}
 
-    public void setSex(String sex) {
-        this.sex = sex;
-    }
+	public void setBirthdate(String birthdate) {
+		this.birthdate = birthdate;
+	}
 
-    public String getCountry() {
-        return country;
-    }
+	public String getSex() {
+		return sex;
+	}
 
-    public void setCountry(String country) {
-        this.country = country;
-    }
+	public void setSex(String sex) {
+		this.sex = sex;
+	}
 
-    public String getTown() {
-        return town;
-    }
+	public String getCountry() {
+		return country;
+	}
 
-    public void setTown(String town) {
-        this.town = town;
-    }
+	public void setCountry(String country) {
+		this.country = country;
+	}
 
-    public String getEthnic() {
-        return ethnic;
-    }
+	public String getTown() {
+		return town;
+	}
 
-    public void setEthnic(String ethnic) {
-        this.ethnic = ethnic;
-    }
+	public void setTown(String town) {
+		this.town = town;
+	}
 
-    public String getBloodType() {
-        return bloodType;
-    }
+	public String getEthnic() {
+		return ethnic;
+	}
 
-    public void setBloodType(String bloodType) {
-        this.bloodType = bloodType;
-    }
+	public void setEthnic(String ethnic) {
+		this.ethnic = ethnic;
+	}
 
-    public String getEyeColor() {
-        return eyeColor;
-    }
+	public String getBloodType() {
+		return bloodType;
+	}
 
-    public void setEyeColor(String eyeColor) {
-        this.eyeColor = eyeColor;
-    }
+	public void setBloodType(String bloodType) {
+		this.bloodType = bloodType;
+	}
 
-    public String getBiography() {
-        return biography;
-    }
+	public String getEyeColor() {
+		return eyeColor;
+	}
 
-    public void setBiography(String biography) {
-        this.biography = biography;
-    }
+	public void setEyeColor(String eyeColor) {
+		this.eyeColor = eyeColor;
+	}
 
-    public String getPhoto() {
-        return photo;
-    }
+	public String getBiography() {
+		return biography;
+	}
 
-    public void setPhoto(String photo) {
-        this.photo = photo;
-    }
+	public void setBiography(String biography) {
+		this.biography = biography;
+	}
 
-    public String getUserType() {
-        return userType;
-    }
+	public String getPhoto() {
+		return photo;
+	}
 
-    public void setUserType(String userType) {
-        this.userType = userType;
-    }
+	public void setPhoto(String photo) {
+		this.photo = photo;
+	}
 
 	public float getAverageValoration() {
 		return averageValoration;
@@ -227,16 +226,11 @@ public class DTOUser {
 		this.averageValoration = averageValoration;
 	}
 
-	public int getBanned() {
-		return banned;
+	public int getEnabled() {
+		return enabled;
 	}
 
-	public void setBanned(int banned) {
-		this.banned = banned;
+	public void setEnabled(int enabled) {
+		this.enabled = enabled;
 	}
-
-	public void setBirthdate(String birthdate) {
-		this.birthdate = birthdate;
-	}
-    
 }

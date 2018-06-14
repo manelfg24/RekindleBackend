@@ -93,4 +93,16 @@
 	       </column>
 	    </addColumn>
 	</changeSet>
+	
+	<changeSet id="enabledUser" author="bob">
+		<renameColumn newColumnName="enabled"
+                oldColumnName="banned"
+                tableName="Refugee"/>
+		<renameColumn newColumnName="enabled"
+                oldColumnName="banned"
+                tableName="Volunteer"/>
+		<renameColumn newColumnName="enabled"
+                oldColumnName="banned"
+                tableName="Admin"/>
+	</changeSet>
 </databaseChangeLog>
