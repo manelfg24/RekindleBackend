@@ -40,6 +40,7 @@ public class DTOJob {
         this.places = job.getPlaces();
         this.salary = job.getSalary();
         this.description = job.getDescription();
+        this.ended = job.getEnded();
     }
 
     public long getId() {

@@ -64,9 +64,6 @@ public class ServiceController {
 
     @RequestMapping(value = "/servicios", method = RequestMethod.GET)
     public ResponseEntity<List<DTOService>> listServices() {
-    	System.out.println("--------------------------------------------------------");
-    	System.out.println("Entrada al controlador");
-    	System.out.println("--------------------------------------------------------");
         return ResponseEntity.status(HttpStatus.OK).body(serviceService.listServices());
     }
 

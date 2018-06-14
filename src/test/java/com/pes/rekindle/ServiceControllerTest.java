@@ -250,6 +250,7 @@ public class ServiceControllerTest {
         this.mockMvc
                 .perform(get("/servicios"))
                 .andExpect(status().isOk())
+                .andDo(print())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$.[0].id").value(1))
                 .andExpect(jsonPath("$.[1].id").value(2))
@@ -352,6 +353,7 @@ public class ServiceControllerTest {
         this.mockMvc
         		.perform(put("/alojamientos/{id}", 1).contentType(MediaType.APPLICATION_JSON_UTF8)
         				.content(json))
+        		.andDo(print())
         		.andExpect(status().isOk());   
     }
     

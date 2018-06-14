@@ -34,6 +34,7 @@ public class DTOLodge {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         this.dateLimit = formatter.format(lodge.getDateLimit());
         this.description = lodge.getDescription();
+        this.ended =lodge.getEnded();
     }
 
     public long getId() {

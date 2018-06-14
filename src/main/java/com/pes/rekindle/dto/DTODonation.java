@@ -48,6 +48,7 @@ public class DTODonation {
         System.out.println(formatter1.format(donation.getEndTime()));
         this.endTime = formatter1.format(donation.getEndTime());
         this.description = donation.getDescription();
+        this.ended = donation.getEnded();
     }
 
     public long getId() {

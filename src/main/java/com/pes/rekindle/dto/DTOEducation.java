@@ -44,6 +44,7 @@ public class DTOEducation {
         this.places = education.getPlaces();
         this.price = education.getPrice();
         this.description = education.getDescription();
+        this.ended = education.getEnded();
     }
 
     public String getServiceType() {
