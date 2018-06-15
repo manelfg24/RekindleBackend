@@ -70,86 +70,88 @@ public class ServiceServiceImpl implements ServiceService {
 
     @Override
     public void createLodge(DTOLodge dtoLodge) {
-        Lodge lodge = mapper.map(dtoLodge, Lodge.class);
+        Lodge lodge = new Lodge();
+        lodge.setName(dtoLodge.getName());
+        lodge.setVolunteer(dtoLodge.getVolunteer());
+        lodge.setServiceType("Lodge");
+        lodge.setPhoneNumber(dtoLodge.getPhoneNumber());
+        lodge.setAdress(dtoLodge.getAdress());
+        lodge.setPlaces(dtoLodge.getPlaces());
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         try {
             Date dateLimit = formatter.parse(dtoLodge.getDateLimit());
             lodge.setDateLimit(dateLimit);
         } catch (Exception e) {
+
         }
-        /*
-         * lodge.setName(dtoLodge.getName()); lodge.setVolunteer(dtoLodge.getVolunteer());
-         * lodge.setServiceType("Lodge"); lodge.setPhoneNumber(dtoLodge.getPhoneNumber());
-         * lodge.setAdress(dtoLodge.getAdress()); lodge.setPlaces(dtoLodge.getPlaces());
-         * SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd"); try { Date dateLimit =
-         * formatter.parse(dtoLodge.getDateLimit()); lodge.setDateLimit(dateLimit); } catch
-         * (Exception e) { } lodge.setDescription(dtoLodge.getDescription());
-         * lodge.setEnded(dtoLodge.getEnded());
-         */
+        lodge.setDescription(dtoLodge.getDescription());
+        lodge.setEnded(dtoLodge.getEnded());
         lodgeRepository.save(lodge);
     }
 
     public void createDonation(DTODonation dtoDonation) {
-        Donation donation = mapper.map(dtoDonation, Donation.class);
+        Donation donation = new Donation();
+        donation.setName(dtoDonation.getName());
+        donation.setVolunteer(dtoDonation.getVolunteer());
+        donation.setServiceType("Donation");
+        donation.setPhoneNumber(dtoDonation.getPhoneNumber());
+        donation.setAdress(dtoDonation.getAdress());
+        donation.setPlaces(dtoDonation.getPlaces());
+        // DateTimeFormatter formatter = DateTimeFormatter.ISO_TIME;
         try {
             LocalTime startTime = LocalTime.parse(dtoDonation.getStartTime(),
                     DateTimeFormatter.ofPattern("HH:mm:ss"));
             donation.setStartTime(startTime);
+        } catch (Exception e) {
+
+        }
+        try {
             LocalTime endTime = LocalTime.parse(dtoDonation.getEndTime(),
                     DateTimeFormatter.ofPattern("HH:mm:ss"));
             donation.setEndTime(endTime);
         } catch (Exception e) {
 
         }
-        /*
-         * donation.setName(dtoDonation.getName());
-         * donation.setVolunteer(dtoDonation.getVolunteer()); donation.setServiceType("Donation");
-         * donation.setPhoneNumber(dtoDonation.getPhoneNumber());
-         * donation.setAdress(dtoDonation.getAdress()); donation.setPlaces(dtoDonation.getPlaces());
-         * // DateTimeFormatter formatter = DateTimeFormatter.ISO_TIME; try { LocalTime startTime =
-         * LocalTime.parse(dtoDonation.getStartTime(), DateTimeFormatter.ofPattern("HH:mm:ss"));
-         * donation.setStartTime(startTime); } catch (Exception e) { } try { LocalTime endTime =
-         * LocalTime.parse(dtoDonation.getEndTime(), DateTimeFormatter.ofPattern("HH:mm:ss"));
-         * donation.setEndTime(endTime); } catch (Exception e) { } //
-         * donation.setStartTime(dtoDonation.getStartTime()); //
-         * donation.setEndTime(dtoDonation.getEndTime());
-         * donation.setDescription(dtoDonation.getDescription());
-         * donation.setEnded(dtoDonation.getEnded());
-         */
+        // donation.setStartTime(dtoDonation.getStartTime());
+        // donation.setEndTime(dtoDonation.getEndTime());
+        donation.setDescription(dtoDonation.getDescription());
+        donation.setEnded(dtoDonation.getEnded());
         donationRepository.save(donation);
     }
 
     public void createEducation(DTOEducation dtoEducation) {
-        Education education = mapper.map(dtoEducation, Education.class);
-        /*
-         * education.setName(dtoEducation.getName());
-         * education.setVolunteer(dtoEducation.getVolunteer());
-         * education.setServiceType("Education");
-         * education.setPhoneNumber(dtoEducation.getPhoneNumber());
-         * education.setAdress(dtoEducation.getAdress());
-         * education.setAmbit(dtoEducation.getAmbit());
-         * education.setRequirements(dtoEducation.getRequirements());
-         * education.setSchedule(dtoEducation.getSchedule());
-         * education.setPlaces(dtoEducation.getPlaces());
-         * education.setPrice(dtoEducation.getPrice());
-         * education.setDescription(dtoEducation.getDescription());
-         * education.setEnded(dtoEducation.getEnded());
-         */
+        Education education = new Education();
+        education.setName(dtoEducation.getName());
+        education.setVolunteer(dtoEducation.getVolunteer());
+        education.setServiceType("Education");
+        education.setPhoneNumber(dtoEducation.getPhoneNumber());
+        education.setAdress(dtoEducation.getAdress());
+        education.setAmbit(dtoEducation.getAmbit());
+        education.setRequirements(dtoEducation.getRequirements());
+        education.setSchedule(dtoEducation.getSchedule());
+        education.setPlaces(dtoEducation.getPlaces());
+        education.setPrice(dtoEducation.getPrice());
+        education.setDescription(dtoEducation.getDescription());
+        education.setEnded(dtoEducation.getEnded());
         educationRepository.save(education);
     }
 
     public void createJob(DTOJob dtoJob) {
-        Job job = mapper.map(dtoJob, Job.class);
-        /*
-         * job.setName(dtoJob.getName()); job.setVolunteer(dtoJob.getVolunteer());
-         * job.setServiceType("Job"); job.setPhoneNumber(dtoJob.getPhoneNumber());
-         * job.setAdress(dtoJob.getAdress()); job.setCharge(dtoJob.getCharge());
-         * job.setRequirements(dtoJob.getRequirements()); job.setHoursDay(dtoJob.getHoursDay());
-         * job.setHoursWeek(dtoJob.getHoursWeek());
-         * job.setContractDuration(dtoJob.getContractDuration()); job.setPlaces(dtoJob.getPlaces());
-         * job.setSalary(dtoJob.getSalary()); job.setDescription(dtoJob.getDescription());
-         * job.setEnded(dtoJob.getEnded());
-         */
+        Job job = new Job();
+        job.setName(dtoJob.getName());
+        job.setVolunteer(dtoJob.getVolunteer());
+        job.setServiceType("Job");
+        job.setPhoneNumber(dtoJob.getPhoneNumber());
+        job.setAdress(dtoJob.getAdress());
+        job.setCharge(dtoJob.getCharge());
+        job.setRequirements(dtoJob.getRequirements());
+        job.setHoursDay(dtoJob.getHoursDay());
+        job.setHoursWeek(dtoJob.getHoursWeek());
+        job.setContractDuration(dtoJob.getContractDuration());
+        job.setPlaces(dtoJob.getPlaces());
+        job.setSalary(dtoJob.getSalary());
+        job.setDescription(dtoJob.getDescription());
+        job.setEnded(dtoJob.getEnded());
         jobRepository.save(job);
     }
 
@@ -435,7 +437,6 @@ public class ServiceServiceImpl implements ServiceService {
         job.setDescription(dtoJob.getDescription());
         job.setEnded(dtoJob.getEnded());
         jobRepository.save(job);
-
         Pusher pusher = new Pusher("525518", "743a4fb4a1370f0ca9a4", "c78f3bfa72330a58ee1f");
         pusher.setCluster("eu");
         pusher.setEncrypted(true);

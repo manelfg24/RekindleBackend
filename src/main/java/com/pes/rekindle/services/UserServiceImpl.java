@@ -982,8 +982,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Integer isUserEnabled(String mail) throws UserNotExistsException {
-        // TODO Auto-generated method stub
-        return null;
+
     }
 
     @Override
