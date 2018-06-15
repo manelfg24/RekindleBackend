@@ -127,12 +127,12 @@ public class UserServiceImpl implements UserService {
         Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMail(mail);
         if (oRefugee.isPresent()) {
             Refugee refugee = oRefugee.get();
-            return (refugee.getApiKey() == apiKey);
+            return (refugee.getApiKey().equals(apiKey));
         } else {
             Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMail(mail);
             if (oVolunteer.isPresent()) {
                 Volunteer volunteer = oVolunteer.get();
-                return (volunteer.getApiKey() == apiKey);
+                return (volunteer.getApiKey().equals(apiKey));
             }
             return false;
         }
