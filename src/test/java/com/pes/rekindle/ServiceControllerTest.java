@@ -171,7 +171,6 @@ public class ServiceControllerTest {
         this.mockMvc
         		.perform(post("/alojamientos").contentType(MediaType.APPLICATION_JSON_UTF8)
         				.content(json).header("apiKey", "2"))
-        		//.andDo(print())
         		.andExpect(status().isOk());   
     }
     
@@ -253,7 +252,6 @@ public class ServiceControllerTest {
         this.mockMvc
                 .perform(get("/servicios"))
                 .andExpect(status().isOk())
-                //.andDo(print())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$.[0].id").value(1))
                 .andExpect(jsonPath("$.[1].id").value(2))
@@ -401,6 +399,28 @@ public class ServiceControllerTest {
         this.mockMvc
         		.perform(put("/cursos/{id}", 2).contentType(MediaType.APPLICATION_JSON_UTF8)
         				.content(json).header("apiKey", 2))
+        		.andDo(print())
+        		.andExpect(status().isOk());   
+    }
+    
+    
+    
+    
+    @Test 
+    public void modifyDonationTest() throws Exception {
+    	DTODonation dtoDonation = new DTODonation();
+    	dtoDonation.setName("Donación de ropa");
+    	dtoDonation.setPhoneNumber(936666666);
+    	dtoDonation.setAdress("Balmes");
+    	dtoDonation.setPlaces(4);
+    	dtoDonation.setDescription("Donación de ropa");
+    	LocalTime starTime = LocalTime.parse("20:22:11", DateTimeFormatter.ofPattern("HH:mm:ss"));
+    	dtoDonation.setStartTime(starTime);
+        Gson gson = new Gson();
+        String json = gson.toJson(dtoDonation);
+        this.mockMvc
+        		.perform(put("/donaciones/{id}", 1).contentType(MediaType.APPLICATION_JSON_UTF8)
+        				.content(json).header("apiKey", 3))
         		.andDo(print())
         		.andExpect(status().isOk());   
     }
