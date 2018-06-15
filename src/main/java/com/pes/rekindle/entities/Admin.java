@@ -22,6 +22,8 @@ public class Admin {
     private String photo;
     @NotNull
     private int enabled;
+    private String apiKey;
+   
 	public String getMail() {
 		return mail;
 	}
@@ -64,4 +66,13 @@ public class Admin {
 	public void setEnabled(int enabled) {
 		this.enabled = enabled;
 	}
+  
+  public String getApiKey() {
+      return apiKey;
+  }
+
+  public void setApiKey(String apiKey) {
+      this.apiKey = apiKey;
+  }
+
 }

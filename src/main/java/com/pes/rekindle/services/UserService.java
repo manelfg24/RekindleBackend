@@ -20,6 +20,10 @@ import com.pes.rekindle.exceptions.UserStateAlreadyUpdatedException;
 
 public interface UserService {
 
+    public boolean authenticate(String mail, String apiKey);
+
+    public DTOUser hideCredentials(DTOUser dtoUser);
+
     // boolean logIn(String user, String password);
     Object logIn(String user, String password);
 
@@ -105,4 +109,5 @@ public interface UserService {
 	void modifyBannedStatus(String mail, int userDesiredState) throws UserNotExistsException, UserStateAlreadyUpdatedException;
 
 	void deleteReport(Long id) throws ReportNotExistsException;
+
 }

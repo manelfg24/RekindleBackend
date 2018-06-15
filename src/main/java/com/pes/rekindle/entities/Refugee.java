@@ -39,6 +39,7 @@ public class Refugee {
     private String photo;
     @NotNull
     private int enabled;
+    private String apiKey;
 
     @ManyToMany(mappedBy = "inscriptions", cascade = {
             CascadeType.PERSIST,
@@ -223,7 +224,15 @@ public class Refugee {
 		return courses;
 	}
 
-	public void setCourses(Set<Education> courses) {
-		this.courses = courses;
-	}
+  public void setCourses(Set<Education> courses) {
+      this.courses = courses;
+  }
+
+  public String getApiKey() {
+      return apiKey;
+  }
+
+  public void setApiKey(String apiKey) {
+      this.apiKey = apiKey;
+  }
 }
