@@ -276,6 +276,9 @@ public class UserController {
             Pusher pusher = new Pusher("525518", "743a4fb4a1370f0ca9a4", "c78f3bfa72330a58ee1f");
             pusher.setCluster("eu");
             pusher.setEncrypted(true);
+            
+            pusher.trigger(dtoChat.getUser1().getMail(), "new-chat",
+                    Collections.singletonMap("message", createdChat.getId()));
 
             pusher.trigger(dtoChat.getUser2().getMail(), "new-chat",
                     Collections.singletonMap("message", createdChat.getId()));
