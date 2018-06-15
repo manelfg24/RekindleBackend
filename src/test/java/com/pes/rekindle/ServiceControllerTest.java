@@ -194,7 +194,7 @@ public class ServiceControllerTest {
         this.mockMvc
         		.perform(post("/donaciones").contentType(MediaType.APPLICATION_JSON_UTF8)
         				.content(json))
-        		.andDo(print())
+        		//.andDo(print())
         		.andExpect(status().isOk());   
     }
     
@@ -250,7 +250,7 @@ public class ServiceControllerTest {
         this.mockMvc
                 .perform(get("/servicios"))
                 .andExpect(status().isOk())
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$.[0].id").value(1))
                 .andExpect(jsonPath("$.[1].id").value(2))
@@ -310,6 +310,7 @@ public class ServiceControllerTest {
         this.mockMvc
                 .perform(get("/servicios/{mail}/{tipo}", "mailRoger" , "Volunteer").param("ended", "1"))
                 .andExpect(status().isOk())
+                .andDo(print())
                 .andExpect(jsonPath("$.[0].volunteer").value("mailRoger"))
         		.andExpect(jsonPath("$.[1].volunteer").value("mailRoger"))
         		.andExpect(jsonPath("$.[2].volunteer").value("mailRoger"))
