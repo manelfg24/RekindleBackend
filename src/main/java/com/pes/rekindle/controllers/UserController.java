@@ -243,14 +243,12 @@ public class UserController {
 
     }
 
-    // Todos chats del mail
     @RequestMapping(value = "/usuarios/{mail}/chats", method = RequestMethod.GET)
     public ResponseEntity<Set<DTOChat>> listUserChats(@PathVariable String mail) {
         Set<DTOChat> dtoChats = userService.listUserChats(mail);
         return ResponseEntity.status(HttpStatus.OK).body(dtoChats);
     }
 
-    // Todos los mensajes de un chat
     @RequestMapping(value = "/usuarios/{mail}/chats/{idChat}/messages", method = RequestMethod.GET)
     public ResponseEntity<List<DTOMessage>> getChatMessages(@PathVariable String mail,
             @PathVariable long idChat) {
@@ -258,7 +256,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(dtoMessages);
     }
 
-    // Devuelve el chat entre dos personas, mismo nombre que listUserChats
     @RequestMapping(value = "/usuarios/{mail}/chat", method = RequestMethod.GET)
     public ResponseEntity<DTOChat> getChat(@PathVariable String mail,
             @RequestParam("mail1") String mail1,
@@ -270,7 +267,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(dtoChats);
     }
 
-    // Crea un chat
     @RequestMapping(value = "/usuarios/{mail}/chats", method = RequestMethod.POST)
     public ResponseEntity<DTOChat> createChat(@RequestHeader("apiKey") String apiKey,
             @RequestBody DTOChat dtoChat, @PathVariable String mail) {
@@ -290,7 +286,6 @@ public class UserController {
         }
     }
 
-    // Enviar mensaje
     @RequestMapping(value = "/usuarios/{mail}/chats/{idChat}/messages", method = RequestMethod.POST)
     public ResponseEntity<Void> sendMessage(@RequestHeader("apiKey") String apiKey,
             @PathVariable String mail,
@@ -387,15 +382,4 @@ public class UserController {
         }
     }
 
-    @RequestMapping(value = "/test", method = RequestMethod.GET)
-    public ResponseEntity<String> test() {
-
-        String id = userService.test();
-        return ResponseEntity.status(HttpStatus.OK).body(id);
-    }
-
-    @RequestMapping(value = "/test2", method = RequestMethod.GET)
-    public ResponseEntity<Void> test2() {
-        return ResponseEntity.status(HttpStatus.OK).body(null);
-    }
 }

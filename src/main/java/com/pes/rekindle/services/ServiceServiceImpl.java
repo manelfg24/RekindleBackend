@@ -1,6 +1,7 @@
 
 package com.pes.rekindle.services;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -255,7 +256,7 @@ public class ServiceServiceImpl implements ServiceService {
                 return userService.userAlreadyEnrolledDonation(mail, id);
             case "Job":
                 return userService.userAlreadyEnrolledJob(mail, id);
-            default: // no deberia pasar nunca
+            default:
                 return null;
         }
     }
@@ -278,18 +279,6 @@ public class ServiceServiceImpl implements ServiceService {
     public DTOEducation infoEducation(Long id) {
         Education education = educationRepository.findById(id);
         DTOEducation dtoEducation = new DTOEducation(education);
-        /*
-         * dtoEducation.setName(education.getName());
-         * dtoEducation.setVolunteer(education.getVolunteer());
-         * dtoEducation.setServiceType("Education");
-         * dtoEducation.setPhoneNumber(education.getPhoneNumber());
-         * dtoEducation.setAdress(education.getAdress());
-         * dtoEducation.setAmbit(education.getAmbit());
-         * dtoEducation.setRequirements(education.getRequirements());
-         * dtoEducation.setSchedule(education.getSchedule());
-         * dtoEducation.setPlaces(education.getPlaces());
-         * dtoEducation.setDescription(education.getDescription());
-         */
         return dtoEducation;
     }
 
@@ -297,16 +286,6 @@ public class ServiceServiceImpl implements ServiceService {
     public DTODonation infoDonation(Long id) {
         Donation donation = donationRepository.findById(id);
         DTODonation dtoDonation = new DTODonation(donation);
-        /*
-         * dtoDonation.setName(donation.getName());
-         * dtoDonation.setVolunteer(donation.getVolunteer());
-         * dtoDonation.setServiceType("Donation");
-         * dtoDonation.setPhoneNumber(donation.getPhoneNumber());
-         * dtoDonation.setAdress(donation.getAdress()); dtoDonation.setPlaces(donation.getPlaces());
-         * dtoDonation.setStartTime(donation.getStartTime());
-         * dtoDonation.setEndTime(donation.getEndTime());
-         * dtoDonation.setDescription(donation.getDescription());
-         */
         return dtoDonation;
     }
 
@@ -314,15 +293,6 @@ public class ServiceServiceImpl implements ServiceService {
     public DTOJob infoJob(Long id) {
         Job job = jobRepository.findById(id);
         DTOJob dtoJob = new DTOJob(job);
-        /*
-         * dtoJob.setName(job.getName()); dtoJob.setVolunteer(job.getVolunteer());
-         * dtoJob.setServiceType("Job"); dtoJob.setPhoneNumber(job.getPhoneNumber());
-         * dtoJob.setAdress(job.getAdress()); dtoJob.setCharge(job.getCharge());
-         * dtoJob.setRequirements(job.getRequirements()); dtoJob.setHoursDay(job.getHoursDay());
-         * dtoJob.setHoursWeek(job.getHoursWeek());
-         * dtoJob.setContractDuration(job.getContractDuration()); dtoJob.setPlaces(job.getPlaces());
-         * dtoJob.setSalary(job.getSalary()); dtoJob.setDescription(job.getDescription());
-         */
         return dtoJob;
     }
 
@@ -336,25 +306,12 @@ public class ServiceServiceImpl implements ServiceService {
         donation.setPhoneNumber(dtoDonation.getPhoneNumber());
         donation.setAdress(dtoDonation.getAdress());
         donation.setPlaces(dtoDonation.getPlaces());
-        // DateTimeFormatter formatter = DateTimeFormatter.ISO_TIME;
-        try {
-            LocalTime startTime = LocalTime.parse(dtoDonation.getStartTime(),
-                    DateTimeFormatter.ofPattern("HH:mm:ss"));
-            donation.setStartTime(startTime);
-            ;
-        } catch (Exception e) {
-
-        }
-        try {
-            LocalTime endTime = LocalTime.parse(dtoDonation.getEndTime(),
-                    DateTimeFormatter.ofPattern("HH:mm:ss"));
-            donation.setEndTime(endTime);
-            ;
-        } catch (Exception e) {
-
-        }
-        // donation.setStartTime(dtoDonation.getStartTime());
-        // donation.setEndTime(dtoDonation.getEndTime());
+        LocalTime startTime = LocalTime.parse(dtoDonation.getStartTime(),
+                DateTimeFormatter.ofPattern("HH:mm:ss"));
+        donation.setStartTime(startTime);
+        LocalTime endTime = LocalTime.parse(dtoDonation.getEndTime(),
+                DateTimeFormatter.ofPattern("HH:mm:ss"));
+        donation.setEndTime(endTime);
         donation.setDescription(dtoDonation.getDescription());
         donation.setEnded(dtoDonation.getEnded());
         donationRepository.save(donation);
@@ -367,7 +324,7 @@ public class ServiceServiceImpl implements ServiceService {
     }
 
     @Override
-    public void modifyLodge(long id, DTOLodge dtoLodge) {
+    public void modifyLodge(long id, DTOLodge dtoLodge) throws ParseException {
         Lodge lodge = lodgeRepository.findById(id);
         lodge.setName(dtoLodge.getName());
         lodge.setVolunteer(dtoLodge.getVolunteer());
@@ -376,12 +333,8 @@ public class ServiceServiceImpl implements ServiceService {
         lodge.setAdress(dtoLodge.getAdress());
         lodge.setPlaces(dtoLodge.getPlaces());
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            Date dateLimit = formatter.parse(dtoLodge.getDateLimit());
-            lodge.setDateLimit(dateLimit);
-        } catch (Exception e) {
-
-        }
+        Date dateLimit = formatter.parse(dtoLodge.getDateLimit());
+        lodge.setDateLimit(dateLimit);
         lodge.setDescription(dtoLodge.getDescription());
         lodge.setEnded(dtoLodge.getEnded());
         lodgeRepository.save(lodge);
@@ -477,7 +430,6 @@ public class ServiceServiceImpl implements ServiceService {
                 .findByRequestStatus("Not Resolved");
         ArrayList<DTODonationEnrollment> dtoEnrollmentList = new ArrayList();
 
-        // mirar como se guarda la PK en bd para no hacer llamadas inecesarias
         for (DonationEnrollment donationEnrollment : enrollmentList) {
             DTOService dtoDonation = new DTOService(
                     donationRepository.findById(donationEnrollment.getDonationId()));
@@ -548,8 +500,6 @@ public class ServiceServiceImpl implements ServiceService {
 
             lodgeEnrollment.setValoration(dtoValoration.getPoints());
             lodgeEnrollmentRepository.save(lodgeEnrollment);
-        } else {
-            System.out.println("El refugiado no esta enrolado");
         }
     }
 
@@ -566,8 +516,6 @@ public class ServiceServiceImpl implements ServiceService {
 
             donationEnrollment.setValoration(dtoValoration.getPoints());
             donationEnrollmentRepository.save(donationEnrollment);
-        } else {
-            System.out.println("El refugiado no esta enrolado");
         }
     }
 
@@ -584,8 +532,6 @@ public class ServiceServiceImpl implements ServiceService {
 
             jobEnrollment.setValoration(dtoValoration.getPoints());
             jobEnrollmentRepository.save(jobEnrollment);
-        } else {
-            System.out.println("El refugiado no esta enrolado");
         }
     }
 
@@ -602,8 +548,6 @@ public class ServiceServiceImpl implements ServiceService {
 
             educationEnrollment.setValoration(dtoValoration.getPoints());
             educationEnrollmentRepository.save(educationEnrollment);
-        } else {
-            System.out.println("El refugiado no esta enrolado");
         }
     }
 }

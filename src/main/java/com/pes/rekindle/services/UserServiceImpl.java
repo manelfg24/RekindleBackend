@@ -5,7 +5,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -398,12 +397,12 @@ public class UserServiceImpl implements UserService {
         Set<Donation> donations;
         Set<Job> jobs;
         Set<Education> courses;
-        if (userType.equals("Refugee")) { // refugee
+        if (userType.equals("Refugee")) {
             lodges = lodgeRepository.findByInscriptions_Mail(mail);
             donations = donationRepository.findByInscriptions_Mail(mail);
             courses = educationRepository.findByInscriptions_Mail(mail);
             jobs = jobRepository.findByInscriptions_Mail(mail);
-        } else { // volunteer
+        } else {
             lodges = lodgeRepository.findByVolunteer(mail);
             donations = donationRepository.findByVolunteer(mail);
             courses = educationRepository.findByVolunteer(mail);
@@ -476,17 +475,7 @@ public class UserServiceImpl implements UserService {
 
     private void enrollUserToLodge(String mail, Long id) throws Exception {
         Lodge lodge = serviceService.getLodge(id);
-        java.util.Date today = Calendar.getInstance().getTime();
         int enrolledCount = lodge.getInscriptions().size() + 1;
-        /*
-         * System.out.println("---------------------------------------");
-         * System.out.println("Numero de places total: " + lodge.getPlaces());
-         * System.out.println("Numero de places ocupadas: " + lodge.getInscriptions().size()+1);
-         * System.out.println("---------------------------------------");
-         * System.out.println("Data del servicio: " + lodge.getDateLimit());
-         * System.out.println("Data actual: " + Calendar.getInstance().getTime());
-         * System.out.println("---------------------------------------");
-         */
 
         if (enrolledCount > lodge.getPlaces() /* || today.after(lodge.getDateLimit()) */) {
             throw new Exception();
@@ -502,7 +491,6 @@ public class UserServiceImpl implements UserService {
             refugee.setLodges(lodges);
             lodge.setInscriptions(refugees);
 
-            // sobra un save
             refugeeRepository.save(refugee);
             lodgeRepository.save(lodge);
         }
@@ -510,7 +498,6 @@ public class UserServiceImpl implements UserService {
 
     private void enrollUserToEducation(String mail, Long id) throws Exception {
         Education education = serviceService.getEducation(id);
-        java.util.Date today = Calendar.getInstance().getTime();
         int enrolledCount = education.getInscriptions().size() + 1;
 
         if (enrolledCount > education.getPlaces()) {
@@ -534,7 +521,6 @@ public class UserServiceImpl implements UserService {
 
     private void enrollUserToDonation(String mail, Long id) throws Exception {
         Donation donation = serviceService.getDonation(id);
-        java.util.Date today = Calendar.getInstance().getTime();
         int enrolledCount = donation.getInscriptions().size() + 1;
 
         if (enrolledCount > donation.getPlaces()) {
@@ -558,7 +544,6 @@ public class UserServiceImpl implements UserService {
 
     private void enrollUserToJob(String mail, Long id) throws Exception {
         Job job = serviceService.getJob(id);
-        Date today = Calendar.getInstance().getTime();
         int enrolledCount = job.getInscriptions().size() + 1;
 
         if (enrolledCount > job.getPlaces()) {
@@ -849,9 +834,6 @@ public class UserServiceImpl implements UserService {
         message.setTimestamp(dtoMessage.getTimestamp());
 
         messageRepository.save(message);
-        /*
-         * chat.addMessage(message); chatRepository.save(chat);
-         */
     }
 
     @Override
@@ -924,7 +906,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Set<DTOLink> listLinks() {
         Set<Link> links = linkRepository.findAll();
-        Set<DTOLink> dtoLinks = new HashSet();
+        Set<DTOLink> dtoLinks = new HashSet<DTOLink>();
         for (Link link : links) {
             DTOLink auxiliarLink = mapper.map(link, DTOLink.class);
             dtoLinks.add(auxiliarLink);
@@ -942,12 +924,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteLink(Long id) {
         linkRepository.deleteById(id);
-    }
-
-    // -------------------------------------------------------------------
-    @Override
-    public String test() {
-        return "Hola";
     }
 
     @Override
@@ -1061,7 +1037,6 @@ public class UserServiceImpl implements UserService {
     public void deleteReport(Long id) throws ReportNotExistsException {
         Optional<Report> oReport = reportRepository.findOptionalById(id);
         if (oReport.isPresent()) {
-            // mirar apikey
             reportRepository.deleteById(id);
         } else {
             throw new ReportNotExistsException();
