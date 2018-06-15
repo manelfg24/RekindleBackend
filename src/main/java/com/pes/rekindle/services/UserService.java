@@ -111,6 +111,4 @@ public interface UserService {
 
     void deleteReport(Long id) throws ReportNotExistsException;
 
-    Set<DTOService> obtainOwnServices(String mail, String userType);
-
 }

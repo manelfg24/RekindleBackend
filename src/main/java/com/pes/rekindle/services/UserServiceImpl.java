@@ -387,7 +387,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<DTOService> obtainOwnServices(String mail, String userType, Boolean ended) {
-    	ArrayList<DTOService> result = new ArrayList<DTOService>();
+        ArrayList<DTOService> result = new ArrayList<DTOService>();
 
         Set<Lodge> lodges;
         Set<Donation> donations;
@@ -937,12 +937,6 @@ public class UserServiceImpl implements UserService {
         }
         volunteerRepository.save(modifiedVolunteer);
 
-    }
-
-    @Override
-    public Set<DTOService> obtainOwnServices(String mail, String userType, Boolean ended) {
-        // TODO Auto-generated method stub
-        return null;
     }
 
     @Override
