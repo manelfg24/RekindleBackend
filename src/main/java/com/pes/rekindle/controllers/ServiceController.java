@@ -1,6 +1,7 @@
 
 package com.pes.rekindle.controllers;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -107,11 +108,6 @@ public class ServiceController {
         return ResponseEntity.status(HttpStatus.OK).body(serviceService.infoJob(id));
     }
 
-    // -------------------------------------------------------------------------------------------------------------
-    // -------------------------------------------- Falta acabarlas
-    // ------------------------------------------------
-    // -------------------------------------------------------------------------------------------------------------
-
     @RequestMapping(value = "/servicios/{mail}/{tipo}", method = RequestMethod.GET)
     public ResponseEntity<List<DTOService>> obtainOwnServices(
             @PathVariable("mail") String mail,
@@ -147,7 +143,11 @@ public class ServiceController {
             @PathVariable("id") long id,
             @RequestBody DTOLodge lodge) {
         if (userService.authenticate(lodge.getVolunteer(), apiKey)) {
-            serviceService.modifyLodge(id, lodge);
+            try {
+                serviceService.modifyLodge(id, lodge);
+            } catch (ParseException e) {
+                return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body(null);
+            }
             return ResponseEntity.status(HttpStatus.OK).body(null);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
@@ -192,7 +192,7 @@ public class ServiceController {
     @RequestMapping(value = "/solicituddonacion", method = RequestMethod.POST)
     public ResponseEntity<Void> createDonationRequest(@RequestHeader("apiKey") String apiKey,
             @RequestBody DTODonationEnrollment dtoDonationEnrollment) {
-        if (userService.authenticate(dtoDonationEnrollment.getDonation().getVolunteer(), apiKey)) {
+        if (userService.authenticate(dtoDonationEnrollment.getRefugeeMail(), apiKey)) {
             serviceService.createDonationRequest(dtoDonationEnrollment);
             return ResponseEntity.status(HttpStatus.OK).body(null);
         } else {

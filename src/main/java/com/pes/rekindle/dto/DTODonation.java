@@ -36,9 +36,10 @@ public class DTODonation {
         this.phoneNumber = donation.getPhoneNumber();
         this.adress = donation.getAdress();
         this.places = donation.getPlaces();
-        
-       // LocalTime endTime = LocalTime.parse(dtoDonation.getEndTime(), DateTimeFormatter.ofPattern("H:mm:ss"));
-        
+
+        // LocalTime endTime = LocalTime.parse(dtoDonation.getEndTime(),
+        // DateTimeFormatter.ofPattern("H:mm:ss"));
+
         DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_TIME;
         this.startTime = formatter.format(donation.getStartTime());
         DateTimeFormatter formatter1 = DateTimeFormatter.ISO_LOCAL_TIME;
@@ -108,7 +109,7 @@ public class DTODonation {
     }
 
     public void setStartTime(LocalTime startTime) {
-    	DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_TIME;
+        DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_TIME;
         this.startTime = formatter.format(startTime);
     }
 
@@ -117,7 +118,7 @@ public class DTODonation {
     }
 
     public void setEndTime(LocalTime endTime) {
-    	DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_TIME;
+        DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_TIME;
         this.endTime = formatter.format(endTime);
     }
 
@@ -129,11 +130,11 @@ public class DTODonation {
         this.description = description;
     }
 
-	public Boolean getEnded() {
-		return ended;
-	}
+    public Boolean getEnded() {
+        return ended;
+    }
 
-	public void setEnded(Boolean ended) {
-		this.ended = ended;
-	}
+    public void setEnded(Boolean ended) {
+        this.ended = ended;
+    }
 }

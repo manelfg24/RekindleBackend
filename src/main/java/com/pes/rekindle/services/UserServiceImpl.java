@@ -5,7 +5,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -44,11 +43,7 @@ import com.pes.rekindle.exceptions.UserNotExistsException;
 import com.pes.rekindle.exceptions.UserStateAlreadyUpdatedException;
 import com.pes.rekindle.repositories.AdminRepository;
 import com.pes.rekindle.repositories.ChatRepository;
-import com.pes.rekindle.repositories.DonationRepository;
-import com.pes.rekindle.repositories.EducationRepository;
-import com.pes.rekindle.repositories.JobRepository;
 import com.pes.rekindle.repositories.LinkRepository;
-import com.pes.rekindle.repositories.LodgeRepository;
 import com.pes.rekindle.repositories.MessageRepository;
 import com.pes.rekindle.repositories.RefugeeRepository;
 import com.pes.rekindle.repositories.ReportRepository;
@@ -60,18 +55,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     VolunteerRepository volunteerRepository;
+
     @Autowired
     AdminRepository adminRepository;
+
     @Autowired
     RefugeeRepository refugeeRepository;
-    @Autowired
-    LodgeRepository lodgeRepository;
-    @Autowired
-    EducationRepository educationRepository;
-    @Autowired
-    DonationRepository donationRepository;
-    @Autowired
-    JobRepository jobRepository;
 
     @Autowired
     ServiceService serviceService;
@@ -81,6 +70,7 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     ChatRepository chatRepository;
+
     @Autowired
     MessageRepository messageRepository;
 
@@ -398,16 +388,16 @@ public class UserServiceImpl implements UserService {
         Set<Donation> donations;
         Set<Job> jobs;
         Set<Education> courses;
-        if (userType.equals("Refugee")) { // refugee
-            lodges = lodgeRepository.findByInscriptions_Mail(mail);
-            donations = donationRepository.findByInscriptions_Mail(mail);
-            courses = educationRepository.findByInscriptions_Mail(mail);
-            jobs = jobRepository.findByInscriptions_Mail(mail);
-        } else { // volunteer
-            lodges = lodgeRepository.findByVolunteer(mail);
-            donations = donationRepository.findByVolunteer(mail);
-            courses = educationRepository.findByVolunteer(mail);
-            jobs = jobRepository.findByVolunteer(mail);
+        if (userType.equals("Refugee")) {
+            lodges = serviceService.getLodgeInscriptions(mail);
+            donations = serviceService.getDonationInscriptions(mail);
+            courses = serviceService.getEducationInscriptions(mail);
+            jobs = serviceService.getJobInscriptions(mail);
+        } else {
+            lodges = serviceService.getLodgeByVolunteer(mail);
+            donations = serviceService.getDonationByVolunteer(mail);
+            courses = serviceService.getCourseByVolunteer(mail);
+            jobs = serviceService.getJobByVolunteer(mail);
         }
         for (Lodge lodge : lodges) {
             if (lodge.getEnded() == ended) {
@@ -442,7 +432,7 @@ public class UserServiceImpl implements UserService {
             case "Lodge":
                 enrollUserToLodge(mail, id);
 
-                Lodge lodge = lodgeRepository.findById(id);
+                Lodge lodge = serviceService.getLodge(id);
 
                 pusher.trigger(mail, "enroll-service",
                         Collections.singletonMap("message", new DTOService(lodge)));
@@ -450,7 +440,7 @@ public class UserServiceImpl implements UserService {
             case "Education":
                 enrollUserToEducation(mail, id);
 
-                Education education = educationRepository.findById(id);
+                Education education = serviceService.getEducation(id);
 
                 pusher.trigger(mail, "enroll-service",
                         Collections.singletonMap("message", new DTOService(education)));
@@ -458,7 +448,7 @@ public class UserServiceImpl implements UserService {
             case "Donation":
                 enrollUserToDonation(mail, id);
 
-                Donation donation = donationRepository.findById(id);
+                Donation donation = serviceService.getDonation(id);
 
                 pusher.trigger(mail, "enroll-service",
                         Collections.singletonMap("message", new DTOService(donation)));
@@ -466,7 +456,7 @@ public class UserServiceImpl implements UserService {
             case "Job":
                 enrollUserToJob(mail, id);
 
-                Job job = jobRepository.findById(id);
+                Job job = serviceService.getJob(id);
 
                 pusher.trigger(mail, "enroll-service",
                         Collections.singletonMap("message", new DTOService(job)));
@@ -476,17 +466,7 @@ public class UserServiceImpl implements UserService {
 
     private void enrollUserToLodge(String mail, Long id) throws Exception {
         Lodge lodge = serviceService.getLodge(id);
-        java.util.Date today = Calendar.getInstance().getTime();
         int enrolledCount = lodge.getInscriptions().size() + 1;
-        /*
-         * System.out.println("---------------------------------------");
-         * System.out.println("Numero de places total: " + lodge.getPlaces());
-         * System.out.println("Numero de places ocupadas: " + lodge.getInscriptions().size()+1);
-         * System.out.println("---------------------------------------");
-         * System.out.println("Data del servicio: " + lodge.getDateLimit());
-         * System.out.println("Data actual: " + Calendar.getInstance().getTime());
-         * System.out.println("---------------------------------------");
-         */
 
         if (enrolledCount > lodge.getPlaces() /* || today.after(lodge.getDateLimit()) */) {
             throw new Exception();
@@ -502,15 +482,13 @@ public class UserServiceImpl implements UserService {
             refugee.setLodges(lodges);
             lodge.setInscriptions(refugees);
 
-            // sobra un save
             refugeeRepository.save(refugee);
-            lodgeRepository.save(lodge);
+            serviceService.saveLodge(lodge);
         }
     }
 
     private void enrollUserToEducation(String mail, Long id) throws Exception {
         Education education = serviceService.getEducation(id);
-        java.util.Date today = Calendar.getInstance().getTime();
         int enrolledCount = education.getInscriptions().size() + 1;
 
         if (enrolledCount > education.getPlaces()) {
@@ -528,13 +506,12 @@ public class UserServiceImpl implements UserService {
             education.setInscriptions(refugees);
 
             refugeeRepository.save(refugee);
-            educationRepository.save(education);
+            serviceService.saveCourse(education);
         }
     }
 
     private void enrollUserToDonation(String mail, Long id) throws Exception {
         Donation donation = serviceService.getDonation(id);
-        java.util.Date today = Calendar.getInstance().getTime();
         int enrolledCount = donation.getInscriptions().size() + 1;
 
         if (enrolledCount > donation.getPlaces()) {
@@ -552,13 +529,12 @@ public class UserServiceImpl implements UserService {
             donation.setInscriptions(refugees);
 
             refugeeRepository.save(refugee);
-            donationRepository.save(donation);
+            serviceService.saveDonation(donation);
         }
     }
 
     private void enrollUserToJob(String mail, Long id) throws Exception {
         Job job = serviceService.getJob(id);
-        Date today = Calendar.getInstance().getTime();
         int enrolledCount = job.getInscriptions().size() + 1;
 
         if (enrolledCount > job.getPlaces()) {
@@ -576,7 +552,7 @@ public class UserServiceImpl implements UserService {
             job.setInscriptions(refugees);
 
             refugeeRepository.save(refugee);
-            jobRepository.save(job);
+            serviceService.saveJob(job);
         }
     }
 
@@ -590,7 +566,7 @@ public class UserServiceImpl implements UserService {
             case "Lodge":
                 unenrollUserFromLodge(mail, id);
 
-                Lodge lodge = lodgeRepository.findById(id);
+                Lodge lodge = serviceService.getLodge(id);
 
                 pusher.trigger(mail, "unenroll-service",
                         Collections.singletonMap("message", new DTOService(lodge)));
@@ -598,7 +574,7 @@ public class UserServiceImpl implements UserService {
             case "Education":
                 unenrollUserFromEducation(mail, id);
 
-                Education education = educationRepository.findById(id);
+                Education education = serviceService.getEducation(id);
 
                 pusher.trigger(mail, "unenroll-service",
                         Collections.singletonMap("message", new DTOService(education)));
@@ -606,7 +582,7 @@ public class UserServiceImpl implements UserService {
             case "Donation":
                 unenrollUserFromDonation(mail, id);
 
-                Donation donation = donationRepository.findById(id);
+                Donation donation = serviceService.getDonation(id);
 
                 pusher.trigger(mail, "unenroll-service",
                         Collections.singletonMap("message", new DTOService(donation)));
@@ -614,7 +590,7 @@ public class UserServiceImpl implements UserService {
             case "Job":
                 unenrollUserFromJob(mail, id);
 
-                Job job = jobRepository.findById(id);
+                Job job = serviceService.getJob(id);
 
                 pusher.trigger(mail, "unenroll-service",
                         Collections.singletonMap("message", new DTOService(job)));
@@ -636,7 +612,7 @@ public class UserServiceImpl implements UserService {
         job.setInscriptions(refugees);
 
         refugeeRepository.save(refugee);
-        jobRepository.save(job);
+        serviceService.saveJob(job);
     }
 
     private void unenrollUserFromDonation(String mail, Long id) {
@@ -653,7 +629,7 @@ public class UserServiceImpl implements UserService {
         donation.setInscriptions(refugees);
 
         refugeeRepository.save(refugee);
-        donationRepository.save(donation);
+        serviceService.saveDonation(donation);
 
     }
 
@@ -671,7 +647,7 @@ public class UserServiceImpl implements UserService {
         education.setInscriptions(refugees);
 
         refugeeRepository.save(refugee);
-        educationRepository.save(education);
+        serviceService.saveCourse(education);
 
     }
 
@@ -689,7 +665,7 @@ public class UserServiceImpl implements UserService {
         lodge.setInscriptions(refugees);
 
         refugeeRepository.save(refugee);
-        lodgeRepository.save(lodge);
+        serviceService.saveLodge(lodge);
     }
 
     @Override
@@ -698,42 +674,54 @@ public class UserServiceImpl implements UserService {
         if (chatRepository.existsByMailUser1(mail) || chatRepository.existsByMailUser2(mail)) {
             Set<Chat> chats = chatRepository.findByMailUser1(mail);
             chats.addAll(chatRepository.findByMailUser2(mail));
+            DTOUser dtoUserOwner = null;
+            try {
+				dtoUserOwner = getDTOUser(mail);
+			} catch (UserNotExistsException e) {
+				e.printStackTrace();
+			}
+            
 
             for (Chat chat : chats) {
                 DTOChat dtoChat = new DTOChat();
                 dtoChat.setId(chat.getId());
-                Optional<Refugee> oRefugee = refugeeRepository
-                        .findOptionalByMail(chat.getMailUser1());
-                if (oRefugee.isPresent()) {
-                    DTOUser dtoUser = new DTOUser(oRefugee.get());
-                    dtoUser = hideCredentials(dtoUser);
-                    dtoChat.setUser1(dtoUser);
-                } else {
-                    Optional<Volunteer> oVolunteer = volunteerRepository
-                            .findOptionalByMail(chat.getMailUser1());
-                    DTOUser dtoUser = null;
-                    if (oVolunteer.isPresent()) {
-                        dtoUser = new DTOUser(oVolunteer.get());
-                        dtoUser = hideCredentials(dtoUser);
-                    }
-                    dtoChat.setUser1(dtoUser);
+                
+                if (dtoUserOwner.getMail().equals(chat.getMailUser1())) {   
+	                Optional<Refugee> oRefugee = refugeeRepository
+	                        .findOptionalByMail(chat.getMailUser1());
+	                if (oRefugee.isPresent()) {
+	                    DTOUser dtoUser = new DTOUser(oRefugee.get());
+	                    dtoUser = hideCredentials(dtoUser);
+	                    dtoChat.setUser1(dtoUser);
+	                } else {
+	                    Optional<Volunteer> oVolunteer = volunteerRepository
+	                            .findOptionalByMail(chat.getMailUser1());
+	                    DTOUser dtoUser = null;
+	                    if (oVolunteer.isPresent()) {
+	                        dtoUser = new DTOUser(oVolunteer.get());
+	                        dtoUser = hideCredentials(dtoUser);
+	                    }
+	                    dtoChat.setUser1(dtoUser);
+	                }
                 }
-
-                oRefugee = refugeeRepository.findOptionalByMail(chat.getMailUser2());
-                if (oRefugee.isPresent()) {
-                    DTOUser dtoUser = new DTOUser(oRefugee.get());
-                    dtoChat.setUser2(dtoUser);
-                } else {
-                    Optional<Volunteer> oVolunteer = volunteerRepository
-                            .findOptionalByMail(chat.getMailUser2());
-                    DTOUser dtoUser = null;
-                    if (oVolunteer.isPresent()) {
-                        dtoUser = new DTOUser(oVolunteer.get());
-                    }
-
-                    dtoChat.setUser2(dtoUser);
-                }
-                dtoChats.add(dtoChat);
+                else {
+	                Optional<Refugee> oRefugee = refugeeRepository
+	                        .findOptionalByMail(chat.getMailUser2());
+	                if (oRefugee.isPresent()) {
+	                    DTOUser dtoUser = new DTOUser(oRefugee.get());
+	                    dtoUser = hideCredentials(dtoUser);
+	                    dtoChat.setUser2(dtoUser);
+	                } else {
+	                    Optional<Volunteer> oVolunteer = volunteerRepository
+	                            .findOptionalByMail(chat.getMailUser2());
+	                    DTOUser dtoUser = null;
+	                    if (oVolunteer.isPresent()) {
+	                        dtoUser = new DTOUser(oVolunteer.get());
+	                        dtoUser = hideCredentials(dtoUser);
+	                    }
+	                    dtoChat.setUser2(dtoUser);
+	                }
+            }
             }
         }
         return dtoChats;
@@ -849,9 +837,6 @@ public class UserServiceImpl implements UserService {
         message.setTimestamp(dtoMessage.getTimestamp());
 
         messageRepository.save(message);
-        /*
-         * chat.addMessage(message); chatRepository.save(chat);
-         */
     }
 
     @Override
@@ -924,7 +909,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Set<DTOLink> listLinks() {
         Set<Link> links = linkRepository.findAll();
-        Set<DTOLink> dtoLinks = new HashSet();
+        Set<DTOLink> dtoLinks = new HashSet<DTOLink>();
         for (Link link : links) {
             DTOLink auxiliarLink = mapper.map(link, DTOLink.class);
             dtoLinks.add(auxiliarLink);
@@ -942,12 +927,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteLink(Long id) {
         linkRepository.deleteById(id);
-    }
-
-    // -------------------------------------------------------------------
-    @Override
-    public String test() {
-        return "Hola";
     }
 
     @Override
@@ -1061,7 +1040,6 @@ public class UserServiceImpl implements UserService {
     public void deleteReport(Long id) throws ReportNotExistsException {
         Optional<Report> oReport = reportRepository.findOptionalById(id);
         if (oReport.isPresent()) {
-            // mirar apikey
             reportRepository.deleteById(id);
         } else {
             throw new ReportNotExistsException();
