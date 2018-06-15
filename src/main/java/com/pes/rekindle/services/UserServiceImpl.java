@@ -674,42 +674,54 @@ public class UserServiceImpl implements UserService {
         if (chatRepository.existsByMailUser1(mail) || chatRepository.existsByMailUser2(mail)) {
             Set<Chat> chats = chatRepository.findByMailUser1(mail);
             chats.addAll(chatRepository.findByMailUser2(mail));
+            DTOUser dtoUserOwner = null;
+            try {
+				dtoUserOwner = getDTOUser(mail);
+			} catch (UserNotExistsException e) {
+				e.printStackTrace();
+			}
+            
 
             for (Chat chat : chats) {
                 DTOChat dtoChat = new DTOChat();
                 dtoChat.setId(chat.getId());
-                Optional<Refugee> oRefugee = refugeeRepository
-                        .findOptionalByMail(chat.getMailUser1());
-                if (oRefugee.isPresent()) {
-                    DTOUser dtoUser = new DTOUser(oRefugee.get());
-                    dtoUser = hideCredentials(dtoUser);
-                    dtoChat.setUser1(dtoUser);
-                } else {
-                    Optional<Volunteer> oVolunteer = volunteerRepository
-                            .findOptionalByMail(chat.getMailUser1());
-                    DTOUser dtoUser = null;
-                    if (oVolunteer.isPresent()) {
-                        dtoUser = new DTOUser(oVolunteer.get());
-                        dtoUser = hideCredentials(dtoUser);
-                    }
-                    dtoChat.setUser1(dtoUser);
+                
+                if (dtoUserOwner.getMail().equals(chat.getMailUser1())) {   
+	                Optional<Refugee> oRefugee = refugeeRepository
+	                        .findOptionalByMail(chat.getMailUser1());
+	                if (oRefugee.isPresent()) {
+	                    DTOUser dtoUser = new DTOUser(oRefugee.get());
+	                    dtoUser = hideCredentials(dtoUser);
+	                    dtoChat.setUser1(dtoUser);
+	                } else {
+	                    Optional<Volunteer> oVolunteer = volunteerRepository
+	                            .findOptionalByMail(chat.getMailUser1());
+	                    DTOUser dtoUser = null;
+	                    if (oVolunteer.isPresent()) {
+	                        dtoUser = new DTOUser(oVolunteer.get());
+	                        dtoUser = hideCredentials(dtoUser);
+	                    }
+	                    dtoChat.setUser1(dtoUser);
+	                }
                 }
-
-                oRefugee = refugeeRepository.findOptionalByMail(chat.getMailUser2());
-                if (oRefugee.isPresent()) {
-                    DTOUser dtoUser = new DTOUser(oRefugee.get());
-                    dtoChat.setUser2(dtoUser);
-                } else {
-                    Optional<Volunteer> oVolunteer = volunteerRepository
-                            .findOptionalByMail(chat.getMailUser2());
-                    DTOUser dtoUser = null;
-                    if (oVolunteer.isPresent()) {
-                        dtoUser = new DTOUser(oVolunteer.get());
-                    }
-
-                    dtoChat.setUser2(dtoUser);
-                }
-                dtoChats.add(dtoChat);
+                else {
+	                Optional<Refugee> oRefugee = refugeeRepository
+	                        .findOptionalByMail(chat.getMailUser2());
+	                if (oRefugee.isPresent()) {
+	                    DTOUser dtoUser = new DTOUser(oRefugee.get());
+	                    dtoUser = hideCredentials(dtoUser);
+	                    dtoChat.setUser2(dtoUser);
+	                } else {
+	                    Optional<Volunteer> oVolunteer = volunteerRepository
+	                            .findOptionalByMail(chat.getMailUser2());
+	                    DTOUser dtoUser = null;
+	                    if (oVolunteer.isPresent()) {
+	                        dtoUser = new DTOUser(oVolunteer.get());
+	                        dtoUser = hideCredentials(dtoUser);
+	                    }
+	                    dtoChat.setUser2(dtoUser);
+	                }
+            }
             }
         }
         return dtoChats;
