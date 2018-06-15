@@ -410,22 +410,22 @@ public class UserServiceImpl implements UserService {
             jobs = jobRepository.findByVolunteer(mail);
         }
         for (Lodge lodge : lodges) {
-            if (!lodge.getEnded()) {
+            if (lodge.getEnded() == ended) {
                 result.add(new DTOService(lodge));
             }
         }
         for (Education education : courses) {
-            if (!education.getEnded()) {
+            if (education.getEnded() == ended) {
                 result.add(new DTOService(education));
             }
         }
         for (Donation donation : donations) {
-            if (!donation.getEnded()) {
+            if (donation.getEnded() == ended) {
                 result.add(new DTOService(donation));
             }
         }
         for (Job job : jobs) {
-            if (!job.getEnded()) {
+            if (job.getEnded() == ended) {
                 result.add(new DTOService(job));
             }
         }
