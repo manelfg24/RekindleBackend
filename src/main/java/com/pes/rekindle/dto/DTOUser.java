@@ -30,6 +30,8 @@ public class DTOUser {
     private String photo;
     private float averageValoration;
     private int enabled;
+    private String apiKey;
+
 
     public DTOUser() {
         super();
@@ -69,13 +71,13 @@ public class DTOUser {
         this.surname2 = volunteer.getSurname2();
         this.photo = volunteer.getPhoto();
         this.enabled = volunteer.getEnabled();
-        if (volunteer.getNumberOfValorations()==0) {
-        	this.averageValoration = 0;
+        if (volunteer.getNumberOfValorations() == 0) {
+            this.averageValoration = 0;
+        } else {
+            this.averageValoration = volunteer.getAverageValoration()
+                    / volunteer.getNumberOfValorations();
         }
-        else {
-        	this.averageValoration = volunteer.getAverageValoration()/volunteer.getNumberOfValorations();
-        }
-        	
+
     }
 
     public DTOUser(Admin admin) {
@@ -218,19 +220,32 @@ public class DTOUser {
 		this.photo = photo;
 	}
 
-	public float getAverageValoration() {
-		return averageValoration;
-	}
+    public float getAverageValoration() {
+        return averageValoration;
+    }
 
-	public void setAverageValoration(float averageValoration) {
-		this.averageValoration = averageValoration;
-	}
+    public void setAverageValoration(float averageValoration) {
+        this.averageValoration = averageValoration;
+    }
 
-	public int getEnabled() {
-		return enabled;
-	}
+    public void setBirthdate(String birthdate) {
+        this.birthdate = birthdate;
+    }
 
-	public void setEnabled(int enabled) {
-		this.enabled = enabled;
-	}
+    public String getApiKey() {
+        return apiKey;
+    }
+
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
+    }
+
+    public int getEnabled() {
+      return enabled;
+    }
+
+    public void setEnabled(int enabled) {
+      this.enabled = enabled;
+    }
+
 }
