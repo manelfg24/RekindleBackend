@@ -409,14 +409,26 @@ public class UserServiceImpl implements UserService {
             courses = educationRepository.findByVolunteer(mail);
             jobs = jobRepository.findByVolunteer(mail);
         }
-        for (Lodge lodge : lodges)
-            result.add(new DTOService(lodge));
-        for (Education education : courses)
-            result.add(new DTOService(education));
-        for (Donation donation : donations)
-            result.add(new DTOService(donation));
-        for (Job job : jobs)
-            result.add(new DTOService(job));
+        for (Lodge lodge : lodges) {
+            if (!lodge.getEnded()) {
+                result.add(new DTOService(lodge));
+            }
+        }
+        for (Education education : courses) {
+            if (!education.getEnded()) {
+                result.add(new DTOService(education));
+            }
+        }
+        for (Donation donation : donations) {
+            if (!donation.getEnded()) {
+                result.add(new DTOService(donation));
+            }
+        }
+        for (Job job : jobs) {
+            if (!job.getEnded()) {
+                result.add(new DTOService(job));
+            }
+        }
         return result;
     }
 
@@ -975,88 +987,84 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-	public Set<DTOUser> getAllUsers() {
-		Set<Refugee> refugees = refugeeRepository.findAll();
-		Set<Volunteer> volunteers = volunteerRepository.findAll();
-		Set<DTOUser> dtoUsers = new HashSet<DTOUser>();
-		
-		for (Refugee refugee : refugees) {
-			dtoUsers.add(new DTOUser(refugee));
-		}
-		
-		for (Volunteer volunteer : volunteers) {
-			dtoUsers.add(new DTOUser(volunteer));
-		}
-		
-		return dtoUsers;
-	}
+    public Set<DTOUser> getAllUsers() {
+        Set<Refugee> refugees = refugeeRepository.findAll();
+        Set<Volunteer> volunteers = volunteerRepository.findAll();
+        Set<DTOUser> dtoUsers = new HashSet<DTOUser>();
+
+        for (Refugee refugee : refugees) {
+            dtoUsers.add(new DTOUser(refugee));
+        }
+
+        for (Volunteer volunteer : volunteers) {
+            dtoUsers.add(new DTOUser(volunteer));
+        }
+
+        return dtoUsers;
+    }
 
     @Override
-	public Integer isUserEnabled(String mail) throws UserNotExistsException {
-		DTOUser dtoUser = getDTOUser(mail);
-		return dtoUser.getEnabled();
-	}
-    
+    public Integer isUserEnabled(String mail) throws UserNotExistsException {
+        DTOUser dtoUser = getDTOUser(mail);
+        return dtoUser.getEnabled();
+    }
+
     private DTOUser getDTOUser(String mail) throws UserNotExistsException {
-		Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMail(mail);
-		if (oVolunteer.isPresent()) {
-			return new DTOUser(oVolunteer.get());
-		}
-		else {
-			Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMail(mail);
-			if (oRefugee.isPresent()) {
-				return new DTOUser(oRefugee.get());
-			}
-			else {
-				throw new UserNotExistsException();
-			}
-		}
-	}
+        Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMail(mail);
+        if (oVolunteer.isPresent()) {
+            return new DTOUser(oVolunteer.get());
+        } else {
+            Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMail(mail);
+            if (oRefugee.isPresent()) {
+                return new DTOUser(oRefugee.get());
+            } else {
+                throw new UserNotExistsException();
+            }
+        }
+    }
 
-	@Override
-	public void modifyBannedStatus(String mail, int userFinalState) throws UserNotExistsException, UserStateAlreadyUpdatedException {
-		changeBanStatus(mail, userFinalState);								
-	}
-	
-	private void changeBanStatus(String mail, int userFinalState) throws UserNotExistsException, UserStateAlreadyUpdatedException {
-		Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMail(mail);
-		if (oVolunteer.isPresent()) {
-			Volunteer volunteer = oVolunteer.get();
-			if (userFinalState == volunteer.getEnabled()) { //El estado del usuario es el mismo que el que nos pasan
-				throw new UserStateAlreadyUpdatedException();
-			}
-			else {
-				volunteer.setEnabled(userFinalState);
-				volunteerRepository.save(volunteer);
-			}
-		}
-		else {
-			Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMail(mail);
-			if (oRefugee.isPresent()) {
-				Refugee refugee = oRefugee.get();
-				if (userFinalState == refugee.getEnabled()) {
-					throw new UserStateAlreadyUpdatedException();
-				}
-				else {
-					refugee.setEnabled(userFinalState);
-					refugeeRepository.save(refugee);
-				}
-			}
-			else {
-				throw new UserNotExistsException();
-			}
-		}
-	}
+    @Override
+    public void modifyBannedStatus(String mail, int userFinalState)
+            throws UserNotExistsException, UserStateAlreadyUpdatedException {
+        changeBanStatus(mail, userFinalState);
+    }
 
-	@Override
-	public void deleteReport(Long id) throws ReportNotExistsException {
-		Optional<Report> oReport = reportRepository.findOptionalById(id);
-		if (oReport.isPresent()) {
-			//mirar apikey
-			reportRepository.deleteById(id);
-		}
-		else {
-			throw new ReportNotExistsException();
-		}
-	}
+    private void changeBanStatus(String mail, int userFinalState)
+            throws UserNotExistsException, UserStateAlreadyUpdatedException {
+        Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMail(mail);
+        if (oVolunteer.isPresent()) {
+            Volunteer volunteer = oVolunteer.get();
+            if (userFinalState == volunteer.getEnabled()) { // El estado del usuario es el mismo que
+                                                            // el que nos pasan
+                throw new UserStateAlreadyUpdatedException();
+            } else {
+                volunteer.setEnabled(userFinalState);
+                volunteerRepository.save(volunteer);
+            }
+        } else {
+            Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMail(mail);
+            if (oRefugee.isPresent()) {
+                Refugee refugee = oRefugee.get();
+                if (userFinalState == refugee.getEnabled()) {
+                    throw new UserStateAlreadyUpdatedException();
+                } else {
+                    refugee.setEnabled(userFinalState);
+                    refugeeRepository.save(refugee);
+                }
+            } else {
+                throw new UserNotExistsException();
+            }
+        }
+    }
+
+    @Override
+    public void deleteReport(Long id) throws ReportNotExistsException {
+        Optional<Report> oReport = reportRepository.findOptionalById(id);
+        if (oReport.isPresent()) {
+            // mirar apikey
+            reportRepository.deleteById(id);
+        } else {
+            throw new ReportNotExistsException();
+        }
+    }
 }
