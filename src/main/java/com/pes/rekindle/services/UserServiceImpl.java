@@ -432,12 +432,27 @@ public class UserServiceImpl implements UserService {
                 break;
             case "Education":
                 enrollUserToEducation(mail, id);
+
+                Education education = educationRepository.findById(id);
+
+                pusher.trigger(mail, "enroll-service",
+                        Collections.singletonMap("message", new DTOService(education)));
                 break;
             case "Donation":
                 enrollUserToDonation(mail, id);
+
+                Donation donation = donationRepository.findById(id);
+
+                pusher.trigger(mail, "enroll-service",
+                        Collections.singletonMap("message", new DTOService(donation)));
                 break;
             case "Job":
                 enrollUserToJob(mail, id);
+
+                Job job = jobRepository.findById(id);
+
+                pusher.trigger(mail, "enroll-service",
+                        Collections.singletonMap("message", new DTOService(job)));
                 break;
         }
     }
@@ -565,12 +580,27 @@ public class UserServiceImpl implements UserService {
                 break;
             case "Education":
                 unenrollUserFromEducation(mail, id);
+
+                Education education = educationRepository.findById(id);
+
+                pusher.trigger(mail, "unenroll-service",
+                        Collections.singletonMap("message", new DTOService(education)));
                 break;
             case "Donation":
                 unenrollUserFromDonation(mail, id);
+
+                Donation donation = donationRepository.findById(id);
+
+                pusher.trigger(mail, "unenroll-service",
+                        Collections.singletonMap("message", new DTOService(donation)));
                 break;
             case "Job":
                 unenrollUserFromJob(mail, id);
+
+                Job job = jobRepository.findById(id);
+
+                pusher.trigger(mail, "unenroll-service",
+                        Collections.singletonMap("message", new DTOService(job)));
                 break;
         }
     }
