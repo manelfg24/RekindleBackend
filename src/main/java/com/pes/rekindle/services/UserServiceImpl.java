@@ -672,8 +672,8 @@ public class UserServiceImpl implements UserService {
     public Set<DTOChat> listUserChats(String mail) {
         Set<DTOChat> dtoChats = new HashSet<DTOChat>();
         if (chatRepository.existsByMailUser1(mail) || chatRepository.existsByMailUser2(mail)) {
-            Set<Chat> chats = chatRepository.findByMailUser1(mail);
-            chats.addAll(chatRepository.findByMailUser2(mail));
+            Set<Chat> chats = chatRepository.findByMailUser2(mail);
+            chats.addAll(chatRepository.findByMailUser1(mail));
             DTOUser dtoUserOwner = null;
             try {
 				dtoUserOwner = getDTOUser(mail);
