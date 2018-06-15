@@ -686,7 +686,7 @@ public class UserServiceImpl implements UserService {
                 DTOChat dtoChat = new DTOChat();
                 dtoChat.setId(chat.getId());
                 
-                if (dtoUserOwner.getMail().equals(chat.getMailUser1())) {   
+                if (!dtoUserOwner.getMail().equals(chat.getMailUser1())) {   
 	                Optional<Refugee> oRefugee = refugeeRepository
 	                        .findOptionalByMail(chat.getMailUser1());
 	                if (oRefugee.isPresent()) {
@@ -703,6 +703,7 @@ public class UserServiceImpl implements UserService {
 	                    }
 	                    dtoChat.setUser1(dtoUser);
 	                }
+	                dtoChat.setUser2(dtoUserOwner);
                 }
                 else {
 	                Optional<Refugee> oRefugee = refugeeRepository
@@ -721,6 +722,7 @@ public class UserServiceImpl implements UserService {
 	                    }
 	                    dtoChat.setUser2(dtoUser);
 	                }
+	                dtoChat.setUser1(dtoUserOwner);
             }
             }
         }
