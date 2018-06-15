@@ -6,9 +6,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -32,7 +30,6 @@ import com.pes.rekindle.entities.Job;
 import com.pes.rekindle.entities.JobEnrollment;
 import com.pes.rekindle.entities.Lodge;
 import com.pes.rekindle.entities.LodgeEnrollment;
-import com.pes.rekindle.entities.Message;
 import com.pes.rekindle.entities.Refugee;
 import com.pes.rekindle.repositories.DonationEnrollmentRepository;
 import com.pes.rekindle.repositories.DonationRepository;
@@ -58,16 +55,16 @@ public class ServiceServiceImpl implements ServiceService {
 
     @Autowired
     UserService userService;
-    
+
     @Autowired
     DonationEnrollmentRepository donationEnrollmentRepository;
-    @Autowired 
+    @Autowired
     JobEnrollmentRepository jobEnrollmentRepository;
-    @Autowired 
+    @Autowired
     LodgeEnrollmentRepository lodgeEnrollmentRepository;
-    @Autowired 
+    @Autowired
     EducationEnrollmentRepository educationEnrollmentRepository;
-    
+
     @Autowired
     DozerBeanMapper mapper;
 
@@ -100,21 +97,23 @@ public class ServiceServiceImpl implements ServiceService {
         donation.setPhoneNumber(dtoDonation.getPhoneNumber());
         donation.setAdress(dtoDonation.getAdress());
         donation.setPlaces(dtoDonation.getPlaces());
-        //DateTimeFormatter formatter = DateTimeFormatter.ISO_TIME;
+        // DateTimeFormatter formatter = DateTimeFormatter.ISO_TIME;
         try {
-        	LocalTime startTime = LocalTime.parse(dtoDonation.getStartTime(), DateTimeFormatter.ofPattern("HH:mm:ss"));
+            LocalTime startTime = LocalTime.parse(dtoDonation.getStartTime(),
+                    DateTimeFormatter.ofPattern("HH:mm:ss"));
             donation.setStartTime(startTime);
         } catch (Exception e) {
 
         }
         try {
-        	LocalTime endTime = LocalTime.parse(dtoDonation.getEndTime(), DateTimeFormatter.ofPattern("HH:mm:ss"));
+            LocalTime endTime = LocalTime.parse(dtoDonation.getEndTime(),
+                    DateTimeFormatter.ofPattern("HH:mm:ss"));
             donation.setEndTime(endTime);
         } catch (Exception e) {
 
         }
-        //donation.setStartTime(dtoDonation.getStartTime());
-        //donation.setEndTime(dtoDonation.getEndTime());
+        // donation.setStartTime(dtoDonation.getStartTime());
+        // donation.setEndTime(dtoDonation.getEndTime());
         donation.setDescription(dtoDonation.getDescription());
         donation.setEnded(dtoDonation.getEnded());
         donationRepository.save(donation);
@@ -157,41 +156,41 @@ public class ServiceServiceImpl implements ServiceService {
     }
 
     public List<DTOService> listServices() {
-        ArrayList<DTOService> dtosService = new ArrayList<DTOService>();      
+        ArrayList<DTOService> dtosService = new ArrayList<DTOService>();
         Set<Donation> donations = donationRepository.findAll();
         for (Donation donation : donations) {
-        	if(donation.getEnded() && donation.getInscriptions().size() < donation.getPlaces()) {
-	            DTOService dtoDonation = new DTOService(donation);
-	            dtosService.add(dtoDonation);
-        	}
+            if (donation.getEnded() && donation.getInscriptions().size() < donation.getPlaces()) {
+                DTOService dtoDonation = new DTOService(donation);
+                dtosService.add(dtoDonation);
+            }
         }
         Set<Education> courses = educationRepository.findAll();
         for (Education education : courses) {
-        	if(education.getEnded() && education.getInscriptions().size() < education.getPlaces()) {
-	            DTOService dtoEducation = new DTOService(education);
-	            dtosService.add(dtoEducation);
-        	}
+            if (education.getEnded()
+                    && education.getInscriptions().size() < education.getPlaces()) {
+                DTOService dtoEducation = new DTOService(education);
+                dtosService.add(dtoEducation);
+            }
         }
         Set<Job> jobs = jobRepository.findAll();
         for (Job job : jobs) {
-        	if(job.getEnded() && job.getInscriptions().size() < job.getPlaces()) {
-	            DTOService dtoJob = new DTOService(job);
-	            dtosService.add(dtoJob);
-        	}
+            if (job.getEnded() && job.getInscriptions().size() < job.getPlaces()) {
+                DTOService dtoJob = new DTOService(job);
+                dtosService.add(dtoJob);
+            }
         }
         Set<Lodge> lodges = lodgeRepository.findAll();
         for (Lodge lodge : lodges) {
-        	if(lodge.getEnded() && lodge.getInscriptions().size() < lodge.getPlaces()) {
-	            DTOService dtoLodge = new DTOService(lodge);
-	            dtosService.add(dtoLodge);     
-        	}
-        }
-        /*dtosService.sort( new Comparator<DTOService>() {
-            @Override
-            public int compare(final DTOService object1, final DTOService object2) {
-                return (int) (object1.getId()-object2.getId());
+            if (lodge.getEnded() && lodge.getInscriptions().size() < lodge.getPlaces()) {
+                DTOService dtoLodge = new DTOService(lodge);
+                dtosService.add(dtoLodge);
             }
-        });*/
+        }
+        /*
+         * dtosService.sort( new Comparator<DTOService>() {
+         * @Override public int compare(final DTOService object1, final DTOService object2) { return
+         * (int) (object1.getId()-object2.getId()); } });
+         */
         return dtosService;
     }
 
@@ -204,13 +203,13 @@ public class ServiceServiceImpl implements ServiceService {
         switch (serviceType) {
             case "Lodge":
                 Lodge lodge = lodgeRepository.findById(id);
-                lodgeRepository.deleteById(id);
                 pusher.trigger(serviceType + id, "deleted-service",
                         Collections.singletonMap("message", new DTOService(lodge)));
                 for (Refugee refugee : lodge.getInscriptions()) {
                     pusher.trigger(refugee.getMail(), "unenroll-service",
                             Collections.singletonMap("message", id));
                 }
+                lodgeRepository.deleteById(id);
                 break;
             case "Education":
                 educationRepository.deleteById(id);
@@ -316,21 +315,25 @@ public class ServiceServiceImpl implements ServiceService {
         donation.setPhoneNumber(dtoDonation.getPhoneNumber());
         donation.setAdress(dtoDonation.getAdress());
         donation.setPlaces(dtoDonation.getPlaces());
-        //DateTimeFormatter formatter = DateTimeFormatter.ISO_TIME;
+        // DateTimeFormatter formatter = DateTimeFormatter.ISO_TIME;
         try {
-        	LocalTime startTime = LocalTime.parse(dtoDonation.getStartTime(), DateTimeFormatter.ofPattern("HH:mm:ss"));            
-            donation.setStartTime(startTime);;
+            LocalTime startTime = LocalTime.parse(dtoDonation.getStartTime(),
+                    DateTimeFormatter.ofPattern("HH:mm:ss"));
+            donation.setStartTime(startTime);
+            ;
         } catch (Exception e) {
 
         }
         try {
-        	LocalTime endTime = LocalTime.parse(dtoDonation.getEndTime(), DateTimeFormatter.ofPattern("HH:mm:ss"));
-            donation.setEndTime(endTime);;
+            LocalTime endTime = LocalTime.parse(dtoDonation.getEndTime(),
+                    DateTimeFormatter.ofPattern("HH:mm:ss"));
+            donation.setEndTime(endTime);
+            ;
         } catch (Exception e) {
 
         }
-        //donation.setStartTime(dtoDonation.getStartTime());
-        //donation.setEndTime(dtoDonation.getEndTime());
+        // donation.setStartTime(dtoDonation.getStartTime());
+        // donation.setEndTime(dtoDonation.getEndTime());
         donation.setDescription(dtoDonation.getDescription());
         donation.setEnded(dtoDonation.getEnded());
         donationRepository.save(donation);
@@ -425,136 +428,145 @@ public class ServiceServiceImpl implements ServiceService {
         return jobRepository.findById(id);
     }
 
-	@Override
-	public void createDonationRequest(DTODonationEnrollment dtoDonationEnrollment) {
-		DonationEnrollment donationEnrollment = new DonationEnrollment(dtoDonationEnrollment);
-		donationEnrollmentRepository.save(donationEnrollment);
-	}
+    @Override
+    public void createDonationRequest(DTODonationEnrollment dtoDonationEnrollment) {
+        DonationEnrollment donationEnrollment = new DonationEnrollment(dtoDonationEnrollment);
+        donationEnrollmentRepository.save(donationEnrollment);
+    }
 
-	@Override
-	public ArrayList<DTODonationEnrollment> listDonationRequests() {
-		ArrayList<DonationEnrollment> enrollmentList = donationEnrollmentRepository.findByRequestStatus("Not Resolved");
-		ArrayList<DTODonationEnrollment> dtoEnrollmentList = new ArrayList();
-		
-		//mirar como se guarda la PK en bd para no hacer llamadas inecesarias
-		for(DonationEnrollment donationEnrollment : enrollmentList) {
-			DTOService dtoDonation = new DTOService(donationRepository.findById(donationEnrollment.getDonationId()));
+    @Override
+    public ArrayList<DTODonationEnrollment> listDonationRequests() {
+        ArrayList<DonationEnrollment> enrollmentList = donationEnrollmentRepository
+                .findByRequestStatus("Not Resolved");
+        ArrayList<DTODonationEnrollment> dtoEnrollmentList = new ArrayList();
 
-			dtoEnrollmentList.add(new DTODonationEnrollment(donationEnrollment, dtoDonation));
-		}
-		return dtoEnrollmentList;
-	}
+        // mirar como se guarda la PK en bd para no hacer llamadas inecesarias
+        for (DonationEnrollment donationEnrollment : enrollmentList) {
+            DTOService dtoDonation = new DTOService(
+                    donationRepository.findById(donationEnrollment.getDonationId()));
 
-	@Override
-	public Boolean donationIsRequested(Long donationId, String refugeeMail) {
-		Optional<DonationEnrollment> oDonationEnrollment = donationEnrollmentRepository.findOptionalByRefugeeMailAndDonationId(refugeeMail, donationId);
-		if (oDonationEnrollment.isPresent()) {
-			return true;
-		}
-		return false;
-	}
+            dtoEnrollmentList.add(new DTODonationEnrollment(donationEnrollment, dtoDonation));
+        }
+        return dtoEnrollmentList;
+    }
 
-	@Override
-	public void acceptDonationRequest(Long donationId, String refugeeMail) {
-		DonationEnrollment donationEnrollment = donationEnrollmentRepository.findByRefugeeMailAndDonationId(refugeeMail, donationId);
-		if (!donationEnrollment.getRequestStatus().equals("Accepted")) {
-			donationEnrollment.setRequestStatus("Accepted");
-			donationEnrollmentRepository.save(donationEnrollment);
-		}
-	}
+    @Override
+    public Boolean donationIsRequested(Long donationId, String refugeeMail) {
+        Optional<DonationEnrollment> oDonationEnrollment = donationEnrollmentRepository
+                .findOptionalByRefugeeMailAndDonationId(refugeeMail, donationId);
+        if (oDonationEnrollment.isPresent()) {
+            return true;
+        }
+        return false;
+    }
 
-	@Override
-	public void rejectDonationRequest(Long donationId, String refugeeMail) {
-		DonationEnrollment donationEnrollment = donationEnrollmentRepository.findByRefugeeMailAndDonationId(refugeeMail, donationId);
-		if (!donationEnrollment.getRequestStatus().equals("Rejected")) {
-			donationEnrollment.setRequestStatus("Rejected");
-			donationEnrollmentRepository.save(donationEnrollment);
-		}
-	}
+    @Override
+    public void acceptDonationRequest(Long donationId, String refugeeMail) {
+        DonationEnrollment donationEnrollment = donationEnrollmentRepository
+                .findByRefugeeMailAndDonationId(refugeeMail, donationId);
+        if (!donationEnrollment.getRequestStatus().equals("Accepted")) {
+            donationEnrollment.setRequestStatus("Accepted");
+            donationEnrollmentRepository.save(donationEnrollment);
+        }
+    }
 
-	@Override
-	public void valorateService(DTOValoration dtoValoration) {
-		switch (dtoValoration.getServiceType()) {
-			case "Lodge":
-				valorateLodge(dtoValoration);
-				break;
-			case "Donation":
-				valorateDonation(dtoValoration);
-				break;
-			case "Job":
-				valorateJob(dtoValoration);
-				break;
-			case "Education":
-				valorateEducation(dtoValoration);
-				break;
-		}	
-	}
-	
-	public void valorateLodge(DTOValoration dtoValoration) {
-		Optional<LodgeEnrollment> oLodgeEnrollment = lodgeEnrollmentRepository.findOptionalByLodgeIdAndRefugeeMail(dtoValoration.getIdService(),
-				dtoValoration.getRefugeeMail());
-		if (oLodgeEnrollment.isPresent()) {
-			LodgeEnrollment lodgeEnrollment = oLodgeEnrollment.get();
-			Lodge lodge = lodgeRepository.findById(dtoValoration.getIdService());
-			
-			userService.valorateVolunteer(lodge.getVolunteer(), dtoValoration.getPoints(), lodgeEnrollment.getValoration());
-			
-			lodgeEnrollment.setValoration(dtoValoration.getPoints());
-			lodgeEnrollmentRepository.save(lodgeEnrollment);
-		}
-		else {
-			System.out.println("El refugiado no esta enrolado");
-		}
-	}
-	
-	public void valorateDonation(DTOValoration dtoValoration) {
-		Optional<DonationEnrollment> oDonationEnrollment = donationEnrollmentRepository.findOptionalByDonationIdAndRefugeeMail(dtoValoration.getIdService(),
-				dtoValoration.getRefugeeMail());
-		if (oDonationEnrollment.isPresent()) {
-			DonationEnrollment donationEnrollment = oDonationEnrollment.get();
-			Donation donation = donationRepository.findById(dtoValoration.getIdService());
-			
-			userService.valorateVolunteer(donation.getVolunteer(), dtoValoration.getPoints(), donationEnrollment.getValoration());
-			
-			donationEnrollment.setValoration(dtoValoration.getPoints());
-			donationEnrollmentRepository.save(donationEnrollment);
-		}
-		else {
-			System.out.println("El refugiado no esta enrolado");
-		}
-	}
-	
-	public void valorateJob(DTOValoration dtoValoration) {
-		Optional<JobEnrollment> oJobEnrollment = jobEnrollmentRepository.findOptionalByJobIdAndRefugeeMail(dtoValoration.getIdService(),
-				dtoValoration.getRefugeeMail());
-		if (oJobEnrollment.isPresent()) {
-			JobEnrollment jobEnrollment = oJobEnrollment.get();
-			Job job = jobRepository.findById(dtoValoration.getIdService());
-			
-			userService.valorateVolunteer(job.getVolunteer(), dtoValoration.getPoints(), jobEnrollment.getValoration());
-			
-			jobEnrollment.setValoration(dtoValoration.getPoints());
-			jobEnrollmentRepository.save(jobEnrollment);
-		}
-		else {
-			System.out.println("El refugiado no esta enrolado");
-		}
-	}
-	
-	public void valorateEducation(DTOValoration dtoValoration) {
-		Optional<EducationEnrollment> oEducationEnrollment = educationEnrollmentRepository.findOptionalByEducationIdAndRefugeeMail(dtoValoration.getIdService(),
-				dtoValoration.getRefugeeMail());
-		if (oEducationEnrollment.isPresent()) {
-			EducationEnrollment educationEnrollment = oEducationEnrollment.get();
-			Education education = educationRepository.findById(dtoValoration.getIdService());
-			
-			userService.valorateVolunteer(education.getVolunteer(), dtoValoration.getPoints(), educationEnrollment.getValoration());
-			
-			educationEnrollment.setValoration(dtoValoration.getPoints());
-			educationEnrollmentRepository.save(educationEnrollment);
-		}
-		else {
-			System.out.println("El refugiado no esta enrolado");
-		}
-	}
+    @Override
+    public void rejectDonationRequest(Long donationId, String refugeeMail) {
+        DonationEnrollment donationEnrollment = donationEnrollmentRepository
+                .findByRefugeeMailAndDonationId(refugeeMail, donationId);
+        if (!donationEnrollment.getRequestStatus().equals("Rejected")) {
+            donationEnrollment.setRequestStatus("Rejected");
+            donationEnrollmentRepository.save(donationEnrollment);
+        }
+    }
+
+    @Override
+    public void valorateService(DTOValoration dtoValoration) {
+        switch (dtoValoration.getServiceType()) {
+            case "Lodge":
+                valorateLodge(dtoValoration);
+                break;
+            case "Donation":
+                valorateDonation(dtoValoration);
+                break;
+            case "Job":
+                valorateJob(dtoValoration);
+                break;
+            case "Education":
+                valorateEducation(dtoValoration);
+                break;
+        }
+    }
+
+    public void valorateLodge(DTOValoration dtoValoration) {
+        Optional<LodgeEnrollment> oLodgeEnrollment = lodgeEnrollmentRepository
+                .findOptionalByLodgeIdAndRefugeeMail(dtoValoration.getIdService(),
+                        dtoValoration.getRefugeeMail());
+        if (oLodgeEnrollment.isPresent()) {
+            LodgeEnrollment lodgeEnrollment = oLodgeEnrollment.get();
+            Lodge lodge = lodgeRepository.findById(dtoValoration.getIdService());
+
+            userService.valorateVolunteer(lodge.getVolunteer(), dtoValoration.getPoints(),
+                    lodgeEnrollment.getValoration());
+
+            lodgeEnrollment.setValoration(dtoValoration.getPoints());
+            lodgeEnrollmentRepository.save(lodgeEnrollment);
+        } else {
+            System.out.println("El refugiado no esta enrolado");
+        }
+    }
+
+    public void valorateDonation(DTOValoration dtoValoration) {
+        Optional<DonationEnrollment> oDonationEnrollment = donationEnrollmentRepository
+                .findOptionalByDonationIdAndRefugeeMail(dtoValoration.getIdService(),
+                        dtoValoration.getRefugeeMail());
+        if (oDonationEnrollment.isPresent()) {
+            DonationEnrollment donationEnrollment = oDonationEnrollment.get();
+            Donation donation = donationRepository.findById(dtoValoration.getIdService());
+
+            userService.valorateVolunteer(donation.getVolunteer(), dtoValoration.getPoints(),
+                    donationEnrollment.getValoration());
+
+            donationEnrollment.setValoration(dtoValoration.getPoints());
+            donationEnrollmentRepository.save(donationEnrollment);
+        } else {
+            System.out.println("El refugiado no esta enrolado");
+        }
+    }
+
+    public void valorateJob(DTOValoration dtoValoration) {
+        Optional<JobEnrollment> oJobEnrollment = jobEnrollmentRepository
+                .findOptionalByJobIdAndRefugeeMail(dtoValoration.getIdService(),
+                        dtoValoration.getRefugeeMail());
+        if (oJobEnrollment.isPresent()) {
+            JobEnrollment jobEnrollment = oJobEnrollment.get();
+            Job job = jobRepository.findById(dtoValoration.getIdService());
+
+            userService.valorateVolunteer(job.getVolunteer(), dtoValoration.getPoints(),
+                    jobEnrollment.getValoration());
+
+            jobEnrollment.setValoration(dtoValoration.getPoints());
+            jobEnrollmentRepository.save(jobEnrollment);
+        } else {
+            System.out.println("El refugiado no esta enrolado");
+        }
+    }
+
+    public void valorateEducation(DTOValoration dtoValoration) {
+        Optional<EducationEnrollment> oEducationEnrollment = educationEnrollmentRepository
+                .findOptionalByEducationIdAndRefugeeMail(dtoValoration.getIdService(),
+                        dtoValoration.getRefugeeMail());
+        if (oEducationEnrollment.isPresent()) {
+            EducationEnrollment educationEnrollment = oEducationEnrollment.get();
+            Education education = educationRepository.findById(dtoValoration.getIdService());
+
+            userService.valorateVolunteer(education.getVolunteer(), dtoValoration.getPoints(),
+                    educationEnrollment.getValoration());
+
+            educationEnrollment.setValoration(dtoValoration.getPoints());
+            educationEnrollmentRepository.save(educationEnrollment);
+        } else {
+            System.out.println("El refugiado no esta enrolado");
+        }
+    }
 }
