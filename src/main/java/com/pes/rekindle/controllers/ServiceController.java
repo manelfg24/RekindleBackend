@@ -210,12 +210,11 @@ public class ServiceController {
     	System.out.println();
     	List<DTOFilterService> filteredServices;
 		try {
-			filteredServices = serviceService.filterServices(fromDate, toDate, minimumRating, positionLat,
-					positionLng, distance);
+	    	return ResponseEntity.status(HttpStatus.OK).body(serviceService.filterServices(fromDate, toDate, minimumRating, positionLat,
+					positionLng, distance));
 		} catch (ParseException e) {
 			 return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body(null);
 		}
-    	return ResponseEntity.status(HttpStatus.OK).body(filteredServices);
     }
 
 }

@@ -41,6 +41,7 @@ import com.pes.rekindle.repositories.DonationEnrollmentRepository;
 import com.pes.rekindle.repositories.DonationRepository;
 import com.pes.rekindle.repositories.EducationEnrollmentRepository;
 import com.pes.rekindle.repositories.EducationRepository;
+import com.pes.rekindle.repositories.FilterServicesQuery;
 import com.pes.rekindle.repositories.JobEnrollmentRepository;
 import com.pes.rekindle.repositories.JobRepository;
 import com.pes.rekindle.repositories.LodgeEnrollmentRepository;
@@ -544,42 +545,19 @@ public class ServiceServiceImpl implements ServiceService {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		
-		String query = "SELECT id,  serviceType, name, volunteer, phoneNumber, adress, description, expiresOn, positionLat, positionLng, distance\r\n" + 
-				"FROM (\r\n" + 
-				"	SELECT id,  serviceType, l.name, volunteer, phoneNumber, adress, description, expiresOn, positionLat, positionLng,\r\n" + 
-				"		p.radius,\r\n"+
-				"		p.distance_unit\r\n" + 
-				"				 * DEGREES(ACOS(COS(RADIANS(p.latpoint))\r\n" + 
-				"				 * COS(RADIANS(l.positionLat))\r\n" + 
-				"				 * COS(RADIANS(p.longpoint - l.positionLng))\r\n" + 
-				"				 + SIN(RADIANS(p.latpoint))\r\n" + 
-				"				 * SIN(RADIANS(l.positionLat)))) AS distance\r\n" + 
-				"	FROM Lodge AS l\r\n" + 
-				"	JOIN (   /* these are the query parameters */\r\n" + 
-				"		SELECT  :positionLat  AS latpoint,  :positionLng AS longpoint,\r\n" + 
-				"				:distance AS radius,      111.045 AS distance_unit\r\n" + 
-				"	) AS p ON 1=1\r\n" + 
-				"    JOIN Volunteer v ON l.volunteer = v.mail\r\n" + 
-				"	WHERE not l.ended and\r\n" + 
-				"		l.positionLat\r\n" + 
-				"	 BETWEEN p.latpoint  - (p.radius / p.distance_unit)\r\n" + 
-				"		 AND p.latpoint  + (p.radius / p.distance_unit)\r\n" + 
-				"	AND l.positionLng\r\n" + 
-				"	 BETWEEN p.longpoint - (p.radius / (p.distance_unit * COS(RADIANS(p.latpoint))))\r\n" + 
-				"		 AND p.longpoint + (p.radius / (p.distance_unit * COS(RADIANS(p.latpoint))))\r\n" + 
-				"	AND l.expiresOn between :fromDate and :toDate\r\n" + 
-				"		and ( (v.averageValoration/v.numberOfValorations) >= :minimumRating\r\n" + 
-				"			or :minimumRating is null)\r\n" + 
-				") AS d\r\n" + 
-				"WHERE distance <= radius\r\n";
+		String query = FilterServicesQuery.getFilterQuery();
 		
-		query += "ORDER BY expiresOn";
+		if (positionLat != 100 && positionLng != 200) {
+			query += "WHERE distance <= radius\r\n";
+		}
+		
+		query += "ORDER BY distance";
 		
 		Query q = em.createNativeQuery(query);
 		
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         Date fromDate = formatter.parse(fromDateString);
-        Date toDate = toDate = formatter.parse(toDateString);
+        Date toDate = formatter.parse(toDateString);
 		
 		q.setParameter("fromDate", fromDate);
 		q.setParameter("toDate", toDate);
@@ -589,32 +567,20 @@ public class ServiceServiceImpl implements ServiceService {
 		q.setParameter("distance", distance);
 		
 		List<Object[]> daoServices = q.getResultList();
+		List<DTOFilterService> dtoFilter = new ArrayList<DTOFilterService>();
+		
+		System.out.println("Size result: " + daoServices.size());
 		
 		for (Object[] aux : daoServices) {
-			DTOFilterService dao = new DTOFilterService(aux);
-			System.out.println(dao.getId());
-			System.out.println(dao.getName());
-			System.out.println(dao.getDistance());
+			dtoFilter.add(new DTOFilterService(aux));
 		}
 		
-		/*
-		for (Object ds : daoServices) {
-			System.out.println(ds.toString());
-			DAOService daoService = mapper.map(ds, DAOService.class);
-			System.out.println("ID: " + daoService.getId());
-			System.out.println("Distancia: " + daoService.getDistance());
-			System.out.println("----------------------------------");
-		}*/
-		
-		/*
-		for (Object ds : daoService) {
-			ds[0]
-			System.out.println("ID: " + ds.getId());
-			System.out.println("Distancia: " + ds.getDistance());
-			System.out.println("----------------------------------");
+		for (DTOFilterService deto : dtoFilter) {
+			System.out.println("id: " + deto.getId());
+			System.out.println(deto.toString());
 		}
-		*/
-		return null;
+		
+		return dtoFilter;
 	}
 
 }

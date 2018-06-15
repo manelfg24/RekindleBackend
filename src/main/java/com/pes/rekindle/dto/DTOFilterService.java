@@ -31,7 +31,7 @@ public class DTOFilterService {
     	this.adress = (String) dao[5];
     	this.description = (String) dao[6];
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-    	this.expiresOn = formatter.format(dao[7]);
+    	this.setExpiresOn(formatter.format(dao[7]));
     	this.positionLat = (double) dao[8];
     	this.positionLng = (double) dao[9];
     	this.distance = (double) dao[10];
@@ -93,7 +93,15 @@ public class DTOFilterService {
         this.description = description;
     }
 
-    public double getPositionLat() {
+    public String getExpiresOn() {
+		return expiresOn;
+	}
+
+	public void setExpiresOn(String expiresOn) {
+		this.expiresOn = expiresOn;
+	}
+
+	public double getPositionLat() {
         return positionLat;
     }
 
@@ -116,5 +124,15 @@ public class DTOFilterService {
     public void setDistance(double distance) {
         this.distance = distance;
     }
+
+	@Override
+	public String toString() {
+		return "DTOFilterService [id=" + id + ", serviceType=" + serviceType + ", name=" + name + ", volunteer="
+				+ volunteer + ", phoneNumber=" + phoneNumber + ", adress=" + adress + ", description=" + description
+				+ ", expiresOn=" + expiresOn + ", positionLat=" + positionLat + ", positionLng=" + positionLng
+				+ ", distance=" + distance + "]";
+	}
+    
+    
 
 }
