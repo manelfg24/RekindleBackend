@@ -1,7 +1,10 @@
 
-package com.pes.rekindle.dao;
+package com.pes.rekindle.dto;
 
-public class DAOService {
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class DTOFilterService {
     private long id;
     private String serviceType;
     private String name;
@@ -9,15 +12,16 @@ public class DAOService {
     private Integer phoneNumber;
     private String adress;
     private String description;
+    private String expiresOn; 
     private double positionLat;
     private double positionLng;
     private double distance;
     
-    public DAOService() {
+    public DTOFilterService() {
     	super();
 	}
 
-    public DAOService(Object[] dao) {
+    public DTOFilterService(Object[] dao) {
     	super();
     	this.id = Long.parseLong(dao[0].toString());
     	this.serviceType = (String) dao[1];
@@ -26,9 +30,11 @@ public class DAOService {
     	this.phoneNumber = (Integer) dao[4];
     	this.adress = (String) dao[5];
     	this.description = (String) dao[6];
-    	this.positionLat = (double) dao[7];
-    	this.positionLng = (double) dao[8];
-    	this.distance = (double) dao[9];
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+    	this.expiresOn = formatter.format(dao[7]);
+    	this.positionLat = (double) dao[8];
+    	this.positionLng = (double) dao[9];
+    	this.distance = (double) dao[10];
 	}
 
 	public long getId() {

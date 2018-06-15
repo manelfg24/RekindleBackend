@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.pes.rekindle.dto.DTODonation;
 import com.pes.rekindle.dto.DTODonationEnrollment;
 import com.pes.rekindle.dto.DTOEducation;
+import com.pes.rekindle.dto.DTOFilterService;
 import com.pes.rekindle.dto.DTOJob;
 import com.pes.rekindle.dto.DTOLodge;
 import com.pes.rekindle.dto.DTOService;
@@ -196,11 +197,24 @@ public class ServiceController {
     }
     
     @RequestMapping(value = "/servicios/filtrar", method = RequestMethod.GET)
-    public ResponseEntity<ArrayList<DTOService>> filterServices(@RequestParam String fromDate, @RequestParam String toDate,
+    public ResponseEntity<List<DTOFilterService>> filterServices(@RequestParam String fromDate, @RequestParam String toDate,
     		@RequestParam double minimumRating, @RequestParam double positionLat,
     		@RequestParam double positionLng, @RequestParam double distance) {
-    	ArrayList<DTOService> filteredServices = serviceService.filterServices(fromDate, toDate, minimumRating, positionLat,
-    			positionLng, distance);
+    	System.out.println();
+    	System.out.println(fromDate); // enviar 1900-01-01 
+    	System.out.println(toDate); // enviar 2100-01-01
+    	System.out.println(minimumRating); // enviar 0
+    	System.out.println(positionLat); // se envia siempre
+    	System.out.println(positionLng); // se envia siempre
+    	System.out.println(distance); // se envia 1000000
+    	System.out.println();
+    	List<DTOFilterService> filteredServices;
+		try {
+			filteredServices = serviceService.filterServices(fromDate, toDate, minimumRating, positionLat,
+					positionLng, distance);
+		} catch (ParseException e) {
+			 return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body(null);
+		}
     	return ResponseEntity.status(HttpStatus.OK).body(filteredServices);
     }
 

@@ -9,6 +9,7 @@ import java.util.Set;
 import com.pes.rekindle.dto.DTODonation;
 import com.pes.rekindle.dto.DTODonationEnrollment;
 import com.pes.rekindle.dto.DTOEducation;
+import com.pes.rekindle.dto.DTOFilterService;
 import com.pes.rekindle.dto.DTOJob;
 import com.pes.rekindle.dto.DTOLodge;
 import com.pes.rekindle.dto.DTOService;
@@ -70,7 +71,7 @@ public interface ServiceService {
 
 	void valorateService(DTOValoration dtoValoration);
 
-	ArrayList<DTOService> filterServices(String fromDateString, String toDateString, double minimumRating,
-			double positionLat, double positionLng, double distance);
+	List<DTOFilterService> filterServices(String fromDateString, String toDateString, double minimumRating,
+			double positionLat, double positionLng, double distance) throws ParseException;
 
 }

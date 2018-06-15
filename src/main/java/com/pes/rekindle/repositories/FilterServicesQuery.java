@@ -1,7 +1,7 @@
 
 package com.pes.rekindle.repositories;
 
-public class GeolocationQuery {
+public class FilterServicesQuery {
 
     public String getGeolocationQuery() {
         return "SELECT id,  serviceType, name, volunteer, phoneNumber, adress, description, positionLat, positionLng, distance\r\n"

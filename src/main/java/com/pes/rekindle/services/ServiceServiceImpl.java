@@ -20,10 +20,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.pes.rekindle.dao.DAOService;
 import com.pes.rekindle.dto.DTODonation;
 import com.pes.rekindle.dto.DTODonationEnrollment;
 import com.pes.rekindle.dto.DTOEducation;
+import com.pes.rekindle.dto.DTOFilterService;
 import com.pes.rekindle.dto.DTOJob;
 import com.pes.rekindle.dto.DTOLodge;
 import com.pes.rekindle.dto.DTOService;
@@ -535,32 +535,19 @@ public class ServiceServiceImpl implements ServiceService {
             System.out.println("El refugiado no esta enrolado");
         }
     }
+    
+ 
 
 	@Override
-	public ArrayList<DTOService> filterServices(String fromDateString, String toDateString, double minimumRating,
-			double positionLat, double positionLng, double distance) {
-		/*
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        Date fromDate = formatter.parse("1900-01-01");
-        Date toDate = formatter.parse("2100-01-01");
-		if (!fromDate.equals("")) {
-			fromDate = formatter.parse(fromDateString);
-		}
-		if (!toDate.equals("")) {
-			toDate = formatter.parse(toDateString);
-		}
-		if (minimumRating) {
-			
-		}
-		*/
-		
+	public List<DTOFilterService> filterServices(String fromDateString, String toDateString, double minimumRating,
+			double positionLat, double positionLng, double distance) throws ParseException {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		
-		Query q = em.createNativeQuery("SELECT id,  serviceType, name, volunteer, phoneNumber, adress, description, positionLat, positionLng, distance\r\n" + 
+		String query = "SELECT id,  serviceType, name, volunteer, phoneNumber, adress, description, expiresOn, positionLat, positionLng, distance\r\n" + 
 				"FROM (\r\n" + 
-				"	SELECT id,  serviceType, name, volunteer, phoneNumber, adress, description, positionLat, positionLng,\r\n" + 
-				"		p.radius,\r\n" + 
+				"	SELECT id,  serviceType, l.name, volunteer, phoneNumber, adress, description, expiresOn, positionLat, positionLng,\r\n" + 
+				"		p.radius,\r\n"+
 				"		p.distance_unit\r\n" + 
 				"				 * DEGREES(ACOS(COS(RADIANS(p.latpoint))\r\n" + 
 				"				 * COS(RADIANS(l.positionLat))\r\n" + 
@@ -569,97 +556,42 @@ public class ServiceServiceImpl implements ServiceService {
 				"				 * SIN(RADIANS(l.positionLat)))) AS distance\r\n" + 
 				"	FROM Lodge AS l\r\n" + 
 				"	JOIN (   /* these are the query parameters */\r\n" + 
-				"		SELECT  ?1  AS latpoint,  ?2 AS longpoint,\r\n" + 
-				"				?3 AS radius,      111.045 AS distance_unit\r\n" + 
+				"		SELECT  :positionLat  AS latpoint,  :positionLng AS longpoint,\r\n" + 
+				"				:distance AS radius,      111.045 AS distance_unit\r\n" + 
 				"	) AS p ON 1=1\r\n" + 
+				"    JOIN Volunteer v ON l.volunteer = v.mail\r\n" + 
 				"	WHERE not l.ended and\r\n" + 
 				"		l.positionLat\r\n" + 
 				"	 BETWEEN p.latpoint  - (p.radius / p.distance_unit)\r\n" + 
 				"		 AND p.latpoint  + (p.radius / p.distance_unit)\r\n" + 
 				"	AND l.positionLng\r\n" + 
 				"	 BETWEEN p.longpoint - (p.radius / (p.distance_unit * COS(RADIANS(p.latpoint))))\r\n" + 
-				"		 AND p.longpoint + (p.radius / (p.distance_unit * COS(RADIANS(p.latpoint))))\r\n" +  
-				
-				"UNION" +
-				
-				"	SELECT id,  serviceType, name, volunteer, phoneNumber, adress, description, positionLat, positionLng,\r\n" + 
-				"		p.radius,\r\n" + 
-				"		p.distance_unit\r\n" + 
-				"				 * DEGREES(ACOS(COS(RADIANS(p.latpoint))\r\n" + 
-				"				 * COS(RADIANS(l.positionLat))\r\n" + 
-				"				 * COS(RADIANS(p.longpoint - l.positionLng))\r\n" + 
-				"				 + SIN(RADIANS(p.latpoint))\r\n" + 
-				"				 * SIN(RADIANS(l.positionLat)))) AS distance\r\n" + 
-				"	FROM Donation AS l\r\n" + 
-				"	JOIN (   /* these are the query parameters */\r\n" + 
-				"		SELECT  ?1  AS latpoint,  ?2 AS longpoint,\r\n" + 
-				"				?3 AS radius,      111.045 AS distance_unit\r\n" + 
-				"	) AS p ON 1=1\r\n" + 
-				"	WHERE not l.ended and\r\n" + 
-				"		l.positionLat\r\n" + 
-				"	 BETWEEN p.latpoint  - (p.radius / p.distance_unit)\r\n" + 
-				"		 AND p.latpoint  + (p.radius / p.distance_unit)\r\n" + 
-				"	AND l.positionLng\r\n" + 
-				"	 BETWEEN p.longpoint - (p.radius / (p.distance_unit * COS(RADIANS(p.latpoint))))\r\n" + 
-				"		 AND p.longpoint + (p.radius / (p.distance_unit * COS(RADIANS(p.latpoint))))\r\n" +  
-				
-				"UNION" +
-				
-				"	SELECT id,  serviceType, name, volunteer, phoneNumber, adress, description, positionLat, positionLng,\r\n" + 
-				"		p.radius,\r\n" + 
-				"		p.distance_unit\r\n" + 
-				"				 * DEGREES(ACOS(COS(RADIANS(p.latpoint))\r\n" + 
-				"				 * COS(RADIANS(l.positionLat))\r\n" + 
-				"				 * COS(RADIANS(p.longpoint - l.positionLng))\r\n" + 
-				"				 + SIN(RADIANS(p.latpoint))\r\n" + 
-				"				 * SIN(RADIANS(l.positionLat)))) AS distance\r\n" + 
-				"	FROM Job AS l\r\n" + 
-				"	JOIN (   /* these are the query parameters */\r\n" + 
-				"		SELECT  ?1  AS latpoint,  ?2 AS longpoint,\r\n" + 
-				"				?3 AS radius,      111.045 AS distance_unit\r\n" + 
-				"	) AS p ON 1=1\r\n" + 
-				"	WHERE not l.ended and\r\n" + 
-				"		l.positionLat\r\n" + 
-				"	 BETWEEN p.latpoint  - (p.radius / p.distance_unit)\r\n" + 
-				"		 AND p.latpoint  + (p.radius / p.distance_unit)\r\n" + 
-				"	AND l.positionLng\r\n" + 
-				"	 BETWEEN p.longpoint - (p.radius / (p.distance_unit * COS(RADIANS(p.latpoint))))\r\n" + 
-				"		 AND p.longpoint + (p.radius / (p.distance_unit * COS(RADIANS(p.latpoint))))\r\n" +  
-				
-				"UNION" +
-				
-				"	SELECT id,  serviceType, name, volunteer, phoneNumber, adress, description, positionLat, positionLng,\r\n" + 
-				"		p.radius,\r\n" + 
-				"		p.distance_unit\r\n" + 
-				"				 * DEGREES(ACOS(COS(RADIANS(p.latpoint))\r\n" + 
-				"				 * COS(RADIANS(l.positionLat))\r\n" + 
-				"				 * COS(RADIANS(p.longpoint - l.positionLng))\r\n" + 
-				"				 + SIN(RADIANS(p.latpoint))\r\n" + 
-				"				 * SIN(RADIANS(l.positionLat)))) AS distance\r\n" + 
-				"	FROM Education AS l\r\n" + 
-				"	JOIN (   /* these are the query parameters */\r\n" + 
-				"		SELECT  ?1  AS latpoint,  ?2 AS longpoint,\r\n" + 
-				"				?3 AS radius,      111.045 AS distance_unit\r\n" + 
-				"	) AS p ON 1=1\r\n" + 
-				"	WHERE not l.ended and\r\n" + 
-				"		l.positionLat\r\n" + 
-				"	 BETWEEN p.latpoint  - (p.radius / p.distance_unit)\r\n" + 
-				"		 AND p.latpoint  + (p.radius / p.distance_unit)\r\n" + 
-				"	AND l.positionLng\r\n" + 
-				"	 BETWEEN p.longpoint - (p.radius / (p.distance_unit * COS(RADIANS(p.latpoint))))\r\n" + 
-				"		 AND p.longpoint + (p.radius / (p.distance_unit * COS(RADIANS(p.latpoint))))\r\n" +  
+				"		 AND p.longpoint + (p.radius / (p.distance_unit * COS(RADIANS(p.latpoint))))\r\n" + 
+				"	AND l.expiresOn between :fromDate and :toDate\r\n" + 
+				"		and ( (v.averageValoration/v.numberOfValorations) >= :minimumRating\r\n" + 
+				"			or :minimumRating is null)\r\n" + 
 				") AS d\r\n" + 
-				"WHERE distance <= radius\r\n" + 
-				"ORDER BY distance;");
+				"WHERE distance <= radius\r\n";
 		
-		q.setParameter(1, positionLat);
-		q.setParameter(2, positionLng);
-		q.setParameter(3, distance);
+		query += "ORDER BY expiresOn";
+		
+		Query q = em.createNativeQuery(query);
+		
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date fromDate = formatter.parse(fromDateString);
+        Date toDate = toDate = formatter.parse(toDateString);
+		
+		q.setParameter("fromDate", fromDate);
+		q.setParameter("toDate", toDate);
+		q.setParameter("minimumRating", minimumRating);
+		q.setParameter("positionLat", positionLat);
+		q.setParameter("positionLng", positionLng);
+		q.setParameter("distance", distance);
 		
 		List<Object[]> daoServices = q.getResultList();
 		
 		for (Object[] aux : daoServices) {
-			DAOService dao = new DAOService(aux);
+			DTOFilterService dao = new DTOFilterService(aux);
 			System.out.println(dao.getId());
 			System.out.println(dao.getName());
 			System.out.println(dao.getDistance());
