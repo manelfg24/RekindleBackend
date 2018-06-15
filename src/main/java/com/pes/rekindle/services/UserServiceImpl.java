@@ -995,7 +995,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteReport(Long id) throws ReportNotExistsException {
-        // TODO Auto-generated method stub
-
+        reportRepository.deleteById(id);
     }
 }
