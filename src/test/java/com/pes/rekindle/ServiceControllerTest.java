@@ -309,7 +309,7 @@ public class ServiceControllerTest {
     }
     
     @Test
-    public void obtainOwnServicesTest() throws Exception {
+    public void obtainOwnServicesVolunterTest() throws Exception {
         this.mockMvc
                 .perform(get("/servicios/{mail}/{tipo}", "mailRoger" , "Volunteer").param("ended", "1"))
                 .andExpect(status().isOk())
@@ -320,6 +320,19 @@ public class ServiceControllerTest {
         		.andExpect(jsonPath("$.[3].volunteer").value("mailRoger"))
         		.andExpect(jsonPath("$.[4].volunteer").value("mailRoger"));
     }
+    
+    @Test
+    public void obtainOwnServicesRefugeeTest() throws Exception {
+        this.mockMvc
+                .perform(get("/servicios/{mail}/{tipo}", "mailRafael" , "Refugee").param("ended", "0"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.[0].volunteer").value("mailRoger"))
+                .andExpect(jsonPath("$.[0].id").value("1"))
+        		.andExpect(jsonPath("$.[1].volunteer").value("mailAlex"))
+        		.andExpect(jsonPath("$.[1].id").value("1"))
+        		.andExpect(jsonPath("$.[2].volunteer").value("mailRoger"))
+        		.andExpect(jsonPath("$.[2].id").value("2"));
+    }
 
     @Test
     public void userAlreadyEnrolledTest() throws Exception {
@@ -327,11 +340,18 @@ public class ServiceControllerTest {
                 .perform(get("/refugiados/{mail}/inscripciones/{id}/{tipo}", "mailRafael" , "1","Donation"))
                 .andExpect(status().isOk());                
     }
+    //Alerta
+    @Test
+    public void userAlreadyEnrolledTest2() throws Exception {
+        this.mockMvc
+                .perform(get("/refugiados/{mail}/inscripciones/{id}/{tipo}", "mailRafael" , "1","Lodge"))
+                .andExpect(status().isOk());                
+    }
     
     @Test
     public void deleteServiceTest() throws Exception {
         this.mockMvc
-                .perform(delete("/servicios/{id}/{tipo}", "1","Donation"))
+                .perform(delete("/servicios/{id}/{tipo}", "1","Donation").header("apiKey", "3").param("mailUser", "mailAlex"))
                 .andExpect(status().isOk());                
     }
     
@@ -356,9 +376,32 @@ public class ServiceControllerTest {
         String json = gson.toJson(dtoLodge);
         this.mockMvc
         		.perform(put("/alojamientos/{id}", 1).contentType(MediaType.APPLICATION_JSON_UTF8)
-        				.content(json))
+        				.content(json).header("apiKey", 2))
         		.andDo(print())
         		.andExpect(status().isOk());   
     }
     
+    @Test 
+    public void modifyEducationTest() throws Exception {
+    	DTOEducation dtoEdu = new DTOEducation();
+    	dtoEdu.setServiceType("Education");
+    	dtoEdu.setName("Clases de Español de España");
+    	dtoEdu.setVolunteer("mailRoger");
+    	dtoEdu.setPhoneNumber(936666666);
+    	dtoEdu.setAdress("Balmes");
+    	dtoEdu.setAmbit("Idioma");
+       	dtoEdu.setRequirements("Nada");
+    	dtoEdu.setSchedule("Tardes");
+    	dtoEdu.setPlaces(2);
+    	//dtoEdu.setPrice(0);
+    	dtoEdu.setDescription("Clases de español basico por M.Rjoy");
+    	dtoEdu.setEnded(false);
+        Gson gson = new Gson();
+        String json = gson.toJson(dtoEdu);
+        this.mockMvc
+        		.perform(put("/cursos/{id}", 2).contentType(MediaType.APPLICATION_JSON_UTF8)
+        				.content(json).header("apiKey", 2))
+        		.andDo(print())
+        		.andExpect(status().isOk());   
+    }
 }

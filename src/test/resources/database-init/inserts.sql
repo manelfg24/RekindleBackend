@@ -7,17 +7,22 @@ INSERT INTO Refugee VALUES('mailRafael', '1234', 'rafael', 'ramirez', 'pozo', 94
 INSERT INTO Refugee VALUES('mailLee', '1234', 'bruce', 'lee', 'chun', 634377442, null, 'Masculino', 'Japon', 'Tokyo', 'asiatico', 'B-', 'Oscuro', 'La biografia de Lee', 'photo Lee', 1, '7');
 INSERT INTO Refugee VALUES('mailYaiza', '1234', 'yaiza', 'martinez', 'guardeño', 634322242, null, 'Femenino', 'España', 'Madrid', 'hispano', 'AB-', 'Oscuro', 'La biografia de Yaiza', 'photo Yaiza', 1, '8');
 
-INSERT INTO Lodge VALUES(1, 'Lodge', 'Casa Pepe10', 'mailRoger', 936666666, 'Balmes', '2018-06-06', 2,'Alojamiento para dos personas',  1);
+INSERT INTO Lodge VALUES(1, 'Lodge', 'Casa Pepe10', 'mailRoger', 936666666, 'Balmes', '2018-06-06', 2,'Alojamiento para dos personas',  0);
 
 
-INSERT INTO Donation VALUES(1, 'Donation', 'Donation numero cero', 'mailAlex', 93427512, 'adress donation cero', 10, '21:00:00', '22:00:00', 'Descripcion del donation cero', 1);
-INSERT INTO Donation VALUES(2, 'Donation', 'Donation numero uno', 'mailRoger', 93427512, 'adress donation one', 10, '10:00:00', '11:00:00', 'Descripcion del donation uno',  1);
-INSERT INTO Donation VALUES(3, 'Donation', 'Donation numero dos', 'mailRoger', 93427512, 'adress donation two', 10, '10:00:20', '15:00:00', 'Descripcion del donation dos',  1);
+INSERT INTO Donation VALUES(1, 'Donation', 'Donation numero cero', 'mailAlex', 93427512, 'adress donation cero', 10, '21:00:00', '22:00:00', 'Descripcion del donation cero', 0);
+INSERT INTO Donation VALUES(2, 'Donation', 'Donation numero uno', 'mailRoger', 93427512, 'adress donation one', 10, '10:00:00', '11:00:00', 'Descripcion del donation uno',  0);
+INSERT INTO Donation VALUES(3, 'Donation', 'Donation numero dos', 'mailRoger', 93427512, 'adress donation two', 10, '10:00:20', '15:00:00', 'Descripcion del donation dos',  0);
 
-INSERT INTO Education VALUES(1, 'Education', 'NombreEdu cero', 'mailAlex', 93427512, 'adress education cero', 'carpinteria', 'requirements for education 0', 'schedule cero' ,32, 50, 'Descripción Education service cero',  1);
-INSERT INTO Education VALUES(2, 'Education', 'NombreEdu uno', 'mailRoger', 93427512, 'adress education one', 'jardineria', 'requirements for education 1', 'schedule uno' ,32, 50, 'Descripción education service uno',  1);
+INSERT INTO Education VALUES(1, 'Education', 'NombreEdu cero', 'mailAlex', 93427512, 'adress education cero', 'carpinteria', 'requirements for education 0', 'schedule cero' ,32, 50, 'Descripción Education service cero',  0);
+INSERT INTO Education VALUES(2, 'Education', 'NombreEdu uno', 'mailRoger', 93427512, 'adress education one', 'jardineria', 'requirements for education 1', 'schedule uno' ,32, 50, 'Descripción education service uno',  0);
 
-INSERT INTO Job VALUES(1, 'Job', 'Nombre Job cero', 'mailRoger', 93427512, 'adress job 0','cargo del job', 'requirements para el job', 5, 25, 12, 5000, 1,'Descripción Job service cero',  1);
+INSERT INTO Job VALUES(1, 'Job', 'Nombre Job cero', 'mailRoger', 93427512, 'adress job 0','cargo del job', 'requirements para el job', 5, 25, 12, 5000, 1,'Descripción Job service cero',  0);
+
+INSERT INTO EducationEnrollment VALUES('mailRafael', 1, 4);
+INSERT INTO EducationEnrollment VALUES('mailRafael', 2, 3);
+INSERT INTO LodgeEnrollment VALUES ('mailRafael', 1, 3);
+
 /*
 INSERT INTO donationenrollment VALUES ('mailRafael', 1);
 INSERT INTO donationenrollment VALUES ('mailFelipe', 1);
