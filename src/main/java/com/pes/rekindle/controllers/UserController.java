@@ -288,7 +288,6 @@ public class UserController {
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
-
     }
 
     // Enviar mensaje
@@ -312,9 +311,14 @@ public class UserController {
     }
 
     @RequestMapping(value = "/reportes", method = RequestMethod.POST)
-    public ResponseEntity<Void> createReport(@RequestBody DTOReport dtoReport) {
-        userService.createReport(dtoReport);
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+    public ResponseEntity<Void> createReport(@RequestHeader("apiKey") String apiKey,
+            @RequestBody DTOReport dtoReport) {
+        if (userService.authenticate(dtoReport.getInformerUser().getMail(), apiKey)) {
+            userService.createReport(dtoReport);
+            return ResponseEntity.status(HttpStatus.OK).body(null);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
     }
 
     @RequestMapping(value = "/reportes", method = RequestMethod.GET)
@@ -328,19 +332,31 @@ public class UserController {
     }
 
     @RequestMapping(value = "/reportes/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<Void> deleteReport(@PathVariable Long id) {
-        try {
-            userService.deleteReport(id);
-        } catch (ReportNotExistsException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+    public ResponseEntity<Void> deleteReport(@RequestHeader("apiKey") String apiKey,
+            @RequestParam("mail") String mail,
+            @PathVariable Long id) {
+        if (userService.authenticate(mail, apiKey)) {
+            try {
+                userService.deleteReport(id);
+            } catch (ReportNotExistsException e) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            }
+            return ResponseEntity.status(HttpStatus.OK).body(null);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
-        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
     @RequestMapping(value = "/links", method = RequestMethod.POST)
-    public ResponseEntity<Void> createLink(@RequestBody DTOLink dtoLink) {
-        userService.createLink(dtoLink);
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+    public ResponseEntity<Void> createLink(@RequestHeader("apiKey") String apiKey,
+            @RequestBody DTOLink dtoLink,
+            @RequestParam("mail") String mail) {
+        if (userService.authenticate(mail, apiKey)) {
+            userService.createLink(dtoLink);
+            return ResponseEntity.status(HttpStatus.OK).body(null);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
     }
 
     @RequestMapping(value = "/links", method = RequestMethod.GET)
@@ -349,15 +365,26 @@ public class UserController {
     }
 
     @RequestMapping(value = "/links/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<Void> modifyLink(@PathVariable Long id, @RequestBody DTOLink dtoLink) {
-        userService.modifyLink(dtoLink);
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+    public ResponseEntity<Void> modifyLink(@RequestHeader("apiKey") String apiKey,
+            @PathVariable Long id, @RequestBody DTOLink dtoLink,
+            @RequestParam("mail") String mail) {
+        if (userService.authenticate(mail, apiKey)) {
+            userService.modifyLink(dtoLink);
+            return ResponseEntity.status(HttpStatus.OK).body(null);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
     }
 
     @RequestMapping(value = "/links/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<Void> deleteLink(@PathVariable Long id) {
-        userService.deleteLink(id);
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+    public ResponseEntity<Void> deleteLink(@RequestHeader("apiKey") String apiKey,
+            @PathVariable Long id, @RequestParam("mail") String mail) {
+        if (userService.authenticate(mail, apiKey)) {
+            userService.deleteLink(id);
+            return ResponseEntity.status(HttpStatus.OK).body(null);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
     }
 
     @RequestMapping(value = "/test", method = RequestMethod.GET)
