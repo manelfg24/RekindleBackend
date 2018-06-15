@@ -108,4 +108,21 @@
                 oldColumnName="banned"
                 tableName="Admin"/>
 	</changeSet>
+	<changeSet id="apiKeyUser" author="bob">
+		<addColumn tableName="Refugee">
+	       <column name="apiKey" type="varchar(50)">
+	        <constraints nullable="false"/>
+	       </column>
+	    </addColumn>
+	    <addColumn tableName="Admin">
+	       <column name="apiKey" type="varchar(50)">
+	       	<constraints nullable="false"/>
+	       </column>
+	    </addColumn>
+		<addColumn tableName="Volunteer">
+	       <column name="apiKey" type="varchar(50)">
+	       	<constraints nullable="false"/>
+	       </column>
+	    </addColumn>
+	</changeSet>
 </databaseChangeLog>
