@@ -7,8 +7,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.TreeMap;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -93,6 +95,9 @@ public class ServiceServiceImpl implements ServiceService {
         Date expiresOn = formatter.parse(dtoLodge.getExpiresOn());
         lodge.setExpiresOn(expiresOn);
         lodge.setDescription(dtoLodge.getDescription());
+        lodge.setPositionLat(dtoLodge.getPositionLat());
+        lodge.setPositionLng(dtoLodge.getPositionLng());
+
         lodgeRepository.save(lodge);
     }
 
@@ -110,6 +115,8 @@ public class ServiceServiceImpl implements ServiceService {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         Date expiresOn = formatter.parse(dtoDonation.getExpiresOn());
         donation.setExpiresOn(expiresOn);
+        donation.setPositionLat(dtoDonation.getPositionLat());
+        donation.setPositionLng(dtoDonation.getPositionLng());
         donationRepository.save(donation);
     }
 
@@ -128,6 +135,8 @@ public class ServiceServiceImpl implements ServiceService {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         Date expiresOn = formatter.parse(dtoEducation.getExpiresOn());
         education.setExpiresOn(expiresOn);
+        education.setPositionLat(dtoEducation.getPositionLat());
+        education.setPositionLng(dtoEducation.getPositionLng());
         educationRepository.save(education);
     }
 
@@ -149,6 +158,8 @@ public class ServiceServiceImpl implements ServiceService {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         Date expiresOn = formatter.parse(dtoJob.getExpiresOn());
         job.setExpiresOn(expiresOn);
+        job.setPositionLat(dtoJob.getPositionLat());
+        job.setPositionLng(dtoJob.getPositionLng());
         jobRepository.save(job);
     }
 
@@ -540,8 +551,8 @@ public class ServiceServiceImpl implements ServiceService {
  
 
 	@Override
-	public List<DTOFilterService> filterServices(String fromDateString, String toDateString, double minimumRating,
-			double positionLat, double positionLng, double distance) throws ParseException {
+	public Map<String, ArrayList<Object>> filterServices(String fromDateString, String toDateString, double minimumRating,
+			double positionLat, double positionLng, double distance, String order) throws ParseException {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		
@@ -551,7 +562,7 @@ public class ServiceServiceImpl implements ServiceService {
 			query += "WHERE distance <= radius\r\n";
 		}
 		
-		query += "ORDER BY distance";
+		query += "ORDER BY :order";
 		
 		Query q = em.createNativeQuery(query);
 		
@@ -565,22 +576,28 @@ public class ServiceServiceImpl implements ServiceService {
 		q.setParameter("positionLat", positionLat);
 		q.setParameter("positionLng", positionLng);
 		q.setParameter("distance", distance);
+		q.setParameter("order", order);
 		
 		List<Object[]> daoServices = q.getResultList();
-		List<DTOFilterService> dtoFilter = new ArrayList<DTOFilterService>();
-		
-		System.out.println("Size result: " + daoServices.size());
+				
+		ArrayList<Object> services = new ArrayList<Object>();
+		ArrayList<Object> distances = new ArrayList<Object>(); 
+		ArrayList<Object> ratings = new ArrayList<Object>(); 
 		
 		for (Object[] aux : daoServices) {
-			dtoFilter.add(new DTOFilterService(aux));
+			DTOFilterService dtoFilter = new DTOFilterService(aux);
+			services.add((Object)new DTOService(dtoFilter));
+			distances.add((Object)dtoFilter.getDistance());
+			ratings.add((Object)dtoFilter.getRating());
 		}
 		
-		for (DTOFilterService deto : dtoFilter) {
-			System.out.println("id: " + deto.getId());
-			System.out.println(deto.toString());
-		}
+		Map<String, ArrayList<Object>> result = new TreeMap<String, ArrayList<Object>>();
 		
-		return dtoFilter;
+		result.put("services", services);
+		result.put("distances", distances);
+		result.put("ratings", ratings);
+		
+		return result;
 	}
 
 }

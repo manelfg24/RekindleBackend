@@ -4,6 +4,7 @@ package com.pes.rekindle.services;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.pes.rekindle.dto.DTODonation;
@@ -71,7 +72,7 @@ public interface ServiceService {
 
 	void valorateService(DTOValoration dtoValoration);
 
-	List<DTOFilterService> filterServices(String fromDateString, String toDateString, double minimumRating,
-			double positionLat, double positionLng, double distance) throws ParseException;
+	Map<String, ArrayList<Object>> filterServices(String fromDateString, String toDateString, double minimumRating,
+			double positionLat, double positionLng, double distance, String order) throws ParseException;
 
 }

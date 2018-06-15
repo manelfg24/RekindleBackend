@@ -16,6 +16,7 @@ public class DTOFilterService {
     private double positionLat;
     private double positionLng;
     private double distance;
+    private double rating;
     
     public DTOFilterService() {
     	super();
@@ -35,6 +36,7 @@ public class DTOFilterService {
     	this.positionLat = (double) dao[8];
     	this.positionLng = (double) dao[9];
     	this.distance = (double) dao[10];
+    	this.rating = (double) dao[11];
 	}
 
 	public long getId() {
@@ -125,14 +127,13 @@ public class DTOFilterService {
         this.distance = distance;
     }
 
-	@Override
-	public String toString() {
-		return "DTOFilterService [id=" + id + ", serviceType=" + serviceType + ", name=" + name + ", volunteer="
-				+ volunteer + ", phoneNumber=" + phoneNumber + ", adress=" + adress + ", description=" + description
-				+ ", expiresOn=" + expiresOn + ", positionLat=" + positionLat + ", positionLng=" + positionLng
-				+ ", distance=" + distance + "]";
+	public double getRating() {
+		return rating;
+	}
+
+	public void setRating(double rating) {
+		this.rating = rating;
 	}
     
     
-
 }

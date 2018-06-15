@@ -75,6 +75,18 @@ public class DTOService {
         this.positionLng = job.getPositionLng();
     }
     
+    public DTOService(DTOFilterService dtoFilterService) {
+        this.id = dtoFilterService.getId();
+        this.serviceType = dtoFilterService.getServiceType();
+        this.name = dtoFilterService.getName();
+        this.volunteer = dtoFilterService.getVolunteer();
+        this.phoneNumber = dtoFilterService.getPhoneNumber();
+        this.adress = dtoFilterService.getAdress();
+        this.description = dtoFilterService.getDescription();
+        this.positionLat = dtoFilterService.getPositionLat();
+        this.positionLng = dtoFilterService.getPositionLng();
+    }
+    
     public long getId() {
 		return id;
 	}

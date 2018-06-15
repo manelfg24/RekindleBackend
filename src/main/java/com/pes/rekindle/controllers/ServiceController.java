@@ -4,6 +4,7 @@ package com.pes.rekindle.controllers;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -197,21 +198,14 @@ public class ServiceController {
     }
     
     @RequestMapping(value = "/servicios/filtrar", method = RequestMethod.GET)
-    public ResponseEntity<List<DTOFilterService>> filterServices(@RequestParam String fromDate, @RequestParam String toDate,
+    public ResponseEntity<Map<String, ArrayList<Object>>> filterServices(@RequestParam String fromDate, @RequestParam String toDate,
     		@RequestParam double minimumRating, @RequestParam double positionLat,
-    		@RequestParam double positionLng, @RequestParam double distance) {
-    	System.out.println();
-    	System.out.println(fromDate); // enviar 1900-01-01 
-    	System.out.println(toDate); // enviar 2100-01-01
-    	System.out.println(minimumRating); // enviar 0
-    	System.out.println(positionLat); // se envia siempre
-    	System.out.println(positionLng); // se envia siempre
-    	System.out.println(distance); // se envia 1000000
-    	System.out.println();
-    	List<DTOFilterService> filteredServices;
+    		@RequestParam double positionLng, @RequestParam double distance,
+    		@RequestParam String order) {
 		try {
+			System.out.println(order);
 	    	return ResponseEntity.status(HttpStatus.OK).body(serviceService.filterServices(fromDate, toDate, minimumRating, positionLat,
-					positionLng, distance));
+					positionLng, distance, order));
 		} catch (ParseException e) {
 			 return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body(null);
 		}
