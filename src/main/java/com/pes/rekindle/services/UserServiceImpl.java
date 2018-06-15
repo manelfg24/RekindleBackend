@@ -390,8 +390,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Set<DTOService> obtainOwnServices(String mail, String userType, Boolean ended) {
-        Set<DTOService> result = new HashSet<DTOService>();
+    public List<DTOService> obtainOwnServices(String mail, String userType, Boolean ended) {
+    	ArrayList<DTOService> result = new ArrayList<DTOService>();
         Set<Lodge> lodges;
         Set<Donation> donations;
         Set<Job> jobs;
