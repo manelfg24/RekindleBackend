@@ -686,43 +686,21 @@ public class UserServiceImpl implements UserService {
                 DTOChat dtoChat = new DTOChat();
                 dtoChat.setId(chat.getId());
                 
-                if (!dtoUserOwner.getMail().equals(chat.getMailUser1())) {   
-	                Optional<Refugee> oRefugee = refugeeRepository
-	                        .findOptionalByMail(chat.getMailUser1());
-	                if (oRefugee.isPresent()) {
-	                    DTOUser dtoUser = new DTOUser(oRefugee.get());
-	                    dtoUser = hideCredentials(dtoUser);
-	                    dtoChat.setUser1(dtoUser);
-	                } else {
-	                    Optional<Volunteer> oVolunteer = volunteerRepository
-	                            .findOptionalByMail(chat.getMailUser1());
-	                    DTOUser dtoUser = null;
-	                    if (oVolunteer.isPresent()) {
-	                        dtoUser = new DTOUser(oVolunteer.get());
-	                        dtoUser = hideCredentials(dtoUser);
-	                    }
-	                    dtoChat.setUser1(dtoUser);
-	                }
+                if (!dtoUserOwner.getMail().equals(chat.getMailUser1())) {  
+                	try {
+						dtoChat.setUser1(hideCredentials(getDTOUser(chat.getMailUser1())));
+					} catch (UserNotExistsException e) {
+						e.printStackTrace();
+					}
 	                dtoChat.setUser2(dtoUserOwner);
                 }
                 else {
-	                Optional<Refugee> oRefugee = refugeeRepository
-	                        .findOptionalByMail(chat.getMailUser2());
-	                if (oRefugee.isPresent()) {
-	                    DTOUser dtoUser = new DTOUser(oRefugee.get());
-	                    dtoUser = hideCredentials(dtoUser);
-	                    dtoChat.setUser2(dtoUser);
-	                } else {
-	                    Optional<Volunteer> oVolunteer = volunteerRepository
-	                            .findOptionalByMail(chat.getMailUser2());
-	                    DTOUser dtoUser = null;
-	                    if (oVolunteer.isPresent()) {
-	                        dtoUser = new DTOUser(oVolunteer.get());
-	                        dtoUser = hideCredentials(dtoUser);
-	                    }
-	                    dtoChat.setUser2(dtoUser);
-	                }
 	                dtoChat.setUser1(dtoUserOwner);
+                	try {
+                		dtoChat.setUser2(hideCredentials(getDTOUser(chat.getMailUser2())));
+					} catch (UserNotExistsException e) {
+						e.printStackTrace();
+					}
                 }
             }
         }
