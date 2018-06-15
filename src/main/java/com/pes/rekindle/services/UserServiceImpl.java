@@ -677,10 +677,10 @@ public class UserServiceImpl implements UserService {
             DTOUser dtoUserOwner = null;
             try {
 				dtoUserOwner = getDTOUser(mail);
+				hideCredentials(dtoUserOwner);
 			} catch (UserNotExistsException e) {
 				e.printStackTrace();
 			}
-            
 
             for (Chat chat : chats) {
                 DTOChat dtoChat = new DTOChat();
@@ -723,7 +723,7 @@ public class UserServiceImpl implements UserService {
 	                    dtoChat.setUser2(dtoUser);
 	                }
 	                dtoChat.setUser1(dtoUserOwner);
-            }
+                }
             }
         }
         return dtoChats;
