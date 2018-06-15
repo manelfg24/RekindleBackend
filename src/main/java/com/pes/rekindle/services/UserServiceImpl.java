@@ -673,7 +673,8 @@ public class UserServiceImpl implements UserService {
         Set<DTOChat> dtoChats = new HashSet<DTOChat>();
         if (chatRepository.existsByMailUser1(mail) || chatRepository.existsByMailUser2(mail)) {
             Set<Chat> chats = chatRepository.findByMailUser2(mail);
-            chats.addAll(chatRepository.findByMailUser1(mail));
+            chats.addAll(chatRepository.findByMailUser1(mail));            
+            
             DTOUser dtoUserOwner = null;
             try {
 				dtoUserOwner = getDTOUser(mail);
@@ -691,17 +692,20 @@ public class UserServiceImpl implements UserService {
 						dtoChat.setUser1(hideCredentials(getDTOUser(chat.getMailUser1())));
 					} catch (UserNotExistsException e) {
 						e.printStackTrace();
+
 					}
 	                dtoChat.setUser2(dtoUserOwner);
                 }
                 else {
 	                dtoChat.setUser1(dtoUserOwner);
+	                
                 	try {
                 		dtoChat.setUser2(hideCredentials(getDTOUser(chat.getMailUser2())));
 					} catch (UserNotExistsException e) {
 						e.printStackTrace();
 					}
                 }
+                dtoChats.add(dtoChat);
             }
         }
         return dtoChats;
