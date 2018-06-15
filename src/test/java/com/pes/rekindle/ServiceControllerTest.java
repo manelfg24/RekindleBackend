@@ -39,9 +39,11 @@ import com.google.gson.Gson;
 import com.pes.RekindleApplication;
 import com.pes.rekindle.controllers.ServiceController;
 import com.pes.rekindle.dto.DTODonation;
+import com.pes.rekindle.dto.DTODonationEnrollment;
 import com.pes.rekindle.dto.DTOEducation;
 import com.pes.rekindle.dto.DTOJob;
 import com.pes.rekindle.dto.DTOLodge;
+import com.pes.rekindle.dto.DTOService;
 import com.pes.rekindle.entities.Link;
 import com.pes.rekindle.entities.Lodge;
 
@@ -410,6 +412,7 @@ public class ServiceControllerTest {
     public void modifyDonationTest() throws Exception {
     	DTODonation dtoDonation = new DTODonation();
     	dtoDonation.setName("Donación de ropa");
+    	dtoDonation.setVolunteer("mailRoger");
     	dtoDonation.setPhoneNumber(936666666);
     	dtoDonation.setAdress("Balmes");
     	dtoDonation.setPlaces(4);
@@ -419,9 +422,70 @@ public class ServiceControllerTest {
         Gson gson = new Gson();
         String json = gson.toJson(dtoDonation);
         this.mockMvc
-        		.perform(put("/donaciones/{id}", 1).contentType(MediaType.APPLICATION_JSON_UTF8)
-        				.content(json).header("apiKey", 3))
+        		.perform(put("/donaciones/{id}", 2).contentType(MediaType.APPLICATION_JSON_UTF8)
+        				.content(json).header("apiKey", 2))
         		.andDo(print())
         		.andExpect(status().isOk());   
     }
+    
+    @Test 
+    public void modifyJobTest() throws Exception {
+    	DTOJob dtoJob = new DTOJob();
+    	dtoJob.setName("Carpintero");
+    	dtoJob.setVolunteer("mailRoger");
+    	dtoJob.setPhoneNumber(936666666);
+    	dtoJob.setAdress("Balmes");
+    	dtoJob.setCharge("Becario");
+    	dtoJob.setRequirements("Nada");
+    	dtoJob.setHoursDay(4);
+    	dtoJob.setHoursWeek(20);
+    	dtoJob.setContractDuration(5);
+    	dtoJob.setSalary(400);
+    	dtoJob.setPlaces(2);
+    	dtoJob.setDescription("Trabajo de aprendiz de carpintero");
+    	dtoJob.setEnded(false);
+    	Gson gson = new Gson();
+        String json = gson.toJson(dtoJob);
+        this.mockMvc
+        		.perform(put("/empleos/{id}", 2).contentType(MediaType.APPLICATION_JSON_UTF8)
+        				.content(json).header("apiKey", 2))
+        		.andDo(print())
+        		.andExpect(status().isOk());   
+    }
+    
+    @Test
+    public void createDonationRequestTest() throws Exception {
+    	DTOService dtoDonation = new DTOService();
+    	dtoDonation.setServiceType("Donation");
+    	dtoDonation.setName("Donation numero uno");
+    	dtoDonation.setVolunteer("mailRoger");
+    	dtoDonation.setPhoneNumber(93427512);
+    	dtoDonation.setAdress("adress donation one");
+    	dtoDonation.setDescription("Descripcion del donation uno");
+    	dtoDonation.setEnded(false);
+    	DTODonationEnrollment dtoDEn = new DTODonationEnrollment();
+    	dtoDEn.setDonation(dtoDonation);
+    	dtoDEn.setRefugeeMail("mailRafael");
+    	dtoDEn.setMotive("Porque puedo");
+    	//dtoDEn.setValoration(valoration);
+    	Gson gson = new Gson();
+        String json = gson.toJson(dtoDEn);
+        this.mockMvc
+                .perform(post("/solicituddonacion").contentType(MediaType.APPLICATION_JSON_UTF8)
+                		.content(json).header("apiKey", "6a"))
+                .andDo(print())
+                .andExpect(status().isOk());                
+    }
+    
+    /*@Test
+    public void listDonationRequestsTest() throws Exception {
+        this.mockMvc
+                .perform(get("/solicituddonacion"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=UTF-8"))
+                .andDo(print())
+                .andExpect(jsonPath("$.[0].refugeeMail").value("mailRafael"))
+                .andExpect(jsonPath("$.[0].motive").value("Motive"))
+        		.andExpect(jsonPath("$.[0].valoration").value("3"));
+    }*/
 }

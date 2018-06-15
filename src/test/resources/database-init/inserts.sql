@@ -3,7 +3,7 @@ INSERT INTO Volunteer VALUES('mailAlex', '1234', 'alex', 'sanchez', 'gil', 'phot
 INSERT INTO Volunteer VALUES('mailJose', '1234', 'jose', 'ramon', 'perez', 'photo Jose', 0, 0, 1, '4');
 
 INSERT INTO Refugee VALUES('mailFelipe', '1234', 'felipe', 'betancourt', 'rodriguez', 942342312, null, 'Masculino', 'Cuba', 'La Havana', 'hispano', 'AB+', 'Castaño', 'La biografia de Felipe', 'photo Felipe', 1, '5');
-INSERT INTO Refugee VALUES('mailRafael', '1234', 'rafael', 'ramirez', 'pozo', 942342442, null, 'Masculino', 'España', 'Barcelona', 'hispano', 'A+', 'Castaño', 'La biografia de Rafael', 'photo Rafael', 1, '6');
+INSERT INTO Refugee VALUES('mailRafael', '1234', 'rafael', 'ramirez', 'pozo', 942342442, null, 'Masculino', 'España', 'Barcelona', 'hispano', 'A+', 'Castaño', 'La biografia de Rafael', 'photo Rafael', 1, '6a');
 INSERT INTO Refugee VALUES('mailLee', '1234', 'bruce', 'lee', 'chun', 634377442, null, 'Masculino', 'Japon', 'Tokyo', 'asiatico', 'B-', 'Oscuro', 'La biografia de Lee', 'photo Lee', 1, '7');
 INSERT INTO Refugee VALUES('mailYaiza', '1234', 'yaiza', 'martinez', 'guardeño', 634322242, null, 'Femenino', 'España', 'Madrid', 'hispano', 'AB-', 'Oscuro', 'La biografia de Yaiza', 'photo Yaiza', 1, '8');
 
@@ -19,6 +19,7 @@ INSERT INTO Education VALUES(2, 'Education', 'NombreEdu uno', 'mailRoger', 93427
 
 INSERT INTO Job VALUES(1, 'Job', 'Nombre Job cero', 'mailRoger', 93427512, 'adress job 0','cargo del job', 'requirements para el job', 5, 25, 12, 5000, 1,'Descripción Job service cero',  0);
 
+INSERT INTO DonationEnrollment VALUES('mailRafael', 2, 'Motivo', 'Estatus', 3);
 INSERT INTO EducationEnrollment VALUES('mailRafael', 1, 4);
 INSERT INTO EducationEnrollment VALUES('mailRafael', 2, 3);
 INSERT INTO LodgeEnrollment VALUES ('mailRafael', 1, 3);
