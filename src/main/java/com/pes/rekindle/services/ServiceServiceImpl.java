@@ -161,32 +161,36 @@ public class ServiceServiceImpl implements ServiceService {
         Set<Donation> donations = donationRepository.findAll();
         for (Donation donation : donations) {
 
-            if (!donation.getEnded() && donation.getPlaces() != null
-                    && donation.getInscriptions().size() < donation.getPlaces()) {
+            if (!donation.getEnded() && ((donation.getPlaces() != null
+                    && donation.getInscriptions().size() < donation.getPlaces())
+                    || donation.getPlaces() == null)) {
                 DTOService dtoDonation = new DTOService(donation);
                 dtosService.add(dtoDonation);
             }
         }
         Set<Education> courses = educationRepository.findAll();
         for (Education education : courses) {
-            if (!education.getEnded() && education.getPlaces() != null
-                    && education.getInscriptions().size() < education.getPlaces()) {
+            if (!education.getEnded() && ((education.getPlaces() != null
+                    && education.getInscriptions().size() < education.getPlaces())
+                    || education.getPlaces() == null)) {
                 DTOService dtoEducation = new DTOService(education);
                 dtosService.add(dtoEducation);
             }
         }
         Set<Job> jobs = jobRepository.findAll();
         for (Job job : jobs) {
-            if (!job.getEnded() && job.getPlaces() != null
-                    && job.getInscriptions().size() < job.getPlaces()) {
+            if (!job.getEnded() && ((job.getPlaces() != null
+                    && job.getInscriptions().size() < job.getPlaces())
+                    || job.getPlaces() == null)) {
                 DTOService dtoJob = new DTOService(job);
                 dtosService.add(dtoJob);
             }
         }
         Set<Lodge> lodges = lodgeRepository.findAll();
         for (Lodge lodge : lodges) {
-            if (!lodge.getEnded() && lodge.getPlaces() != null
-                    && lodge.getInscriptions().size() < lodge.getPlaces()) {
+            if (!lodge.getEnded() && ((lodge.getPlaces() != null
+                    && lodge.getInscriptions().size() < lodge.getPlaces())
+                    || lodge.getPlaces() == null)) {
                 DTOService dtoLodge = new DTOService(lodge);
                 dtosService.add(dtoLodge);
             }
