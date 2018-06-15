@@ -159,14 +159,14 @@ public class ServiceServiceImpl implements ServiceService {
         ArrayList<DTOService> dtosService = new ArrayList<DTOService>();
         Set<Donation> donations = donationRepository.findAll();
         for (Donation donation : donations) {
-            if (donation.getEnded() && donation.getInscriptions().size() < donation.getPlaces()) {
+            if (!donation.getEnded() && donation.getInscriptions().size() < donation.getPlaces()) {
                 DTOService dtoDonation = new DTOService(donation);
                 dtosService.add(dtoDonation);
             }
         }
         Set<Education> courses = educationRepository.findAll();
         for (Education education : courses) {
-            if (education.getEnded()
+            if (!education.getEnded()
                     && education.getInscriptions().size() < education.getPlaces()) {
                 DTOService dtoEducation = new DTOService(education);
                 dtosService.add(dtoEducation);
@@ -174,14 +174,14 @@ public class ServiceServiceImpl implements ServiceService {
         }
         Set<Job> jobs = jobRepository.findAll();
         for (Job job : jobs) {
-            if (job.getEnded() && job.getInscriptions().size() < job.getPlaces()) {
+            if (!job.getEnded() && job.getInscriptions().size() < job.getPlaces()) {
                 DTOService dtoJob = new DTOService(job);
                 dtosService.add(dtoJob);
             }
         }
         Set<Lodge> lodges = lodgeRepository.findAll();
         for (Lodge lodge : lodges) {
-            if (lodge.getEnded() && lodge.getInscriptions().size() < lodge.getPlaces()) {
+            if (!lodge.getEnded() && lodge.getInscriptions().size() < lodge.getPlaces()) {
                 DTOService dtoLodge = new DTOService(lodge);
                 dtosService.add(dtoLodge);
             }
