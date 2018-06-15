@@ -100,14 +100,17 @@ public interface UserService {
 
     void deleteLink(Long id);
 
-	void valorateVolunteer(String volunteer, float newValoration, float oldValoration);
+    void valorateVolunteer(String volunteer, float newValoration, float oldValoration);
 
-	Set<DTOUser> getAllUsers();
+    Set<DTOUser> getAllUsers();
 
-	Integer isUserEnabled(String mail) throws UserNotExistsException ;
+    Integer isUserEnabled(String mail) throws UserNotExistsException;
 
-	void modifyBannedStatus(String mail, int userDesiredState) throws UserNotExistsException, UserStateAlreadyUpdatedException;
+    void modifyBannedStatus(String mail, int userDesiredState)
+            throws UserNotExistsException, UserStateAlreadyUpdatedException;
 
-	void deleteReport(Long id) throws ReportNotExistsException;
+    void deleteReport(Long id) throws ReportNotExistsException;
+
+    Set<DTOService> obtainOwnServices(String mail, String userType);
 
 }
