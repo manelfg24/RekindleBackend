@@ -5,7 +5,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -133,6 +132,11 @@ public class UserServiceImpl implements UserService {
             if (oVolunteer.isPresent()) {
                 Volunteer volunteer = oVolunteer.get();
                 return (volunteer.getApiKey().equals(apiKey));
+            }
+            Optional<Admin> oAdmin = adminRepository.findOptionalByMail(mail);
+            if (oAdmin.isPresent()) {
+                Admin admin = oAdmin.get();
+                return (admin.getApiKey().equals(apiKey));
             }
             return false;
         }
@@ -393,25 +397,37 @@ public class UserServiceImpl implements UserService {
         Set<Donation> donations;
         Set<Job> jobs;
         Set<Education> courses;
-        if (userType.equals("Refugee")) { // refugee
+        if (userType.equals("Refugee")) {
             lodges = lodgeRepository.findByInscriptions_Mail(mail);
             donations = donationRepository.findByInscriptions_Mail(mail);
             courses = educationRepository.findByInscriptions_Mail(mail);
             jobs = jobRepository.findByInscriptions_Mail(mail);
-        } else { // volunteer
+        } else {
             lodges = lodgeRepository.findByVolunteer(mail);
             donations = donationRepository.findByVolunteer(mail);
             courses = educationRepository.findByVolunteer(mail);
             jobs = jobRepository.findByVolunteer(mail);
         }
-        for (Lodge lodge : lodges)
-            result.add(new DTOService(lodge));
-        for (Education education : courses)
-            result.add(new DTOService(education));
-        for (Donation donation : donations)
-            result.add(new DTOService(donation));
-        for (Job job : jobs)
-            result.add(new DTOService(job));
+        for (Lodge lodge : lodges) {
+            if (lodge.getEnded() == ended) {
+                result.add(new DTOService(lodge));
+            }
+        }
+        for (Education education : courses) {
+            if (education.getEnded() == ended) {
+                result.add(new DTOService(education));
+            }
+        }
+        for (Donation donation : donations) {
+            if (donation.getEnded() == ended) {
+                result.add(new DTOService(donation));
+            }
+        }
+        for (Job job : jobs) {
+            if (job.getEnded() == ended) {
+                result.add(new DTOService(job));
+            }
+        }
         return result;
     }
 
@@ -432,29 +448,34 @@ public class UserServiceImpl implements UserService {
                 break;
             case "Education":
                 enrollUserToEducation(mail, id);
+
+                Education education = educationRepository.findById(id);
+
+                pusher.trigger(mail, "enroll-service",
+                        Collections.singletonMap("message", new DTOService(education)));
                 break;
             case "Donation":
                 enrollUserToDonation(mail, id);
+
+                Donation donation = donationRepository.findById(id);
+
+                pusher.trigger(mail, "enroll-service",
+                        Collections.singletonMap("message", new DTOService(donation)));
                 break;
             case "Job":
                 enrollUserToJob(mail, id);
+
+                Job job = jobRepository.findById(id);
+
+                pusher.trigger(mail, "enroll-service",
+                        Collections.singletonMap("message", new DTOService(job)));
                 break;
         }
     }
 
     private void enrollUserToLodge(String mail, Long id) throws Exception {
         Lodge lodge = serviceService.getLodge(id);
-        java.util.Date today = Calendar.getInstance().getTime();
         int enrolledCount = lodge.getInscriptions().size() + 1;
-        /*
-         * System.out.println("---------------------------------------");
-         * System.out.println("Numero de places total: " + lodge.getPlaces());
-         * System.out.println("Numero de places ocupadas: " + lodge.getInscriptions().size()+1);
-         * System.out.println("---------------------------------------");
-         * System.out.println("Data del servicio: " + lodge.getDateLimit());
-         * System.out.println("Data actual: " + Calendar.getInstance().getTime());
-         * System.out.println("---------------------------------------");
-         */
 
         if (enrolledCount > lodge.getPlaces() /* || today.after(lodge.getDateLimit()) */) {
             throw new Exception();
@@ -470,7 +491,6 @@ public class UserServiceImpl implements UserService {
             refugee.setLodges(lodges);
             lodge.setInscriptions(refugees);
 
-            // sobra un save
             refugeeRepository.save(refugee);
             lodgeRepository.save(lodge);
         }
@@ -478,7 +498,6 @@ public class UserServiceImpl implements UserService {
 
     private void enrollUserToEducation(String mail, Long id) throws Exception {
         Education education = serviceService.getEducation(id);
-        java.util.Date today = Calendar.getInstance().getTime();
         int enrolledCount = education.getInscriptions().size() + 1;
 
         if (enrolledCount > education.getPlaces()) {
@@ -502,7 +521,6 @@ public class UserServiceImpl implements UserService {
 
     private void enrollUserToDonation(String mail, Long id) throws Exception {
         Donation donation = serviceService.getDonation(id);
-        java.util.Date today = Calendar.getInstance().getTime();
         int enrolledCount = donation.getInscriptions().size() + 1;
 
         if (enrolledCount > donation.getPlaces()) {
@@ -526,7 +544,6 @@ public class UserServiceImpl implements UserService {
 
     private void enrollUserToJob(String mail, Long id) throws Exception {
         Job job = serviceService.getJob(id);
-        Date today = Calendar.getInstance().getTime();
         int enrolledCount = job.getInscriptions().size() + 1;
 
         if (enrolledCount > job.getPlaces()) {
@@ -565,12 +582,27 @@ public class UserServiceImpl implements UserService {
                 break;
             case "Education":
                 unenrollUserFromEducation(mail, id);
+
+                Education education = educationRepository.findById(id);
+
+                pusher.trigger(mail, "unenroll-service",
+                        Collections.singletonMap("message", new DTOService(education)));
                 break;
             case "Donation":
                 unenrollUserFromDonation(mail, id);
+
+                Donation donation = donationRepository.findById(id);
+
+                pusher.trigger(mail, "unenroll-service",
+                        Collections.singletonMap("message", new DTOService(donation)));
                 break;
             case "Job":
                 unenrollUserFromJob(mail, id);
+
+                Job job = jobRepository.findById(id);
+
+                pusher.trigger(mail, "unenroll-service",
+                        Collections.singletonMap("message", new DTOService(job)));
                 break;
         }
     }
@@ -802,9 +834,6 @@ public class UserServiceImpl implements UserService {
         message.setTimestamp(dtoMessage.getTimestamp());
 
         messageRepository.save(message);
-        /*
-         * chat.addMessage(message); chatRepository.save(chat);
-         */
     }
 
     @Override
@@ -877,7 +906,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Set<DTOLink> listLinks() {
         Set<Link> links = linkRepository.findAll();
-        Set<DTOLink> dtoLinks = new HashSet();
+        Set<DTOLink> dtoLinks = new HashSet<DTOLink>();
         for (Link link : links) {
             DTOLink auxiliarLink = mapper.map(link, DTOLink.class);
             dtoLinks.add(auxiliarLink);
@@ -895,12 +924,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteLink(Long id) {
         linkRepository.deleteById(id);
-    }
-
-    // -------------------------------------------------------------------
-    @Override
-    public String test() {
-        return "Hola";
     }
 
     @Override
@@ -941,26 +964,82 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Set<DTOUser> getAllUsers() {
-        // TODO Auto-generated method stub
-        return null;
+        Set<Refugee> refugees = refugeeRepository.findAll();
+        Set<Volunteer> volunteers = volunteerRepository.findAll();
+        Set<DTOUser> dtoUsers = new HashSet<DTOUser>();
+
+        for (Refugee refugee : refugees) {
+            dtoUsers.add(new DTOUser(refugee));
+        }
+
+        for (Volunteer volunteer : volunteers) {
+            dtoUsers.add(new DTOUser(volunteer));
+        }
+
+        return dtoUsers;
     }
 
     @Override
     public Integer isUserEnabled(String mail) throws UserNotExistsException {
-        // TODO Auto-generated method stub
-        return null;
+        DTOUser dtoUser = getDTOUser(mail);
+        return dtoUser.getEnabled();
+    }
+
+    private DTOUser getDTOUser(String mail) throws UserNotExistsException {
+        Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMail(mail);
+        if (oVolunteer.isPresent()) {
+            return new DTOUser(oVolunteer.get());
+        } else {
+            Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMail(mail);
+            if (oRefugee.isPresent()) {
+                return new DTOUser(oRefugee.get());
+            } else {
+                throw new UserNotExistsException();
+            }
+        }
     }
 
     @Override
-    public void modifyBannedStatus(String mail, int userDesiredState)
+    public void modifyBannedStatus(String mail, int userFinalState)
             throws UserNotExistsException, UserStateAlreadyUpdatedException {
-        // TODO Auto-generated method stub
+        changeBanStatus(mail, userFinalState);
+    }
 
+    private void changeBanStatus(String mail, int userFinalState)
+            throws UserNotExistsException, UserStateAlreadyUpdatedException {
+        Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMail(mail);
+        if (oVolunteer.isPresent()) {
+            Volunteer volunteer = oVolunteer.get();
+            if (userFinalState == volunteer.getEnabled()) { // El estado del usuario es el mismo que
+                                                            // el que nos pasan
+                throw new UserStateAlreadyUpdatedException();
+            } else {
+                volunteer.setEnabled(userFinalState);
+                volunteerRepository.save(volunteer);
+            }
+        } else {
+            Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMail(mail);
+            if (oRefugee.isPresent()) {
+                Refugee refugee = oRefugee.get();
+                if (userFinalState == refugee.getEnabled()) {
+                    throw new UserStateAlreadyUpdatedException();
+                } else {
+                    refugee.setEnabled(userFinalState);
+                    refugeeRepository.save(refugee);
+                }
+            } else {
+                throw new UserNotExistsException();
+            }
+        }
     }
 
     @Override
     public void deleteReport(Long id) throws ReportNotExistsException {
-        // TODO Auto-generated method stub
-
+        Optional<Report> oReport = reportRepository.findOptionalById(id);
+        if (oReport.isPresent()) {
+            reportRepository.deleteById(id);
+        } else {
+            throw new ReportNotExistsException();
+        }
     }
 }
