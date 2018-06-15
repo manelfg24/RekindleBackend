@@ -3,7 +3,6 @@ package com.pes.rekindle.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -117,7 +116,7 @@ public class ServiceController {
     public ResponseEntity<List<DTOService>> obtainOwnServices(
             @PathVariable("mail") String mail,
             @PathVariable("tipo") String userType,
-            @RequestParam ("ended")Boolean ended) {
+            @RequestParam("ended") Boolean ended) {
         List<DTOService> result = userService.obtainOwnServices(mail, userType, ended);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
@@ -132,44 +131,73 @@ public class ServiceController {
     }
 
     @RequestMapping(value = "/servicios/{id}/{tipo}", method = RequestMethod.DELETE)
-    public ResponseEntity<String> deleteService(@PathVariable Long id, @PathVariable String tipo) {
-        serviceService.deleteService(id, tipo);
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+    public ResponseEntity<String> deleteService(@RequestHeader("apiKey") String apiKey,
+            @PathVariable Long id, @PathVariable String tipo,
+            @RequestParam("mailUser") String mail) {
+        if (userService.authenticate(mail, apiKey)) {
+            serviceService.deleteService(id, tipo);
+            return ResponseEntity.status(HttpStatus.OK).body(null);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
     }
 
     @RequestMapping(value = "/alojamientos/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<Lodge> modifyLodge(@PathVariable("id") long id,
+    public ResponseEntity<Lodge> modifyLodge(@RequestHeader("apiKey") String apiKey,
+            @PathVariable("id") long id,
             @RequestBody DTOLodge lodge) {
-        serviceService.modifyLodge(id, lodge);
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+        if (userService.authenticate(lodge.getVolunteer(), apiKey)) {
+            serviceService.modifyLodge(id, lodge);
+            return ResponseEntity.status(HttpStatus.OK).body(null);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
     }
 
     @RequestMapping(value = "/cursos/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<Education> modifyEducation(@PathVariable("id") long id,
+    public ResponseEntity<Education> modifyEducation(@RequestHeader("apiKey") String apiKey,
+            @PathVariable("id") long id,
             @RequestBody DTOEducation education) {
-        serviceService.modifyEducation(id, education);
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+        if (userService.authenticate(education.getVolunteer(), apiKey)) {
+            serviceService.modifyEducation(id, education);
+            return ResponseEntity.status(HttpStatus.OK).body(null);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
     }
 
     @RequestMapping(value = "/donaciones/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<Donation> modifyDonation(@PathVariable("id") long id,
+    public ResponseEntity<Donation> modifyDonation(@RequestHeader("apiKey") String apiKey,
+            @PathVariable("id") long id,
             @RequestBody DTODonation donation) {
-        serviceService.modifyDonation(id, donation);
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+        if (userService.authenticate(donation.getVolunteer(), apiKey)) {
+            serviceService.modifyDonation(id, donation);
+            return ResponseEntity.status(HttpStatus.OK).body(null);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
     }
 
     @RequestMapping(value = "/empleos/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<Job> modifyJob(@PathVariable("id") long id, @RequestBody DTOJob job) {
-        serviceService.modifyJob(id, job);
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+    public ResponseEntity<Job> modifyJob(@RequestHeader("apiKey") String apiKey,
+            @PathVariable("id") long id, @RequestBody DTOJob job) {
+        if (userService.authenticate(job.getVolunteer(), apiKey)) {
+            serviceService.modifyJob(id, job);
+            return ResponseEntity.status(HttpStatus.OK).body(null);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
     }
 
     @RequestMapping(value = "/solicituddonacion", method = RequestMethod.POST)
-    public ResponseEntity<Void> createDonationRequest(
+    public ResponseEntity<Void> createDonationRequest(@RequestHeader("apiKey") String apiKey,
             @RequestBody DTODonationEnrollment dtoDonationEnrollment) {
-        System.out.println("Incide --------------------------------------------------------------");
-        serviceService.createDonationRequest(dtoDonationEnrollment);
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+        if (userService.authenticate(dtoDonationEnrollment.getDonation().getVolunteer(), apiKey)) {
+            serviceService.createDonationRequest(dtoDonationEnrollment);
+            return ResponseEntity.status(HttpStatus.OK).body(null);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
     }
 
     @RequestMapping(value = "/solicituddonacion", method = RequestMethod.GET)
