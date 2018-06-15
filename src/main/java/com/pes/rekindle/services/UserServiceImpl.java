@@ -43,11 +43,7 @@ import com.pes.rekindle.exceptions.UserNotExistsException;
 import com.pes.rekindle.exceptions.UserStateAlreadyUpdatedException;
 import com.pes.rekindle.repositories.AdminRepository;
 import com.pes.rekindle.repositories.ChatRepository;
-import com.pes.rekindle.repositories.DonationRepository;
-import com.pes.rekindle.repositories.EducationRepository;
-import com.pes.rekindle.repositories.JobRepository;
 import com.pes.rekindle.repositories.LinkRepository;
-import com.pes.rekindle.repositories.LodgeRepository;
 import com.pes.rekindle.repositories.MessageRepository;
 import com.pes.rekindle.repositories.RefugeeRepository;
 import com.pes.rekindle.repositories.ReportRepository;
@@ -59,18 +55,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     VolunteerRepository volunteerRepository;
+
     @Autowired
     AdminRepository adminRepository;
+
     @Autowired
     RefugeeRepository refugeeRepository;
-    @Autowired
-    LodgeRepository lodgeRepository;
-    @Autowired
-    EducationRepository educationRepository;
-    @Autowired
-    DonationRepository donationRepository;
-    @Autowired
-    JobRepository jobRepository;
 
     @Autowired
     ServiceService serviceService;
@@ -80,6 +70,7 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     ChatRepository chatRepository;
+
     @Autowired
     MessageRepository messageRepository;
 
@@ -398,15 +389,15 @@ public class UserServiceImpl implements UserService {
         Set<Job> jobs;
         Set<Education> courses;
         if (userType.equals("Refugee")) {
-            lodges = lodgeRepository.findByInscriptions_Mail(mail);
-            donations = donationRepository.findByInscriptions_Mail(mail);
-            courses = educationRepository.findByInscriptions_Mail(mail);
-            jobs = jobRepository.findByInscriptions_Mail(mail);
+            lodges = serviceService.getLodgeInscriptions(mail);
+            donations = serviceService.getDonationInscriptions(mail);
+            courses = serviceService.getEducationInscriptions(mail);
+            jobs = serviceService.getJobInscriptions(mail);
         } else {
-            lodges = lodgeRepository.findByVolunteer(mail);
-            donations = donationRepository.findByVolunteer(mail);
-            courses = educationRepository.findByVolunteer(mail);
-            jobs = jobRepository.findByVolunteer(mail);
+            lodges = serviceService.getLodgeByVolunteer(mail);
+            donations = serviceService.getDonationByVolunteer(mail);
+            courses = serviceService.getCourseByVolunteer(mail);
+            jobs = serviceService.getJobByVolunteer(mail);
         }
         for (Lodge lodge : lodges) {
             if (lodge.getEnded() == ended) {
@@ -441,7 +432,7 @@ public class UserServiceImpl implements UserService {
             case "Lodge":
                 enrollUserToLodge(mail, id);
 
-                Lodge lodge = lodgeRepository.findById(id);
+                Lodge lodge = serviceService.getLodge(id);
 
                 pusher.trigger(mail, "enroll-service",
                         Collections.singletonMap("message", new DTOService(lodge)));
@@ -449,7 +440,7 @@ public class UserServiceImpl implements UserService {
             case "Education":
                 enrollUserToEducation(mail, id);
 
-                Education education = educationRepository.findById(id);
+                Education education = serviceService.getEducation(id);
 
                 pusher.trigger(mail, "enroll-service",
                         Collections.singletonMap("message", new DTOService(education)));
@@ -457,7 +448,7 @@ public class UserServiceImpl implements UserService {
             case "Donation":
                 enrollUserToDonation(mail, id);
 
-                Donation donation = donationRepository.findById(id);
+                Donation donation = serviceService.getDonation(id);
 
                 pusher.trigger(mail, "enroll-service",
                         Collections.singletonMap("message", new DTOService(donation)));
@@ -465,7 +456,7 @@ public class UserServiceImpl implements UserService {
             case "Job":
                 enrollUserToJob(mail, id);
 
-                Job job = jobRepository.findById(id);
+                Job job = serviceService.getJob(id);
 
                 pusher.trigger(mail, "enroll-service",
                         Collections.singletonMap("message", new DTOService(job)));
@@ -492,7 +483,7 @@ public class UserServiceImpl implements UserService {
             lodge.setInscriptions(refugees);
 
             refugeeRepository.save(refugee);
-            lodgeRepository.save(lodge);
+            serviceService.saveLodge(lodge);
         }
     }
 
@@ -515,7 +506,7 @@ public class UserServiceImpl implements UserService {
             education.setInscriptions(refugees);
 
             refugeeRepository.save(refugee);
-            educationRepository.save(education);
+            serviceService.saveCourse(education);
         }
     }
 
@@ -538,7 +529,7 @@ public class UserServiceImpl implements UserService {
             donation.setInscriptions(refugees);
 
             refugeeRepository.save(refugee);
-            donationRepository.save(donation);
+            serviceService.saveDonation(donation);
         }
     }
 
@@ -561,7 +552,7 @@ public class UserServiceImpl implements UserService {
             job.setInscriptions(refugees);
 
             refugeeRepository.save(refugee);
-            jobRepository.save(job);
+            serviceService.saveJob(job);
         }
     }
 
@@ -575,7 +566,7 @@ public class UserServiceImpl implements UserService {
             case "Lodge":
                 unenrollUserFromLodge(mail, id);
 
-                Lodge lodge = lodgeRepository.findById(id);
+                Lodge lodge = serviceService.getLodge(id);
 
                 pusher.trigger(mail, "unenroll-service",
                         Collections.singletonMap("message", new DTOService(lodge)));
@@ -583,7 +574,7 @@ public class UserServiceImpl implements UserService {
             case "Education":
                 unenrollUserFromEducation(mail, id);
 
-                Education education = educationRepository.findById(id);
+                Education education = serviceService.getEducation(id);
 
                 pusher.trigger(mail, "unenroll-service",
                         Collections.singletonMap("message", new DTOService(education)));
@@ -591,7 +582,7 @@ public class UserServiceImpl implements UserService {
             case "Donation":
                 unenrollUserFromDonation(mail, id);
 
-                Donation donation = donationRepository.findById(id);
+                Donation donation = serviceService.getDonation(id);
 
                 pusher.trigger(mail, "unenroll-service",
                         Collections.singletonMap("message", new DTOService(donation)));
@@ -599,7 +590,7 @@ public class UserServiceImpl implements UserService {
             case "Job":
                 unenrollUserFromJob(mail, id);
 
-                Job job = jobRepository.findById(id);
+                Job job = serviceService.getJob(id);
 
                 pusher.trigger(mail, "unenroll-service",
                         Collections.singletonMap("message", new DTOService(job)));
@@ -621,7 +612,7 @@ public class UserServiceImpl implements UserService {
         job.setInscriptions(refugees);
 
         refugeeRepository.save(refugee);
-        jobRepository.save(job);
+        serviceService.saveJob(job);
     }
 
     private void unenrollUserFromDonation(String mail, Long id) {
@@ -638,7 +629,7 @@ public class UserServiceImpl implements UserService {
         donation.setInscriptions(refugees);
 
         refugeeRepository.save(refugee);
-        donationRepository.save(donation);
+        serviceService.saveDonation(donation);
 
     }
 
@@ -656,7 +647,7 @@ public class UserServiceImpl implements UserService {
         education.setInscriptions(refugees);
 
         refugeeRepository.save(refugee);
-        educationRepository.save(education);
+        serviceService.saveCourse(education);
 
     }
 
@@ -674,7 +665,7 @@ public class UserServiceImpl implements UserService {
         lodge.setInscriptions(refugees);
 
         refugeeRepository.save(refugee);
-        lodgeRepository.save(lodge);
+        serviceService.saveLodge(lodge);
     }
 
     @Override

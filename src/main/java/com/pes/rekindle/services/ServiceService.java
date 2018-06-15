@@ -4,6 +4,7 @@ package com.pes.rekindle.services;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import com.pes.rekindle.dto.DTODonation;
 import com.pes.rekindle.dto.DTODonationEnrollment;
@@ -68,5 +69,29 @@ public interface ServiceService {
     void rejectDonationRequest(Long donationId, String refugeeMail);
 
     void valorateService(DTOValoration dtoValoration);
+
+    Set<Lodge> getLodgeInscriptions(String mail);
+
+    Set<Lodge> getLodgeByVolunteer(String mail);
+
+    void saveLodge(Lodge lodge);
+
+    Set<Education> getEducationInscriptions(String mail);
+
+    Set<Education> getCourseByVolunteer(String mail);
+
+    void saveCourse(Education education);
+
+    Set<Donation> getDonationInscriptions(String mail);
+
+    Set<Donation> getDonationByVolunteer(String mail);
+
+    void saveDonation(Donation donation);
+
+    Set<Job> getJobInscriptions(String mail);
+
+    Set<Job> getJobByVolunteer(String mail);
+
+    void saveJob(Job job);
 
 }

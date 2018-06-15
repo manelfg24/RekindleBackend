@@ -551,4 +551,64 @@ public class ServiceServiceImpl implements ServiceService {
             educationEnrollmentRepository.save(educationEnrollment);
         }
     }
+
+    @Override
+    public Set<Lodge> getLodgeInscriptions(String mail) {
+        return lodgeRepository.findByInscriptions_Mail(mail);
+    }
+
+    @Override
+    public Set<Lodge> getLodgeByVolunteer(String mail) {
+        return lodgeRepository.findByVolunteer(mail);
+    }
+
+    @Override
+    public void saveLodge(Lodge lodge) {
+        lodgeRepository.save(lodge);
+    }
+
+    @Override
+    public Set<Education> getEducationInscriptions(String mail) {
+        return educationRepository.findByInscriptions_Mail(mail);
+    }
+
+    @Override
+    public Set<Education> getCourseByVolunteer(String mail) {
+        return educationRepository.findByVolunteer(mail);
+    }
+
+    @Override
+    public void saveCourse(Education education) {
+        educationRepository.save(education);
+    }
+
+    @Override
+    public Set<Donation> getDonationInscriptions(String mail) {
+        return donationRepository.findByInscriptions_Mail(mail);
+    }
+
+    @Override
+    public Set<Donation> getDonationByVolunteer(String mail) {
+        return donationRepository.findByVolunteer(mail);
+    }
+
+    @Override
+    public void saveDonation(Donation donation) {
+        donationRepository.save(donation);
+    }
+
+    @Override
+    public Set<Job> getJobInscriptions(String mail) {
+        return jobRepository.findByInscriptions_Mail(mail);
+    }
+
+    @Override
+    public Set<Job> getJobByVolunteer(String mail) {
+        return jobRepository.findByVolunteer(mail);
+    }
+
+    @Override
+    public void saveJob(Job job) {
+        jobRepository.save(job);
+    }
 }
