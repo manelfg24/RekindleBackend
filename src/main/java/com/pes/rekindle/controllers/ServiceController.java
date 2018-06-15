@@ -114,11 +114,11 @@ public class ServiceController {
     // -------------------------------------------------------------------------------------------------------------
 
     @RequestMapping(value = "/servicios/{mail}/{tipo}", method = RequestMethod.GET)
-    public ResponseEntity<Set<DTOService>> obtainOwnServices(
+    public ResponseEntity<List<DTOService>> obtainOwnServices(
             @PathVariable("mail") String mail,
             @PathVariable("tipo") String userType,
             @RequestParam ("ended")Boolean ended) {
-        Set<DTOService> result = userService.obtainOwnServices(mail, userType, ended);
+        List<DTOService> result = userService.obtainOwnServices(mail, userType, ended);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
