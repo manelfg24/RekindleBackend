@@ -1,7 +1,9 @@
 
 package com.pes.rekindle.dto;
 
-import java.sql.Time;
+//import java.sql.Time;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -16,9 +18,10 @@ public class DTODonation {
     private Integer phoneNumber;
     private String adress;
     private Integer places;
-    private Time startTime;
-    private Time endTime;
+    private String startTime;
+    private String endTime;
     private String description;
+    private Boolean ended;
 
     public DTODonation() {
         super();
@@ -33,9 +36,15 @@ public class DTODonation {
         this.phoneNumber = donation.getPhoneNumber();
         this.adress = donation.getAdress();
         this.places = donation.getPlaces();
-        this.startTime = donation.getStartTime();
-        this.endTime = donation.getEndTime();
+        
+       // LocalTime endTime = LocalTime.parse(dtoDonation.getEndTime(), DateTimeFormatter.ofPattern("H:mm:ss"));
+        
+        DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_TIME;
+        this.startTime = formatter.format(donation.getStartTime());
+        DateTimeFormatter formatter1 = DateTimeFormatter.ISO_LOCAL_TIME;
+        this.endTime = formatter1.format(donation.getEndTime());
         this.description = donation.getDescription();
+        this.ended = donation.getEnded();
     }
 
     public long getId() {
@@ -94,20 +103,22 @@ public class DTODonation {
         this.places = places;
     }
 
-    public Time getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Time startTime) {
-        this.startTime = startTime;
+    public void setStartTime(LocalTime startTime) {
+    	DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_TIME;
+        this.startTime = formatter.format(startTime);
     }
 
-    public Time getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Time endTime) {
-        this.endTime = endTime;
+    public void setEndTime(LocalTime endTime) {
+    	DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_TIME;
+        this.endTime = formatter.format(endTime);
     }
 
     public String getDescription() {
@@ -117,4 +128,12 @@ public class DTODonation {
     public void setDescription(String description) {
         this.description = description;
     }
+
+	public Boolean getEnded() {
+		return ended;
+	}
+
+	public void setEnded(Boolean ended) {
+		this.ended = ended;
+	}
 }

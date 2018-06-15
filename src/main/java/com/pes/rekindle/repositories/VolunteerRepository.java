@@ -2,6 +2,7 @@
 package com.pes.rekindle.repositories;
 
 import java.util.Optional;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -35,4 +36,6 @@ public interface VolunteerRepository extends Repository<Volunteer, String> {
     public void flush();
 
 	public Volunteer findByMail(Volunteer volunteer);
+
+	public Set<Volunteer> findAll();
 }

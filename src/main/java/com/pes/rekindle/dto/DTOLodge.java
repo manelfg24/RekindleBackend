@@ -16,6 +16,7 @@ public class DTOLodge {
     private Integer places;
     private String dateLimit;
     private String description;
+    private Boolean ended;
 
     public DTOLodge() {
         super();
@@ -33,6 +34,7 @@ public class DTOLodge {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         this.dateLimit = formatter.format(lodge.getDateLimit());
         this.description = lodge.getDescription();
+        this.ended =lodge.getEnded();
     }
 
     public long getId() {
@@ -107,4 +109,12 @@ public class DTOLodge {
     public void setDescription(String description) {
         this.description = description;
     }
+
+	public Boolean getEnded() {
+		return ended;
+	}
+
+	public void setEnded(Boolean ended) {
+		this.ended = ended;
+	}
 }

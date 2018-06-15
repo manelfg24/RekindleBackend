@@ -2,6 +2,8 @@
 package com.pes.rekindle.services;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -86,6 +88,7 @@ public class ServiceServiceImpl implements ServiceService {
 
         }
         lodge.setDescription(dtoLodge.getDescription());
+        lodge.setEnded(dtoLodge.getEnded());
         lodgeRepository.save(lodge);
     }
 
@@ -97,9 +100,23 @@ public class ServiceServiceImpl implements ServiceService {
         donation.setPhoneNumber(dtoDonation.getPhoneNumber());
         donation.setAdress(dtoDonation.getAdress());
         donation.setPlaces(dtoDonation.getPlaces());
-        donation.setStartTime(dtoDonation.getStartTime());
-        donation.setEndTime(dtoDonation.getEndTime());
+        //DateTimeFormatter formatter = DateTimeFormatter.ISO_TIME;
+        try {
+        	LocalTime startTime = LocalTime.parse(dtoDonation.getStartTime(), DateTimeFormatter.ofPattern("HH:mm:ss"));
+            donation.setStartTime(startTime);
+        } catch (Exception e) {
+
+        }
+        try {
+        	LocalTime endTime = LocalTime.parse(dtoDonation.getEndTime(), DateTimeFormatter.ofPattern("HH:mm:ss"));
+            donation.setEndTime(endTime);
+        } catch (Exception e) {
+
+        }
+        //donation.setStartTime(dtoDonation.getStartTime());
+        //donation.setEndTime(dtoDonation.getEndTime());
         donation.setDescription(dtoDonation.getDescription());
+        donation.setEnded(dtoDonation.getEnded());
         donationRepository.save(donation);
     }
 
@@ -114,7 +131,9 @@ public class ServiceServiceImpl implements ServiceService {
         education.setRequirements(dtoEducation.getRequirements());
         education.setSchedule(dtoEducation.getSchedule());
         education.setPlaces(dtoEducation.getPlaces());
+        education.setPrice(dtoEducation.getPrice());
         education.setDescription(dtoEducation.getDescription());
+        education.setEnded(dtoEducation.getEnded());
         educationRepository.save(education);
     }
 
@@ -133,30 +152,39 @@ public class ServiceServiceImpl implements ServiceService {
         job.setPlaces(dtoJob.getPlaces());
         job.setSalary(dtoJob.getSalary());
         job.setDescription(dtoJob.getDescription());
+        job.setEnded(dtoJob.getEnded());
         jobRepository.save(job);
     }
 
     public List<DTOService> listServices() {
-        ArrayList<DTOService> dtosService = new ArrayList<DTOService>();        
+        ArrayList<DTOService> dtosService = new ArrayList<DTOService>();      
         Set<Donation> donations = donationRepository.findAll();
         for (Donation donation : donations) {
-            DTOService dtoDonation = new DTOService(donation);
-            dtosService.add(dtoDonation);
+        	if(donation.getEnded() && donation.getInscriptions().size() < donation.getPlaces()) {
+	            DTOService dtoDonation = new DTOService(donation);
+	            dtosService.add(dtoDonation);
+        	}
         }
         Set<Education> courses = educationRepository.findAll();
         for (Education education : courses) {
-            DTOService dtoEducation = new DTOService(education);
-            dtosService.add(dtoEducation);
+        	if(education.getEnded() && education.getInscriptions().size() < education.getPlaces()) {
+	            DTOService dtoEducation = new DTOService(education);
+	            dtosService.add(dtoEducation);
+        	}
         }
         Set<Job> jobs = jobRepository.findAll();
         for (Job job : jobs) {
-            DTOService dtoJob = new DTOService(job);
-            dtosService.add(dtoJob);
+        	if(job.getEnded() && job.getInscriptions().size() < job.getPlaces()) {
+	            DTOService dtoJob = new DTOService(job);
+	            dtosService.add(dtoJob);
+        	}
         }
         Set<Lodge> lodges = lodgeRepository.findAll();
         for (Lodge lodge : lodges) {
-            DTOService dtoLodge = new DTOService(lodge);
-            dtosService.add(dtoLodge);            
+        	if(lodge.getEnded() && lodge.getInscriptions().size() < lodge.getPlaces()) {
+	            DTOService dtoLodge = new DTOService(lodge);
+	            dtosService.add(dtoLodge);     
+        	}
         }
         /*dtosService.sort( new Comparator<DTOService>() {
             @Override
@@ -288,9 +316,23 @@ public class ServiceServiceImpl implements ServiceService {
         donation.setPhoneNumber(dtoDonation.getPhoneNumber());
         donation.setAdress(dtoDonation.getAdress());
         donation.setPlaces(dtoDonation.getPlaces());
-        donation.setStartTime(dtoDonation.getStartTime());
-        donation.setEndTime(dtoDonation.getEndTime());
+        //DateTimeFormatter formatter = DateTimeFormatter.ISO_TIME;
+        try {
+        	LocalTime startTime = LocalTime.parse(dtoDonation.getStartTime(), DateTimeFormatter.ofPattern("HH:mm:ss"));            
+            donation.setStartTime(startTime);;
+        } catch (Exception e) {
+
+        }
+        try {
+        	LocalTime endTime = LocalTime.parse(dtoDonation.getEndTime(), DateTimeFormatter.ofPattern("HH:mm:ss"));
+            donation.setEndTime(endTime);;
+        } catch (Exception e) {
+
+        }
+        //donation.setStartTime(dtoDonation.getStartTime());
+        //donation.setEndTime(dtoDonation.getEndTime());
         donation.setDescription(dtoDonation.getDescription());
+        donation.setEnded(dtoDonation.getEnded());
         donationRepository.save(donation);
 
     }
@@ -312,6 +354,7 @@ public class ServiceServiceImpl implements ServiceService {
 
         }
         lodge.setDescription(dtoLodge.getDescription());
+        lodge.setEnded(dtoLodge.getEnded());
         lodgeRepository.save(lodge);
 
         Pusher pusher = new Pusher("525518", "743a4fb4a1370f0ca9a4", "c78f3bfa72330a58ee1f");
@@ -335,6 +378,7 @@ public class ServiceServiceImpl implements ServiceService {
         education.setSchedule(dtoEducation.getSchedule());
         education.setPlaces(dtoEducation.getPlaces());
         education.setDescription(dtoEducation.getDescription());
+        education.setEnded(dtoEducation.getEnded());
         educationRepository.save(education);
 
     }
@@ -356,6 +400,7 @@ public class ServiceServiceImpl implements ServiceService {
         job.setPlaces(dtoJob.getPlaces());
         job.setSalary(dtoJob.getSalary());
         job.setDescription(dtoJob.getDescription());
+        job.setEnded(dtoJob.getEnded());
         jobRepository.save(job);
 
     }

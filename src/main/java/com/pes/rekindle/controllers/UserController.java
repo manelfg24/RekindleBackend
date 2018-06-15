@@ -24,8 +24,11 @@ import com.pes.rekindle.dto.DTOLogInInfo;
 import com.pes.rekindle.dto.DTOMessage;
 import com.pes.rekindle.dto.DTOReport;
 import com.pes.rekindle.dto.DTOUser;
+import com.pes.rekindle.dto.DTOValoration;
+import com.pes.rekindle.exceptions.ReportNotExistsException;
 import com.pes.rekindle.exceptions.UserAlreadyExistsException;
 import com.pes.rekindle.exceptions.UserNotExistsException;
+import com.pes.rekindle.exceptions.UserStateAlreadyUpdatedException;
 import com.pes.rekindle.services.UserService;
 import com.pusher.rest.Pusher;
 
@@ -60,6 +63,9 @@ public class UserController {
         DTOUser dtoUser;
         try {
             dtoUser = userService.getUser(logInInfo);
+            if (dtoUser.getEnabled()==0) {
+            	 return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+            }
             return ResponseEntity.status(HttpStatus.OK).body(dtoUser);
         } catch (LoginException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
@@ -139,9 +145,55 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
+    
+    @RequestMapping(value = "/usuarios", method = RequestMethod.GET)
+    public ResponseEntity<Set<DTOUser>> getAllUsers() {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getAllUsers());
+    }
+    
+    @RequestMapping(value = "/usuarios/{mail}/enabled", method = RequestMethod.GET)
+    public ResponseEntity<Integer> isUserEnabled(@PathVariable String mail) {
+    	try {
+			return ResponseEntity.status(HttpStatus.OK).body(userService.isUserEnabled(mail));
+		} catch (UserNotExistsException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
+    }
+    
+    @RequestMapping(value = "/usuarios/{mail}/enable", method = RequestMethod.PUT)
+    public ResponseEntity<Void> enableUser(@PathVariable String mail) {
+    	try {
+			userService.modifyBannedStatus(mail, 1);
+		} catch (UserNotExistsException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		} catch (UserStateAlreadyUpdatedException e) {
+			return ResponseEntity.status(HttpStatus.NOT_MODIFIED).body(null);
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+    
+    @RequestMapping(value = "/usuarios/{mail}/disable", method = RequestMethod.PUT)
+    public ResponseEntity<Void> disableUser(@PathVariable String mail, @RequestParam String motive) {
+    	try {
+			userService.modifyBannedStatus(mail, 0);
+		} catch (UserNotExistsException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		} catch (UserStateAlreadyUpdatedException e) {
+			return ResponseEntity.status(HttpStatus.NOT_MODIFIED).body(null);
+		}
+    	
+        Pusher pusher = new Pusher("525518", "743a4fb4a1370f0ca9a4", "c78f3bfa72330a58ee1f");
+        pusher.setCluster("eu");
+        pusher.setEncrypted(true);
+
+        pusher.trigger(mail, "ban",
+                Collections.singletonMap("message", motive));
+    	
+		return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
 
     @RequestMapping(value = "/refugiados", method = RequestMethod.GET)
-    public ResponseEntity<Set<DTOUser>> findRefugee(@RequestParam("name") String name,
+    public ResponseEntity<Set<DTOUser>> findRefugees(@RequestParam("name") String name,
             @RequestParam("surname1") String surname1,
             @RequestParam("surname2") String surname2, @RequestParam("birthdate") String birthdate,
             @RequestParam("sex") String sex,
@@ -277,6 +329,16 @@ public class UserController {
     @RequestMapping(value = "/reportes/{id}", method = RequestMethod.GET)
     public ResponseEntity<DTOReport> getReport(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getReport(id));
+    }
+    
+    @RequestMapping(value = "/reportes/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<Void> deleteReport(@PathVariable Long id) {
+    	try {
+			userService.deleteReport(id);
+		} catch (ReportNotExistsException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
     @RequestMapping(value = "/links", method = RequestMethod.POST)

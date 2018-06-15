@@ -12,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.sql.Time;
+import java.time.LocalTime;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -83,8 +84,8 @@ public class TestTest {
         dtoDonation.setPhoneNumber(93427512);
         dtoDonation.setAdress("adress donation cero");
         dtoDonation.setDescription("Ropa para sucias cucarachas");
-        dtoDonation.setStartTime(new Time(10, 0, 0));
-        dtoDonation.setEndTime(new Time(11, 0, 0));
+        dtoDonation.setStartTime(LocalTime.now());
+        dtoDonation.setEndTime(LocalTime.now());
         dtoDonation.setPlaces(5);
         
         Gson gson = new Gson();

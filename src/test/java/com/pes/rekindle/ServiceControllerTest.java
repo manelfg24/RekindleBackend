@@ -13,6 +13,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.sql.Time;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 import org.junit.Before;
@@ -172,7 +174,7 @@ public class ServiceControllerTest {
         		.andExpect(status().isOk());   
     }
     
-   /* @Test 
+    @Test 
     public void createDonationTest() throws Exception {
     	DTODonation dtoDonation = new DTODonation();
     	dtoDonation.setServiceType("Donation");
@@ -182,17 +184,19 @@ public class ServiceControllerTest {
     	dtoDonation.setAdress("Balmes");
     	dtoDonation.setPlaces(2);
     	dtoDonation.setDescription("Donación de ropa");
-    	Time t = new Time(10, 0, 0);
-    	Time t2 = new Time(11, 0, 0);
-    	dtoDonation.setStartTime(t);
-    	dtoDonation.setEndTime(t2);
+    	LocalTime starTime = LocalTime.parse("10:22:11", DateTimeFormatter.ofPattern("HH:mm:ss"));
+    	LocalTime endTime = LocalTime.parse("11:22:11", DateTimeFormatter.ofPattern("HH:mm:ss"));
+    	dtoDonation.setStartTime(starTime);
+    	dtoDonation.setEndTime(endTime);
+    	dtoDonation.setEnded(true);
         Gson gson = new Gson();
         String json = gson.toJson(dtoDonation);
         this.mockMvc
         		.perform(post("/donaciones").contentType(MediaType.APPLICATION_JSON_UTF8)
         				.content(json))
+        		.andDo(print())
         		.andExpect(status().isOk());   
-    }*/
+    }
     
     
     @Test
@@ -246,6 +250,7 @@ public class ServiceControllerTest {
         this.mockMvc
                 .perform(get("/servicios"))
                 .andExpect(status().isOk())
+                .andDo(print())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$.[0].id").value(1))
                 .andExpect(jsonPath("$.[1].id").value(2))
@@ -303,7 +308,7 @@ public class ServiceControllerTest {
     @Test
     public void obtainOwnServicesTest() throws Exception {
         this.mockMvc
-                .perform(get("/servicios/{mail}/{tipo}", "mailRoger" , "Volunteer"))
+                .perform(get("/servicios/{mail}/{tipo}", "mailRoger" , "Volunteer").param("ended", "1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.[0].volunteer").value("mailRoger"))
         		.andExpect(jsonPath("$.[1].volunteer").value("mailRoger"))
@@ -349,7 +354,6 @@ public class ServiceControllerTest {
         		.perform(put("/alojamientos/{id}", 1).contentType(MediaType.APPLICATION_JSON_UTF8)
         				.content(json))
         		.andDo(print())
-        		.andDo((ResultHandler)jsonPath("$.phoneNumber").value(931111333))
         		.andExpect(status().isOk());   
     }
     

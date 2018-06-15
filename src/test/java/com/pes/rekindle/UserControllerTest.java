@@ -256,13 +256,13 @@ public class UserControllerTest {
                         .param("name", "felipe")
                         .param("surname1", "")
                         .param("surname2", "")
-                        .param("sex", "")
+                        .param("sex", "-")
                         .param("birthdate", "1890-01-01")
                         .param("country", "")
                         .param("town", "")
                         .param("ethnic", "")
-                        .param("blood", "")
-                        .param("eye", "")
+                        .param("blood", "-")
+                        .param("eye", "-")
                         .param("mail", ""))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -280,7 +280,7 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.[0].biography").value("La biografia de Felipe"))
                 .andExpect(jsonPath("$.[0].photo").value("photo Felipe"));
     }
-
+    
     @Test
     public void getNotExistentRefugeeShouldReturnNotFound() throws Exception {
         String mail = "mailNotExistent";

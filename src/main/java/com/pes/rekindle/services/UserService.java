@@ -13,8 +13,10 @@ import com.pes.rekindle.dto.DTOMessage;
 import com.pes.rekindle.dto.DTOReport;
 import com.pes.rekindle.dto.DTOService;
 import com.pes.rekindle.dto.DTOUser;
+import com.pes.rekindle.exceptions.ReportNotExistsException;
 import com.pes.rekindle.exceptions.UserAlreadyExistsException;
 import com.pes.rekindle.exceptions.UserNotExistsException;
+import com.pes.rekindle.exceptions.UserStateAlreadyUpdatedException;
 
 public interface UserService {
 
@@ -59,7 +61,7 @@ public interface UserService {
 
     void recoverPassword(String mail, String passwordNew) throws LoginException;
 
-    Set<DTOService> obtainOwnServices(String mail, String userType);
+    Set<DTOService> obtainOwnServices(String mail, String userType, Boolean ended);
 
     void unenrollUserFromService(String mail, Long id, String serviceType);
 
@@ -98,5 +100,14 @@ public interface UserService {
 
     void deleteLink(Long id);
 
-    void valorateVolunteer(String volunteer, float newValoration, float oldValoration);
+	void valorateVolunteer(String volunteer, float newValoration, float oldValoration);
+
+	Set<DTOUser> getAllUsers();
+
+	Integer isUserEnabled(String mail) throws UserNotExistsException ;
+
+	void modifyBannedStatus(String mail, int userDesiredState) throws UserNotExistsException, UserStateAlreadyUpdatedException;
+
+	void deleteReport(Long id) throws ReportNotExistsException;
+
 }

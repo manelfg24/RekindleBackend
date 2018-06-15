@@ -1,5 +1,6 @@
 package com.pes.rekindle.repositories;
 
+import java.util.Optional;
 import java.util.Set;
 
 import javax.transaction.Transactional;
@@ -16,5 +17,9 @@ public interface ReportRepository extends Repository<Report, String> {
 	Set<Report> findAll();
 
 	Report findById(Long id);
+
+	Optional<Report> findOptionalById(long id);
+
+	void deleteById(Long id);
 	
 }

@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.sql.Time;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 import javax.persistence.GeneratedValue;
@@ -45,8 +46,8 @@ public class DonationRepositoryTest {
 		donation.setPhoneNumber(32843479);
 		donation.setAdress("C/Aragon");
 		donation.setPlaces(5);
-		donation.setStartTime(new Time(9));
-		donation.setEndTime(new Time(13));
+		donation.setStartTime(LocalTime.now());
+		donation.setEndTime(LocalTime.now());
 		donation.setDescription("Donacion de ropa masculina de la talla XL");
 		
 		Volunteer volunteer = new Volunteer();
