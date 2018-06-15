@@ -165,11 +165,12 @@ public class ServiceControllerTest {
 
         }
         dtoLodge.setDescription("Alojamiento para dos personas");
+        dtoLodge.setEnded(false);
         Gson gson = new Gson();
         String json = gson.toJson(dtoLodge);
         this.mockMvc
         		.perform(post("/alojamientos").contentType(MediaType.APPLICATION_JSON_UTF8)
-        				.content(json))
+        				.content(json).header("apiKey", "2"))
         		//.andDo(print())
         		.andExpect(status().isOk());   
     }
@@ -188,12 +189,12 @@ public class ServiceControllerTest {
     	LocalTime endTime = LocalTime.parse("11:22:11", DateTimeFormatter.ofPattern("HH:mm:ss"));
     	dtoDonation.setStartTime(starTime);
     	dtoDonation.setEndTime(endTime);
-    	dtoDonation.setEnded(true);
+    	dtoDonation.setEnded(false);
         Gson gson = new Gson();
         String json = gson.toJson(dtoDonation);
         this.mockMvc
         		.perform(post("/donaciones").contentType(MediaType.APPLICATION_JSON_UTF8)
-        				.content(json))
+        				.content(json).header("apiKey", "2"))
         		//.andDo(print())
         		.andExpect(status().isOk());   
     }
@@ -213,11 +214,12 @@ public class ServiceControllerTest {
     	dtoEdu.setPlaces(2);
     	dtoEdu.setPrice(0);
     	dtoEdu.setDescription("Clases de español basico por M.Rjoy");
+    	dtoEdu.setEnded(false);
     	Gson gsonE = new Gson();
         String jsonE = gsonE.toJson(dtoEdu);
         this.mockMvc
         		.perform(post("/cursos").contentType(MediaType.APPLICATION_JSON_UTF8)
-        				.content(jsonE))
+        				.content(jsonE).header("apiKey", "2"))
         		.andExpect(status().isOk());   
     }
     
@@ -237,11 +239,12 @@ public class ServiceControllerTest {
     	dtoJob.setSalary(400);
     	dtoJob.setPlaces(2);
     	dtoJob.setDescription("Trabajo de aprendiz de carpintero");
+    	dtoJob.setEnded(false);
     	Gson gsonJ = new Gson();
         String jsonJ = gsonJ.toJson(dtoJob);
         this.mockMvc
         		.perform(post("/empleos").contentType(MediaType.APPLICATION_JSON_UTF8)
-        				.content(jsonJ))
+        				.content(jsonJ).header("apiKey", "2"))
         		.andExpect(status().isOk());   
     }
     
