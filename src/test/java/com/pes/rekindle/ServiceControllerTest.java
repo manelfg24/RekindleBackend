@@ -39,9 +39,11 @@ import com.google.gson.Gson;
 import com.pes.RekindleApplication;
 import com.pes.rekindle.controllers.ServiceController;
 import com.pes.rekindle.dto.DTODonation;
+import com.pes.rekindle.dto.DTODonationEnrollment;
 import com.pes.rekindle.dto.DTOEducation;
 import com.pes.rekindle.dto.DTOJob;
 import com.pes.rekindle.dto.DTOLodge;
+import com.pes.rekindle.dto.DTOService;
 import com.pes.rekindle.entities.Link;
 import com.pes.rekindle.entities.Lodge;
 
@@ -165,12 +167,12 @@ public class ServiceControllerTest {
 
         }
         dtoLodge.setDescription("Alojamiento para dos personas");
+        dtoLodge.setEnded(false);
         Gson gson = new Gson();
         String json = gson.toJson(dtoLodge);
         this.mockMvc
         		.perform(post("/alojamientos").contentType(MediaType.APPLICATION_JSON_UTF8)
-        				.content(json))
-        		//.andDo(print())
+        				.content(json).header("apiKey", "2"))
         		.andExpect(status().isOk());   
     }
     
@@ -188,12 +190,12 @@ public class ServiceControllerTest {
     	LocalTime endTime = LocalTime.parse("11:22:11", DateTimeFormatter.ofPattern("HH:mm:ss"));
     	dtoDonation.setStartTime(starTime);
     	dtoDonation.setEndTime(endTime);
-    	dtoDonation.setEnded(true);
+    	dtoDonation.setEnded(false);
         Gson gson = new Gson();
         String json = gson.toJson(dtoDonation);
         this.mockMvc
         		.perform(post("/donaciones").contentType(MediaType.APPLICATION_JSON_UTF8)
-        				.content(json))
+        				.content(json).header("apiKey", "2"))
         		//.andDo(print())
         		.andExpect(status().isOk());   
     }
@@ -213,11 +215,12 @@ public class ServiceControllerTest {
     	dtoEdu.setPlaces(2);
     	dtoEdu.setPrice(0);
     	dtoEdu.setDescription("Clases de español basico por M.Rjoy");
+    	dtoEdu.setEnded(false);
     	Gson gsonE = new Gson();
         String jsonE = gsonE.toJson(dtoEdu);
         this.mockMvc
         		.perform(post("/cursos").contentType(MediaType.APPLICATION_JSON_UTF8)
-        				.content(jsonE))
+        				.content(jsonE).header("apiKey", "2"))
         		.andExpect(status().isOk());   
     }
     
@@ -237,11 +240,12 @@ public class ServiceControllerTest {
     	dtoJob.setSalary(400);
     	dtoJob.setPlaces(2);
     	dtoJob.setDescription("Trabajo de aprendiz de carpintero");
+    	dtoJob.setEnded(false);
     	Gson gsonJ = new Gson();
         String jsonJ = gsonJ.toJson(dtoJob);
         this.mockMvc
         		.perform(post("/empleos").contentType(MediaType.APPLICATION_JSON_UTF8)
-        				.content(jsonJ))
+        				.content(jsonJ).header("apiKey", "2"))
         		.andExpect(status().isOk());   
     }
     
@@ -250,7 +254,6 @@ public class ServiceControllerTest {
         this.mockMvc
                 .perform(get("/servicios"))
                 .andExpect(status().isOk())
-                //.andDo(print())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$.[0].id").value(1))
                 .andExpect(jsonPath("$.[1].id").value(2))
@@ -306,7 +309,7 @@ public class ServiceControllerTest {
     }
     
     @Test
-    public void obtainOwnServicesTest() throws Exception {
+    public void obtainOwnServicesVolunterTest() throws Exception {
         this.mockMvc
                 .perform(get("/servicios/{mail}/{tipo}", "mailRoger" , "Volunteer").param("ended", "1"))
                 .andExpect(status().isOk())
@@ -317,6 +320,19 @@ public class ServiceControllerTest {
         		.andExpect(jsonPath("$.[3].volunteer").value("mailRoger"))
         		.andExpect(jsonPath("$.[4].volunteer").value("mailRoger"));
     }
+    
+    @Test
+    public void obtainOwnServicesRefugeeTest() throws Exception {
+        this.mockMvc
+                .perform(get("/servicios/{mail}/{tipo}", "mailRafael" , "Refugee").param("ended", "0"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.[0].volunteer").value("mailRoger"))
+                .andExpect(jsonPath("$.[0].id").value("1"))
+        		.andExpect(jsonPath("$.[1].volunteer").value("mailAlex"))
+        		.andExpect(jsonPath("$.[1].id").value("1"))
+        		.andExpect(jsonPath("$.[2].volunteer").value("mailRoger"))
+        		.andExpect(jsonPath("$.[2].id").value("2"));
+    }
 
     @Test
     public void userAlreadyEnrolledTest() throws Exception {
@@ -324,11 +340,18 @@ public class ServiceControllerTest {
                 .perform(get("/refugiados/{mail}/inscripciones/{id}/{tipo}", "mailRafael" , "1","Donation"))
                 .andExpect(status().isOk());                
     }
+    //Alerta
+    @Test
+    public void userAlreadyEnrolledTest2() throws Exception {
+        this.mockMvc
+                .perform(get("/refugiados/{mail}/inscripciones/{id}/{tipo}", "mailRafael" , "1","Lodge"))
+                .andExpect(status().isOk());                
+    }
     
     @Test
     public void deleteServiceTest() throws Exception {
         this.mockMvc
-                .perform(delete("/servicios/{id}/{tipo}", "1","Donation"))
+                .perform(delete("/servicios/{id}/{tipo}", "1","Donation").header("apiKey", "3").param("mailUser", "mailAlex"))
                 .andExpect(status().isOk());                
     }
     
@@ -353,9 +376,116 @@ public class ServiceControllerTest {
         String json = gson.toJson(dtoLodge);
         this.mockMvc
         		.perform(put("/alojamientos/{id}", 1).contentType(MediaType.APPLICATION_JSON_UTF8)
-        				.content(json))
+        				.content(json).header("apiKey", 2))
         		.andDo(print())
         		.andExpect(status().isOk());   
     }
     
+    @Test 
+    public void modifyEducationTest() throws Exception {
+    	DTOEducation dtoEdu = new DTOEducation();
+    	dtoEdu.setServiceType("Education");
+    	dtoEdu.setName("Clases de Español de España");
+    	dtoEdu.setVolunteer("mailRoger");
+    	dtoEdu.setPhoneNumber(936666666);
+    	dtoEdu.setAdress("Balmes");
+    	dtoEdu.setAmbit("Idioma");
+       	dtoEdu.setRequirements("Nada");
+    	dtoEdu.setSchedule("Tardes");
+    	dtoEdu.setPlaces(2);
+    	//dtoEdu.setPrice(0);
+    	dtoEdu.setDescription("Clases de español basico por M.Rjoy");
+    	dtoEdu.setEnded(false);
+        Gson gson = new Gson();
+        String json = gson.toJson(dtoEdu);
+        this.mockMvc
+        		.perform(put("/cursos/{id}", 2).contentType(MediaType.APPLICATION_JSON_UTF8)
+        				.content(json).header("apiKey", 2))
+        		.andDo(print())
+        		.andExpect(status().isOk());   
+    }
+    
+    
+    
+    
+    @Test 
+    public void modifyDonationTest() throws Exception {
+    	DTODonation dtoDonation = new DTODonation();
+    	dtoDonation.setName("Donación de ropa");
+    	dtoDonation.setVolunteer("mailRoger");
+    	dtoDonation.setPhoneNumber(936666666);
+    	dtoDonation.setAdress("Balmes");
+    	dtoDonation.setPlaces(4);
+    	dtoDonation.setDescription("Donación de ropa");
+    	LocalTime starTime = LocalTime.parse("20:22:11", DateTimeFormatter.ofPattern("HH:mm:ss"));
+    	dtoDonation.setStartTime(starTime);
+        Gson gson = new Gson();
+        String json = gson.toJson(dtoDonation);
+        this.mockMvc
+        		.perform(put("/donaciones/{id}", 2).contentType(MediaType.APPLICATION_JSON_UTF8)
+        				.content(json).header("apiKey", 2))
+        		.andDo(print())
+        		.andExpect(status().isOk());   
+    }
+    
+    @Test 
+    public void modifyJobTest() throws Exception {
+    	DTOJob dtoJob = new DTOJob();
+    	dtoJob.setName("Carpintero");
+    	dtoJob.setVolunteer("mailRoger");
+    	dtoJob.setPhoneNumber(936666666);
+    	dtoJob.setAdress("Balmes");
+    	dtoJob.setCharge("Becario");
+    	dtoJob.setRequirements("Nada");
+    	dtoJob.setHoursDay(4);
+    	dtoJob.setHoursWeek(20);
+    	dtoJob.setContractDuration(5);
+    	dtoJob.setSalary(400);
+    	dtoJob.setPlaces(2);
+    	dtoJob.setDescription("Trabajo de aprendiz de carpintero");
+    	dtoJob.setEnded(false);
+    	Gson gson = new Gson();
+        String json = gson.toJson(dtoJob);
+        this.mockMvc
+        		.perform(put("/empleos/{id}", 2).contentType(MediaType.APPLICATION_JSON_UTF8)
+        				.content(json).header("apiKey", 2))
+        		.andDo(print())
+        		.andExpect(status().isOk());   
+    }
+    
+    @Test
+    public void createDonationRequestTest() throws Exception {
+    	DTOService dtoDonation = new DTOService();
+    	dtoDonation.setServiceType("Donation");
+    	dtoDonation.setName("Donation numero uno");
+    	dtoDonation.setVolunteer("mailRoger");
+    	dtoDonation.setPhoneNumber(93427512);
+    	dtoDonation.setAdress("adress donation one");
+    	dtoDonation.setDescription("Descripcion del donation uno");
+    	dtoDonation.setEnded(false);
+    	DTODonationEnrollment dtoDEn = new DTODonationEnrollment();
+    	dtoDEn.setDonation(dtoDonation);
+    	dtoDEn.setRefugeeMail("mailRafael");
+    	dtoDEn.setMotive("Porque puedo");
+    	//dtoDEn.setValoration(valoration);
+    	Gson gson = new Gson();
+        String json = gson.toJson(dtoDEn);
+        this.mockMvc
+                .perform(post("/solicituddonacion").contentType(MediaType.APPLICATION_JSON_UTF8)
+                		.content(json).header("apiKey", "6a"))
+                .andDo(print())
+                .andExpect(status().isOk());                
+    }
+    
+    /*@Test
+    public void listDonationRequestsTest() throws Exception {
+        this.mockMvc
+                .perform(get("/solicituddonacion"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=UTF-8"))
+                .andDo(print())
+                .andExpect(jsonPath("$.[0].refugeeMail").value("mailRafael"))
+                .andExpect(jsonPath("$.[0].motive").value("Motive"))
+        		.andExpect(jsonPath("$.[0].valoration").value("3"));
+    }*/
 }

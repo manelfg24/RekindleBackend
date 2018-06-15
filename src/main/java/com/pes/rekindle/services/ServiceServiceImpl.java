@@ -160,6 +160,7 @@ public class ServiceServiceImpl implements ServiceService {
         ArrayList<DTOService> dtosService = new ArrayList<DTOService>();
         Set<Donation> donations = donationRepository.findAll();
         for (Donation donation : donations) {
+
             if (!donation.getEnded() && donation.getInscriptions().size() < donation.getPlaces()) {
                 DTOService dtoDonation = new DTOService(donation);
                 dtosService.add(dtoDonation);
