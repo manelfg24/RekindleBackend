@@ -134,6 +134,11 @@ public class UserServiceImpl implements UserService {
                 Volunteer volunteer = oVolunteer.get();
                 return (volunteer.getApiKey().equals(apiKey));
             }
+            Optional<Admin> oAdmin = adminRepository.findOptionalByMail(mail);
+            if (oAdmin.isPresent()) {
+                Admin admin = oAdmin.get();
+                return (admin.getApiKey().equals(apiKey));
+            }
             return false;
         }
     }
