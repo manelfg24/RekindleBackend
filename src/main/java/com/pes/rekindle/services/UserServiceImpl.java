@@ -124,20 +124,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean authenticate(String mail, String apiKey) {
-        boolean authenticated = false;
         Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMail(mail);
         if (oRefugee.isPresent()) {
             Refugee refugee = oRefugee.get();
-            authenticated = (refugee.getApiKey() == apiKey);
+            return (refugee.getApiKey() == apiKey);
         } else {
             Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMail(mail);
             if (oVolunteer.isPresent()) {
                 Volunteer volunteer = oVolunteer.get();
-                authenticated = (volunteer.getApiKey() == apiKey);
+                return (volunteer.getApiKey() == apiKey);
             }
+            return false;
         }
-
-        return authenticated;
     }
 
     @Override
@@ -240,7 +238,6 @@ public class UserServiceImpl implements UserService {
         volunteer.setSurname1(dtoUser.getSurname1());
         volunteer.setSurname2(dtoUser.getSurname2());
         volunteer.setPhoto(dtoUser.getPhoto());
-        volunteer.setEnabled(dtoUser.getEnabled());
         volunteerRepository.save(volunteer);
     }
 
@@ -264,7 +261,6 @@ public class UserServiceImpl implements UserService {
         refugee.setEyeColor(dtoUser.getEyeColor());
         refugee.setBiography(dtoUser.getBiography());
         refugee.setPhoto(dtoUser.getPhoto());
-        refugee.setEnabled(dtoUser.getEnabled());
         refugeeRepository.save(refugee);
     }
 
@@ -390,7 +386,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Set<DTOService> obtainOwnServices(String mail, String userType, Boolean ended) {
+    public Set<DTOService> obtainOwnServices(String mail, String userType) {
         Set<DTOService> result = new HashSet<DTOService>();
         Set<Lodge> lodges;
         Set<Donation> donations;
@@ -407,26 +403,14 @@ public class UserServiceImpl implements UserService {
             courses = educationRepository.findByVolunteer(mail);
             jobs = jobRepository.findByVolunteer(mail);
         }
-        for (Lodge lodge : lodges) {
-            if (lodge.getEnded() == ended) {
-                result.add(new DTOService(lodge));
-            }
-        }
-        for (Education education : courses) {
-            if (education.getEnded() == ended) {
-                result.add(new DTOService(education));
-            }
-        }
-        for (Donation donation : donations) {
-            if (donation.getEnded() == ended) {
-                result.add(new DTOService(donation));
-            }
-        }
-        for (Job job : jobs) {
-            if (job.getEnded() == ended) {
-                result.add(new DTOService(job));
-            }
-        }
+        for (Lodge lodge : lodges)
+            result.add(new DTOService(lodge));
+        for (Education education : courses)
+            result.add(new DTOService(education));
+        for (Donation donation : donations)
+            result.add(new DTOService(donation));
+        for (Job job : jobs)
+            result.add(new DTOService(job));
         return result;
     }
 
@@ -955,85 +939,33 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Set<DTOService> obtainOwnServices(String mail, String userType, Boolean ended) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
     public Set<DTOUser> getAllUsers() {
-        Set<Refugee> refugees = refugeeRepository.findAll();
-        Set<Volunteer> volunteers = volunteerRepository.findAll();
-        Set<DTOUser> dtoUsers = new HashSet<DTOUser>();
-
-        for (Refugee refugee : refugees) {
-            dtoUsers.add(new DTOUser(refugee));
-        }
-
-        for (Volunteer volunteer : volunteers) {
-            dtoUsers.add(new DTOUser(volunteer));
-        }
-
-        return dtoUsers;
+        // TODO Auto-generated method stub
+        return null;
     }
 
     @Override
     public Integer isUserEnabled(String mail) throws UserNotExistsException {
-        DTOUser dtoUser = getDTOUser(mail);
-        return dtoUser.getEnabled();
-    }
-
-    private DTOUser getDTOUser(String mail) throws UserNotExistsException {
-        Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMail(mail);
-        if (oVolunteer.isPresent()) {
-            return new DTOUser(oVolunteer.get());
-        } else {
-            Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMail(mail);
-            if (oRefugee.isPresent()) {
-                return new DTOUser(oRefugee.get());
-            } else {
-                throw new UserNotExistsException();
-            }
-        }
+        // TODO Auto-generated method stub
+        return null;
     }
 
     @Override
-    public void modifyBannedStatus(String mail, int userFinalState)
+    public void modifyBannedStatus(String mail, int userDesiredState)
             throws UserNotExistsException, UserStateAlreadyUpdatedException {
-        changeBanStatus(mail, userFinalState);
-    }
+        // TODO Auto-generated method stub
 
-    private void changeBanStatus(String mail, int userFinalState)
-            throws UserNotExistsException, UserStateAlreadyUpdatedException {
-        Optional<Volunteer> oVolunteer = volunteerRepository.findOptionalByMail(mail);
-        if (oVolunteer.isPresent()) {
-            Volunteer volunteer = oVolunteer.get();
-            if (userFinalState == volunteer.getEnabled()) { // El estado del usuario es el mismo que
-                                                            // el que nos pasan
-                throw new UserStateAlreadyUpdatedException();
-            } else {
-                volunteer.setEnabled(userFinalState);
-                volunteerRepository.save(volunteer);
-            }
-        } else {
-            Optional<Refugee> oRefugee = refugeeRepository.findOptionalByMail(mail);
-            if (oRefugee.isPresent()) {
-                Refugee refugee = oRefugee.get();
-                if (userFinalState == refugee.getEnabled()) {
-                    throw new UserStateAlreadyUpdatedException();
-                } else {
-                    refugee.setEnabled(userFinalState);
-                    refugeeRepository.save(refugee);
-                }
-            } else {
-                throw new UserNotExistsException();
-            }
-        }
     }
 
     @Override
     public void deleteReport(Long id) throws ReportNotExistsException {
-        Optional<Report> oReport = reportRepository.findOptionalById(id);
-        if (oReport.isPresent()) {
-            // mirar apikey
-            reportRepository.deleteById(id);
-        } else {
-            throw new ReportNotExistsException();
-        }
-    }
+        // TODO Auto-generated method stub
 
+    }
 }
