@@ -19,7 +19,7 @@ public interface DonationRepository extends Repository<Donation, String> {
 
     public Set<Donation> findByVolunteer(String mail);
 
-    public Set<Donation> findByInscriptions_MailAndRequestStatus(String mail, String status);
+    public Set<Donation> findByInscriptions_Mail(String mail);
 
 	public void deleteById(long id);
 }
