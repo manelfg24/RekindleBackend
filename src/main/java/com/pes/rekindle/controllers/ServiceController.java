@@ -212,7 +212,7 @@ public class ServiceController {
                 .body(serviceService.donationIsRequested(donationId, mail));
     }
 
-    @RequestMapping(value = "/solicituddonacion/accept/{idDonation}", method = RequestMethod.GET)
+    @RequestMapping(value = "/solicituddonacion/accept/{idDonation}", method = RequestMethod.PUT)
     public ResponseEntity<Void> acceptDonationRequest(@PathVariable Long donationId,
             @RequestParam String refugeeMail) {
         serviceService.acceptDonationRequest(donationId, refugeeMail);
