@@ -16,8 +16,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.annotations.WhereJoinTable;
-
 @Entity
 @Table(name = "Donation")
 public class Donation {
@@ -50,9 +48,8 @@ public class Donation {
             CascadeType.MERGE
     })
     @JoinTable(name = "DonationEnrollment", joinColumns = @JoinColumn(name = "donationId"), inverseJoinColumns = @JoinColumn(name = "refugeeMail"))
-    @WhereJoinTable(clause = " requestStatus = 'Accepted'")
     private Set<Refugee> inscriptions;
-  
+
     public long getId() {
         return id;
     }
