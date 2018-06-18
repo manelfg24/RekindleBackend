@@ -591,7 +591,7 @@ public class ServiceServiceImpl implements ServiceService {
 
     @Override
     public Set<Donation> getDonationInscriptions(String mail) {
-        return donationRepository.findByInscriptions_Mail(mail);
+        return donationRepository.findByInscriptions_MailAndRequestStatus(mail, "Accepted");
     }
 
     @Override
