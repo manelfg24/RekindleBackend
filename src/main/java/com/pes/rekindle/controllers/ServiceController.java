@@ -214,15 +214,15 @@ public class ServiceController {
 
     @RequestMapping(value = "/solicituddonacion/accept/{idDonation}", method = RequestMethod.PUT)
     public ResponseEntity<Void> acceptDonationRequest(@PathVariable Long donationId,
-            @RequestParam String refugeeMail) {
-        serviceService.acceptDonationRequest(donationId, refugeeMail);
+            @RequestParam String mail) {
+        serviceService.acceptDonationRequest(donationId, mail);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
     @RequestMapping(value = "/solicituddonacion/reject/{idDonation}", method = RequestMethod.GET)
     public ResponseEntity<Void> rejectDonationRequest(@PathVariable Long donationId,
-            @RequestParam String refugeeMail) {
-        serviceService.rejectDonationRequest(donationId, refugeeMail);
+            @RequestParam String mail) {
+        serviceService.rejectDonationRequest(donationId, mail);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
