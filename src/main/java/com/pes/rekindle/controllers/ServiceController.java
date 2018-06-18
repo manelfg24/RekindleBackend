@@ -207,9 +207,9 @@ public class ServiceController {
 
     @RequestMapping(value = "/solicituddonacion/{donationId}", method = RequestMethod.GET)
     public ResponseEntity<Boolean> donationIsRequested(@PathVariable Long donationId,
-            @RequestParam String refugeeMail) {
+            @RequestParam String mail) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(serviceService.donationIsRequested(donationId, refugeeMail));
+                .body(serviceService.donationIsRequested(donationId, mail));
     }
 
     @RequestMapping(value = "/solicituddonacion/accept/{idDonation}", method = RequestMethod.GET)
