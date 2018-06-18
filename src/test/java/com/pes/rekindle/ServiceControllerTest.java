@@ -311,7 +311,7 @@ public class ServiceControllerTest {
     @Test
     public void obtainOwnServicesVolunterTest() throws Exception {
         this.mockMvc
-                .perform(get("/servicios/{mail}/{tipo}", "mailRoger" , "Volunteer").param("ended", "1"))
+                .perform(get("/servicios/{mail}/{tipo}", "mailRoger" , "Volunteer").param("ended", "0"))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(jsonPath("$.[0].volunteer").value("mailRoger"))
@@ -412,7 +412,7 @@ public class ServiceControllerTest {
     public void modifyDonationTest() throws Exception {
     	DTODonation dtoDonation = new DTODonation();
     	dtoDonation.setName("Donación de ropa");
-    	dtoDonation.setVolunteer("mailRoger");
+    	dtoDonation.setVolunteer("mailAlex");
     	dtoDonation.setPhoneNumber(936666666);
     	dtoDonation.setAdress("Balmes");
     	dtoDonation.setPlaces(4);
@@ -422,8 +422,8 @@ public class ServiceControllerTest {
         Gson gson = new Gson();
         String json = gson.toJson(dtoDonation);
         this.mockMvc
-        		.perform(put("/donaciones/{id}", 2).contentType(MediaType.APPLICATION_JSON_UTF8)
-        				.content(json).header("apiKey", 2))
+        		.perform(put("/donaciones/{id}", 1).contentType(MediaType.APPLICATION_JSON_UTF8)
+        				.content(json).header("apiKey", 3))
         		.andDo(print())
         		.andExpect(status().isOk());   
     }
