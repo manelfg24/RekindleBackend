@@ -50,7 +50,7 @@ public class Donation {
             CascadeType.MERGE
     })
     @JoinTable(name = "DonationEnrollment", joinColumns = @JoinColumn(name = "donationId"), inverseJoinColumns = @JoinColumn(name = "refugeeMail"))
-    @WhereJoinTable(clause = " requestStatus = 'Accepted'")
+    //@WhereJoinTable(clause = " requestStatus = 'Accepted'")
     private Set<Refugee> inscriptions;
   
     public long getId() {
