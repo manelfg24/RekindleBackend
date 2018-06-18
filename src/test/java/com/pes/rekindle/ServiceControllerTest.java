@@ -324,7 +324,7 @@ public class ServiceControllerTest {
     @Test
     public void obtainOwnServicesRefugeeTest() throws Exception {
         this.mockMvc
-                .perform(get("/servicios/{mail}/{tipo}", "mailRafael" , "Refugee").param("ended", "1"))
+                .perform(get("/servicios/{mail}/{tipo}", "mailRafael" , "Refugee").param("ended", "0"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.[0].volunteer").value("mailRoger"))
                 .andExpect(jsonPath("$.[0].id").value("1"))
